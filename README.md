@@ -140,19 +140,3 @@ Você é livre para compartilhar e adaptar o material, desde que dê o crédito 
 
 Veja [LICENSE](LICENSE) para o texto completo.
 
----
-
-## 👥 Créditos
-
-Desenvolvido pelo **Laboratório de Processamento de Imagens e Geoinformação (LAPIG)**
-Instituto de Estudos Socioambientais (IESA) — Universidade Federal de Goiás (UFG)
-
-Site: [lapig.iesa.ufg.br](https://lapig.iesa.ufg.br/)
-
----
-
-## 🤝 Como contribuir
-
-1. Para **adicionar/corrigir um lançamento**: edite a planilha do Google Sheets (com permissão).
-2. Para **bugs ou melhorias no código**: abra uma *issue* ou um *pull request* neste repositório.
-3. Para **adicionar uma nova empresa**: veja a seção "Empresas suportadas" acima.
