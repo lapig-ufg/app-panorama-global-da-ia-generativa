@@ -8,7 +8,7 @@ Iniciativa do **Laboratório de Processamento de Imagens e Geoinformação — L
 
 ## 🚀 Demonstração
 
-Acesse a versão pública em: `https://<usuário>.github.io/<repositório>/`
+Acesse a versão pública em: `https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/`
 
 (substitua pelo endereço final no GitHub Pages do LAPIG após a publicação)
 
