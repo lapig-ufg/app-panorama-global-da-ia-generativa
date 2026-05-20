@@ -361,7 +361,7 @@ function initDragPan() {
 }
 
 // ─── EXPORTAÇÃO PNG (nativo, sem dependência do html2canvas) ───
-function downloadPNG() {
+async function downloadPNG() {
   const svg = document.getElementById('global-svg');
   if (!svg) return;
 
@@ -370,83 +370,175 @@ function downloadPNG() {
   btn.innerHTML = 'Gerando HD…';
   btn.disabled = true;
 
-  // setTimeout libera a thread UI para o botão atualizar antes de começar
-  setTimeout(() => {
-    try {
-      const w = parseInt(svg.getAttribute('width'), 10);
-      const h = parseInt(svg.getAttribute('height'), 10);
-      const scale = 2;
+  // Aguarda 50ms para que o botão atualize visualmente na UI
+  await new Promise(resolve => setTimeout(resolve, 50));
 
-      // Clona e injeta estilos de fonte inline
-      const cloned = svg.cloneNode(true);
-      const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
-      style.textContent = `
-        text { font-family: Inter, -apple-system, system-ui, sans-serif; }
-        text[font-family*="Mono"], text[font-family*="mono"] { font-family: 'DM Mono', 'Courier New', monospace; }
-      `;
-      cloned.insertBefore(style, cloned.firstChild);
+  try {
+    let w = 0;
+    let h = 0;
 
-      const xml = new XMLSerializer().serializeToString(cloned);
-
-      // *** Usa Blob URL em vez de base64 — sem limite de tamanho ***
-      const blob = new Blob([xml], { type: 'image/svg+xml;charset=utf-8' });
-      const blobUrl = URL.createObjectURL(blob);
-
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = w * scale;
-        canvas.height = h * scale;
-        const ctx = canvas.getContext('2d');
-
-        if (!ctx) {
-          URL.revokeObjectURL(blobUrl);
-          btn.innerHTML = oldHTML;
-          btn.disabled = false;
-          alert('Navegador não suporta canvas. Use "Exportar SVG".');
-          return;
-        }
-
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.scale(scale, scale);
-        ctx.drawImage(img, 0, 0, w, h);
-        URL.revokeObjectURL(blobUrl);
-
-        canvas.toBlob(pngBlob => {
-          if (!pngBlob) {
-            btn.innerHTML = oldHTML;
-            btn.disabled = false;
-            alert('Falha ao gerar PNG. Use "Exportar SVG" para qualidade máxima.');
-            return;
-          }
-          const pngUrl = URL.createObjectURL(pngBlob);
-          const a = document.createElement('a');
-          a.download = `panorama-llms-${new Date().toISOString().slice(0, 10)}.png`;
-          a.href = pngUrl;
-          a.click();
-          setTimeout(() => URL.revokeObjectURL(pngUrl), 2000);
-          btn.innerHTML = oldHTML;
-          btn.disabled = false;
-        }, 'image/png');
-      };
-
-      img.onerror = () => {
-        URL.revokeObjectURL(blobUrl);
-        btn.innerHTML = oldHTML;
-        btn.disabled = false;
-        alert('Erro ao carregar SVG para conversão. Use "Exportar SVG".');
-      };
-
-      img.src = blobUrl;
-
-    } catch (e) {
-      btn.innerHTML = oldHTML;
-      btn.disabled = false;
-      console.error('Erro na exportação PNG:', e);
-      alert('Erro inesperado. Use "Exportar SVG" como alternativa.');
+    // Tenta obter as dimensões nativas do viewBox (coordenadas reais de design da timeline)
+    if (svg.viewBox && svg.viewBox.baseVal) {
+      w = svg.viewBox.baseVal.width;
+      h = svg.viewBox.baseVal.height;
     }
-  }, 50);
+
+    // Se falhar ou não estiver definido, tenta ler os atributos de largura/altura
+    if (!w || isNaN(w)) {
+      w = parseInt(svg.getAttribute('width'), 10);
+    }
+    if (!h || isNaN(h)) {
+      h = parseInt(svg.getAttribute('height'), 10);
+    }
+
+    // Fallbacks finais se tudo falhar
+    w = w || 1200;
+    h = h || 800;
+
+    // ─── ESCALA ADAPTATIVA COM LIMITE DE CANVAS ───
+    const MAX_CANVAS_PIXELS = 100000000; // ~100 megapixels
+    const MAX_CANVAS_DIM = 16384;
+    const desiredScale = 3;
+    let scale = desiredScale;
+    const pixelCount = w * h * desiredScale * desiredScale;
+    const maxDim = Math.max(w, h) * desiredScale;
+
+    if (pixelCount > MAX_CANVAS_PIXELS || maxDim > MAX_CANVAS_DIM) {
+      scale = Math.min(
+        Math.floor(Math.sqrt(MAX_CANVAS_PIXELS / (w * h))),
+        Math.floor(MAX_CANVAS_DIM / Math.max(w, h))
+      );
+      scale = Math.max(1, scale);
+      console.log(`[PNG Export] Escala adaptada de ${desiredScale} para ${scale} para respeitar limites do browser.`);
+    }
+
+    // ─── CLONA E CONFIGURA O SVG ───
+    const cloned = svg.cloneNode(true);
+    
+    // Configura as dimensões físicas e o viewBox da cópia para o tamanho ampliado.
+    // Isso garante que o canvas final tenha a resolução desejada.
+    cloned.setAttribute('width', w * scale);
+    cloned.setAttribute('height', h * scale);
+    cloned.setAttribute('viewBox', `0 0 ${w * scale} ${h * scale}`);
+
+    // Cria um grupo wrapper com transform="scale(scale)" para aplicar a escala vetorial
+    // diretamente em todos os elementos gráficos. Isso força o motor de renderização do
+    // navegador a rasterizar as fontes, caminhos e formas na resolução nativa ampliada (HD/UHD),
+    // eliminando qualquer serrilhado ou perda de nitidez.
+    const wrapper = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    wrapper.setAttribute('transform', `scale(${scale})`);
+
+    // Move os filhos visuais para dentro do wrapper (preservando title, defs, style e o rect de fundo no topo)
+    const children = Array.from(cloned.childNodes);
+    children.forEach(child => {
+      const tag = child.tagName ? child.tagName.toLowerCase() : '';
+      if (tag === 'title' || tag === 'defs' || tag === 'style') {
+        return;
+      }
+      if (tag === 'rect' && child.getAttribute('width') === '100%') {
+        return; // Mantém o fundo branco de 100% no nível raiz do SVG
+      }
+      wrapper.appendChild(child);
+    });
+    cloned.appendChild(wrapper);
+
+    // Define explicitamente o namespace xmlns caso falte
+    if (!cloned.getAttribute('xmlns')) {
+      cloned.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    }
+
+    // Injeta os estilos de fonte originais conforme solicitado
+    const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    style.textContent = `
+      text { font-family: Inter, -apple-system, system-ui, sans-serif; }
+      text[font-family*="Mono"], text[font-family*="mono"] { font-family: 'DM Mono', 'Courier New', monospace; }
+    `;
+    cloned.insertBefore(style, cloned.firstChild);
+
+    // Serializa o SVG
+    const serializer = new XMLSerializer();
+    let xml = serializer.serializeToString(cloned);
+    
+    // Adiciona declaração XML se não estiver presente
+    if (!xml.startsWith('<?xml')) {
+      xml = '<?xml version="1.0" encoding="UTF-8"?>\n' + xml;
+    }
+
+    // ─── DATA URI EM VEZ DE BLOB URL OU BASE64 ───
+    // encodeURIComponent funciona perfeitamente com caracteres especiais (como acentos em PT-BR)
+    // e é muito mais confiável em vários navegadores que o Blob URL para SVG→Img→Canvas.
+    const svgDataUri = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(xml);
+
+    // ─── CARREGAMENTO DA IMAGEM E img.decode() ───
+    const loadImage = (src) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = async () => {
+          try {
+            if (typeof img.decode === 'function') {
+              await img.decode(); // Garante decodificação completa antes de desenhar
+            }
+            resolve(img);
+          } catch (err) {
+            console.warn('[PNG Export] img.decode() falhou, tentando desenhar diretamente:', err);
+            resolve(img); // Resolve mesmo assim se a decodificação falhar, como fallback
+          }
+        };
+        img.onerror = (err) => {
+          reject(new Error('Erro ao carregar os elementos gráficos do SVG.'));
+        };
+        img.src = src;
+      });
+    };
+
+    const img = await loadImage(svgDataUri);
+
+    // ─── DESENHA NO CANVAS ───
+    const canvas = document.createElement('canvas');
+    canvas.width = w * scale;
+    canvas.height = h * scale;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      throw new Error('Navegador não suporta o contexto 2D do Canvas.');
+    }
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Desenhamos a imagem de alta resolução na proporção 1:1 direta no canvas.
+    // Não usamos mais ctx.scale(scale, scale), pois a imagem 'img' já está renderizada
+    // nativamente no tamanho correto e nítido.
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    // ─── CONVERTE PARA BLOB PNG E DIRECIONA DOWNLOAD ───
+    const canvasToBlob = (cv) => {
+      return new Promise((resolve) => {
+        cv.toBlob(resolve, 'image/png');
+      });
+    };
+
+    const pngBlob = await canvasToBlob(canvas);
+    if (!pngBlob) {
+      throw new Error('Não foi possível gerar a imagem final.');
+    }
+
+    const pngUrl = URL.createObjectURL(pngBlob);
+    const a = document.createElement('a');
+    a.download = `panorama-llms-${new Date().toISOString().slice(0, 10)}.png`;
+    a.href = pngUrl;
+    a.click();
+    
+    // Revoga a URL do Blob após um pequeno intervalo
+    setTimeout(() => URL.revokeObjectURL(pngUrl), 2000);
+
+  } catch (e) {
+    console.error('Erro na exportação PNG:', e);
+    alert('Erro ao gerar PNG: ' + e.message + '\nComo alternativa, utilize a exportação em SVG.');
+  } finally {
+    btn.innerHTML = oldHTML;
+    btn.disabled = false;
+  }
 }
 
 // ─── EXPORTAÇÃO SVG (vetorial, ideal para publicação acadêmica) ───
