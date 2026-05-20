@@ -370,27 +370,14 @@ function downloadPNG() {
   btn.innerHTML = 'Gerando HD…';
   btn.disabled = true;
 
-  // Usa setTimeout para liberar a thread e deixar o botão atualizar visualmente
+  // setTimeout libera a thread UI para o botão atualizar antes de começar
   setTimeout(() => {
     try {
       const w = parseInt(svg.getAttribute('width'), 10);
       const h = parseInt(svg.getAttribute('height'), 10);
+      const scale = 2;
 
-      // Escala 3x é o ponto ideal: legível sem estourar o limite de memória do canvas
-      const scale = 3;
-      const canvasW = w * scale;
-      const canvasH = h * scale;
-
-      // Limite de segurança: a maioria dos browsers suporta até ~16384×16384px
-      const MAX_DIM = 16000;
-      if (canvasW > MAX_DIM || canvasH > MAX_DIM) {
-        btn.innerHTML = oldHTML;
-        btn.disabled = false;
-        alert(`A imagem seria muito grande (${canvasW}×${canvasH}px). Use "Exportar SVG" para qualidade máxima.`);
-        return;
-      }
-
-      // Clona e injeta estilos de fonte inline para garantir renderização
+      // Clona e injeta estilos de fonte inline
       const cloned = svg.cloneNode(true);
       const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
       style.textContent = `
@@ -400,56 +387,64 @@ function downloadPNG() {
       cloned.insertBefore(style, cloned.firstChild);
 
       const xml = new XMLSerializer().serializeToString(cloned);
-      const svg64 = btoa(unescape(encodeURIComponent(xml)));
-      const dataUrl = 'data:image/svg+xml;base64,' + svg64;
+
+      // *** Usa Blob URL em vez de base64 — sem limite de tamanho ***
+      const blob = new Blob([xml], { type: 'image/svg+xml;charset=utf-8' });
+      const blobUrl = URL.createObjectURL(blob);
 
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        canvas.width = canvasW;
-        canvas.height = canvasH;
-        const ctx = canvas.getContext('2d', { willReadFrequently: false });
+        canvas.width = w * scale;
+        canvas.height = h * scale;
+        const ctx = canvas.getContext('2d');
 
         if (!ctx) {
+          URL.revokeObjectURL(blobUrl);
           btn.innerHTML = oldHTML;
           btn.disabled = false;
-          alert('Seu navegador não conseguiu criar o canvas. Use "Exportar SVG".');
+          alert('Navegador não suporta canvas. Use "Exportar SVG".');
           return;
         }
 
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(0, 0, canvasW, canvasH);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.scale(scale, scale);
-        ctx.drawImage(img, 0, 0);
+        ctx.drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(blobUrl);
 
-        canvas.toBlob(blob => {
-          if (!blob) {
+        canvas.toBlob(pngBlob => {
+          if (!pngBlob) {
             btn.innerHTML = oldHTML;
             btn.disabled = false;
-            alert('Falha ao gerar PNG (canvas muito grande). Use "Exportar SVG" para qualidade máxima.');
+            alert('Falha ao gerar PNG. Use "Exportar SVG" para qualidade máxima.');
             return;
           }
-          const url = URL.createObjectURL(blob);
+          const pngUrl = URL.createObjectURL(pngBlob);
           const a = document.createElement('a');
           a.download = `panorama-llms-${new Date().toISOString().slice(0, 10)}.png`;
-          a.href = url;
+          a.href = pngUrl;
           a.click();
-          setTimeout(() => URL.revokeObjectURL(url), 1000);
+          setTimeout(() => URL.revokeObjectURL(pngUrl), 2000);
           btn.innerHTML = oldHTML;
           btn.disabled = false;
         }, 'image/png');
       };
+
       img.onerror = () => {
+        URL.revokeObjectURL(blobUrl);
         btn.innerHTML = oldHTML;
         btn.disabled = false;
-        alert('Erro ao renderizar SVG. Tente exportar como SVG.');
+        alert('Erro ao carregar SVG para conversão. Use "Exportar SVG".');
       };
-      img.src = dataUrl;
+
+      img.src = blobUrl;
+
     } catch (e) {
       btn.innerHTML = oldHTML;
       btn.disabled = false;
-      console.error('Erro na exportação:', e);
-      alert('Erro inesperado na exportação. Use "Exportar SVG" como alternativa.');
+      console.error('Erro na exportação PNG:', e);
+      alert('Erro inesperado. Use "Exportar SVG" como alternativa.');
     }
   }, 50);
 }
