@@ -370,58 +370,88 @@ function downloadPNG() {
   btn.innerHTML = 'Gerando HD…';
   btn.disabled = true;
 
-  try {
-    const w = parseInt(svg.getAttribute('width'), 10);
-    const h = parseInt(svg.getAttribute('height'), 10);
+  // Usa setTimeout para liberar a thread e deixar o botão atualizar visualmente
+  setTimeout(() => {
+    try {
+      const w = parseInt(svg.getAttribute('width'), 10);
+      const h = parseInt(svg.getAttribute('height'), 10);
 
-    // Clona e injeta os estilos de fonte inline para garantir renderização
-    const cloned = svg.cloneNode(true);
-    const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
-    style.textContent = `
-      text { font-family: Inter, -apple-system, system-ui, sans-serif; }
-      text[font-family*="Mono"], text[font-family*="mono"] { font-family: 'DM Mono', 'Courier New', monospace; }
-    `;
-    cloned.insertBefore(style, cloned.firstChild);
-
-    const xml = new XMLSerializer().serializeToString(cloned);
-    const svg64 = btoa(unescape(encodeURIComponent(xml)));
-    const dataUrl = 'data:image/svg+xml;base64,' + svg64;
-
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
+      // Escala 3x é o ponto ideal: legível sem estourar o limite de memória do canvas
       const scale = 3;
-      const canvas = document.createElement('canvas');
-      canvas.width = w * scale;
-      canvas.height = h * scale;
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.scale(scale, scale);
-      ctx.drawImage(img, 0, 0);
+      const canvasW = w * scale;
+      const canvasH = h * scale;
 
-      canvas.toBlob(blob => {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.download = `panorama-llms-${new Date().toISOString().slice(0, 10)}.png`;
-        a.href = url;
-        a.click();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      // Limite de segurança: a maioria dos browsers suporta até ~16384×16384px
+      const MAX_DIM = 16000;
+      if (canvasW > MAX_DIM || canvasH > MAX_DIM) {
         btn.innerHTML = oldHTML;
         btn.disabled = false;
-      }, 'image/png');
-    };
-    img.onerror = () => {
+        alert(`A imagem seria muito grande (${canvasW}×${canvasH}px). Use "Exportar SVG" para qualidade máxima.`);
+        return;
+      }
+
+      // Clona e injeta estilos de fonte inline para garantir renderização
+      const cloned = svg.cloneNode(true);
+      const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+      style.textContent = `
+        text { font-family: Inter, -apple-system, system-ui, sans-serif; }
+        text[font-family*="Mono"], text[font-family*="mono"] { font-family: 'DM Mono', 'Courier New', monospace; }
+      `;
+      cloned.insertBefore(style, cloned.firstChild);
+
+      const xml = new XMLSerializer().serializeToString(cloned);
+      const svg64 = btoa(unescape(encodeURIComponent(xml)));
+      const dataUrl = 'data:image/svg+xml;base64,' + svg64;
+
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = canvasW;
+        canvas.height = canvasH;
+        const ctx = canvas.getContext('2d', { willReadFrequently: false });
+
+        if (!ctx) {
+          btn.innerHTML = oldHTML;
+          btn.disabled = false;
+          alert('Seu navegador não conseguiu criar o canvas. Use "Exportar SVG".');
+          return;
+        }
+
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvasW, canvasH);
+        ctx.scale(scale, scale);
+        ctx.drawImage(img, 0, 0);
+
+        canvas.toBlob(blob => {
+          if (!blob) {
+            btn.innerHTML = oldHTML;
+            btn.disabled = false;
+            alert('Falha ao gerar PNG (canvas muito grande). Use "Exportar SVG" para qualidade máxima.');
+            return;
+          }
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.download = `panorama-llms-${new Date().toISOString().slice(0, 10)}.png`;
+          a.href = url;
+          a.click();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+          btn.innerHTML = oldHTML;
+          btn.disabled = false;
+        }, 'image/png');
+      };
+      img.onerror = () => {
+        btn.innerHTML = oldHTML;
+        btn.disabled = false;
+        alert('Erro ao renderizar SVG. Tente exportar como SVG.');
+      };
+      img.src = dataUrl;
+    } catch (e) {
       btn.innerHTML = oldHTML;
       btn.disabled = false;
-      alert('Erro ao gerar PNG. Tente exportar como SVG.');
-    };
-    img.src = dataUrl;
-  } catch (e) {
-    btn.innerHTML = oldHTML;
-    btn.disabled = false;
-    console.error('Erro na exportação:', e);
-  }
+      console.error('Erro na exportação:', e);
+      alert('Erro inesperado na exportação. Use "Exportar SVG" como alternativa.');
+    }
+  }, 50);
 }
 
 // ─── EXPORTAÇÃO SVG (vetorial, ideal para publicação acadêmica) ───
