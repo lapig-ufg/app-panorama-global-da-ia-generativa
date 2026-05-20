@@ -390,7 +390,7 @@ function downloadPNG() {
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {
-      const scale = 4;
+      const scale = 3;
       const canvas = document.createElement('canvas');
       canvas.width = w * scale;
       canvas.height = h * scale;
