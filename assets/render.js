@@ -39,7 +39,7 @@ function rebuildV2(customMaxDias) {
 
   const HEADER_H = 48;
   const GROUP_TITLE_H = 76;
-  const TRACK_H = 86;
+  const TRACK_H = 110;
   const GROUP_GAP = 10;
 
   // ─── DEFS: gradientes + filtro de sombra ───
