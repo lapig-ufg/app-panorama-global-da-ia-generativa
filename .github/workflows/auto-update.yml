@@ -1,0 +1,53 @@
+name: Atualização automática de lançamentos
+
+on:
+  schedule:
+    - cron: '0 12 * * 1' # toda segunda-feira, 12:00 UTC
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (só mostra no log, NÃO escreve na planilha)'
+        type: boolean
+        default: true
+
+# O Claude só lê/escreve arquivos locais e pesquisa na web — não precisa escrever no repo.
+permissions:
+  contents: read
+
+concurrency:
+  group: auto-update
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Preparar prompt (lê a planilha)
+        run: node automation/prepare.mjs
+
+      - name: Pesquisar lançamentos (Claude)
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Leia o arquivo automation/_work/prompt.md e siga TODAS as instruções nele.
+            Use WebSearch/WebFetch para pesquisar e escreva o resultado, no formato pedido,
+            no arquivo automation/_work/candidates.json. Não edite nenhum outro arquivo e não rode git.
+          claude_args: '--allowedTools "WebSearch,WebFetch,Read,Write" --max-turns 40'
+
+      - name: Validar e publicar
+        env:
+          # Real (escreve na planilha) só quando: dispatch manual com dry_run desmarcado,
+          # OU agendado E a variável de repositório AUTO_PUBLISH == 'true'. Caso contrário, dry-run.
+          DRY_RUN: ${{ ((github.event_name == 'workflow_dispatch' && inputs.dry_run == false) || (github.event_name == 'schedule' && vars.AUTO_PUBLISH == 'true')) && 'false' || 'true' }}
+          APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+          APPS_SCRIPT_TOKEN: ${{ secrets.APPS_SCRIPT_TOKEN }}
+        run: node automation/publish.mjs

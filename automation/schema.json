@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Candidatos de lançamentos para a planilha do Panorama",
+  "type": "object",
+  "required": ["candidatos"],
+  "additionalProperties": false,
+  "properties": {
+    "candidatos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["data", "empresa", "modelo", "impacto", "referencia", "tipo", "confianca", "empresa_nova"],
+        "additionalProperties": false,
+        "properties": {
+          "data": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "empresa": { "type": "string", "minLength": 1 },
+          "modelo": { "type": "string", "minLength": 1 },
+          "impacto": { "type": "string", "minLength": 1 },
+          "referencia": { "type": "string", "pattern": "^https?://" },
+          "tipo": { "type": "string", "default": "modelo" },
+          "relevancia_justificativa": { "type": "string" },
+          "confianca": { "type": "number", "minimum": 0, "maximum": 1 },
+          "empresa_nova": { "type": "boolean" },
+          "pais": { "type": "string" },
+          "grupo_sugerido": {
+            "type": "string",
+            "enum": ["", "OPENAI", "ECOSSISTEMA NORTE-AMERICANO", "ECOSSISTEMA CHINÊS", "OUTROS PAÍSES"]
+          }
+        }
+      }
+    }
+  }
+}
