@@ -93,7 +93,9 @@ function processRows(allRows) {
   });
 
   RAW.forEach(r => {
-    r.dias = Math.round((new Date(r.date + 'T00:00:00') - CONFIG.MARCO) / 86400000);
+    const parts = r.date.split('-');
+    const eventUTC = Date.UTC(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+    r.dias = Math.round((eventUTC - CONFIG.MARCO.getTime()) / 86400000);
   });
 
   if (RAW.length) {

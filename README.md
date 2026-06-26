@@ -1,6 +1,6 @@
 # Panorama Global da IA Generativa
 
-Linha do tempo interativa dos lançamentos de modelos de Inteligência Artificial generativa desde o lançamento do ChatGPT (30 de novembro de 2022). Organiza os principais modelos e ferramentas em três grupos — **OpenAI** (pioneira), **Ecossistema Ocidental** (modelos majoritariamente fechados, com origem nos EUA) e **Ecossistema Chinês** (forte aposta em código aberto).
+Linha do tempo interativa dos lançamentos de modelos de Inteligência Artificial generativa desde o lançamento do ChatGPT (30 de novembro de 2022). Organiza os principais modelos e ferramentas em quatro grupos — **OpenAI** (pioneira), **Ecossistema Norte-Americano** (modelos majoritariamente fechados, com origem nos EUA), **Ecossistema Chinês** (forte aposta em código aberto) e **Outros Países** (laboratórios de fronteira fora dos eixos EUA–China, como Japão e França).
 
 Iniciativa do **Laboratório de Processamento de Imagens e Geoinformação — LAPIG / IESA / UFG**.
 
@@ -62,7 +62,7 @@ A planilha do Google Sheets deve conter uma aba chamada **`Lancamentos`** com as
 
 ### Empresas suportadas
 
-`OpenAI`, `Anthropic`, `Google`, `Meta`, `xAI`, `NVIDIA`, `Cursor`, `OpenClaw`, `Baidu`, `Alibaba`, `DeepSeek`, `MiniMax`, `Moonshot AI`, `Zhipu AI`.
+`OpenAI`, `Anthropic`, `Google`, `Microsoft`, `IBM`, `Meta`, `xAI`, `NVIDIA`, `Cursor`, `OpenClaw`, `Sakana AI`, `Mistral`, `Baidu`, `Alibaba`, `DeepSeek`, `MiniMax`, `Moonshot AI`, `Zhipu AI`, `Xiaomi`.
 
 Para adicionar uma nova empresa, edite `assets/data.js`:
 - Adicione cor em `COMPANY_COLORS`
@@ -128,6 +128,7 @@ O arquivo `.nojekyll` na raiz garante que o GitHub Pages não tente processar os
 - HTML, CSS e JavaScript puros (sem frameworks)
 - SVG construído programaticamente
 - Google Sheets via [gviz/tq](https://developers.google.com/chart/interactive/docs/dev/implementing_data_source) (JSONP)
+- Google Apps Script para manipulação dos dados
 - Google Fonts (Inter + DM Mono)
 
 ---
@@ -140,3 +141,4 @@ Você é livre para compartilhar e adaptar o material, desde que dê o crédito 
 
 Veja [LICENSE](LICENSE) para o texto completo.
 
+---

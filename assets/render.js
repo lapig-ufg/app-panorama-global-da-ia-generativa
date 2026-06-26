@@ -75,21 +75,23 @@ function rebuildV2(customMaxDias) {
   const endYear = new Date(CONFIG.MARCO.getTime() + maxDias * 86400000).getFullYear() + 1;
 
   for (let y = startYear; y <= endYear; y++) {
-    const dias = Math.round((new Date(`${y}-01-01`) - CONFIG.MARCO) / 86400000);
+    const dias = Math.round((Date.UTC(y, 0, 1) - CONFIG.MARCO.getTime()) / 86400000);
     if (dias >= 0 && dias <= maxDias) {
       const x = xOf(dias);
       gridSvg += `<line x1="${x}" y1="${HEADER_H}" x2="${x}" y2="${SVG_H - 30}" stroke="#cdcabe" stroke-width="1"/>`;
       gridSvg += `<text x="${x}" y="26" font-family="Inter,sans-serif" font-size="19" font-weight="800" fill="#0c0c0c" text-anchor="middle" letter-spacing="-0.5">${y}</text>`;
       gridSvg += `<text x="${x}" y="${SVG_H - 10}" font-family="DM Mono,monospace" font-size="11" font-weight="500" fill="#a5a297" text-anchor="middle" letter-spacing="1">${y}</text>`;
     }
-    const diasMid = Math.round((new Date(`${y}-07-01`) - CONFIG.MARCO) / 86400000);
+    const diasMid = Math.round((Date.UTC(y, 6, 1) - CONFIG.MARCO.getTime()) / 86400000);
     if (diasMid >= 0 && diasMid <= maxDias) {
       gridSvg += `<line x1="${xOf(diasMid)}" y1="${HEADER_H}" x2="${xOf(diasMid)}" y2="${SVG_H - 30}" stroke="#dedacf" stroke-width="1" stroke-dasharray="3,5"/>`;
     }
   }
 
-  // Linha do "hoje" - referência temporal sutil
-  const hojeDias = Math.round((Date.now() - CONFIG.MARCO) / 86400000);
+  // Linha do "hoje" - referência temporal sutil e robusta contra fusos horários
+  const now = new Date();
+  const hojeUTC = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  const hojeDias = Math.round((hojeUTC - CONFIG.MARCO.getTime()) / 86400000);
   if (hojeDias >= 0 && hojeDias <= maxDias) {
     const xHoje = xOf(hojeDias);
     gridSvg += `<line x1="${xHoje}" y1="${HEADER_H}" x2="${xHoje}" y2="${SVG_H - 30}" stroke="#10a37f" stroke-width="1.2" opacity="0.45" stroke-dasharray="4,4"/>`;
@@ -114,7 +116,7 @@ function rebuildV2(customMaxDias) {
     // Bandeira + título do grupo
     let titleX = 20;
     if (group.flag && FLAG_SVG[group.flag]) {
-      const flagLabel = group.flag === 'US' ? 'Bandeira dos EUA' : 'Bandeira da China';
+      const flagLabel = group.flag === 'US' ? 'Bandeira dos EUA' : group.flag === 'CN' ? 'Bandeira da China' : 'Globo — outros países';
       elementsSvg += `<g transform="translate(20, ${currentY + 24})" role="img" aria-label="${flagLabel}"><title>${flagLabel}</title>${FLAG_SVG[group.flag]}</g>`;
       titleX = 20 + 30 + 12;
     }
