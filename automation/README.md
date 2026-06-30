@@ -21,21 +21,36 @@ Nada vai ao ar sem você. O site só renderiza linhas de `Lancamentos` com `stat
 
 ## Setup (uma vez)
 
-### 1. Planilha
-- Crie a aba **`Pendentes`** com o **mesmo cabeçalho** de `Lancamentos` (`data, empresa, modelo, impacto, referencia, status, tipo, dias, origem, timestamp, data_atualizacao`) **+ uma coluna `Aprovar?`** (formato → caixa de seleção).
+O Apps Script é gerenciado via **clasp** (CLI). A pasta `automation/apps-script/` já é um projeto
+clasp (`.clasp.json` → script vinculado à planilha de produção). O `SECRET` **não** fica no
+código (fica em Script Properties), para nunca vazar neste repositório público.
 
-### 2. Apps Script (na própria planilha)
-- Extensões → Apps Script → cole `automation/apps-script/Codigo.gs`.
-- Edite no topo: `SECRET` (um token aleatório — anote) e `EMAIL` (destinatário).
-- Gatilhos (ícone de relógio) → Adicionar gatilho → função **`onEdit`**, origem "Da planilha", evento **"Ao editar"** (gatilho **instalável**, necessário para o checkbox promover entre abas).
-- Implantar → Nova implantação → **App da Web** → Executar como **eu**, Acesso **qualquer pessoa** → copie a **URL**.
+### 1. Subir o código (clasp)
+```bash
+cd automation/apps-script
+clasp login            # uma vez, na conta dona da planilha
+clasp push --force     # envia Codigo.gs + appsscript.json
+```
 
-### 3. Secrets do repositório (Settings → Secrets and variables → Actions)
+### 2. Configurar e autorizar (na UI do Apps Script — `clasp open-script`)
+- **Project Settings → Script Properties** → adicione a propriedade **`SECRET`** com um token
+  aleatório (anote — é o mesmo valor do secret `APPS_SCRIPT_TOKEN` no GitHub).
+- Rode a função **`setup()`** uma vez (autorize quando o Google pedir). Ela cria a aba
+  **`Pendentes`** (cabeçalho de `Lancamentos` + coluna `Aprovar?` como checkbox) e instala o
+  gatilho **instalável** `onEdit` (removendo gatilhos antigos).
+
+### 3. Implantar como App da Web
+```bash
+clasp create-deployment    # acesso já vem do appsscript.json (executar como eu / anônimo)
+```
+Copie a URL `/exec` (`clasp open-web-app` ou o painel de implantações). É o secret `APPS_SCRIPT_URL`.
+
+### 4. Secrets do repositório (Settings → Secrets and variables → Actions)
 | Secret | Valor |
 |---|---|
 | `CLAUDE_CODE_OAUTH_TOKEN` | Gere com `claude setup-token` (usa sua assinatura Pro/Max; token ~1 ano, **sem cobrança de API**) |
-| `APPS_SCRIPT_URL` | A URL do App da Web do passo 2 |
-| `APPS_SCRIPT_TOKEN` | O mesmo valor de `SECRET` do passo 2 |
+| `APPS_SCRIPT_URL` | A URL `/exec` do App da Web do passo 3 |
+| `APPS_SCRIPT_TOKEN` | O mesmo valor da Script Property `SECRET` do passo 2 |
 
 ### 4. Variável de segurança (opcional, recomendado)
 - Em **Variables** (não Secrets): `AUTO_PUBLISH`.

@@ -1,62 +1,137 @@
 /**
  * Codigo.gs — Apps Script vinculado à planilha do "Panorama Global da IA Generativa".
  *
- * Faz duas coisas:
- *  1) doPost(e): recebe os candidatos do GitHub Actions (publish.mjs), grava na aba
- *     "Pendentes" como rascunho (status = "pendente", checkbox "Aprovar?" desmarcado)
- *     e envia um e-mail-resumo.
- *  2) onEdit(e): quando você marca "Aprovar?" numa linha de "Pendentes", copia a linha
- *     para "Lancamentos" com status = "publicado" (é isso que o site lê).
+ * Faz três coisas:
+ *  1) doPost(e) ingestão: recebe os candidatos do GitHub Actions (publish.mjs), grava na
+ *     aba "Pendentes" como rascunho (status = "pendente") e envia um e-mail-resumo.
+ *  2) doPost(e) admin: ações { action:'aprovar'|'rejeitar', token, data, empresa, modelo }
+ *     vindas da PWA de curadoria — aprovar promove p/ "Lancamentos" (publicado) e remove de
+ *     "Pendentes"; rejeitar remove de "Pendentes".
+ *  3) onEdit(e): marcar "Aprovar?" numa linha de "Pendentes" também promove p/ "Lancamentos".
  *
- * SETUP (uma vez):
- *  - Editar SECRET e EMAIL abaixo. SECRET deve ser igual ao secret APPS_SCRIPT_TOKEN do GitHub.
- *  - Criar a aba "Pendentes" com o MESMO cabeçalho de "Lancamentos" + uma coluna "Aprovar?".
- *  - Adicionar um gatilho INSTALÁVEL de onEdit: no editor → Gatilhos (ícone de relógio) →
- *    Adicionar gatilho → função onEdit, evento "Ao editar". (O onEdit simples não tem
- *    permissão p/ ler outras abas; por isso precisa do gatilho instalável.)
- *  - Implantar → Nova implantação → App da Web → Executar como: eu → Acesso: qualquer
- *    pessoa. Copiar a URL (é o secret APPS_SCRIPT_URL do GitHub).
+ * SETUP (uma vez, nesta ordem):
+ *  - Project Settings → Script Properties → adicionar a propriedade "SECRET" com um token
+ *    aleatório. Esse MESMO valor é o secret APPS_SCRIPT_TOKEN no GitHub E o token que a PWA
+ *    de curadoria guarda no localStorage. (O segredo NÃO fica no código-fonte.)
+ *  - Rodar a função setup() uma vez (autorizar): cria a aba "Pendentes" e o gatilho onEdit.
+ *  - Implantar → App da Web (acesso já vem do appsscript.json). Copiar a URL /exec.
  */
 
-var SECRET = 'COLOQUE_O_MESMO_TOKEN_DO_GITHUB_AQUI';
 var EMAIL = 'victor.amaral@ufg.br';
 var TAB_LANC = 'Lancamentos';
 var TAB_PEND = 'Pendentes';
 var COL_APROVAR = 'Aprovar?';
 
-// ───────────────────────── doPost: recebe candidatos ─────────────────────────
+function getSecret_() {
+  var s = PropertiesService.getScriptProperties().getProperty('SECRET');
+  if (!s) throw new Error('Script Property "SECRET" não definida (Project Settings → Script Properties).');
+  return s;
+}
+
+// ─────────────────────────── setup (rodar 1x) ───────────────────────────────
+function setup() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var lanc = ss.getSheetByName(TAB_LANC);
+  if (!lanc) throw new Error('Aba "' + TAB_LANC + '" não encontrada — abra a planilha certa.');
+
+  // 1) Cria/garante a aba Pendentes com o mesmo cabeçalho + coluna Aprovar?
+  var pend = ss.getSheetByName(TAB_PEND);
+  if (!pend) pend = ss.insertSheet(TAB_PEND);
+  var lancHeaders = _headers(lanc);
+  if (lancHeaders.indexOf(COL_APROVAR) === -1) lancHeaders = lancHeaders.concat([COL_APROVAR]);
+  pend.getRange(1, 1, 1, lancHeaders.length).setValues([lancHeaders]).setFontWeight('bold');
+  pend.setFrozenRows(1);
+
+  // checkbox na coluna Aprovar? (linhas 2..1000)
+  var aprovarCol = lancHeaders.indexOf(COL_APROVAR) + 1;
+  pend.getRange(2, aprovarCol, 1000, 1)
+      .setDataValidation(SpreadsheetApp.newDataValidation().requireCheckbox().build());
+
+  // 2) Gatilho instalável onEdit. Remove TODOS os gatilhos antigos primeiro
+  //    (tentativas anteriores podem ter deixado gatilhos por tempo que agora falhariam).
+  var removidos = 0;
+  ScriptApp.getProjectTriggers().forEach(function (t) { ScriptApp.deleteTrigger(t); removidos++; });
+  ScriptApp.newTrigger('onEdit').forSpreadsheet(ss).onEdit().create();
+
+  return 'setup ok: aba "' + TAB_PEND + '" pronta + gatilho onEdit instalado (gatilhos antigos removidos: ' + removidos + ').';
+}
+
+// ───────────────────────────── doPost (roteador) ─────────────────────────────
 function doPost(e) {
   try {
     var body = JSON.parse(e.postData.contents);
-    if (!body || body.token !== SECRET) return _json({ ok: false, error: 'token invalido' });
-
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var pend = ss.getSheetByName(TAB_PEND);
-    if (!pend) return _json({ ok: false, error: 'aba "' + TAB_PEND + '" nao existe' });
-
-    var headers = _headers(pend);
-    var existing = _existingKeys(ss);
-    var added = [], skipped = 0;
-
-    (body.rows || []).forEach(function (r) {
-      var key = [r.data, String(r.empresa).trim().toUpperCase(), String(r.modelo).trim().toUpperCase()].join('|');
-      if (existing[key]) { skipped++; return; }
-      existing[key] = true;
-      var obj = {
-        data: r.data, empresa: r.empresa, modelo: r.modelo, impacto: r.impacto,
-        referencia: r.referencia, status: 'pendente', tipo: r.tipo || 'modelo',
-        dias: '', origem: r.origem || 'auto',
-        timestamp: new Date(), data_atualizacao: new Date()
-      };
-      pend.appendRow(_rowFromObj(headers, obj));
-      added.push(r);
-    });
-
-    _sendEmail(body, added, skipped);
-    return _json({ ok: true, added: added.length, skipped: skipped });
+    if (body && (body.action === 'aprovar' || body.action === 'rejeitar')) {
+      return _handleAdmin_(body, body.action);
+    }
+    return _handleIngestao_(body);
   } catch (err) {
     return _json({ ok: false, error: String(err) });
   }
+}
+
+// ── ingestão: recebe candidatos do GitHub Actions ──
+function _handleIngestao_(body) {
+  if (!body || body.token !== getSecret_()) return _json({ ok: false, error: 'token invalido' });
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var pend = ss.getSheetByName(TAB_PEND);
+  if (!pend) return _json({ ok: false, error: 'aba "' + TAB_PEND + '" nao existe' });
+
+  var headers = _headers(pend);
+  var existing = _existingKeys(ss);
+  var added = [], skipped = 0;
+
+  (body.rows || []).forEach(function (r) {
+    var key = [r.data, String(r.empresa).trim().toUpperCase(), String(r.modelo).trim().toUpperCase()].join('|');
+    if (existing[key]) { skipped++; return; }
+    existing[key] = true;
+    var obj = {
+      data: r.data, empresa: r.empresa, modelo: r.modelo, impacto: r.impacto,
+      referencia: r.referencia, status: 'pendente', tipo: r.tipo || 'modelo',
+      dias: '', origem: r.origem || 'auto',
+      timestamp: new Date(), data_atualizacao: new Date()
+    };
+    pend.appendRow(_rowFromObj(headers, obj));
+    added.push(r);
+  });
+
+  _sendEmail(body, added, skipped);
+  return _json({ ok: true, added: added.length, skipped: skipped });
+}
+
+// ── admin: aprovar/rejeitar uma linha pendente (vindo da PWA de curadoria) ──
+function _handleAdmin_(body, action) {
+  if (!body || body.token !== getSecret_()) return _json({ ok: false, error: 'token invalido' });
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var pend = ss.getSheetByName(TAB_PEND);
+  if (!pend) return _json({ ok: false, error: 'aba "' + TAB_PEND + '" nao existe' });
+
+  var headers = _headers(pend);
+  var iData = _col(headers, 'data'), iEmp = _col(headers, 'empresa'),
+      iMod = _col(headers, 'modelo'), iStatus = _col(headers, 'status');
+  if (iData < 0 || iEmp < 0 || iMod < 0) return _json({ ok: false, error: 'cabecalho invalido' });
+
+  var alvo = [String(body.data).trim(),
+              String(body.empresa).trim().toUpperCase(),
+              String(body.modelo).trim().toUpperCase()].join('|');
+
+  var last = pend.getLastRow();
+  for (var r = 2; r <= last; r++) {
+    var vals = pend.getRange(r, 1, 1, pend.getLastColumn()).getValues()[0];
+    var st = iStatus >= 0 ? String(vals[iStatus]).trim().toLowerCase() : 'pendente';
+    if (st && st !== 'pendente') continue; // só age sobre pendentes
+    var key = [_fmtDate(vals[iData]),
+               String(vals[iEmp]).trim().toUpperCase(),
+               String(vals[iMod]).trim().toUpperCase()].join('|');
+    if (key !== alvo) continue;
+
+    var emp = vals[iEmp], mod = vals[iMod];
+    if (action === 'aprovar') _promoverLinha_(ss, pend, headers, r);
+    pend.deleteRow(r);
+    return _json({ ok: true, action: action, empresa: emp, modelo: mod });
+  }
+  return _json({ ok: false, error: 'linha pendente nao encontrada (ja processada?)' });
 }
 
 // ──────────────────── onEdit: aprovar promove p/ Lancamentos ─────────────────
@@ -73,19 +148,25 @@ function onEdit(e) {
   var row = e.range.getRow();
   if (row === 1) return;
 
-  var ss = e.source;
-  var lanc = ss.getSheetByName(TAB_LANC);
-  if (!lanc) return;
-  var lancHeaders = _headers(lanc);
+  _promoverLinha_(e.source, sh, headers, row);
 
-  var vals = sh.getRange(row, 1, 1, sh.getLastColumn()).getValues()[0];
+  // Marca a linha como publicada p/ sair da fila da PWA (sem apagar, deixa rastro na planilha).
+  var iStatus = _col(headers, 'status');
+  if (iStatus >= 0) sh.getRange(row, iStatus + 1).setValue('publicado');
+  sh.getRange(row, aprovarCol).setNote('Aprovado e publicado em ' + new Date());
+}
+
+// ── helper compartilhado: copia a linha de Pendentes p/ Lancamentos como publicado ──
+function _promoverLinha_(ss, pend, pendHeaders, rowIndex) {
+  var lanc = ss.getSheetByName(TAB_LANC);
+  if (!lanc) throw new Error('aba "' + TAB_LANC + '" nao existe');
+  var lancHeaders = _headers(lanc);
+  var vals = pend.getRange(rowIndex, 1, 1, pend.getLastColumn()).getValues()[0];
   var obj = {};
-  headers.forEach(function (h, i) { obj[h] = vals[i]; });
+  pendHeaders.forEach(function (h, i) { obj[h] = vals[i]; });
   obj.status = 'publicado';
   obj.data_atualizacao = new Date();
-
   lanc.appendRow(_rowFromObj(lancHeaders, obj));
-  sh.getRange(row, aprovarCol).setNote('Aprovado e publicado em ' + new Date());
 }
 
 // ───────────────────────────── helpers ──────────────────────────────────────
@@ -167,8 +248,8 @@ function _sendEmail(body, added, skipped) {
   var html =
     '<p>Pipeline automático encontrou <b>' + added.length + '</b> candidato(s) novo(s) ' +
     '(ignorados por já existirem: ' + skipped + ').</p>' +
-    '<p>Eles estão na aba <b>' + TAB_PEND + '</b> como rascunho. Para publicar no site, ' +
-    'marque a coluna <b>"' + COL_APROVAR + '"</b> na linha desejada.</p>' +
+    '<p>Abra a <b>PWA de curadoria</b> para aprovar/rejeitar, ou marque a coluna <b>"' +
+    COL_APROVAR + '"</b> na aba <b>' + TAB_PEND + '</b>.</p>' +
     '<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse">' +
     '<tr><th>Data</th><th>Empresa</th><th>Modelo</th><th>Conf.</th><th>Fonte</th></tr>' +
     rows + '</table>' +
