@@ -11,8 +11,10 @@ on:
         default: true
 
 # O Claude só lê/escreve arquivos locais e pesquisa na web — não precisa escrever no repo.
+# id-token: write é exigido pelo claude-code-action@v1 (usa OIDC).
 permissions:
   contents: read
+  id-token: write
 
 concurrency:
   group: auto-update
