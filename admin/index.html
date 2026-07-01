@@ -38,6 +38,11 @@
   .btn-ok { background:var(--ok); color:#06210f; flex:1; }
   .btn-no { background:var(--no); color:#2a0808; flex:1; }
   .actions button:disabled { opacity:.5; cursor:default; }
+  .spinner { display:inline-block; width:13px; height:13px; vertical-align:-2px; margin-right:7px;
+             border:2px solid rgba(0,0,0,.25); border-top-color:currentColor; border-radius:50%;
+             animation:spin .7s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .card.busy { opacity:.7; pointer-events:none; }
   .empty { text-align:center; color:var(--mut); padding:48px 16px; }
   .token-box { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; }
   .token-box input { width:100%; padding:11px; border-radius:9px; border:1px solid var(--line);
@@ -179,30 +184,56 @@
   }
 
   // ── ação aprovar/rejeitar → POST text/plain (sem preflight CORS) ──
+  var busy = false; // trava global: só uma ação por vez (evita clique duplo)
+
+  // O Apps Script responde por um redirect entre domínios do Google que o navegador
+  // muitas vezes não consegue ler — o fetch pode ficar pendurado. Por isso corremos
+  // contra um timeout: se estourar, NÃO quer dizer que falhou (o servidor já gravou);
+  // apenas seguimos e confirmamos relendo a planilha.
+  function withTimeout(promise, ms) {
+    return Promise.race([
+      promise,
+      new Promise(function (_, rej) { setTimeout(function () { rej(new Error("timeout")); }, ms); })
+    ]);
+  }
+
   async function act(action, it, cardEl) {
+    if (busy) return;
+    busy = true;
     var btns = cardEl.querySelectorAll("button");
+    var clicked = cardEl.querySelector(action === "aprovar" ? ".btn-ok" : ".btn-no");
+    var label = clicked.innerHTML; // guarda p/ restaurar se der erro legível
     btns.forEach(function (b) { b.disabled = true; });
+    cardEl.classList.add("busy");
+    clicked.innerHTML = '<span class="spinner"></span>Enviando…';
+
     var payload = { action: action, token: getToken(), data: it.date, empresa: it.emp, modelo: it.mod };
-    var ok = false, msg = "";
+    var errMsg = "";
     try {
-      var res = await fetch(APPS_SCRIPT_URL, {
+      var res = await withTimeout(fetch(APPS_SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(payload),
         redirect: "follow"
-      });
-      var txt = await res.text();
-      try { var j = JSON.parse(txt); ok = !!j.ok; msg = j.error || ""; } catch (e) { /* resposta opaca: confirmamos por reload */ ok = res.ok; }
-    } catch (e) { msg = e.message; }
+      }), 12000);
+      // Quando a resposta É legível, capturamos erros reais (ex.: token invalido).
+      try { var j = JSON.parse(await res.text()); if (j && j.ok === false) errMsg = j.error || "falhou"; } catch (e) { /* ilegível: confirmamos por reload */ }
+    } catch (e) { /* timeout/CORS: NÃO é falha — confirmamos por reload abaixo */ }
 
-    if (ok) {
-      cardEl.style.opacity = ".4";
-      toast(action === "aprovar" ? "✓ Aprovado e publicado" : "Rejeitado");
-      setTimeout(loadPendentes, 700); // recarrega p/ confirmar pelo estado real da planilha
-    } else {
+    busy = false;
+
+    if (errMsg) { // erro de verdade e legível → restaura e avisa
+      clicked.innerHTML = label;
+      cardEl.classList.remove("busy");
       btns.forEach(function (b) { b.disabled = false; });
-      toast("Erro: " + (msg || "falhou") + (msg === "token invalido" ? " — confira o token" : ""), true);
+      toast("Erro: " + errMsg + (errMsg === "token invalido" ? " — confira o token" : ""), true);
+      return;
     }
+    // Sucesso (ou resposta ilegível = quase sempre sucesso): confirma e reconcilia.
+    clicked.innerHTML = action === "aprovar" ? "✓ Aprovado" : "✓ Rejeitado";
+    cardEl.style.opacity = ".4";
+    toast(action === "aprovar" ? "✓ Aprovado e publicado" : "✓ Rejeitado");
+    setTimeout(loadPendentes, 1500); // relê a planilha p/ confirmar pelo estado real
   }
 
   // ── token gate ──
