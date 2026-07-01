@@ -181,7 +181,8 @@ A pasta `panorama-llms-preview/` ainda carregava todo o `.git/` do repositório 
 - **Repositório:** `panorama-llms-github/`
 - **Remote:** `https://github.com/lapig-ufg/app-panorama-global-da-ia-generativa.git`
 - **Branch:** `main`
-- **Mensagem:** `chore: reorganiza workspace, sincroniza raiz com deploy e adiciona ORGANIZACAO.md`
+- **Hash:** `9f2fa60`
+- **Mensagem:** `chore: adiciona .nojekyll e documenta organizacao do projeto`
 - **Arquivos alterados:**
   - Novos: `.nojekyll`, `ORGANIZACAO.md`
   - Nenhuma alteração no conteúdo dos arquivos existentes (a raiz e o clone ficaram idênticos antes do commit).
