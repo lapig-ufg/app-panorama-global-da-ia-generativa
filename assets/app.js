@@ -81,6 +81,34 @@ function parseSheetTimestamp(val) {
   return isNaN(t) ? 0 : t;
 }
 
+// ─── ESTADO DE ZOOM ───
+const ZOOM_CACHE_KEY = 'panorama-llms-zoom-v1';
+let currentPxPerDay = CONFIG.PX_PER_DAY;
+
+function loadZoom() {
+  try {
+    const raw = sessionStorage.getItem(ZOOM_CACHE_KEY);
+    if (raw) {
+      const v = parseFloat(raw);
+      if (!isNaN(v)) currentPxPerDay = clampZoom(v);
+    }
+  } catch (e) { /* sessionStorage indisponível */ }
+}
+
+function saveZoom() {
+  try {
+    sessionStorage.setItem(ZOOM_CACHE_KEY, String(currentPxPerDay));
+  } catch (e) { /* ignora */ }
+}
+
+function clampZoom(v) {
+  return Math.min(CONFIG.MAX_PX_PER_DAY, Math.max(CONFIG.MIN_PX_PER_DAY, Math.round(v * 100) / 100));
+}
+
+function getZoomLabel() {
+  return `${currentPxPerDay.toFixed(1)} px/dia`;
+}
+
 // ─── PIPELINE DE PROCESSAMENTO DAS LINHAS ───
 function processRows(allRows) {
   // Dedup por data|empresa|modelo
@@ -121,7 +149,8 @@ function processRows(allRows) {
     });
   });
 
-  rebuildV2();
+  rebuildV2(undefined, currentPxPerDay);
+  updateZoomUI();
 }
 
 // ─── ESTADOS DE ERRO E LOADING ───
@@ -324,8 +353,8 @@ function initDragPan() {
   if (!slider) return;
 
   slider.addEventListener('mousedown', e => {
-    // Não inicia drag se foi clique numa pílula ou link
-    if (e.target.closest('.pill-group') || e.target.closest('a')) return;
+    // Não inicia drag se foi clique numa pílula, link ou controle de zoom
+    if (e.target.closest('.pill-group') || e.target.closest('a') || e.target.closest('.zoom-control')) return;
     isDragging = false;
     justDragged = false;
     dragStartX = e.pageX;
@@ -360,6 +389,106 @@ function initDragPan() {
 
   slider.addEventListener('mouseup', endDrag);
   slider.addEventListener('mouseleave', endDrag);
+}
+
+// ─── ZOOM E AJUSTE À TELA ───
+function updateZoomUI() {
+  const label = document.getElementById('zoom-label');
+  const slider = document.getElementById('zoom-slider');
+  if (label) label.textContent = getZoomLabel();
+  if (slider) slider.value = currentPxPerDay;
+}
+
+function setZoom(v, opts = {}) {
+  const next = clampZoom(v);
+  if (next === currentPxPerDay) return;
+  currentPxPerDay = next;
+  saveZoom();
+  updateZoomUI();
+
+  // Memoriza a posição proporcional do scroll para tentar manter o ponto de vista
+  const slider = document.getElementById('timeline-area');
+  let relativeScroll = 0;
+  if (slider && slider.scrollWidth > slider.clientWidth) {
+    relativeScroll = slider.scrollLeft / (slider.scrollWidth - slider.clientWidth);
+  }
+
+  rebuildV2(undefined, currentPxPerDay);
+
+  // Restaura a posição proporcional após o novo SVG ser renderizado
+  if (slider && !opts.skipScroll) {
+    requestAnimationFrame(() => {
+      const maxScroll = slider.scrollWidth - slider.clientWidth;
+      if (maxScroll > 0) {
+        slider.scrollLeft = relativeScroll * maxScroll;
+      }
+    });
+  }
+}
+
+function zoomIn() {
+  setZoom(currentPxPerDay + CONFIG.ZOOM_STEP);
+}
+
+function zoomOut() {
+  setZoom(currentPxPerDay - CONFIG.ZOOM_STEP);
+}
+
+function fitToScreen() {
+  const slider = document.getElementById('timeline-area');
+  if (!slider) return;
+  const padding = CONFIG.PAD_L + CONFIG.PAD_R + 40;
+  const available = Math.max(400, slider.clientWidth - padding);
+  const target = available / GLOBAL_MAX_DIAS;
+  setZoom(target, { skipScroll: true });
+  requestAnimationFrame(() => {
+    slider.scrollLeft = 0;
+  });
+}
+
+function initZoomControls() {
+  const btnIn = document.getElementById('zoom-in');
+  const btnOut = document.getElementById('zoom-out');
+  const btnFit = document.getElementById('zoom-fit');
+  const slider = document.getElementById('zoom-slider');
+
+  if (btnIn) btnIn.addEventListener('click', zoomIn);
+  if (btnOut) btnOut.addEventListener('click', zoomOut);
+  if (btnFit) btnFit.addEventListener('click', fitToScreen);
+  if (slider) {
+    slider.min = CONFIG.MIN_PX_PER_DAY;
+    slider.max = CONFIG.MAX_PX_PER_DAY;
+    slider.step = CONFIG.ZOOM_STEP;
+    slider.value = currentPxPerDay;
+    let debounce;
+    slider.addEventListener('input', e => {
+      clearTimeout(debounce);
+      debounce = setTimeout(() => setZoom(parseFloat(e.target.value)), 40);
+    });
+  }
+
+  // Ctrl/Cmd + scroll para zoom (desktop)
+  window.addEventListener('wheel', e => {
+    if (!e.ctrlKey && !e.metaKey) return;
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -CONFIG.ZOOM_STEP : CONFIG.ZOOM_STEP;
+    setZoom(currentPxPerDay + delta);
+  }, { passive: false });
+
+  // Atalhos de teclado: +/- e 0
+  document.addEventListener('keydown', e => {
+    if (e.target.matches('input, textarea, select')) return;
+    if (e.key === '+' || e.key === '=') {
+      e.preventDefault();
+      zoomIn();
+    } else if (e.key === '-' || e.key === '_') {
+      e.preventDefault();
+      zoomOut();
+    } else if (e.key === '0') {
+      e.preventDefault();
+      fitToScreen();
+    }
+  });
 }
 
 // ─── EXPORTAÇÃO PNG (nativo, sem dependência do html2canvas) ───
@@ -568,6 +697,8 @@ function downloadSVG() {
 
 // ─── INICIALIZAÇÃO ───
 document.addEventListener('DOMContentLoaded', () => {
+  loadZoom();
+  initZoomControls();
   initDragPan();
   loadSheetData();
 });

@@ -95,7 +95,22 @@
       </svg>
       Exportar SVG
     </button>
-    <span class="controls-info">Swimlanes por empresa · Escala temporal proporcional · Arraste para navegar</span>
+
+    <div class="zoom-control" aria-label="Controles de zoom temporal">
+      <button class="zoom-btn" id="zoom-out" type="button" aria-label="Diminuir zoom" title="Diminuir zoom (−)">−</button>
+      <input type="range" id="zoom-slider" class="zoom-slider" aria-label="Escala temporal">
+      <button class="zoom-btn" id="zoom-in" type="button" aria-label="Aumentar zoom" title="Aumentar zoom (+)">+</button>
+      <span class="zoom-label" id="zoom-label">1.5 px/dia</span>
+      <button class="download-btn secondary zoom-fit-btn" id="zoom-fit" type="button" title="Ajustar toda a timeline à largura da tela (atalho: 0)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+        </svg>
+        Ajustar à tela
+      </button>
+    </div>
+
+    <span class="controls-info">Swimlanes por empresa · Escala temporal proporcional · Arraste para navegar · Ctrl+scroll para zoom</span>
   </div>
 
   <main class="main">

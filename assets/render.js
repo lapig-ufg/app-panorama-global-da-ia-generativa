@@ -27,20 +27,98 @@ function fmtFull(dStr) {
   return `${d.getDate().toString().padStart(2, '0')} ${MESES[d.getMonth()]} ${d.getFullYear()}`;
 }
 
+// Largura estimada de texto da pílula. Usa medidas aproximadas por caractere,
+// dando folga para evitar que o colchete de lanes encoste no vizinho.
+function estimatePillWidth(ev) {
+  const textPad = 34;           // espaço entre ícone e início do texto
+  const textEndPad = 16;        // folga direita interna
+  const charW = 7.4;            // média Inter 11.5px com peso bold
+  // Adiciona uma pequena folga proporcional ao tamanho do nome
+  return Math.max(90, Math.round(textPad + ev.mod.length * charW + textEndPad));
+}
+
+// ─── PRÉ-CÁLCULO DO LAYOUT VERTICAL ───
+// Retorna, para cada track, o número máximo de lanes usadas e o topo de cada pílula.
+function computeTrackLayout(maxDias, pxPerDay) {
+  const xOf = (dias) => CONFIG.PAD_L + Math.round(dias * pxPerDay);
+  const PILL_H = 32;
+  const LANE_STEP = 40;        // distância vertical entre centros das lanes
+  const GAP_BETWEEN_PILLS = 10; // espaço horizontal mínimo entre pílulas na mesma lane
+
+  const layout = [];
+
+  LAYOUT_GROUPS.forEach((group, gIdx) => {
+    const groupLayout = { tracks: [] };
+
+    group.tracks.forEach(track => {
+      const lanes = []; // lanes[l] = x final (right) da última pílula na lane l
+      const events = [];
+      let maxLane = 0;
+
+      // Ordena eventos por dia para processar da esquerda para a direita
+      const sorted = [...(track.events || [])].sort((a, b) => a.dias - b.dias);
+
+      sorted.forEach((ev, idx) => {
+        const x = xOf(ev.dias);
+        const w = estimatePillWidth(ev);
+
+        // Encontra uma lane onde a pílula caiba sem encostar na anterior
+        let lane = 0;
+        for (let l = 0; l < CONFIG.MAX_LANES; l++) {
+          if (!lanes[l] || x >= lanes[l] + GAP_BETWEEN_PILLS) {
+            lane = l;
+            break;
+          }
+        }
+        lanes[lane] = x + w;
+        if (lane > maxLane) maxLane = lane;
+
+        // Offset vertical em torno do eixo: lanes ímpares para cima, pares para baixo
+        const laneOffset = lane === 0
+          ? 0
+          : (lane % 2 === 1
+              ? -Math.ceil(lane / 2) * LANE_STEP
+              : Math.ceil(lane / 2) * LANE_STEP);
+
+        events.push({ ev, idx, x, w, lane, laneOffset });
+      });
+
+      // Altura mínima garante espaço para o eixo central + lanes para cima e para baixo
+      const lanesUp = Math.ceil(maxLane / 2);
+      const lanesDown = Math.floor(maxLane / 2);
+      const trackHeight = Math.max(
+        CONFIG.MIN_TRACK_H,
+        PILL_H + 24 + lanesUp * LANE_STEP + lanesDown * LANE_STEP
+      );
+
+      groupLayout.tracks.push({ events, trackHeight });
+    });
+
+    layout.push(groupLayout);
+  });
+
+  return layout;
+}
+
 // ─── FUNÇÃO PRINCIPAL DE DESENHO ───
-function rebuildV2(customMaxDias) {
+function rebuildV2(customMaxDias, pxPerDay) {
   const maxDias = customMaxDias !== undefined ? customMaxDias : GLOBAL_MAX_DIAS;
-  const usableW = Math.round(maxDias * CONFIG.PX_PER_DAY);
+  const scale = (pxPerDay !== undefined && !isNaN(pxPerDay)) ? pxPerDay : CONFIG.PX_PER_DAY;
+  const usableW = Math.round(maxDias * scale);
   const SVG_W = CONFIG.PAD_L + usableW + CONFIG.PAD_R;
-  const xOf = (dias) => CONFIG.PAD_L + Math.round(dias * CONFIG.PX_PER_DAY);
+  const xOf = (dias) => CONFIG.PAD_L + Math.round(dias * scale);
 
   window.tooltipData = {};
   let bgSvg = '', gridSvg = '', elementsSvg = '';
 
   const HEADER_H = 48;
   const GROUP_TITLE_H = 76;
-  const TRACK_H = 110;
   const GROUP_GAP = 10;
+  const PILL_H = 32;
+  const ICON_R = 11;
+
+  // Pré-calcula alturas dinâmicas de cada track
+  const layout = computeTrackLayout(maxDias, scale);
 
   // ─── DEFS: gradientes + filtro de sombra ───
   let defsSvg = `<defs>
@@ -60,10 +138,10 @@ function rebuildV2(customMaxDias) {
 
   // ─── PASS 1: Backgrounds dos grupos ───
   let currentY = HEADER_H;
-  LAYOUT_GROUPS.forEach((g, i) => {
-    const h = GROUP_TITLE_H + g.tracks.length * TRACK_H + 16;
-    bgSvg += `<rect x="0" y="${currentY}" width="${SVG_W}" height="${h}" fill="url(#bg-grad-${i})"/>`;
-    currentY += h + GROUP_GAP;
+  LAYOUT_GROUPS.forEach((g, gIdx) => {
+    const groupH = GROUP_TITLE_H + layout[gIdx].tracks.reduce((acc, t) => acc + t.trackHeight, 0) + 16;
+    bgSvg += `<rect x="0" y="${currentY}" width="${SVG_W}" height="${groupH}" fill="url(#bg-grad-${gIdx})"/>`;
+    currentY += groupH + GROUP_GAP;
   });
   const SVG_H = currentY + 32;
 
@@ -108,7 +186,8 @@ function rebuildV2(customMaxDias) {
   // ─── PASS 3: Conteúdo (grupos + tracks + pílulas) ───
   currentY = HEADER_H;
   LAYOUT_GROUPS.forEach((group, gIdx) => {
-    const groupHeight = GROUP_TITLE_H + group.tracks.length * TRACK_H + 16;
+    const groupLayout = layout[gIdx];
+    const groupHeight = GROUP_TITLE_H + groupLayout.tracks.reduce((acc, t) => acc + t.trackHeight, 0) + 16;
 
     // Barra de acento regional
     elementsSvg += `<rect x="20" y="${currentY + 14}" width="44" height="3" rx="1.5" fill="${group.accent}"/>`;
@@ -116,7 +195,7 @@ function rebuildV2(customMaxDias) {
     // Bandeira + título do grupo
     let titleX = 20;
     if (group.flag && FLAG_SVG[group.flag]) {
-      const flagLabel = group.flag === 'US' ? 'Bandeira dos EUA' : group.flag === 'CN' ? 'Bandeira da China' : 'Globo — outros países';
+      const flagLabel = group.flag === 'US' ? 'Bandeira dos EUA' : group.flag === 'CN' ? 'Bandeira da China' : 'Mundo';
       elementsSvg += `<g transform="translate(20, ${currentY + 24})" role="img" aria-label="${flagLabel}"><title>${flagLabel}</title>${FLAG_SVG[group.flag]}</g>`;
       titleX = 20 + 30 + 12;
     }
@@ -129,8 +208,9 @@ function rebuildV2(customMaxDias) {
 
     let trackY = currentY + GROUP_TITLE_H;
 
-    group.tracks.forEach(track => {
-      const axisY = trackY + TRACK_H / 2;
+    group.tracks.forEach((track, tIdx) => {
+      const trackHeight = groupLayout.tracks[tIdx].trackHeight;
+      const axisY = trackY + trackHeight / 2;
       const trackColor = COMPANY_COLORS[track.events[0]?.emp] || '#a5a297';
 
       // Eixo do track
@@ -140,26 +220,11 @@ function rebuildV2(customMaxDias) {
       const countLabel = track.events.length ? ` (${track.events.length})` : '';
       elementsSvg += `<text x="${CONFIG.PAD_L - 28}" y="${axisY + 4}" text-anchor="end" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#1a1a1a" letter-spacing="-0.005em">${escapeXml(track.name)}<tspan font-weight="500" fill="#a5a297" font-size="10" font-family="DM Mono,monospace">${escapeXml(countLabel)}</tspan></text>`;
 
-      // Detecção de colisão por lanes
-      const lanes = [];
-
-      track.events.forEach((ev, idx) => {
-        const x = xOf(ev.dias);
+      // Pílulas já pré-computadas
+      groupLayout.tracks[tIdx].events.forEach(({ ev, idx, x, w, lane, laneOffset }) => {
         const color = COMPANY_COLORS[ev.emp] || '#999';
         const logoKey = LOGO_MAP[ev.emp];
-        const PILL_H = 32;
-        const ICON_R = 11;
         const textPad = 32;
-        const estWidth = textPad + ev.mod.length * 7.2 + 14;
-
-        // Encontra uma lane livre
-        let lane = 0;
-        for (let l = 0; l < 20; l++) {
-          if (!lanes[l] || x > lanes[l] + 18) { lane = l; break; }
-        }
-        lanes[lane] = x + estWidth;
-
-        const laneOffset = lane === 0 ? 0 : (lane % 2 === 1 ? Math.ceil(lane / 2) * 38 : -Math.ceil(lane / 2) * 38);
         const pillY = axisY - PILL_H / 2 + laneOffset;
         const pillCy = pillY + PILL_H / 2;
 
@@ -179,8 +244,8 @@ function rebuildV2(customMaxDias) {
 
         // Pílula com sombra
         elementsSvg += `<g filter="url(#pillShadow)">`;
-        elementsSvg += `<rect x="${x}" y="${pillY}" width="${estWidth}" height="${PILL_H}" rx="16" fill="#fff"/>`;
-        elementsSvg += `<rect x="${x}" y="${pillY}" width="${estWidth}" height="${PILL_H}" rx="16" fill="${color}" opacity="0.09" stroke="${color}" stroke-width="1.25" class="pill-bg"/>`;
+        elementsSvg += `<rect x="${x}" y="${pillY}" width="${w}" height="${PILL_H}" rx="16" fill="#fff"/>`;
+        elementsSvg += `<rect x="${x}" y="${pillY}" width="${w}" height="${PILL_H}" rx="16" fill="${color}" opacity="0.09" stroke="${color}" stroke-width="1.25" class="pill-bg"/>`;
         elementsSvg += `</g>`;
 
         // Ícone (logo SVG ou inicial)
@@ -200,7 +265,7 @@ function rebuildV2(customMaxDias) {
         elementsSvg += `</g>`;
       });
 
-      trackY += TRACK_H;
+      trackY += trackHeight;
     });
 
     currentY += groupHeight + GROUP_GAP;
