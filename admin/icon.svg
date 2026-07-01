@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" rx="96" fill="#0f172a"/>
+  <rect width="512" height="512" rx="112" fill="#10a37f"/>
   <!-- linha do tempo -->
-  <line x1="128" y1="216" x2="384" y2="216" stroke="#38bdf8" stroke-width="14" stroke-linecap="round"/>
-  <circle cx="160" cy="216" r="20" fill="#38bdf8"/>
-  <circle cx="256" cy="216" r="20" fill="#64748b"/>
-  <circle cx="352" cy="216" r="20" fill="#64748b"/>
-  <!-- selo de aprovação -->
-  <circle cx="316" cy="332" r="78" fill="#22c55e"/>
-  <path d="M282 332 l24 26 l44 -52" fill="none" stroke="#06210f" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="150" y1="198" x2="362" y2="198" stroke="#ffffff" stroke-width="14" stroke-linecap="round" opacity="0.55"/>
+  <circle cx="182" cy="198" r="17" fill="#ffffff" opacity="0.55"/>
+  <circle cx="256" cy="198" r="17" fill="#ffffff" opacity="0.55"/>
+  <circle cx="330" cy="198" r="17" fill="#ffffff"/>
+  <!-- selo de curadoria (aprovado) -->
+  <circle cx="318" cy="330" r="80" fill="#ffffff"/>
+  <path d="M284 330 l24 26 l44 -54" fill="none" stroke="#10a37f" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
