@@ -15,7 +15,7 @@ const ROOT = join(__dirname, '..');
 const WORK = join(__dirname, '_work');
 mkdirSync(WORK, { recursive: true });
 
-const LOOKBACK_DAYS = Number(process.env.LOOKBACK_DAYS || 21);
+const LOOKBACK_DAYS = Number(process.env.LOOKBACK_DAYS || 7);
 
 // ── 1. Carrega config de assets/data.js (consts não exportadas → captura via vm) ──
 function loadDataJs(fields) {

@@ -53,7 +53,7 @@ Copie a URL `/exec` (`clasp open-web-app` ou o painel de implantações). É o s
 | `APPS_SCRIPT_TOKEN` | O mesmo valor da Script Property `SECRET` do passo 2 |
 
 ### 4. Variável de segurança (opcional, recomendado)
-- Em **Variables** (não Secrets): `AUTO_PUBLISH`.
+- Em **Variables** (não Secrets): `AUTO_PUBLISH`. **Estado atual: `true`** (o cron de segunda escreve nos `Pendentes` sozinho; o site continua só publicando o que você aprovar na PWA).
   - **Deixe sem criar / diferente de `true`** → as rodadas agendadas ficam em **dry-run** (não escrevem). Use isto enquanto calibra o filtro.
   - Defina `AUTO_PUBLISH = true` quando estiver confiante → o cron semanal passa a escrever em `Pendentes` de verdade.
 
@@ -67,7 +67,7 @@ Copie a URL `/exec` (`clasp open-web-app` ou o painel de implantações). É o s
 6. Quando confiar, defina `AUTO_PUBLISH = true` para o agendamento semanal.
 
 ## Ajustes finos
-- **Janela de busca:** `LOOKBACK_DAYS` (env, padrão 21) em `prepare.mjs`.
+- **Janela de busca:** `LOOKBACK_DAYS` (env, padrão **7**) em `prepare.mjs` — casa com o cron semanal (segundas), sem gaps.
 - **Limiar de confiança:** `CONF_MIN` (env, padrão 0.55) em `publish.mjs`.
 - **Rubrica de relevância:** edite `policy.md` (versionado).
 - **Empresa nova:** o e-mail traz um snippet de `data.js` pronto (logo via Simple Icons, cor placeholder, régua no grupo sugerido). Aplique o snippet + suba o `?v=` do `index.html` **antes** de aprovar a linha.
