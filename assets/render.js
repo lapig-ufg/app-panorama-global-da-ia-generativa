@@ -183,8 +183,9 @@ function rebuildV2(customMaxDias, pxPerDay) {
   if (marcoDias <= maxDias) {
     const xMarco = xOf(marcoDias);
     gridSvg += `<line x1="${xMarco}" y1="${HEADER_H}" x2="${xMarco}" y2="${SVG_H - 30}" stroke="#10a37f" stroke-width="1.5" opacity="0.35" stroke-dasharray="4,4"/>`;
-    gridSvg += `<g transform="translate(${xMarco}, 20)">
-      <rect x="-28" y="-14" width="56" height="22" rx="11" fill="#10a37f"/>
+    // Badge na base para nao sobrepor os labels de ano no topo
+    gridSvg += `<g transform="translate(${xMarco}, ${SVG_H - 16})">
+      <rect x="-28" y="-11" width="56" height="22" rx="11" fill="#10a37f"/>
       <text font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="0.02em">Marco zero</text>
     </g>`;
   }
