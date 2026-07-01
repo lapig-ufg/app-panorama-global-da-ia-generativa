@@ -155,6 +155,7 @@ function processRows(allRows) {
 
 // ─── ESTADOS DE ERRO E LOADING ───
 function showError(message) {
+  hideLoading();
   const wrap = document.getElementById('svg-wrap');
   wrap.innerHTML = `
     <div class="error-state">
@@ -166,8 +167,13 @@ function showError(message) {
 }
 
 function showLoading() {
-  const wrap = document.getElementById('svg-wrap');
-  wrap.innerHTML = '<div class="loading-state">Carregando dados da planilha…</div>';
+  const loader = document.getElementById('timeline-loading');
+  if (loader) loader.classList.add('visible');
+}
+
+function hideLoading() {
+  const loader = document.getElementById('timeline-loading');
+  if (loader) loader.classList.remove('visible');
 }
 
 // ─── CARREGAMENTO PRINCIPAL ───
@@ -178,6 +184,7 @@ async function loadSheetData() {
   const cached = readCache();
   if (cached) {
     processRows(cached.rows);
+    hideLoading();
     // Mas continua atualizando em background
     fetchFresh(true).catch(() => { /* silencioso, já temos cache */ });
     return;
@@ -185,8 +192,10 @@ async function loadSheetData() {
 
   try {
     await fetchFresh(false);
+    hideLoading();
   } catch (e) {
     console.error('Falha ao carregar planilha:', e);
+    hideLoading();
     showError('Verifique sua conexão e se a planilha está pública. Erro: ' + (e.message || 'desconhecido'));
   }
 }
@@ -248,31 +257,47 @@ function showTip(e, id) {
   document.getElementById('tt-company').textContent = ev.emp;
   document.getElementById('tt-impact').textContent = ev.impact || '—';
 
+  // Mede posição da pílula alvo para posicionar a seta
+  const target = e.target && e.target.closest ? e.target.closest('.pill-group') : null;
+  const targetRect = target ? target.getBoundingClientRect() : null;
 
-
-  // Mostra invisível primeiro para medir altura real
   tooltip.classList.add('visible');
 
-  // Posicionamento robusto baseado em medidas reais
   requestAnimationFrame(() => {
     const rect = tooltip.getBoundingClientRect();
-    const margin = 12;
+    const margin = 16;
+    const arrow = tooltip.querySelector('.tooltip-arrow');
 
-    let left = e.clientX + 20;
-    let top = e.clientY - 40;
+    let anchorX = e.clientX;
+    let anchorY = targetRect ? targetRect.top : e.clientY;
 
+    // Default: tooltip abaixo do alvo, centralizado horizontalmente
+    let left = anchorX - rect.width / 2;
+    let top = anchorY + (targetRect ? targetRect.height : 0) + 14;
+
+    // Não vaza pela direita
     if (left + rect.width > window.innerWidth - margin) {
-      left = e.clientX - rect.width - 20;
+      left = window.innerWidth - rect.width - margin;
     }
+    // Não vaza pela esquerda
     if (left < margin) left = margin;
 
+    // Se não couber abaixo, coloca acima
+    let placeAbove = false;
     if (top + rect.height > window.innerHeight - margin) {
-      top = window.innerHeight - rect.height - margin;
+      placeAbove = true;
+      top = (targetRect ? targetRect.top : e.clientY) - rect.height - 14;
     }
     if (top < margin) top = margin;
 
     tooltip.style.left = left + 'px';
     tooltip.style.top = top + 'px';
+
+    if (arrow) {
+      arrow.classList.toggle('above', placeAbove);
+      const arrowOffset = Math.max(10, Math.min(rect.width - 10, anchorX - left));
+      arrow.style.left = arrowOffset + 'px';
+    }
   });
 }
 
@@ -338,6 +363,7 @@ document.addEventListener('keydown', e => {
 document.addEventListener('DOMContentLoaded', () => {
   const closeBtn = document.getElementById('tt-close');
   if (closeBtn) closeBtn.addEventListener('click', () => hideTip(true));
+  initHelpPopover();
 });
 
 // ─── DRAG-TO-PAN (com threshold para não atrapalhar clicks) ───
@@ -488,6 +514,35 @@ function initZoomControls() {
       e.preventDefault();
       fitToScreen();
     }
+  });
+}
+
+function initHelpPopover() {
+  const btn = document.getElementById('help-btn');
+  const popover = document.getElementById('help-popover');
+  const close = document.getElementById('help-close');
+  if (!btn || !popover) return;
+
+  function toggle(show) {
+    popover.hidden = !show;
+    btn.setAttribute('aria-expanded', String(show));
+  }
+
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    toggle(popover.hidden);
+  });
+
+  if (close) close.addEventListener('click', () => toggle(false));
+
+  document.addEventListener('click', e => {
+    if (!popover.hidden && !popover.contains(e.target) && e.target !== btn) {
+      toggle(false);
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!popover.hidden && e.key === 'Escape') toggle(false);
   });
 }
 

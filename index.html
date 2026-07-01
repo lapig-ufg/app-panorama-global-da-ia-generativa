@@ -47,7 +47,7 @@
       <a href="https://lapig.iesa.ufg.br/" target="_blank" rel="noopener"
          class="header-logo"
          title="Laboratório de Processamento de Imagens e Geoinformação — LAPIG / UFG"
-         aria-label="LAPIG — Laboratório de Processamento de Imagens e Geoinformação">
+         aria-label="LAPIG">
         <svg viewBox="1500 8200 17700 6300" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
              style="shape-rendering:geometricPrecision" role="img" aria-label="Logo do LAPIG">
           <defs>
@@ -72,55 +72,77 @@
       </div>
     </div>
     <div class="header-meta">
-      <div class="meta-row"><span class="meta-label">Marco zero</span><span class="meta-value">30 Nov 2022</span></div>
-      <div class="meta-row"><span class="meta-label">Última atualização</span><span class="meta-value" id="last-update-date">…</span></div>
+      <div class="meta-row"><span class="meta-label">Marco zero</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-value">30 Nov 2022</span></div>
+      <div class="meta-row"><span class="meta-label">Atualizado</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-value" id="last-update-date">…</span></div>
     </div>
   </header>
 
   <div class="controls">
-    <button class="download-btn" id="btnExport" onclick="downloadPNG()" type="button">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-        <polyline points="7 10 12 15 17 10" />
-        <line x1="12" y1="15" x2="12" y2="3" />
-      </svg>
-      Exportar PNG (HD)
-    </button>
-    <button class="download-btn secondary" onclick="downloadSVG()" type="button" title="Exportar versão vetorial, ideal para publicações acadêmicas">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <polyline points="14 2 14 8 20 8" />
-      </svg>
-      Exportar SVG
-    </button>
+    <div class="control-cluster export-cluster">
+      <button class="icon-btn" id="btnExport" onclick="downloadPNG()" type="button" title="Exportar PNG (HD)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        <span class="btn-text">PNG</span>
+      </button>
+      <button class="icon-btn" onclick="downloadSVG()" type="button" title="Exportar SVG">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        <span class="btn-text">SVG</span>
+      </button>
+    </div>
 
-    <div class="zoom-control" aria-label="Controles de zoom temporal">
+    <div class="control-cluster zoom-cluster" aria-label="Controles de zoom temporal">
       <button class="zoom-btn" id="zoom-out" type="button" aria-label="Diminuir zoom" title="Diminuir zoom (−)">−</button>
       <input type="range" id="zoom-slider" class="zoom-slider" aria-label="Escala temporal">
       <button class="zoom-btn" id="zoom-in" type="button" aria-label="Aumentar zoom" title="Aumentar zoom (+)">+</button>
       <span class="zoom-label" id="zoom-label">1.5 px/dia</span>
-      <button class="download-btn secondary zoom-fit-btn" id="zoom-fit" type="button" title="Ajustar toda a timeline à largura da tela (atalho: 0)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <button class="icon-btn zoom-fit-btn" id="zoom-fit" type="button" title="Ajustar timeline à largura da tela (atalho: 0)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
         </svg>
-        Ajustar à tela
+        <span class="btn-text">Tela</span>
       </button>
     </div>
 
-    <span class="controls-info">Swimlanes por empresa · Escala temporal proporcional · Arraste para navegar · Ctrl+scroll para zoom</span>
+    <button class="icon-btn help-btn" id="help-btn" type="button" title="Como usar" aria-label="Como usar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+      </svg>
+    </button>
   </div>
 
-  <main class="main">
+  <div class="help-popover" id="help-popover" hidden>
+    <button class="help-close" id="help-close" type="button" aria-label="Fechar ajuda">×</button>
+    <ul>
+      <li><strong>Swimlanes:</strong> cada faixa é uma empresa/região.</li>
+      <li><strong>Escala:</strong> proporcional ao tempo desde 30 Nov 2022.</li>
+      <li><strong>Navegar:</strong> arraste horizontalmente ou use a barra de rolagem.</li>
+      <li><strong>Zoom:</strong> botões, slider, <kbd>Ctrl/⌘ + scroll</kbd> ou teclas <kbd>+</kbd> / <kbd>−</kbd>.</li>
+      <li><strong>Ajustar:</strong> botão <kbd>Tela</kbd> ou tecla <kbd>0</kbd> encaixa toda a timeline na largura.</li>
+      <li><strong>Detalhes:</strong> clique numa pílula para abrir a referência no rodapé.</li>
+    </ul>
+  </div>
+
+  <main class="main" id="main">
     <div class="timeline-area" id="timeline-area">
+      <div class="timeline-loading" id="timeline-loading">
+        <div class="loading-spinner" aria-hidden="true"></div>
+        <p>Carregando dados da planilha…</p>
+      </div>
       <div class="timeline-svg-wrap" id="svg-wrap" style="position:relative"></div>
     </div>
   </main>
 
   <div class="tooltip" id="tooltip" role="dialog" aria-label="Detalhes do modelo"
        onmouseenter="clearTimeout(hideTipTimeout)" onmouseleave="hideTip(false)">
+    <div class="tooltip-arrow" aria-hidden="true"></div>
     <button class="tt-close" id="tt-close" type="button" aria-label="Fechar">×</button>
     <div class="tt-header">
       <div class="tt-date" id="tt-date"></div>
@@ -129,7 +151,6 @@
     <div class="tt-model" id="tt-model"></div>
     <div class="tt-company" id="tt-company"></div>
     <div class="tt-impact" id="tt-impact"></div>
-
   </div>
 
   <footer class="app-footer">
@@ -143,9 +164,9 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="assets/data.js?v=12"></script>
-  <script src="assets/render.js?v=12"></script>
-  <script src="assets/app.js?v=12"></script>
+  <script src="assets/data.js?v=13"></script>
+  <script src="assets/render.js?v=13"></script>
+  <script src="assets/app.js?v=13"></script>
 </body>
 
 </html>

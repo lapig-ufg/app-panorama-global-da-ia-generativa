@@ -145,25 +145,48 @@ function rebuildV2(customMaxDias, pxPerDay) {
   });
   const SVG_H = currentY + 32;
 
-  // ─── PASS 2: Grade temporal (anos calculados dinamicamente) ───
+  // ─── PASS 2: Grade temporal refinada ───
   gridSvg += `<g aria-hidden="true">`;
   gridSvg += `<rect x="0" y="0" width="${SVG_W}" height="${HEADER_H}" fill="#fff"/>`;
 
   const startYear = CONFIG.MARCO.getFullYear();
   const endYear = new Date(CONFIG.MARCO.getTime() + maxDias * 86400000).getFullYear() + 1;
 
+  // Linhas verticais de ano + labels; ticks trimestrais sutis
   for (let y = startYear; y <= endYear; y++) {
-    const dias = Math.round((Date.UTC(y, 0, 1) - CONFIG.MARCO.getTime()) / 86400000);
-    if (dias >= 0 && dias <= maxDias) {
-      const x = xOf(dias);
-      gridSvg += `<line x1="${x}" y1="${HEADER_H}" x2="${x}" y2="${SVG_H - 30}" stroke="#cdcabe" stroke-width="1"/>`;
-      gridSvg += `<text x="${x}" y="26" font-family="Inter,sans-serif" font-size="19" font-weight="800" fill="#0c0c0c" text-anchor="middle" letter-spacing="-0.5">${y}</text>`;
-      gridSvg += `<text x="${x}" y="${SVG_H - 10}" font-family="DM Mono,monospace" font-size="11" font-weight="500" fill="#a5a297" text-anchor="middle" letter-spacing="1">${y}</text>`;
+    const diasAno = Math.round((Date.UTC(y, 0, 1) - CONFIG.MARCO.getTime()) / 86400000);
+    if (diasAno >= 0 && diasAno <= maxDias) {
+      const x = xOf(diasAno);
+      // Linha de ano sólida e mais suave
+      gridSvg += `<line x1="${x}" y1="${HEADER_H}" x2="${x}" y2="${SVG_H - 30}" stroke="#d6d2c6" stroke-width="1"/>`;
+      // Label do ano com destaque
+      gridSvg += `<g transform="translate(${x}, 20)">
+        <rect x="-22" y="-14" width="44" height="22" rx="11" fill="#f4f2ec"/>
+        <text font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0c0c0c" text-anchor="middle" letter-spacing="-0.3">${y}</text>
+      </g>`;
+      gridSvg += `<text x="${x}" y="${SVG_H - 12}" font-family="DM Mono,monospace" font-size="10" font-weight="500" fill="#9b9890" text-anchor="middle" letter-spacing="0.08em">${y}</text>`;
+
+      // Ticks trimestrais sutis
+      for (let q = 1; q <= 3; q++) {
+        const mes = q * 3;
+        const diasQ = Math.round((Date.UTC(y, mes, 1) - CONFIG.MARCO.getTime()) / 86400000);
+        if (diasQ > 0 && diasQ <= maxDias) {
+          const xq = xOf(diasQ);
+          gridSvg += `<line x1="${xq}" y1="${HEADER_H}" x2="${xq}" y2="${SVG_H - 30}" stroke="#e8e4da" stroke-width="1" stroke-dasharray="2,6"/>`;
+        }
+      }
     }
-    const diasMid = Math.round((Date.UTC(y, 6, 1) - CONFIG.MARCO.getTime()) / 86400000);
-    if (diasMid >= 0 && diasMid <= maxDias) {
-      gridSvg += `<line x1="${xOf(diasMid)}" y1="${HEADER_H}" x2="${xOf(diasMid)}" y2="${SVG_H - 30}" stroke="#dedacf" stroke-width="1" stroke-dasharray="3,5"/>`;
-    }
+  }
+
+  // Linha do marco zero
+  const marcoDias = 0;
+  if (marcoDias <= maxDias) {
+    const xMarco = xOf(marcoDias);
+    gridSvg += `<line x1="${xMarco}" y1="${HEADER_H}" x2="${xMarco}" y2="${SVG_H - 30}" stroke="#10a37f" stroke-width="1.5" opacity="0.35" stroke-dasharray="4,4"/>`;
+    gridSvg += `<g transform="translate(${xMarco}, 20)">
+      <rect x="-28" y="-14" width="56" height="22" rx="11" fill="#10a37f"/>
+      <text font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="0.02em">Marco zero</text>
+    </g>`;
   }
 
   // Sublinha do header
@@ -199,6 +222,11 @@ function rebuildV2(customMaxDias, pxPerDay) {
       const trackHeight = groupLayout.tracks[tIdx].trackHeight;
       const axisY = trackY + trackHeight / 2;
       const trackColor = COMPANY_COLORS[track.events[0]?.emp] || '#a5a297';
+
+      // Fundo sutil alternado para facilitar leitura horizontal
+      if (tIdx % 2 === 1) {
+        elementsSvg += `<rect x="0" y="${trackY - 4}" width="${SVG_W}" height="${trackHeight + 8}" fill="${group.accent}" opacity="0.04"/>`;
+      }
 
       // Eixo do track
       elementsSvg += `<line x1="${CONFIG.PAD_L - 20}" y1="${axisY}" x2="${SVG_W - 20}" y2="${axisY}" stroke="${trackColor}" opacity="0.22" stroke-width="1.25"/>`;
