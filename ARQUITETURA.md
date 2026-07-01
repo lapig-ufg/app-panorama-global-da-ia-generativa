@@ -4,10 +4,10 @@ Documento de arquitetura e operação do sistema completo: o site, a planilha (b
 dados), a automação semanal de pesquisa, o Apps Script e a PWA de curadoria.
 Última atualização: **01/jul/2026**.
 
-> **Identidades** (papéis, não credenciais — os valores concretos ficam fora deste repo):
-> - **Conta Google** — dona da planilha + Apps Script + clasp (a mesma em todos os passos).
-> - **Conta GitHub** — admin do repo; dona dos Secrets/Variables do Actions.
-> - **E-mail de notificação** da automação — definido em `automation/apps-script/Codigo.gs` (`var EMAIL`).
+> **Identidades** (importante p/ não se perder):
+> - Conta Google (planilha + Apps Script + clasp): **victoramaral.lapig@gmail.com**
+> - Conta GitHub (repo + secrets): **VictorGit10** (admin no repo)
+> - E-mail de notificação da automação: **victor.amaral@ufg.br**
 
 ---
 
@@ -28,11 +28,12 @@ dados), a automação semanal de pesquisa, o Apps Script e a PWA de curadoria.
          │  1x/semana, segunda    │   │   Codigo.gs, bound à   │   │   index.html lê só    │
          │  prepare→Claude→publish│──▶│   planilha             │◀──│   LANCAMENTOS         │
          └────────────────────────┘POST└──────────▲─────────────┘   └───────────────────────┘
-                                                   │ POST aprovar/rejeitar
+                                                   │ POST aprovar/rejeitar/rodar
                                        ┌───────────┴────────────┐
-                                       │  PWA de curadoria      │
-                                       │  /admin/ (GitHub Pages)│   ← você aprova/rejeita aqui
-                                       └────────────────────────┘
+                                       │  PWA de curadoria      │   ← aprova/rejeita + dispara a
+                                       │  /admin/ (GitHub Pages)│   ← pesquisa; LÊ pendentes via
+                                       └───────────┬────────────┘   ← GET listar (fetch CORS, ao vivo)
+                                                   │ GET ?action=listar/ping
 ```
 
 **Princípio do gate humano:** nada vai ao ar sozinho. A automação só escreve em `PENDENTES`
@@ -49,7 +50,7 @@ a move para `LANCAMENTOS` com `status=publicado` — única coisa que o site ren
 | **Planilha** | Google Sheets `1Rsai…DaPA` | Banco de dados. Abas `Lancamentos` (publicado) e `Pendentes` (rascunho). |
 | **Automação** | `automation/` + `.github/workflows/auto-update.yml` | Toda semana pesquisa lançamentos e propõe candidatos em `Pendentes`. |
 | **Apps Script** | `automation/apps-script/Codigo.gs`, bound à planilha | Recebe candidatos, move/apaga linhas, manda e-mail. Publicado como web app. |
-| **PWA de curadoria** | `admin/` → GitHub Pages (`/admin/`) | Tela p/ aprovar/rejeitar pendentes de qualquer lugar (instalável no celular). |
+| **PWA de curadoria** | `admin/` → GitHub Pages (`/admin/`) | Tela p/ aprovar/rejeitar pendentes e disparar a pesquisa manual. Lê `Pendentes` ao vivo via `fetch` CORS ao Apps Script (`?action=listar`); escrita via POST (token). Instalável no celular. |
 
 ---
 
@@ -120,14 +121,18 @@ Todos terminam no Apps Script, que faz a mesma coisa:
 
 ## 6. O Apps Script (`Codigo.gs`)
 
-Projeto **bound** à planilha (Script ID em `automation/apps-script/.clasp.json`,
+Projeto **bound** à planilha (Script ID `1zzUFteO3ICqyv66Agw7zSFZKHoDtvFDA2c2IT3MqWLdvyC_SVBoIZE_t`,
 título "Panorama LLMs"). Gerenciado por **clasp** a partir de `automation/apps-script/`.
 
 | Função | Papel |
 |---|---|
-| `doPost(e)` | Roteador. Se `action` = `aprovar`/`rejeitar` → admin (PWA); senão → ingestão (Actions). |
+| `doGet(e)` | Roteador de leitura. `?action=listar` → `{candidatos:[…]}`; `?action=ping` → latência/estado. Devolve **JSON puro** via `_json` (lido pela PWA via `fetch` CORS). |
+| `doPost(e)` | Roteador de escrita. `action`=`aprovar`/`rejeitar` → admin (PWA); `rodar` → dispara a workflow; senão → ingestão (Actions). |
+| `_listarData_` | Devolve os `Pendentes` (`status=pendente`) como `{candidatos:[…]}`. Lê a aba de uma vez (batch) e pula linhas vazias (checkboxes sem dados). |
+| `_pingData_` | Devolve `{ok, serverTime, pendentesRows, execMs, ghToken}` — diagnóstico de latência do web app (botão ⏱ da PWA). |
 | `_handleIngestao_` | Recebe `rows[]` do `publish.mjs`, grava em `Pendentes` (dedup), manda e-mail. |
-| `_handleAdmin_` | Aprovar/rejeitar uma linha (casa pela chave `data\|empresa\|modelo`). |
+| `_handleAdmin_` | Aprovar/rejeitar uma linha (casa pela chave `data\|empresa\|modelo`). Lê a aba de uma vez (batch), tem **idempotência** (se já em `Lancamentos`, só remove) e `SpreadsheetApp.flush()`. |
+| `_rodarWorkflow_` | Dispara `auto-update.yml` via API do GitHub (POST `/actions/workflows/.../dispatch`). Requer `GH_TOKEN` em Script Properties. |
 | `onEdit(e)` | Checkbox `Aprovar?` → promove a linha. |
 | `_promoverLinha_` | Helper: copia p/ `Lancamentos` como `publicado`. |
 | `setup()` | **Rodar 1x:** cria a aba `Pendentes`+checkbox e o gatilho instalável `onEdit`. |
@@ -135,10 +140,15 @@ título "Panorama LLMs"). Gerenciado por **clasp** a partir de `automation/apps-
 Detalhes importantes:
 - O **token** (`SECRET`) **não** fica no código — vem de **Script Properties** (Project Settings).
   Mesmo valor do secret `APPS_SCRIPT_TOKEN` do GitHub e do token da PWA.
+- O `GH_TOKEN` (fine-grained PAT com `Actions: write` no repo) também fica em **Script Properties**,
+  só usado por `_rodarWorkflow_` no servidor — **nunca** vá pra PWA ou pro repo.
 - O acesso do web app (`executeAs: USER_DEPLOYING`, `access: ANYONE_ANONYMOUS`) vem do
-  `appsscript.json` — por isso o `clasp create-deployment` já sai com o acesso certo.
-- Web app atual: implantação **@2**, URL
+  `appsscript.json` — por isso o `clasp create-deployment` já sai com o acesso certo. As
+  respostas do `doGet`/`doPost` trazem `Access-Control-Allow-Origin: *` (inclusive no `302` que
+  redireciona p/ `script.googleusercontent.com`), o que permite à PWA ler via `fetch` CORS.
+- Web app atual: implantação **@7** (mesma URL desde @2), URL
   `https://script.google.com/macros/s/AKfycbyKKRVZ38ThBgdtSqpjz0aJiBHAAsipP3M7KWumZw9aOm7eaRmsInt06fld92VN7Too/exec`.
+  Mudar o `Codigo.gs` → `clasp push --force` + `clasp create-deployment -i <deploymentId>` (mantém a URL).
 
 ---
 
@@ -153,7 +163,8 @@ Detalhes importantes:
 | `APPS_SCRIPT_URL` | GitHub → Secrets (Actions) | URL `/exec` do web app (destino do POST do `publish.mjs`). |
 | `APPS_SCRIPT_TOKEN` | GitHub → Secrets (Actions) | **= Script Property `SECRET` = token da PWA.** Protege o web app. |
 | `SECRET` | Apps Script → Script Properties | O mesmo valor acima, lado servidor. |
-| token de curadoria | `localStorage` da PWA (você cola 1x) + `Regua/CURADORIA-token.txt` | Mesmo valor; libera aprovar/rejeitar na PWA. |
+| `GH_TOKEN` | Apps Script → Script Properties | Fine-grained PAT (com `Actions: write` no repo) usado por `_rodarWorkflow_` p/ disparar a workflow a partir da PWA (botão 🔍). Fica só no servidor — **não** vá pra PWA nem pro repo. |
+| token de curadoria | `localStorage` da PWA (você cola 1x) + `Regua/CURADORIA-token.txt` | Mesmo valor; libera aprovar/rejeitar/disparar pesquisa na PWA. |
 | `AUTO_PUBLISH` (variável, não secret) | GitHub → Variables (Actions) | `true` liga a escrita do cron semanal. Hoje: **`true`** (cron escreve nos Pendentes toda segunda). |
 
 Os três (`APPS_SCRIPT_TOKEN`, `SECRET`, token da PWA) **têm que ser o mesmo valor**. Para trocar:
@@ -171,7 +182,7 @@ gere um novo e atualize nos três lugares (e cole o novo na PWA).
 | **Rubrica de relevância** | Editar `automation/policy.md` (versionado). |
 | **Janela / limiar** | `LOOKBACK_DAYS` (env, `prepare.mjs`) · `CONF_MIN` (env, `publish.mjs`). |
 
-> **clasp:** logado na **conta Google dona da planilha**. Projeto em `automation/apps-script/`
+> **clasp:** logado como `victoramaral.lapig@gmail.com`. Projeto em `automation/apps-script/`
 > (`.clasp.json` aponta pro script bound). **Não** use a pasta antiga `Regua/apps-script/`
 > (é de tentativas velhas; o `.clasp.json` dela foi desativado de propósito).
 
@@ -220,7 +231,9 @@ Local (debug do pipeline, sem escrever): `node automation/prepare.mjs` e
 | PWA: *"token invalido"* ao aprovar | O token da PWA ≠ Script Property `SECRET`. Recolar o token certo. |
 | Empresa aparece sem logo/cor no site | Empresa nova aprovada sem aplicar o snippet de `data.js` + `?v=`. |
 | Site não mostra mudança | Cache do navegador/Pages. Aba anônima e/ou subir o `?v=`. |
-| Pendente aprovado não sai da PWA | A PWA recarrega após a ação; se persistir, é cache do gviz (alguns minutos). |
+| Pendente aprovado não sai da PWA | A PWA agora **confirma** o commit re-lendo `listar` (ao vivo, sem cache do gviz): o card só some quando a linha realmente saiu de `Pendentes`. Se o POST ainda está processando (cold start) ou falhou, o card fica com toast "Não confirmado ainda — recarregue ↻ e tente de novo". |
+| PWA mostra "Falha ao ler pendentes (load failed)" | A leitura foi trocada de JSONP-via-`<script>` p/ `fetch` CORS. O JSONP falhava no `302 → script.googleusercontent.com` (a tag `<script>` em `no-cors` não executa o redirect). Solução: `doGet` devolve JSON puro, lido via `fetch` CORS (`Access-Control-Allow-Origin: *`). |
+| PWA instalada mostra código velho depois de atualizar | O service worker cacheia o shell. Faça reload forte (Ctrl+Shift+R) ou bump no `CACHE` do `sw.js` (`curadoria-ia-vN`). |
 
 ---
 
@@ -230,8 +243,10 @@ Local (debug do pipeline, sem escrever): `node automation/prepare.mjs` e
 panorama-llms/
 ├── index.html, assets/{app,render,data}.js, styles.css   # o site (timeline)
 ├── admin/                         # PWA de curadoria
-│   ├── index.html                 #   app (shell + lógica); URL do web app hardcoded aqui
-│   ├── manifest.json, sw.js, icon.svg   # PWA instalável (SW cacheia só o shell)
+│   ├── index.html                 #   app (shell + lógica): lê via fetch CORS (?action=listar),
+│   │                              #   aprova/rejeita (POST + reconcile via listar), botão 🔍 (rodar)
+│   │                              #   e botão ⏱ (ping). URL do web app hardcoded aqui.
+│   ├── manifest.json, sw.js, icon.svg   # PWA instalável (SW cacheia só o shell; cache "curadoria-ia-vN")
 │   └── README.md
 ├── automation/
 │   ├── prepare.mjs                # passo 1: monta o prompt
