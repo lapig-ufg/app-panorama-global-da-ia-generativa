@@ -43,7 +43,7 @@ jobs:
             Leia o arquivo automation/_work/prompt.md e siga TODAS as instruções nele.
             Use WebSearch/WebFetch para pesquisar e escreva o resultado, no formato pedido,
             no arquivo automation/_work/candidates.json. Não edite nenhum outro arquivo e não rode git.
-          claude_args: '--allowedTools "WebSearch,WebFetch,Read,Write" --max-turns 40'
+          claude_args: '--allowedTools "WebSearch,WebFetch,Read,Write" --max-turns 30 --model sonnet'
 
       - name: Validar e publicar
         env:
