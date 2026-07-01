@@ -166,19 +166,6 @@ function rebuildV2(customMaxDias, pxPerDay) {
     }
   }
 
-  // Linha do "hoje" - referência temporal sutil e robusta contra fusos horários
-  const now = new Date();
-  const hojeUTC = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-  const hojeDias = Math.round((hojeUTC - CONFIG.MARCO.getTime()) / 86400000);
-  if (hojeDias >= 0 && hojeDias <= maxDias) {
-    const xHoje = xOf(hojeDias);
-    gridSvg += `<line x1="${xHoje}" y1="${HEADER_H}" x2="${xHoje}" y2="${SVG_H - 30}" stroke="#10a37f" stroke-width="1.2" opacity="0.45" stroke-dasharray="4,4"/>`;
-    gridSvg += `<g transform="translate(${xHoje}, ${HEADER_H + 8})">
-      <rect x="-22" y="0" width="44" height="16" rx="8" fill="#10a37f"/>
-      <text x="0" y="11" font-family="DM Mono,monospace" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" letter-spacing="0.08em">HOJE</text>
-    </g>`;
-  }
-
   // Sublinha do header
   gridSvg += `<line x1="0" y1="${HEADER_H}" x2="${SVG_W}" y2="${HEADER_H}" stroke="#0c0c0c" stroke-width="1"/>`;
   gridSvg += `</g>`;
