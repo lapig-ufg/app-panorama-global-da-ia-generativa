@@ -10,14 +10,14 @@ GitHub Actions (cron semanal / disparo manual)
   2. claude-code-action (token da assinatura) → pesquisa na web; escreve _work/candidates.json
   3. publish.mjs  → valida, dedup, gera snippet de empresa nova; POST ao Apps Script
         → Apps Script grava na aba "Pendentes" + manda e-mail
-  4. Você marca "Aprovar?" → Apps Script copia a linha p/ "Lancamentos" (status=publicado)
+  4. Você aprova na PWA (admin/, recomendado) ou marca "Aprovar?" → Apps Script copia p/ "Lancamentos" (status=publicado)
 ```
 
 O LLM faz **só** a pesquisa → JSON. Validação, dedup, escrita e e-mail são determinísticos (Node + Apps Script).
 
 ## Princípio do gate
 
-Nada vai ao ar sem você. O site só renderiza linhas de `Lancamentos` com `status === 'publicado'`; os candidatos entram em `Pendentes` como `pendente`. Aprovar = marcar o checkbox.
+Nada vai ao ar sem você. O site só renderiza linhas de `Lancamentos` com `status === 'publicado'`; os candidatos entram em `Pendentes` como `pendente`. Você aprova de 3 formas equivalentes: a **PWA de curadoria** (`admin/`, recomendada — veja [admin/README.md](../admin/README.md)), o checkbox **`Aprovar?`** na aba `Pendentes`, ou pelo link no e-mail.
 
 ## Setup (uma vez)
 
@@ -52,10 +52,13 @@ Copie a URL `/exec` (`clasp open-web-app` ou o painel de implantações). É o s
 | `APPS_SCRIPT_URL` | A URL `/exec` do App da Web do passo 3 |
 | `APPS_SCRIPT_TOKEN` | O mesmo valor da Script Property `SECRET` do passo 2 |
 
-### 4. Variável de segurança (opcional, recomendado)
+### 5. Variável de segurança (opcional, recomendado)
 - Em **Variables** (não Secrets): `AUTO_PUBLISH`. **Estado atual: `true`** (o cron de segunda escreve nos `Pendentes` sozinho; o site continua só publicando o que você aprovar na PWA).
   - **Deixe sem criar / diferente de `true`** → as rodadas agendadas ficam em **dry-run** (não escrevem). Use isto enquanto calibra o filtro.
   - Defina `AUTO_PUBLISH = true` quando estiver confiante → o cron semanal passa a escrever em `Pendentes` de verdade.
+
+### 6. GitHub App do Claude (obrigatório p/ a Action funcionar)
+Instale o **GitHub App "Claude"** (https://github.com/apps/claude) neste repositório — sem ele o passo `claude-code-action` falha com *"Claude Code is not installed on this repository"*. O workflow também exige `permissions: id-token: write` (já está no `auto-update.yml`).
 
 ## Como testar (recomendado antes de ligar o cron)
 
@@ -64,7 +67,7 @@ Copie a URL `/exec` (`clasp open-web-app` ou o painel de implantações). É o s
 3. **Ajuste `policy.md`** se entrar lixo ou faltar coisa, e repita.
 4. Rode de novo com **dry_run = false** → confira a aba `Pendentes` e o e-mail.
 5. Marque **`Aprovar?`** numa linha → ela aparece em `Lancamentos` como `publicado` → confira no site (aba anônima; o cache do site é de algumas horas).
-6. Quando confiar, defina `AUTO_PUBLISH = true` para o agendamento semanal.
+6. Ligue `AUTO_PUBLISH = true` p/ o cron semanal escrever sozinho (**hoje já está ligado** — veja a seção 5).
 
 ## Ajustes finos
 - **Janela de busca:** `LOOKBACK_DAYS` (env, padrão **7**) em `prepare.mjs` — casa com o cron semanal (segundas), sem gaps.

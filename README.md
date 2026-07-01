@@ -8,9 +8,20 @@ Iniciativa do **Laboratório de Processamento de Imagens e Geoinformação — L
 
 ## 🚀 Demonstração
 
-Acesse a versão pública em: `https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/`
+Acesse a versão pública em: **https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/**
 
-(substitua pelo endereço final no GitHub Pages do LAPIG após a publicação)
+---
+
+## 🏗 Arquitetura & automação
+
+Este repositório é **mais do que o site** — são três partes que trabalham juntas:
+
+- **Site** (`index.html` + `assets/`) — a linha do tempo, publicada no **GitHub Pages**. Lê os dados de uma planilha Google Sheets em tempo real (sem novo deploy).
+- **Automação semanal** (`automation/` + `.github/workflows/auto-update.yml`) — um **cron do GitHub Actions** roda toda segunda: o Claude pesquisa lançamentos recentes na web e grava candidatos numa aba de **rascunho** (`Pendentes`) da planilha.
+- **PWA de curadoria** (`admin/`) — app instalável onde você **aprova/rejeita** os candidatos. **Só o que você aprova vai ao ar** — nada é publicado automaticamente.
+
+📖 **Como tudo funciona em detalhe (inclusive como roda no GitHub): [ARQUITETURA.md](ARQUITETURA.md).**
+Docs específicas: [automation/README.md](automation/README.md) (pipeline) · [admin/README.md](admin/README.md) (PWA).
 
 ---
 
@@ -33,13 +44,17 @@ Acesse a versão pública em: `https://lapig-ufg.github.io/app-panorama-global-d
 
 ```
 panorama-llms/
-├── index.html              # Página principal (estrutura HTML)
+├── index.html              # Página principal do site (timeline)
 ├── assets/
 │   ├── styles.css          # Todos os estilos
-│   ├── data.js             # Logos, bandeiras, cores, configuração de grupos
+│   ├── data.js             # Logos, bandeiras, cores, grupos + SHEET_ID
 │   ├── render.js           # Lógica de construção do SVG (timeline)
 │   └── app.js              # Carregamento de dados, tooltip, drag, exportação
+├── admin/                  # PWA de curadoria (aprovar/rejeitar pendentes)
+├── automation/             # Pipeline semanal (prepare/publish + Apps Script)
+├── .github/workflows/      # auto-update.yml — o cron do GitHub Actions
 ├── .nojekyll               # Desabilita o Jekyll no GitHub Pages
+├── ARQUITETURA.md          # Como o sistema inteiro funciona (comece por aqui)
 ├── README.md               # Este arquivo
 └── LICENSE                 # CC BY 4.0
 ```
@@ -58,7 +73,11 @@ A planilha do Google Sheets deve conter uma aba chamada **`Lancamentos`** com as
 | D      | `impacto`         | Texto     | Breve descrição do impacto (exibida no tooltip)                            |
 | E      | `referencia`      | URL       | Link para a fonte oficial ou cobertura de imprensa                         |
 | F      | `status`          | Texto     | Use **`publicado`** para que a linha apareça (qualquer outro valor: oculta)|
-| K      | `data_atualizacao`| Data      | (Opcional) Data da última edição da linha — usada no rodapé do header     |
+| G      | `tipo`            | Texto     | Categoria (ex.: `modelo`). Informativo — não afeta a renderização.         |
+| H      | `dias`            | Número    | Deixe **vazia** — o JS calcula sozinho a partir de 30/nov/2022.            |
+| I      | `origem`          | Texto     | `manual` ou `auto` (preenchido pela automação). Informativo.               |
+| J      | `timestamp`       | Data/hora | Quando a linha foi criada. Informativo.                                    |
+| K      | `data_atualizacao`| Data      | (Opcional) Data da última edição da linha — usada no rodapé do header      |
 
 ### Empresas suportadas
 
