@@ -21,6 +21,10 @@
   header h1 { font-size:17px; margin:0; flex:1; font-weight:600; }
   button { font:inherit; border:0; border-radius:9px; padding:9px 14px; cursor:pointer; font-weight:600; }
   .btn-refresh { background:var(--card); color:var(--txt); border:1px solid var(--line); padding:8px 12px; }
+  .btn-buscar { width:100%; background:var(--card); color:var(--acc); border:1px solid var(--acc);
+                border-radius:14px; padding:14px 16px; margin-bottom:14px; font-weight:600; font-size:15px; }
+  .btn-buscar:hover { background:#16324a; }
+  .btn-buscar:disabled { opacity:.5; cursor:default; }
   main { max-width:680px; margin:0 auto; padding:16px; }
   .muted { color:var(--mut); }
   .card { background:var(--card); border:1px solid var(--line); border-radius:14px;
@@ -60,10 +64,12 @@
 <body>
 <header>
   <h1>Curadoria · Pendentes</h1>
+  <button class="btn-refresh" id="diag" title="Testar latência do web app">⏱</button>
   <button class="btn-refresh" id="refresh" title="Recarregar">↻</button>
 </header>
 
 <main id="main">
+  <button class="btn-buscar" id="buscar" title="Disparar a pesquisa semanal de lançamentos (workflow do GitHub Actions)">🔍 Buscar novos lançamentos</button>
   <div class="muted" id="status">Carregando…</div>
   <div id="list"></div>
 </main>
@@ -91,36 +97,22 @@
   function getToken() { return localStorage.getItem(TOKEN_KEY) || ""; }
   function setToken(t) { localStorage.setItem(TOKEN_KEY, t); }
 
-  function toast(msg, isErr) {
+  function toast(msg, isErr, ms) {
     toastEl.textContent = msg;
     toastEl.className = isErr ? "show err" : "show";
-    setTimeout(function () { toastEl.className = ""; }, 2600);
+    setTimeout(function () { toastEl.className = ""; }, ms || 2600);
   }
 
-  // ── leitura via gviz/JSONP (mesmo método do site) ──
-  function gvizFetch(tab) {
-    return new Promise(function (resolve, reject) {
-      var cb = "_gv_" + tab.replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now();
-      var timer = setTimeout(function () { delete window[cb]; reject(new Error("timeout")); }, 15000);
-      window[cb] = function (resp) { clearTimeout(timer); delete window[cb]; resolve(resp); };
-      var s = document.createElement("script");
-      s.src = "https://docs.google.com/spreadsheets/d/" + SHEET_ID +
-              "/gviz/tq?sheet=" + encodeURIComponent(tab) + "&tqx=responseHandler:" + cb;
-      s.onerror = function () { clearTimeout(timer); delete window[cb]; reject(new Error("load failed")); };
-      s.onload = function () { if (s.parentNode) s.parentNode.removeChild(s); };
-      document.head.appendChild(s);
-    });
-  }
-
-  function parseDate(val) {
-    if (!val) return "";
-    if (typeof val === "string" && val.indexOf("Date(") === 0) {
-      var p = val.match(/Date\((\d+),\s*(\d+),\s*(\d+)/);
-      if (p) return p[1] + "-" + String(+p[2] + 1).padStart(2, "0") + "-" + String(p[3]).padStart(2, "0");
-    }
-    var d = new Date(val);
-    if (!isNaN(d.getTime())) return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
-    return String(val);
+  // ── Leitura ao vivo do web app via fetch CORS (sem cache do gviz) ──
+  // action=listar → {candidatos:[...]}; action=ping → {ok,execMs,pendentesRows}. Sem token
+  // (Pendentes já é publicamente legível via gviz; listar não vaza nada novo). O Apps Script
+  // responde com Access-Control-Allow-Origin: * (inclusive no 302 → googleusercontent),
+  // então o fetch CORS lê o JSON direto. JSONP-via-<script> NÃO funciona aqui: a tag <script>
+  // falha no redirect pro googleusercontent ("load failed").
+  function webAppGet(action) {
+    var url = APPS_SCRIPT_URL + "?action=" + encodeURIComponent(action);
+    return withTimeout(fetch(url, { method: "GET", mode: "cors", redirect: "follow", cache: "no-store" }), 20000)
+      .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); });
   }
 
   function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
@@ -129,23 +121,15 @@
     statusEl.textContent = "Carregando pendentes…";
     listEl.innerHTML = "";
     var data;
-    try { data = await gvizFetch(TAB); }
-    catch (e) { statusEl.textContent = "Falha ao ler a planilha (" + e.message + ")."; return; }
+    try { data = await webAppGet("listar"); }
+    catch (e) { statusEl.textContent = "Falha ao ler pendentes (" + e.message + ")."; return; }
 
-    var rows = (data && data.table && data.table.rows) ? data.table.rows : [];
+    var raw = (data && Array.isArray(data.candidatos)) ? data.candidatos : [];
     var items = [];
-    for (var i = 0; i < rows.length; i++) {
-      var c = rows[i].c;
-      if (!c || !c[0] || !c[1] || !c[2]) continue;
-      var date = parseDate(c[0].v);
-      var emp = c[1] ? String(c[1].v || "") : "";
-      var mod = c[2] ? String(c[2].v || "") : "";
-      var impacto = c[3] ? String(c[3].v || "") : "";
-      var ref = c[4] ? String(c[4].v || "") : "";
-      var status = c[5] ? String(c[5].v || "").toLowerCase() : "";
-      if (!date || !emp || !mod) continue;
-      if (status && status !== "pendente") continue; // só pendentes
-      items.push({ date: date, emp: emp, mod: mod, impacto: impacto, ref: ref });
+    for (var i = 0; i < raw.length; i++) {
+      var it = raw[i];
+      if (!it || !it.data || !it.empresa || !it.modelo) continue;
+      items.push({ date: it.data, emp: it.empresa, mod: it.modelo, impacto: it.impacto || "", ref: it.referencia || "" });
     }
 
     if (!items.length) {
@@ -187,9 +171,9 @@
   var busy = false; // trava global: só uma ação por vez (evita clique duplo)
 
   // O Apps Script responde por um redirect entre domínios do Google que o navegador
-  // muitas vezes não consegue ler — o fetch pode ficar pendurado. Por isso corremos
-  // contra um timeout: se estourar, NÃO quer dizer que falhou (o servidor já gravou);
-  // apenas seguimos e confirmamos relendo a planilha.
+  // muitas vezes não consegue ler — o fetch pode ficar pendurado. Por isso NÃO
+  // confiamos na resposta do POST: disparamos e depois CONFIRMAMOS pelo estado real
+  // (listar, ao vivo e sem cache). O card só some se a linha realmente saiu de Pendentes.
   function withTimeout(promise, ms) {
     return Promise.race([
       promise,
@@ -202,38 +186,59 @@
     busy = true;
     var btns = cardEl.querySelectorAll("button");
     var clicked = cardEl.querySelector(action === "aprovar" ? ".btn-ok" : ".btn-no");
-    var label = clicked.innerHTML; // guarda p/ restaurar se der erro legível
+    var label = clicked.innerHTML; // guarda p/ restaurar se não confirmar
     btns.forEach(function (b) { b.disabled = true; });
     cardEl.classList.add("busy");
     clicked.innerHTML = '<span class="spinner"></span>Enviando…';
 
     var payload = { action: action, token: getToken(), data: it.date, empresa: it.emp, modelo: it.mod };
-    var errMsg = "";
+
+    // Dispara o POST. A resposta do Apps Script costuma ser ilegível (redirect do Google),
+    // então NÃO dependemos dela — confirmamos pelo estado real (listar, ao vivo).
     try {
-      var res = await withTimeout(fetch(APPS_SCRIPT_URL, {
+      await withTimeout(fetch(APPS_SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(payload),
         redirect: "follow"
-      }), 12000);
-      // Quando a resposta É legível, capturamos erros reais (ex.: token invalido).
-      try { var j = JSON.parse(await res.text()); if (j && j.ok === false) errMsg = j.error || "falhou"; } catch (e) { /* ilegível: confirmamos por reload */ }
-    } catch (e) { /* timeout/CORS: NÃO é falha — confirmamos por reload abaixo */ }
+      }), 30000);
+    } catch (e) { /* timeout/CORS: o servidor pode estar processando — confirmamos abaixo */ }
+
+    // Reconcilia: o card só some se a linha REALMENTE saiu de Pendentes.
+    // (aprovar e rejeitar ambos removem de Pendentes, então o teste serve para os dois.)
+    var norm = function (s) { return String(s).trim().toUpperCase(); };
+    var alvo = it.date + "|" + norm(it.emp) + "|" + norm(it.mod);
+    var prazos = [2000, 4000, 6000, 8000, 10000]; // tenta em intervalos crescentes (~30s total)
+    var confirmou = false;
+    for (var i = 0; i < prazos.length; i++) {
+      clicked.innerHTML = '<span class="spinner"></span>Confirmando… (' + (i + 1) + "/" + prazos.length + ")";
+      await new Promise(function (r) { setTimeout(r, prazos[i]); });
+      var res;
+      try { res = await webAppGet("listar"); } catch (e) { continue; }
+      var ainda = (res && Array.isArray(res.candidatos))
+        ? res.candidatos.some(function (c) { return (c.data + "|" + norm(c.empresa) + "|" + norm(c.modelo)) === alvo; })
+        : false;
+      if (!ainda) { confirmou = true; break; }
+    }
 
     busy = false;
-
-    if (errMsg) { // erro de verdade e legível → restaura e avisa
+    if (confirmou) {
+      clicked.innerHTML = action === "aprovar" ? "✓ Aprovado" : "✓ Rejeitado";
+      cardEl.style.opacity = ".4";
+      toast(action === "aprovar" ? "✓ Aprovado e publicado" : "✓ Rejeitado");
+      setTimeout(function () {
+        if (cardEl.parentNode) cardEl.parentNode.removeChild(cardEl);
+        var n = listEl.querySelectorAll(".card").length;
+        if (!n) { statusEl.textContent = ""; listEl.innerHTML = '<div class="empty">✅ Nenhum lançamento pendente.' + linksHtml() + "</div>"; }
+        else statusEl.textContent = n + " pendente(s):";
+      }, 900);
+    } else {
+      // A linha continua lá: o script ainda está processando (cold start) OU o POST falhou.
       clicked.innerHTML = label;
       cardEl.classList.remove("busy");
       btns.forEach(function (b) { b.disabled = false; });
-      toast("Erro: " + errMsg + (errMsg === "token invalido" ? " — confira o token" : ""), true);
-      return;
+      toast("Não confirmado ainda (processando?). Recarregue ↻ e tente de novo.", true);
     }
-    // Sucesso (ou resposta ilegível = quase sempre sucesso): confirma e reconcilia.
-    clicked.innerHTML = action === "aprovar" ? "✓ Aprovado" : "✓ Rejeitado";
-    cardEl.style.opacity = ".4";
-    toast(action === "aprovar" ? "✓ Aprovado e publicado" : "✓ Rejeitado");
-    setTimeout(loadPendentes, 1500); // relê a planilha p/ confirmar pelo estado real
   }
 
   // ── token gate ──
@@ -269,6 +274,50 @@
   });
 
   document.getElementById("refresh").onclick = function () { getToken() ? loadPendentes() : askToken(); };
+
+  // ── diagnóstico: mede a latência real do web app (cold start + exec) sem efeito colateral ──
+  async function runDiag() {
+    if (busy) return;
+    toast("Testando web app…");
+    var t0 = Date.now();
+    var res;
+    try { res = await webAppGet("ping"); }
+    catch (e) { toast("Falha: " + e.message, true, 6000); return; }
+    var rt = Date.now() - t0;
+    toast("Web app " + rt + "ms · script " + (res && res.execMs != null ? res.execMs : "?") +
+          "ms · pendentes " + (res && res.pendentesRows != null ? res.pendentesRows : "?"), false, 8000);
+  }
+  document.getElementById("diag").onclick = runDiag;
+
+  // ── disparar a pesquisa de lançamentos (workflow do GitHub Actions, via Apps Script) ──
+  async function buscarNovos() {
+    if (busy) return;
+    if (!confirm("Disparar a pesquisa de lançamentos agora?\n\n" +
+                 "Ela busca modelos recentes e grava candidatos em Pendentes (você curadoria depois). " +
+                 "Demora alguns minutos; o resultado chega por e-mail e aqui no app.")) return;
+    busy = true;
+    var btn = document.getElementById("buscar");
+    var label = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Disparando…';
+    var payload = { action: "rodar", token: getToken(), dry_run: "false" };
+    var errMsg = "";
+    try {
+      var res = await withTimeout(fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload),
+        redirect: "follow"
+      }), 45000);
+      try { var j = JSON.parse(await res.text()); if (j && j.ok === false) errMsg = j.error || "falhou"; } catch (e) { /* ilegível: assume disparado */ }
+    } catch (e) { /* timeout/CORS: o servidor provavelmente disparou — confirmamos por e-mail/pendentes */ }
+    busy = false;
+    btn.innerHTML = label;
+    btn.disabled = false;
+    if (errMsg) { toast("Erro: " + errMsg, true, 9000); return; }
+    toast("Pesquisa disparada. Em alguns minutos chegam e-mail + novos pendentes (dê ↻ daqui a pouco).", false, 9000);
+  }
+  document.getElementById("buscar").onclick = buscarNovos;
 
   // boot
   if (!SHEET_ID) { statusEl.textContent = "Erro: não consegui ler CONFIG.SHEET_ID de data.js."; }

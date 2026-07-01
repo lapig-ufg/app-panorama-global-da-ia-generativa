@@ -1,7 +1,7 @@
 /* Service worker da PWA de curadoria.
    Cacheia só o app-shell (para instalar/abrir offline). Dados da planilha e as ações
    (gviz / Apps Script) são SEMPRE rede — nunca cacheados. */
-var CACHE = "curadoria-ia-v1";
+var CACHE = "curadoria-ia-v2";
 var SHELL = ["./", "./index.html", "./manifest.json", "./icon.svg", "../assets/data.js"];
 
 self.addEventListener("install", function (e) {

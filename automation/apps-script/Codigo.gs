@@ -63,14 +63,75 @@ function doPost(e) {
     if (body && (body.action === 'aprovar' || body.action === 'rejeitar')) {
       return _handleAdmin_(body, body.action);
     }
+    if (body && body.action === 'rodar') {
+      return _rodarWorkflow_(body);
+    }
     return _handleIngestao_(body);
   } catch (err) {
     return _json({ ok: false, error: String(err) });
   }
 }
 
+// ───────────────────────────── doGet (leitura) ──────────────────────────────
+// Leituras públicas (não exigem token — os Pendentes já são legíveis via gviz hoje,
+// então listar não vaza nada novo). Devolve JSON puro, lido pela PWA via fetch CORS
+// (o web app responde com Access-Control-Allow-Origin: * — inclusive no 302 que
+// redireciona p/ script.googleusercontent.com — então o fetch lê o JSON direto,
+// sem o problema do JSONP-via-<script>, que falha nesse redirect).
+//   ?action=listar → {candidatos:[{data,empresa,modelo,impacto,referencia}]}
+//   ?action=ping   → {ok,serverTime,pendentesRows,execMs,ghToken}  (teste de latência)
+function doGet(e) {
+  var p = (e && e.parameter) ? e.parameter : {};
+  if (p.action === 'listar') return _json(_listarData_());
+  if (p.action === 'ping')   return _json(_pingData_());
+  return _json({ ok: false, error: 'acao desconhecida (use ?action=listar ou ping)' });
+}
+
+function _listarData_() {
+  var t0 = Date.now();
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var pend = ss.getSheetByName(TAB_PEND);
+  if (!pend) return { candidatos: [] };
+  var h = _headers(pend);
+  var iD = _col(h, 'data'), iE = _col(h, 'empresa'), iM = _col(h, 'modelo'),
+      iImp = _col(h, 'impacto'), iRef = _col(h, 'referencia'), iSt = _col(h, 'status');
+  if (iD < 0 || iE < 0 || iM < 0) return { candidatos: [] };
+  var last = pend.getLastRow(), out = [];
+  if (last >= 2) {
+    var rows = pend.getRange(2, 1, last - 1, pend.getLastColumn()).getValues();
+    for (var r = 0; r < rows.length; r++) {
+      var v = rows[r];
+      var st = iSt >= 0 ? String(v[iSt]).trim().toLowerCase() : 'pendente';
+      if (st && st !== 'pendente') continue; // só pendentes (igual à PWA)
+      var dataV = _fmtDate(v[iD]);
+      var empV = String(v[iE] || '').trim();
+      var modV = String(v[iM] || '').trim();
+      if (!dataV || !empV || !modV) continue; // pula linhas vazias (ex.: checkboxes sem dados)
+      out.push({
+        data: dataV, empresa: empV, modelo: modV,
+        impacto: iImp >= 0 ? String(v[iImp] || '') : '',
+        referencia: iRef >= 0 ? String(v[iRef] || '') : ''
+      });
+    }
+  }
+  console.log('[listar] linhas=' + out.length + ' exec=' + (Date.now() - t0) + 'ms');
+  return { candidatos: out };
+}
+
+function _pingData_() {
+  var t0 = Date.now();
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var pend = ss.getSheetByName(TAB_PEND);
+  var n = pend ? pend.getLastRow() : -1;
+  var ghToken = !!PropertiesService.getScriptProperties().getProperty('GH_TOKEN');
+  var execMs = Date.now() - t0;
+  console.log('[ping] exec=' + execMs + 'ms pendentesLastRow=' + n + ' ghToken=' + ghToken);
+  return { ok: true, serverTime: new Date().getTime(), pendentesRows: n, execMs: execMs, ghToken: ghToken };
+}
+
 // ── ingestão: recebe candidatos do GitHub Actions ──
 function _handleIngestao_(body) {
+  var t0 = Date.now();
   if (!body || body.token !== getSecret_()) return _json({ ok: false, error: 'token invalido' });
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -96,11 +157,14 @@ function _handleIngestao_(body) {
   });
 
   _sendEmail(body, added, skipped);
+  SpreadsheetApp.flush();
+  console.log('[ingestao] added=' + added.length + ' skipped=' + skipped + ' exec=' + (Date.now() - t0) + 'ms');
   return _json({ ok: true, added: added.length, skipped: skipped });
 }
 
 // ── admin: aprovar/rejeitar uma linha pendente (vindo da PWA de curadoria) ──
 function _handleAdmin_(body, action) {
+  var t0 = Date.now();
   if (!body || body.token !== getSecret_()) return _json({ ok: false, error: 'token invalido' });
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -116,22 +180,65 @@ function _handleAdmin_(body, action) {
               String(body.empresa).trim().toUpperCase(),
               String(body.modelo).trim().toUpperCase()].join('|');
 
-  var last = pend.getLastRow();
-  for (var r = 2; r <= last; r++) {
-    var vals = pend.getRange(r, 1, 1, pend.getLastColumn()).getValues()[0];
-    var st = iStatus >= 0 ? String(vals[iStatus]).trim().toLowerCase() : 'pendente';
-    if (st && st !== 'pendente') continue; // só age sobre pendentes
-    var key = [_fmtDate(vals[iData]),
-               String(vals[iEmp]).trim().toUpperCase(),
-               String(vals[iMod]).trim().toUpperCase()].join('|');
-    if (key !== alvo) continue;
+  // idempotência: se um commit anterior já publicou a linha (meio-fez: no Lancamentos
+  // mas ainda na fila), só remove de Pendentes — não duplica em Lancamentos.
+  var jaNoLanc = !!_existingKeys(ss)[alvo];
 
-    var emp = vals[iEmp], mod = vals[iMod];
-    if (action === 'aprovar') _promoverLinha_(ss, pend, headers, r);
-    pend.deleteRow(r);
-    return _json({ ok: true, action: action, empresa: emp, modelo: mod });
+  var last = pend.getLastRow();
+  if (last >= 2) {
+    var all = pend.getRange(2, 1, last - 1, pend.getLastColumn()).getValues(); // lê tudo de uma vez (não linha a linha)
+    for (var r = 0; r < all.length; r++) {
+      var vals = all[r];
+      var st = iStatus >= 0 ? String(vals[iStatus]).trim().toLowerCase() : 'pendente';
+      if (st && st !== 'pendente') continue; // só age sobre pendentes
+      var dataV = _fmtDate(vals[iData]);
+      var empV = String(vals[iEmp] || '').trim();
+      var modV = String(vals[iMod] || '').trim();
+      if (!dataV || !empV || !modV) continue; // pula linhas vazias (checkboxes sem dados)
+      var key = [dataV, empV.toUpperCase(), modV.toUpperCase()].join('|');
+      if (key !== alvo) continue;
+
+      var sheetRow = r + 2;
+      if (action === 'aprovar' && !jaNoLanc) _promoverLinha_(ss, pend, headers, sheetRow);
+      pend.deleteRow(sheetRow);
+      SpreadsheetApp.flush(); // propaga imediatamente p/ abas abertas e PWA
+      console.log('[admin] ' + action + ' ' + alvo + (jaNoLanc ? ' (ja publicado, so removeu)' : '') +
+                  ' commit=' + (Date.now() - t0) + 'ms');
+      return _json({ ok: true, action: action, empresa: empV, modelo: modV, jaNoLanc: jaNoLanc });
+    }
   }
   return _json({ ok: false, error: 'linha pendente nao encontrada (ja processada?)' });
+}
+
+// ── rodar: dispara a workflow do GitHub Actions (pesquisa MANUAL de lançamentos) ──
+// Requer Script Property GH_TOKEN (fine-grained PAT com permissão "Actions: write"
+// no repo lapig-ufg/app-panorama-global-da-ia-generativa). dry_run=false → grava em
+// Pendentes (você curadoria depois); dry_run=true → só mostra no log do Actions.
+// O PAT fica no servidor (Script Properties), nunca na PWA.
+function _rodarWorkflow_(body) {
+  var t0 = Date.now();
+  if (!body || body.token !== getSecret_()) return _json({ ok: false, error: 'token invalido' });
+  var ghToken = PropertiesService.getScriptProperties().getProperty('GH_TOKEN');
+  if (!ghToken) return _json({ ok: false, error: 'GH_TOKEN nao configurado em Script Properties' });
+  var repo = 'lapig-ufg/app-panorama-global-da-ia-generativa';
+  var dry = (body.dry_run === true || String(body.dry_run).toLowerCase() === 'true') ? 'true' : 'false';
+  var url = 'https://api.github.com/repos/' + repo + '/actions/workflows/auto-update.yml/dispatches';
+  try {
+    var resp = UrlFetchApp.fetch(url, {
+      method: 'post',
+      contentType: 'application/vnd.github+json',
+      headers: { Authorization: 'Bearer ' + ghToken, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' },
+      payload: JSON.stringify({ ref: 'main', inputs: { dry_run: dry } }),
+      muteHttpExceptions: true
+    });
+    var code = resp.getResponseCode();
+    console.log('[rodar] dry_run=' + dry + ' github_http=' + code + ' exec=' + (Date.now() - t0) + 'ms');
+    if (code === 204) return _json({ ok: true, dispatched: true, dry_run: dry });
+    return _json({ ok: false, error: 'github http ' + code + ': ' + resp.getContentText().slice(0, 300) });
+  } catch (err) {
+    console.log('[rodar] erro: ' + err + ' exec=' + (Date.now() - t0) + 'ms');
+    return _json({ ok: false, error: 'falha UrlFetch: ' + String(err) });
+  }
 }
 
 // ──────────────────── onEdit: aprovar promove p/ Lancamentos ─────────────────
