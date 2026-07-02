@@ -20,7 +20,12 @@ Este repositório é **mais do que o site** — são três partes que trabalham 
 - **Automação semanal** (`automation/` + `.github/workflows/auto-update.yml`) — um **cron do GitHub Actions** roda toda segunda: o Claude pesquisa lançamentos recentes na web e grava candidatos numa aba de **rascunho** (`Pendentes`) da planilha.
 - **PWA de curadoria** (`admin/`) — app instalável onde você **aprova/rejeita** os candidatos. **Só o que você aprova vai ao ar** — nada é publicado automaticamente.
 
-📖 **Como tudo funciona em detalhe (inclusive como roda no GitHub): [ARQUITETURA.md](ARQUITETURA.md).**
+A ideia por trás da automação: um LLM pesquisa a web (rápido, mas falível), um script
+determinístico valida tudo mecanicamente (lento de pensar, mas implacável), e nenhuma
+linha chega ao público sem aprovação humana. Ver o porquê completo em
+[ARQUITETURA.md § 0](ARQUITETURA.md#0-o-problema-e-a-filosofia-do-sistema).
+
+📖 **Como tudo funciona em detalhe (inclusive como roda no GitHub e por quê): [ARQUITETURA.md](ARQUITETURA.md).**
 Docs específicas: [automation/README.md](automation/README.md) (pipeline) · [admin/README.md](admin/README.md) (PWA).
 
 ---
