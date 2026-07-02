@@ -153,10 +153,12 @@ function rebuildV2(customMaxDias, pxPerDay) {
   const endYear = new Date(CONFIG.MARCO.getTime() + maxDias * 86400000).getFullYear() + 1;
 
   // Linhas verticais de ano + labels; ticks trimestrais sutis
+  let firstYearX = null; // x do primeiro selo de ano desenhado, usado para não colidir com o selo do marco zero
   for (let y = startYear; y <= endYear; y++) {
     const diasAno = Math.round((Date.UTC(y, 0, 1) - CONFIG.MARCO.getTime()) / 86400000);
     if (diasAno >= 0 && diasAno <= maxDias) {
       const x = xOf(diasAno);
+      if (firstYearX === null) firstYearX = x;
       // Linha de ano sólida e mais suave
       gridSvg += `<line x1="${x}" y1="${HEADER_H}" x2="${x}" y2="${SVG_H - 30}" stroke="#d6d2c6" stroke-width="1"/>`;
       // Label do ano com destaque
@@ -178,16 +180,37 @@ function rebuildV2(customMaxDias, pxPerDay) {
     }
   }
 
-  // Linha do marco zero
+  // Marco zero — selo sólido "preso" ao poste vertical, como uma bandeirinha na régua.
+  // O selo fica colado ao marcador (mesma altura, mesmo eixo), não solto no espaço.
   const marcoDias = 0;
   if (marcoDias <= maxDias) {
     const xMarco = xOf(marcoDias);
-    gridSvg += `<line x1="${xMarco}" y1="${HEADER_H}" x2="${xMarco}" y2="${SVG_H - 30}" stroke="#10a37f" stroke-width="1.5" opacity="0.35" stroke-dasharray="4,4"/>`;
-    // Badge na base para nao sobrepor os labels de ano no topo
-    gridSvg += `<g transform="translate(${xMarco}, ${SVG_H - 16})">
-      <rect x="-28" y="-11" width="56" height="22" rx="11" fill="#10a37f"/>
-      <text font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="0.02em">Marco zero</text>
-    </g>`;
+    const tickY = 17; // mesma faixa vertical dos selos de ano (centro em y=20)
+    const titleTag = `<title>Marco zero — ${fmtFull(CONFIG.MARCO.toISOString().slice(0, 10))} (lançamento do ChatGPT)</title>`;
+
+    // Poste único, do topo da régua de rótulos até o fim do gráfico — atravessa o selo
+    gridSvg += `<line x1="${xMarco}" y1="6" x2="${xMarco}" y2="${SVG_H - 30}" stroke="#10a37f" stroke-width="1" opacity="0.25" stroke-dasharray="2,5"/>`;
+
+    const label = 'MARCO ZERO';
+    const pillW = 76;
+    const gap = 5; // respiro entre o selo e o poste
+    // O selo cresce para a esquerda (para dentro da régua de rótulos) e o marcador fica
+    // sobre o poste em x=xMarco; ambos só cabem sem tocar o selo do primeiro ano (raio 22 +
+    // margem) quando há pelo menos ~26px de folga. Abaixo disso o selo de "2023" já alcança
+    // esse ponto, então não há como desenhar nada ali sem sobrepor — a linha tracejada basta.
+    const clearance = firstYearX !== null ? firstYearX - xMarco : Infinity;
+
+    if (clearance >= 26) {
+      // Espaço suficiente: selo cheio, encostado no poste como uma bandeira
+      gridSvg += `<g>${titleTag}
+        <rect x="${xMarco - gap - pillW}" y="6" width="${pillW}" height="22" rx="11" fill="#0c7a5c"/>
+        <text x="${xMarco - gap - pillW / 2}" y="${tickY + 4}" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="0.03em">${label}</text>
+        <circle cx="${xMarco}" cy="${tickY}" r="3" fill="#10a37f" stroke="#fff" stroke-width="1.5"/>
+      </g>`;
+    } else {
+      // Zoom extremo: o selo do primeiro ano já cobre esse ponto — evita sobrepor, mantém só a dica
+      gridSvg += `<g>${titleTag}<rect x="${xMarco - 6}" y="6" width="12" height="22" fill="transparent"/></g>`;
+    }
   }
 
   // Sublinha do header
