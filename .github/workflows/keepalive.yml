@@ -1,0 +1,39 @@
+name: Keep-alive (evita desativação do cron)
+
+# O GitHub desativa workflows agendados automaticamente após 60 dias sem
+# atividade de push no repositório. O workflow auto-update.yml roda toda
+# semana, mas tem permissions: contents: read de propósito (não deve
+# escrever no git) — então essas execuções não contam como "atividade".
+# Este workflow faz um commit mensal trivial só para manter o repositório
+# "ativo" e impedir que o GitHub desative os crons.
+on:
+  schedule:
+    - cron: '0 3 1 * *' # dia 1 de cada mês, 03:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: keepalive
+  cancel-in-progress: false
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Atualizar timestamp
+        run: |
+          mkdir -p .github
+          echo "Último keep-alive: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" > .github/KEEPALIVE.md
+
+      - name: Commit e push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/KEEPALIVE.md
+          git commit -m "chore: keep-alive commit to prevent Actions schedule disablement" || exit 0
+          git push
