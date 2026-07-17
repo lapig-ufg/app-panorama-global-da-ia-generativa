@@ -115,6 +115,16 @@ const COMPANY_COLORS = {
   Mistral: '#FA520F'
 };
 
+// ─── ROTEAMENTO DE EMPRESAS DESCONHECIDAS ───
+// Empresa "conhecida" = tem entrada em COMPANY_COLORS (mesma definição do publish.mjs).
+// Lançamento de empresa desconhecida não some da régua: cai no "Outros" do grupo
+// indicado na coluna `grupo` da planilha (preenchida pela automação a partir do
+// grupo_sugerido); sem grupo, vai para o "Outros" de OUTROS PAÍSES.
+const KNOWN_COMPANIES = new Set(Object.keys(COMPANY_COLORS).map(k => k.toUpperCase()));
+const empDe = r => (r.emp || '').trim().toUpperCase();
+const grupoDe = r => (r.grupo || '').trim().toUpperCase();
+const desconhecida = r => !!r.emp && !KNOWN_COMPANIES.has(empDe(r));
+
 // ─── ESTRUTURA DE GRUPOS / TRACKS ───
 const LAYOUT_GROUPS = [
   {
@@ -131,7 +141,7 @@ const LAYOUT_GROUPS = [
       { name: 'IBM', filter: r => r.emp && r.emp.trim().toUpperCase() === 'IBM' },
       { name: 'xAI', filter: r => r.emp && r.emp.trim().toUpperCase() === 'XAI' },
       { name: 'NVIDIA', filter: r => r.emp && r.emp.trim().toUpperCase() === 'NVIDIA' },
-      { name: 'Outros', filter: r => r.emp && ['META', 'CURSOR', 'OPENCLAW'].includes(r.emp.trim().toUpperCase()) }
+      { name: 'Outros', filter: r => ['META', 'CURSOR', 'OPENCLAW'].includes(empDe(r)) || (desconhecida(r) && grupoDe(r) === 'ECOSSISTEMA NORTE-AMERICANO') }
     ]
   },
   {
@@ -145,7 +155,7 @@ const LAYOUT_GROUPS = [
       { name: 'Qwen / Alibaba', filter: r => r.emp && r.emp.trim().toUpperCase() === 'ALIBABA' },
       { name: 'Zhipu AI', filter: r => r.emp && r.emp.trim().toUpperCase() === 'ZHIPU AI' },
       { name: 'MiniMax', filter: r => r.emp && r.emp.trim().toUpperCase() === 'MINIMAX' },
-      { name: 'Outros', filter: r => r.emp && ['BAIDU', 'MOONSHOT AI', 'XIAOMI'].includes(r.emp.trim().toUpperCase()) }
+      { name: 'Outros', filter: r => ['BAIDU', 'MOONSHOT AI', 'XIAOMI'].includes(empDe(r)) || (desconhecida(r) && grupoDe(r) === 'ECOSSISTEMA CHINÊS') }
     ]
   },
   {
@@ -156,7 +166,10 @@ const LAYOUT_GROUPS = [
     accent: '#5B53A8',
     tracks: [
       { name: 'Sakana AI · Japão', filter: r => r.emp && r.emp.trim().toUpperCase() === 'SAKANA AI' },
-      { name: 'Mistral · França', filter: r => r.emp && r.emp.trim().toUpperCase() === 'MISTRAL' }
+      { name: 'Mistral · França', filter: r => r.emp && r.emp.trim().toUpperCase() === 'MISTRAL' },
+      // Catch-all: empresa desconhecida sem grupo (ou com grupo "OUTROS PAÍSES").
+      // hideIfEmpty: a régua só é desenhada quando há pelo menos um evento nela.
+      { name: 'Outros', hideIfEmpty: true, filter: r => desconhecida(r) && grupoDe(r) !== 'ECOSSISTEMA NORTE-AMERICANO' && grupoDe(r) !== 'ECOSSISTEMA CHINÊS' }
     ]
   }
 ];
@@ -174,7 +187,7 @@ const CONFIG = {
   MAX_LANES: 24,
   PAD_L: 170,
   PAD_R: 200,
-  CACHE_KEY: 'panorama-llms-cache-v2',
+  CACHE_KEY: 'panorama-llms-cache-v3',
   CACHE_TTL_MS: 6 * 60 * 60 * 1000                                // 6 horas
 };
 

@@ -271,6 +271,12 @@ oficial do logo em `simple-icons/simple-icons` no GitHub pelo slug do nome — s
 embute o `path` vetorial no snippet. O curador recebe por e-mail um bloco de código quase
 pronto, em vez de uma tarefa de pesquisa.
 
+Além do snippet, o payload leva `grupo` (o `grupo_sugerido` do agente) e `pais` para
+colunas próprias da planilha. O site usa a coluna `grupo` como rede de segurança: empresa
+que ainda não está em `COMPANY_COLORS` aparece na régua **"Outros"** do grupo sugerido
+(pílula cinza, sem logo) — e no "Outros" de OUTROS PAÍSES quando não há grupo. Ou seja,
+aprovar antes de aplicar o snippet **não** faz o lançamento sumir da timeline.
+
 ### 4.7 Dry-run: o ensaio geral
 
 | Disparo | Escreve? |
@@ -392,7 +398,9 @@ gere um novo e atualize nos três lugares (e cole o novo na PWA).
 3. Abra a **PWA** → aprove o que for relevante, rejeite o resto. ⚠️ Sempre confira a **fonte**:
    a pesquisa pode trazer item duvidoso/alucinado (ex.: nome de modelo que não existe).
 4. **Empresa nova:** a PWA marca "EMPRESA NOVA" e o e-mail traz um snippet de `data.js`.
-   Aplique o snippet (logo/cor/grupo) + suba o `?v=` **antes** de aprovar, senão a pílula sai sem logo.
+   Se aprovar antes de aplicar o snippet, a pílula aparece **provisoriamente em cinza** na
+   régua "Outros" do grupo sugerido (coluna `grupo` da planilha) — aplique o snippet
+   (logo/cor/régua própria) + suba o `?v=` quando quiser dar identidade à empresa.
 5. O cron já escreve sozinho (`AUTO_PUBLISH = true`). Se quiser recalibrar sem escrever,
    volte a variável p/ dry-run temporariamente.
 

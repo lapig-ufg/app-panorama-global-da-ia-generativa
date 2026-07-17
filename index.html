@@ -116,6 +116,15 @@
       </button>
     </div>
 
+    <button class="icon-btn novidades-btn" id="novidades-btn" type="button"
+            title="Últimos modelos adicionados à régua" aria-haspopup="true" aria-expanded="false" hidden>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 3l1.9 5.6a2 2 0 0 0 1.3 1.3L21 12l-5.8 2.1a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.6a2 2 0 0 0-1.3-1.3L3 12l5.8-2.1a2 2 0 0 0 1.3-1.3z" />
+      </svg>
+      <span class="btn-text">Novidades</span>
+      <span class="novidades-dot" hidden aria-hidden="true"></span>
+    </button>
+
     <button class="icon-btn help-btn" id="help-btn" type="button" title="Como usar" aria-label="Como usar">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10" />
@@ -123,6 +132,13 @@
         <line x1="12" y1="17" x2="12.01" y2="17" />
       </svg>
     </button>
+  </div>
+
+  <div class="help-popover novidades-popover" id="novidades-popover" hidden>
+    <button class="help-close" id="novidades-close" type="button" aria-label="Fechar novidades">×</button>
+    <div class="novidades-title">Últimas adições à régua</div>
+    <ul class="novidades-list" id="novidades-list"></ul>
+    <div class="novidades-hint">Clique num item para localizá-lo na timeline.</div>
   </div>
 
   <div class="help-popover" id="help-popover" hidden>
@@ -171,9 +187,9 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="assets/data.js?v=14"></script>
-  <script src="assets/render.js?v=14"></script>
-  <script src="assets/app.js?v=14"></script>
+  <script src="assets/data.js?v=15"></script>
+  <script src="assets/render.js?v=15"></script>
+  <script src="assets/app.js?v=15"></script>
 </body>
 
 </html>

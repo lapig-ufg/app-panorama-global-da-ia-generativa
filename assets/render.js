@@ -51,6 +51,9 @@ function computeTrackLayout(maxDias, pxPerDay) {
     const groupLayout = { tracks: [] };
 
     group.tracks.forEach(track => {
+      // Régua opcional (catch-all): só é desenhada quando tem eventos
+      if (track.hideIfEmpty && !(track.events || []).length) return;
+
       const lanes = []; // lanes[l] = x final (right) da última pílula na lane l
       const events = [];
       let maxLane = 0;
@@ -91,7 +94,7 @@ function computeTrackLayout(maxDias, pxPerDay) {
         PILL_H + 24 + lanesUp * LANE_STEP + lanesDown * LANE_STEP
       );
 
-      groupLayout.tracks.push({ events, trackHeight });
+      groupLayout.tracks.push({ track, events, trackHeight });
     });
 
     layout.push(groupLayout);
@@ -186,7 +189,20 @@ function rebuildV2(customMaxDias, pxPerDay) {
   if (marcoDias <= maxDias) {
     const xMarco = xOf(marcoDias);
     const tickY = 17; // mesma faixa vertical dos selos de ano (centro em y=20)
-    const titleTag = `<title>Marco zero — ${fmtFull(CONFIG.MARCO.toISOString().slice(0, 10))} (lançamento do ChatGPT)</title>`;
+
+    // O selo usa o MESMO sistema de tooltip das pílulas (hover/click/teclado/touch).
+    // O <title> nativo de SVG era pouco confiável: só aparece com o ponteiro parado
+    // por ~1s no desktop e não existe em telas de toque.
+    const marcoAria = `Marco zero — ${fmtFull(CONFIG.MARCO.toISOString().slice(0, 10))}, lançamento do ChatGPT`;
+    window.tooltipData['marco-zero'] = {
+      date: '2022-11-30',
+      dias: 0,
+      mod: 'ChatGPT',
+      emp: 'OpenAI',
+      impact: 'Marco zero da régua: o lançamento do ChatGPT em 30/11/2022 deflagrou a corrida global da IA generativa. Todas as distâncias temporais da timeline são contadas a partir deste dia.',
+      color: '#10a37f'
+    };
+    const marcoAttrs = `class="pill-group" data-pill-id="marco-zero" role="button" tabindex="0" aria-label="${escapeXml(marcoAria)}" style="cursor:pointer"`;
 
     // Poste único, do topo da régua de rótulos até o fim do gráfico — atravessa o selo
     gridSvg += `<line x1="${xMarco}" y1="6" x2="${xMarco}" y2="${SVG_H - 30}" stroke="#10a37f" stroke-width="1" opacity="0.25" stroke-dasharray="2,5"/>`;
@@ -202,14 +218,14 @@ function rebuildV2(customMaxDias, pxPerDay) {
 
     if (clearance >= 26) {
       // Espaço suficiente: selo cheio, encostado no poste como uma bandeira
-      gridSvg += `<g>${titleTag}
+      gridSvg += `<g ${marcoAttrs}>
         <rect x="${xMarco - gap - pillW}" y="6" width="${pillW}" height="22" rx="11" fill="#0c7a5c"/>
         <text x="${xMarco - gap - pillW / 2}" y="${tickY + 4}" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="0.03em">${label}</text>
         <circle cx="${xMarco}" cy="${tickY}" r="3" fill="#10a37f" stroke="#fff" stroke-width="1.5"/>
       </g>`;
     } else {
-      // Zoom extremo: o selo do primeiro ano já cobre esse ponto — evita sobrepor, mantém só a dica
-      gridSvg += `<g>${titleTag}<rect x="${xMarco - 6}" y="6" width="12" height="22" fill="transparent"/></g>`;
+      // Zoom extremo: o selo do primeiro ano já cobre esse ponto — evita sobrepor, mantém a área clicável
+      gridSvg += `<g ${marcoAttrs}><rect x="${xMarco - 6}" y="6" width="12" height="22" fill="transparent"/></g>`;
     }
   }
 
@@ -242,8 +258,9 @@ function rebuildV2(customMaxDias, pxPerDay) {
 
     let trackY = currentY + GROUP_TITLE_H;
 
-    group.tracks.forEach((track, tIdx) => {
-      const trackHeight = groupLayout.tracks[tIdx].trackHeight;
+    groupLayout.tracks.forEach((trackLayout, tIdx) => {
+      const track = trackLayout.track;
+      const trackHeight = trackLayout.trackHeight;
       const axisY = trackY + trackHeight / 2;
       const trackColor = COMPANY_COLORS[track.events[0]?.emp] || '#a5a297';
 
@@ -260,7 +277,7 @@ function rebuildV2(customMaxDias, pxPerDay) {
       elementsSvg += `<text x="${CONFIG.PAD_L - 28}" y="${axisY + 4}" text-anchor="end" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#1a1a1a" letter-spacing="-0.005em">${escapeXml(track.name)}<tspan font-weight="500" fill="#a5a297" font-size="10" font-family="DM Mono,monospace">${escapeXml(countLabel)}</tspan></text>`;
 
       // Pílulas já pré-computadas
-      groupLayout.tracks[tIdx].events.forEach(({ ev, idx, x, w, lane, laneOffset }) => {
+      trackLayout.events.forEach(({ ev, idx, x, w, lane, laneOffset }) => {
         const color = COMPANY_COLORS[ev.emp] || '#999';
         const logoKey = LOGO_MAP[ev.emp];
         const textPad = 32;
@@ -300,6 +317,11 @@ function rebuildV2(customMaxDias, pxPerDay) {
         // Nome do modelo + data
         elementsSvg += `<text x="${x + textPad}" y="${pillY + 14}" font-family="Inter,sans-serif" font-size="11.5" font-weight="700" fill="#0c0c0c" letter-spacing="-0.01em">${escapeXml(ev.mod)}</text>`;
         elementsSvg += `<text x="${x + textPad}" y="${pillY + 26}" font-family="DM Mono,monospace" font-size="9" font-weight="500" fill="#807d75" letter-spacing="0.04em">${escapeXml(fmtPill(ev.date))}</text>`;
+
+        // Pontinho âmbar: adicionado recentemente à régua (vale também p/ exportações)
+        if (ev.isNew) {
+          elementsSvg += `<circle cx="${x + w - 3}" cy="${pillY + 3}" r="4.5" fill="#f59e0b" stroke="#fff" stroke-width="1.5"/>`;
+        }
 
         elementsSvg += `</g>`;
       });

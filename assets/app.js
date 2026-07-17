@@ -72,9 +72,9 @@ function parseSheetDate(val) {
 function parseSheetTimestamp(val) {
   if (!val) return 0;
   if (typeof val === 'string' && val.startsWith('Date(')) {
-    const parts = val.match(/Date\((\d+),\s*(\d+),\s*(\d+)/);
+    const parts = val.match(/Date\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))?(?:,\s*(\d+))?(?:,\s*(\d+))?/);
     if (parts) {
-      return new Date(parts[1], parts[2], parts[3]).getTime();
+      return new Date(+parts[1], +parts[2], +parts[3], +(parts[4] || 0), +(parts[5] || 0), +(parts[6] || 0)).getTime();
     }
   }
   const t = new Date(val).getTime();
@@ -149,8 +149,120 @@ function processRows(allRows) {
     });
   });
 
+  updateNovidades();
   rebuildV2(undefined, currentPxPerDay);
   updateZoomUI();
+}
+
+// ─── NOVIDADES (últimos modelos adicionados à régua) ───
+const NOVIDADES_MAX = 3;
+const NOVIDADES_DOT_DAYS = 14; // idade máxima (dias) p/ marcar "novo" na pílula e no botão
+let NOVIDADES = [];
+
+function updateNovidades() {
+  // "Adicionado" = coluna timestamp da planilha (quando a linha entrou), não a data de lançamento
+  NOVIDADES = RAW.filter(r => r.addedAt > 0)
+    .sort((a, b) => b.addedAt - a.addedAt)
+    .slice(0, NOVIDADES_MAX);
+  const cutoff = Date.now() - NOVIDADES_DOT_DAYS * 86400000;
+  RAW.forEach(r => { r.isNew = false; });
+  NOVIDADES.forEach(r => { r.isNew = r.addedAt >= cutoff; });
+  renderNovidades();
+}
+
+function renderNovidades() {
+  const btn = document.getElementById('novidades-btn');
+  const list = document.getElementById('novidades-list');
+  if (!btn || !list) return;
+  if (!NOVIDADES.length) { btn.hidden = true; return; }
+  btn.hidden = false;
+
+  const dot = btn.querySelector('.novidades-dot');
+  if (dot) dot.hidden = !NOVIDADES.some(r => r.isNew);
+
+  list.innerHTML = NOVIDADES.map((r, i) => {
+    const color = COMPANY_COLORS[r.emp] || '#999';
+    const fonte = r.ref && /^https?:\/\//.test(r.ref)
+      ? `<a class="nv-fonte" href="${escapeXml(r.ref)}" target="_blank" rel="noopener">fonte ↗</a>`
+      : '';
+    return `<li>
+      <button type="button" class="nv-item" data-nv="${i}" title="Localizar na régua">
+        <span class="nv-swatch" style="background:${color}" aria-hidden="true"></span>
+        <span class="nv-body">
+          <span class="nv-model">${escapeXml(r.mod)}</span>
+          <span class="nv-meta">${escapeXml(r.emp)} · ${fmtFull(r.date)}</span>
+          ${r.impact ? `<span class="nv-impact">${escapeXml(r.impact)}</span>` : ''}
+        </span>
+      </button>
+      ${fonte}
+    </li>`;
+  }).join('');
+
+  list.querySelectorAll('.nv-item').forEach(b => {
+    b.addEventListener('click', () => focusPill(NOVIDADES[+b.dataset.nv]));
+  });
+}
+
+// Rola a timeline até a pílula do evento, dá um flash nela e abre o tooltip
+function focusPill(ev) {
+  toggleNovidades(false);
+  const slider = document.getElementById('timeline-area');
+  if (!slider) return;
+
+  let pillId = null;
+  for (const id in window.tooltipData) {
+    const d = window.tooltipData[id];
+    if (d.date === ev.date && d.emp === ev.emp && d.mod === ev.mod) { pillId = id; break; }
+  }
+  if (!pillId) return;
+  const el = document.querySelector(`[data-pill-id="${pillId}"]`);
+  if (!el) return;
+
+  const x = CONFIG.PAD_L + Math.round(ev.dias * currentPxPerDay);
+  slider.scrollTo({ left: Math.max(0, x - slider.clientWidth / 2), behavior: 'smooth' });
+
+  setTimeout(() => {
+    // Ajusta o scroll vertical se a pílula estiver fora da janela visível
+    const areaRect = slider.getBoundingClientRect();
+    let rect = el.getBoundingClientRect();
+    if (rect.top < areaRect.top + 8 || rect.bottom > areaRect.bottom - 8) {
+      slider.scrollTop += rect.top - areaRect.top - slider.clientHeight / 2 + rect.height / 2;
+      rect = el.getBoundingClientRect();
+    }
+    showTip({ clientX: rect.left + rect.width / 2, clientY: rect.top }, pillId);
+    el.classList.add('pill-flash');
+    setTimeout(() => el.classList.remove('pill-flash'), 1800);
+  }, 450);
+}
+
+function toggleNovidades(show) {
+  const btn = document.getElementById('novidades-btn');
+  const popover = document.getElementById('novidades-popover');
+  if (!popover) return;
+  popover.hidden = !show;
+  if (btn) btn.setAttribute('aria-expanded', String(show));
+}
+
+function initNovidadesPopover() {
+  const btn = document.getElementById('novidades-btn');
+  const popover = document.getElementById('novidades-popover');
+  const close = document.getElementById('novidades-close');
+  if (!btn || !popover) return;
+
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    toggleNovidades(popover.hidden);
+  });
+  if (close) close.addEventListener('click', () => toggleNovidades(false));
+
+  document.addEventListener('click', e => {
+    if (!popover.hidden && !popover.contains(e.target) && !btn.contains(e.target)) {
+      toggleNovidades(false);
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (!popover.hidden && e.key === 'Escape') toggleNovidades(false);
+  });
 }
 
 // ─── ESTADOS DE ERRO E LOADING ───
@@ -200,11 +312,30 @@ async function loadSheetData() {
   }
 }
 
+// Normaliza nome de cabeçalho ("data_atualizacao" → "dataatualizacao")
+function normHeader(s) {
+  return String(s == null ? '' : s).trim().toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]/g, '');
+}
+
 async function fetchFresh(silent) {
   const allRows = [];
   for (const tab of CONFIG.SHEET_TABS) {
     const data = await gvizFetch(tab);
     if (!data || !data.table || !data.table.rows) continue;
+
+    // A 1ª linha vem como dado (é o cabeçalho da planilha): usa p/ localizar
+    // colunas novas por nome, com fallback nas posições históricas.
+    const headerCells = (data.table.rows[0] && data.table.rows[0].c) || [];
+    const colIdx = {};
+    headerCells.forEach((cell, i) => {
+      const n = normHeader(cell && cell.v);
+      if (n && colIdx[n] === undefined) colIdx[n] = i;
+    });
+    const iGrupo = colIdx.grupo !== undefined ? colIdx.grupo : -1;
+    const iTimestamp = colIdx.timestamp !== undefined ? colIdx.timestamp : 9;
+    const iUpdated = colIdx.dataatualizacao !== undefined ? colIdx.dataatualizacao : 10;
 
     const rows = data.table.rows.slice(1); // pula header
 
@@ -215,7 +346,7 @@ async function fetchFresh(silent) {
       const emp = c[1] ? String(c[1].v || '') : '';
       const mod = c[2] ? String(c[2].v || '') : '';
       const impact = c[3] ? String(c[3].v || '') : '';
-      const foo = c[4] ? String(c[4].v || '') : '';
+      const ref = c[4] ? String(c[4].v || '') : '';
       const status = c[5] ? String(c[5].v || '').toLowerCase() : '';
 
       if (status !== 'publicado') continue;
@@ -224,9 +355,11 @@ async function fetchFresh(silent) {
       const date = parseSheetDate(c[0].v);
       if (!date) continue;
 
-      const updatedAt = c[10] && c[10].v ? parseSheetTimestamp(c[10].v) : 0;
+      const grupo = iGrupo >= 0 && c[iGrupo] ? String(c[iGrupo].v || '') : '';
+      const addedAt = c[iTimestamp] && c[iTimestamp].v ? parseSheetTimestamp(c[iTimestamp].v) : 0;
+      const updatedAt = c[iUpdated] && c[iUpdated].v ? parseSheetTimestamp(c[iUpdated].v) : 0;
 
-      allRows.push({ date, emp, mod, impact, foo, updatedAt });
+      allRows.push({ date, emp, mod, impact, ref, grupo, addedAt, updatedAt });
     }
   }
 
@@ -364,6 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeBtn = document.getElementById('tt-close');
   if (closeBtn) closeBtn.addEventListener('click', () => hideTip(true));
   initHelpPopover();
+  initNovidadesPopover();
 });
 
 // ─── DRAG-TO-PAN (com threshold para não atrapalhar clicks) ───

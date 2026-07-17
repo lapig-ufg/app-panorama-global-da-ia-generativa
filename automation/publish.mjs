@@ -142,6 +142,7 @@ const payload = {
     referencia: c.referencia, tipo: c.tipo || 'modelo', origem: 'auto',
     empresa_nova: !known.has(String(c.empresa).trim().toUpperCase()),
     confianca: c.confianca, relevancia_justificativa: c.relevancia_justificativa || '',
+    grupo: c.grupo_sugerido || '', pais: c.pais || '',
   })),
   novas: snippets,
 };

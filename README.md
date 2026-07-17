@@ -83,12 +83,16 @@ A planilha do Google Sheets deve conter uma aba chamada **`Lancamentos`** com as
 | I      | `origem`          | Texto     | `manual` ou `auto` (preenchido pela automação). Informativo.               |
 | J      | `timestamp`       | Data/hora | Quando a linha foi criada. Informativo.                                    |
 | K      | `data_atualizacao`| Data      | (Opcional) Data da última edição da linha — usada no rodapé do header      |
+| L      | `grupo`           | Texto     | (Automação) Grupo sugerido p/ empresa **desconhecida**: `ECOSSISTEMA NORTE-AMERICANO`, `ECOSSISTEMA CHINÊS` ou `OUTROS PAÍSES`. Roteia o lançamento p/ a régua "Outros" desse grupo. |
+| M      | `pais`            | Texto     | (Automação) País de origem da empresa. Informativo.                        |
 
 ### Empresas suportadas
 
 `OpenAI`, `Anthropic`, `Google`, `Microsoft`, `IBM`, `Meta`, `xAI`, `NVIDIA`, `Cursor`, `OpenClaw`, `Sakana AI`, `Mistral`, `Baidu`, `Alibaba`, `DeepSeek`, `MiniMax`, `Moonshot AI`, `Zhipu AI`, `Xiaomi`.
 
-Para adicionar uma nova empresa, edite `assets/data.js`:
+Empresas **fora** dessa lista não somem da timeline: o lançamento aparece (em cinza, com a inicial da empresa no lugar do logo) na régua **"Outros"** do grupo indicado na coluna `grupo` da planilha — ou em **Outros Países › Outros** quando a coluna está vazia.
+
+Para adicionar uma nova empresa com identidade própria, edite `assets/data.js`:
 - Adicione cor em `COMPANY_COLORS`
 - Adicione mapeamento de logo em `LOGO_MAP` e o path SVG em `LOGO_PATHS`
 - Inclua a empresa em uma das tracks de `LAYOUT_GROUPS`

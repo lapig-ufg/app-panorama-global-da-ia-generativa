@@ -417,6 +417,143 @@ body {
   font-weight: 600;
 }
 
+/* ─── NOVIDADES (últimas adições à régua) ─── */
+.novidades-btn {
+  margin-left: auto;
+  position: relative;
+}
+
+.novidades-btn .novidades-dot {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #f59e0b;
+  border: 2px solid var(--white);
+}
+
+.novidades-popover {
+  width: 380px;
+}
+
+.novidades-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.novidades-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.novidades-popover .novidades-list li {
+  padding-left: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.novidades-popover .novidades-list li::before {
+  display: none;
+}
+
+.nv-item {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: none;
+  border: 0;
+  padding: 6px;
+  margin: -6px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+
+.nv-item:hover {
+  background: var(--paper-tint);
+}
+
+.nv-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.nv-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.nv-model {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.nv-meta {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-muted);
+  margin-top: 1px;
+}
+
+.nv-impact {
+  display: block;
+  margin-top: 3px;
+  color: var(--ink-light);
+}
+
+.nv-fonte {
+  flex-shrink: 0;
+  font-size: 10px;
+  margin-top: 7px;
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nv-fonte:hover {
+  text-decoration: underline;
+}
+
+.novidades-hint {
+  margin-top: 10px;
+  font-size: 10px;
+  color: var(--ink-muted);
+}
+
+/* Flash da pílula localizada via "Novidades" */
+@keyframes pillFlash {
+  0%, 100% { opacity: 0.09; }
+  50% { opacity: 0.45; }
+}
+
+.pill-group.pill-flash .pill-bg {
+  animation: pillFlash 0.75s ease-in-out 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill-group.pill-flash .pill-bg {
+    animation: none;
+  }
+}
+
 .help-close {
   position: absolute;
   top: 8px;

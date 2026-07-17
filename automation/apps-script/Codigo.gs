@@ -47,6 +47,9 @@ function setup() {
   pend.getRange(2, aprovarCol, 1000, 1)
       .setDataValidation(SpreadsheetApp.newDataValidation().requireCheckbox().build());
 
+  // 1b) Garante as colunas grupo/pais nas duas abas
+  _ensureExtraCols_(ss);
+
   // 2) Gatilho instalável onEdit. Remove TODOS os gatilhos antigos primeiro
   //    (tentativas anteriores podem ter deixado gatilhos por tempo que agora falhariam).
   var removidos = 0;
@@ -138,6 +141,8 @@ function _handleIngestao_(body) {
   var pend = ss.getSheetByName(TAB_PEND);
   if (!pend) return _json({ ok: false, error: 'aba "' + TAB_PEND + '" nao existe' });
 
+  _ensureExtraCols_(ss); // colunas grupo/pais: cria na 1ª ingestão que precisar delas
+
   var headers = _headers(pend);
   var existing = _existingKeys(ss);
   var added = [], skipped = 0;
@@ -150,7 +155,8 @@ function _handleIngestao_(body) {
       data: r.data, empresa: r.empresa, modelo: r.modelo, impacto: r.impacto,
       referencia: r.referencia, status: 'pendente', tipo: r.tipo || 'modelo',
       dias: '', origem: r.origem || 'auto',
-      timestamp: new Date(), data_atualizacao: new Date()
+      timestamp: new Date(), data_atualizacao: new Date(),
+      grupo: r.grupo || '', pais: r.pais || ''
     };
     pend.appendRow(_rowFromObj(headers, obj));
     added.push(r);
@@ -279,6 +285,22 @@ function _promoverLinha_(ss, pend, pendHeaders, rowIndex) {
 }
 
 // ───────────────────────────── helpers ──────────────────────────────────────
+// Colunas extras preenchidas pela automação (roteiam empresa desconhecida no site).
+// Mapeamento é sempre por NOME de cabeçalho, então a posição não importa —
+// só anexa no fim da aba quando faltar.
+var EXTRA_COLS = ['grupo', 'pais'];
+function _ensureExtraCols_(ss) {
+  [TAB_LANC, TAB_PEND].forEach(function (name) {
+    var sh = ss.getSheetByName(name);
+    if (!sh) return;
+    EXTRA_COLS.forEach(function (col) {
+      if (_col(_headers(sh), col) === -1) {
+        sh.getRange(1, sh.getLastColumn() + 1).setValue(col).setFontWeight('bold');
+      }
+    });
+  });
+}
+
 function _headers(sheet) {
   return sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].map(function (h) {
     return String(h).trim();
