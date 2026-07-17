@@ -118,22 +118,13 @@ const COMPANY_COLORS = {
 // ─── ESTRUTURA DE GRUPOS / TRACKS ───
 const LAYOUT_GROUPS = [
   {
-    title: 'OPENAI',
-    subtitle: 'Pioneira da IA generativa moderna. Lançou o ChatGPT em nov/2022 e deu início a uma corrida global.',
-    bg: '#f0f5f2',
-    flag: null,
-    accent: '#10a37f',
-    tracks: [
-      { name: 'OpenAI', filter: r => r.emp && r.emp.trim().toUpperCase() === 'OPENAI' }
-    ]
-  },
-  {
     title: 'ECOSSISTEMA NORTE-AMERICANO',
-    subtitle: 'Modelos e ferramentas desenvolvidos nos Estados Unidos — majoritariamente fechados, com poucas exceções de código aberto.',
+    subtitle: 'Berço do ChatGPT (nov/2022), que deu início à corrida global. Modelos e ferramentas desenvolvidos nos Estados Unidos — majoritariamente fechados, com poucas exceções de código aberto.',
     bg: '#f0f4fa',
     flag: 'US',
     accent: '#3C3B6E',
     tracks: [
+      { name: 'OpenAI', filter: r => r.emp && r.emp.trim().toUpperCase() === 'OPENAI' },
       { name: 'Anthropic', filter: r => r.emp && r.emp.trim().toUpperCase() === 'ANTHROPIC' },
       { name: 'Google', filter: r => r.emp && r.emp.trim().toUpperCase() === 'GOOGLE' },
       { name: 'Microsoft', filter: r => r.emp && r.emp.trim().toUpperCase() === 'MICROSOFT' },

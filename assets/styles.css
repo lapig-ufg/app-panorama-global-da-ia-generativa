@@ -67,16 +67,16 @@ body {
   flex: 1;
 }
 
-.top-ribbon .r-openai {
-  background: linear-gradient(90deg, #10a37f, #14b890);
-}
-
 .top-ribbon .r-west {
   background: linear-gradient(90deg, #3C3B6E, #5b59a6);
 }
 
 .top-ribbon .r-east {
   background: linear-gradient(90deg, #DE2910, #f45142);
+}
+
+.top-ribbon .r-world {
+  background: linear-gradient(90deg, #5B53A8, #7a71c9);
 }
 
 /* ─── HEADER ─── */

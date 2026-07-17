@@ -39,12 +39,12 @@
     padding:0 0 env(safe-area-inset-bottom);
   }
 
-  /* faixa tricolor (OpenAI · Ocidente · Oriente) */
+  /* faixa tricolor (EUA · China · Outros Países) */
   .top-ribbon { display:flex; height:3px; background:var(--ink); }
   .top-ribbon span { flex:1; }
-  .top-ribbon .r-openai { background:linear-gradient(90deg,#10a37f,#14b890); }
-  .top-ribbon .r-west   { background:linear-gradient(90deg,#3C3B6E,#5b59a6); }
-  .top-ribbon .r-east   { background:linear-gradient(90deg,#DE2910,#f45142); }
+  .top-ribbon .r-west  { background:linear-gradient(90deg,#3C3B6E,#5b59a6); }
+  .top-ribbon .r-east  { background:linear-gradient(90deg,#DE2910,#f45142); }
+  .top-ribbon .r-world { background:linear-gradient(90deg,#5B53A8,#7a71c9); }
 
   /* cabeçalho */
   header {
@@ -220,7 +220,7 @@
 </head>
 <body>
 <div class="top-ribbon" aria-hidden="true">
-  <span class="r-openai"></span><span class="r-west"></span><span class="r-east"></span>
+  <span class="r-west"></span><span class="r-east"></span><span class="r-world"></span>
 </div>
 <header>
   <div class="header-titlewrap">

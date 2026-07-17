@@ -24,7 +24,7 @@
           "pais": { "type": "string" },
           "grupo_sugerido": {
             "type": "string",
-            "enum": ["", "OPENAI", "ECOSSISTEMA NORTE-AMERICANO", "ECOSSISTEMA CHINÊS", "OUTROS PAÍSES"]
+            "enum": ["", "ECOSSISTEMA NORTE-AMERICANO", "ECOSSISTEMA CHINÊS", "OUTROS PAÍSES"]
           }
         }
       }

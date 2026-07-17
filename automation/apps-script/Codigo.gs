@@ -182,7 +182,9 @@ function _handleAdmin_(body, action) {
 
   // idempotência: se um commit anterior já publicou a linha (meio-fez: no Lancamentos
   // mas ainda na fila), só remove de Pendentes — não duplica em Lancamentos.
-  var jaNoLanc = !!_existingKeys(ss)[alvo];
+  // Só Lancamentos aqui: a linha sendo aprovada está em Pendentes por definição,
+  // então incluir Pendentes faria jaNoLanc ser sempre true (linha sumia sem publicar).
+  var jaNoLanc = !!_existingKeys(ss, [TAB_LANC])[alvo];
 
   var last = pend.getLastRow();
   if (last >= 2) {
@@ -298,9 +300,9 @@ function _norm(s) {
     .replace(/[^a-z0-9]/g, '');
 }
 
-function _existingKeys(ss) {
+function _existingKeys(ss, tabs) {
   var keys = {};
-  [TAB_LANC, TAB_PEND].forEach(function (name) {
+  (tabs || [TAB_LANC, TAB_PEND]).forEach(function (name) {
     var sh = ss.getSheetByName(name);
     if (!sh || sh.getLastRow() < 2) return;
     var headers = _headers(sh);
