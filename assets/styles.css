@@ -360,12 +360,20 @@ body {
 }
 
 /* ─── HELP POPOVER ─── */
+.actions-cluster {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  border-right: none;
+  padding-right: 0;
+}
+
 .help-btn {
   width: 30px;
   height: 30px;
   padding: 0;
   border-radius: 50%;
-  margin-left: auto;
 }
 
 .help-popover {
@@ -419,7 +427,6 @@ body {
 
 /* ─── NOVIDADES (últimas adições à régua) ─── */
 .novidades-btn {
-  margin-left: auto;
   position: relative;
 }
 

@@ -39,6 +39,15 @@
 
   <!-- Estilos -->
   <link rel="stylesheet" href="assets/styles.css">
+
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSBR3JMT2X"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CSBR3JMT2X');
+  </script>
 </head>
 
 <body>
@@ -116,22 +125,24 @@
       </button>
     </div>
 
-    <button class="icon-btn novidades-btn" id="novidades-btn" type="button"
-            title="Últimos modelos adicionados à régua" aria-haspopup="true" aria-expanded="false" hidden>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 3l1.9 5.6a2 2 0 0 0 1.3 1.3L21 12l-5.8 2.1a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.6a2 2 0 0 0-1.3-1.3L3 12l5.8-2.1a2 2 0 0 0 1.3-1.3z" />
-      </svg>
-      <span class="btn-text">Novidades</span>
-      <span class="novidades-dot" hidden aria-hidden="true"></span>
-    </button>
+    <div class="control-cluster actions-cluster">
+      <button class="icon-btn novidades-btn" id="novidades-btn" type="button"
+              title="Últimos modelos adicionados à régua" aria-haspopup="true" aria-expanded="false" hidden>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3l1.9 5.6a2 2 0 0 0 1.3 1.3L21 12l-5.8 2.1a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.6a2 2 0 0 0-1.3-1.3L3 12l5.8-2.1a2 2 0 0 0 1.3-1.3z" />
+        </svg>
+        <span class="btn-text">Novidades</span>
+        <span class="novidades-dot" hidden aria-hidden="true"></span>
+      </button>
 
-    <button class="icon-btn help-btn" id="help-btn" type="button" title="Como usar" aria-label="Como usar">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-        <line x1="12" y1="17" x2="12.01" y2="17" />
-      </svg>
-    </button>
+      <button class="icon-btn help-btn" id="help-btn" type="button" title="Como usar" aria-label="Como usar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+      </button>
+    </div>
   </div>
 
   <div class="help-popover novidades-popover" id="novidades-popover" hidden>

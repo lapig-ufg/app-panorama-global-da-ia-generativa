@@ -160,13 +160,13 @@ const NOVIDADES_DOT_DAYS = 14; // idade máxima (dias) p/ marcar "novo" na pílu
 let NOVIDADES = [];
 
 function updateNovidades() {
-  // "Adicionado" = coluna timestamp da planilha (quando a linha entrou), não a data de lançamento
-  NOVIDADES = RAW.filter(r => r.addedAt > 0)
-    .sort((a, b) => b.addedAt - a.addedAt)
+  // "Adicionado" = data de atualização da planilha (quando aprovação/automação tocou na linha)
+  NOVIDADES = RAW.filter(r => r.updatedAt > 0)
+    .sort((a, b) => b.updatedAt - a.updatedAt)
     .slice(0, NOVIDADES_MAX);
   const cutoff = Date.now() - NOVIDADES_DOT_DAYS * 86400000;
   RAW.forEach(r => { r.isNew = false; });
-  NOVIDADES.forEach(r => { r.isNew = r.addedAt >= cutoff; });
+  NOVIDADES.forEach(r => { r.isNew = r.updatedAt >= cutoff; });
   renderNovidades();
 }
 
@@ -462,6 +462,14 @@ function attachPillHandlers() {
       if (justDragged) return; // ignora click após drag
       e.stopPropagation();
       showTip(e, id);
+      // Google Analytics: registra qual modelo foi clicado
+      if (window.gtag) {
+        const ev = window.tooltipData && window.tooltipData[id];
+        gtag('event', 'clique_modelo', {
+          modelo: ev ? ev.mod : id,
+          empresa: ev ? ev.emp : undefined
+        });
+      }
     });
 
     pill.addEventListener('keydown', e => {
