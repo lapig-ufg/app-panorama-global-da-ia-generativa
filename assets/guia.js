@@ -66,9 +66,9 @@
   ];
 
   const SLOTS = {
-    best: { key: 'best', label: 'O melhor' },
-    value: { key: 'value', label: 'Custo-benefício' },
-    fast: { key: 'fast', label: 'Mais rápido' },
+    best: { key: 'best', label: 'O melhor', hint: 'maior pontuação da categoria' },
+    value: { key: 'value', label: 'Custo-benefício', hint: 'maior pontuação por dólar' },
+    fast: { key: 'fast', label: 'Mais rápido', hint: 'maior velocidade (tokens por segundo)' },
   };
 
   let bmData = null;
@@ -108,10 +108,16 @@
   }
 
   // ─── Escolhe os três destaques de uma categoria ───
-  // Sempre três modelos DISTINTOS. Quando o campeão de um critério já ocupa
-  // outro card (o mais barato costuma ser o mais rápido), passamos para o
-  // próximo daquele critério — e a legenda do card diz exatamente isso, para
-  // não afirmar "o mais rápido" sobre quem é o segundo.
+  //
+  // Regra central: um selo superlativo só vai para quem REALMENTE vence aquele
+  // critério. Se o mesmo modelo vence dois (o de melhor custo-benefício costuma
+  // ser também o mais rápido), ele carrega os dois selos — repassar "mais
+  // rápido" ao segundo colocado seria simplesmente falso, já que o card ao lado
+  // mostraria um tok/s maior.
+  //
+  // A vaga que sobra é preenchida por posição ("2º melhor"), que é verdadeira
+  // por construção: não afirma superioridade em critério nenhum, só diz onde o
+  // modelo está no ranking de pontuação.
   function pickRecommendations(list) {
     if (!list.length) return [];
     const best = list[0];
@@ -120,7 +126,6 @@
     if (qualified.length < 3) qualified = list.slice(0, 3); // piso restritivo demais
 
     const keyOf = m => `${m.creator}|${m.model}`;
-    const taken = new Set();
 
     // Custo-benefício = maior pontuação por dólar (não o mais barato: o mais
     // barato tende a ser o pior da lista que ainda passa no piso).
@@ -129,30 +134,37 @@
     const bySpeed = qualified.filter(m => m.tok_per_sec > 0)
       .slice().sort((a, b) => b.tok_per_sec - a.tok_per_sec);
 
-    const slots = [];
-    const add = (m, slot, hintTop, hintNext, ranking) => {
-      if (!m || taken.has(keyOf(m))) return;
-      taken.add(keyOf(m));
-      const isTop = ranking && ranking[0] && keyOf(ranking[0]) === keyOf(m);
-      slots.push({ model: m, slot, hint: isTop ? hintTop : hintNext });
+    const cards = new Map();
+    const award = (m, slot) => {
+      if (!m) return;
+      const k = keyOf(m);
+      if (!cards.has(k)) cards.set(k, { model: m, slots: [] });
+      cards.get(k).slots.push(slot);
     };
-    const free = arr => arr.find(m => !taken.has(keyOf(m)));
+    award(best, SLOTS.best);
+    award(byValue[0], SLOTS.value);
+    award(bySpeed[0], SLOTS.fast);
 
-    add(best, SLOTS.best, 'maior pontuação da categoria', 'maior pontuação da categoria', [best]);
-    add(free(byValue), SLOTS.value,
-      'melhor pontuação por dólar entre os que passam no piso',
-      'melhor pontuação por dólar entre as demais opções', byValue);
-    add(free(bySpeed), SLOTS.fast,
-      'maior velocidade entre os que passam no piso',
-      'maior velocidade entre as demais opções', bySpeed);
-
-    // Se algum critério não teve candidato (sem preço ou sem velocidade
-    // medidos), completa por pontuação para manter os três cards.
-    for (const m of qualified) {
-      if (slots.length >= 3) break;
-      add(m, SLOTS.best, 'próxima melhor pontuação', 'próxima melhor pontuação', null);
+    // Completa até três cards com os melhores em pontuação ainda não exibidos.
+    for (let i = 0; i < list.length && cards.size < 3; i++) {
+      const m = list[i];
+      if (cards.has(keyOf(m))) continue;
+      cards.set(keyOf(m), {
+        model: m,
+        slots: [{
+          key: 'rank',
+          label: `${i + 1}º melhor`,
+          hint: `${i + 1}ª maior pontuação da categoria`,
+        }],
+      });
     }
-    return slots;
+
+    // O campeão primeiro; os demais por pontuação.
+    return [...cards.values()].sort((a, b) => {
+      const aB = a.slots.some(s => s.key === 'best') ? 1 : 0;
+      const bB = b.slots.some(s => s.key === 'best') ? 1 : 0;
+      return aB !== bB ? bB - aB : b.model.score - a.model.score;
+    });
   }
 
   // ─── Ligação com a régua ───
@@ -183,13 +195,16 @@
   // ─── Card de recomendação ───
   function recCard(entry, bench, best) {
     const m = entry.model;
-    const isBest = entry.slot.key === 'best';
+    const isBest = entry.slots.some(s => s.key === 'best');
     const price = fmtPrice(m.price_1m_blended);
     const speed = fmtSpeed(m.tok_per_sec);
     const link = reguaLink(m);
     const canonical = link.company;
 
-    const tags = `<span class="qm-slot qm-slot-${entry.slot.key}" title="${escapeHtml(entry.hint)}">${escapeHtml(entry.slot.label)}</span>`;
+    // Um modelo pode acumular selos (ex.: melhor custo-benefício E mais rápido).
+    const tags = entry.slots.map(s =>
+      `<span class="qm-slot qm-slot-${s.key}" title="${escapeHtml(s.hint)}">${escapeHtml(s.label)}</span>`
+    ).join('');
 
     // Quanto o alternativo economiza / entrega em relação ao líder
     let delta = '';
