@@ -901,6 +901,54 @@ function downloadSVG() {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+// ─── EXPORTAÇÃO CSV (dados tabulares dos modelos) ───
+function csvEscape(value) {
+  const s = String(value == null ? '' : value);
+  if (/[",\n\r]/.test(s)) {
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  return s;
+}
+
+function downloadCSV() {
+  if (!RAW || !RAW.length) {
+    alert('Ainda não há modelos carregados para exportar.');
+    return;
+  }
+
+  const btn = document.getElementById('btnExportCSV');
+  const oldHTML = btn ? btn.innerHTML : null;
+  if (btn) { btn.innerHTML = 'Gerando…'; btn.disabled = true; }
+
+  try {
+    const headers = ['Data', 'Empresa', 'Modelo', 'Impacto', 'Referência', 'Grupo', 'Dias desde o marco zero'];
+    const linhas = RAW.slice().sort((a, b) => a.dias - b.dias).map(r => [
+      r.date,
+      r.emp,
+      r.mod,
+      r.impact || '',
+      r.ref || '',
+      r.grupo || '',
+      r.dias
+    ].map(csvEscape).join(','));
+
+    const csv = [headers.map(csvEscape).join(','), ...linhas].join('\r\n');
+    // BOM UTF-8 para o Excel reconhecer acentos
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.download = `panorama-llms-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.href = url;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch (e) {
+    console.error('Erro na exportação CSV:', e);
+    alert('Erro ao gerar CSV: ' + e.message);
+  } finally {
+    if (btn) { btn.innerHTML = oldHTML; btn.disabled = false; }
+  }
+}
+
 // ─── INICIALIZAÇÃO ───
 document.addEventListener('DOMContentLoaded', () => {
   loadZoom();
