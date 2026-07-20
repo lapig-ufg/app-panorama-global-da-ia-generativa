@@ -898,4 +898,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initZoomControls();
   initDragPan();
   loadSheetData();
+  if (typeof window.initBenchmarks === 'function') window.initBenchmarks();
 });
