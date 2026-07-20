@@ -1,0 +1,43 @@
+name: Atualizar benchmarks
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'  # toda segunda-feira, 09:00 UTC (06:00 BRT)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-benchmarks
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Buscar dados da Artificial Analysis
+        env:
+          AA_API_KEY: ${{ secrets.AA_API_KEY }}
+        run: node automation/update-benchmarks.mjs
+
+      - name: Commit e push (se houver mudança)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- assets/benchmarks.json; then
+            echo "Nenhuma mudança em assets/benchmarks.json"
+          else
+            git add assets/benchmarks.json
+            git commit -m "chore: atualiza benchmarks.json da Artificial Analysis"
+            git push
+            echo "Commit e push realizado"
+          fi

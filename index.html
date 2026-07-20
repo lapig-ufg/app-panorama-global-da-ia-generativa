@@ -135,6 +135,15 @@
         <span class="novidades-dot" hidden aria-hidden="true"></span>
       </button>
 
+      <button class="icon-btn benchmarks-btn" id="benchmarks-btn" type="button"
+              title="Benchmarks: notas dos modelos em testes padronizados" aria-label="Benchmarks">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 3v18h18" />
+          <path d="M7 15l4-5 3 3 5-7" />
+        </svg>
+        <span class="btn-text">Benchmarks</span>
+      </button>
+
       <button class="icon-btn help-btn" id="help-btn" type="button" title="Como usar" aria-label="Como usar">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="10" />
@@ -187,6 +196,27 @@
     <div class="tt-impact" id="tt-impact"></div>
   </div>
 
+  <!-- Modal Benchmarks -->
+  <div class="bm-overlay" id="bm-overlay" hidden>
+    <div class="bm-modal" role="dialog" aria-modal="true" aria-labelledby="bm-title">
+      <button class="bm-close" id="bm-close" type="button" aria-label="Fechar Benchmarks">×</button>
+      <header class="bm-header">
+        <div class="bm-titlerow">
+          <h2 id="bm-title">Benchmarks dos Modelos</h2>
+          <a class="bm-source" id="bm-source" href="https://artificialanalysis.ai/" target="_blank" rel="noopener">Dados: Artificial Analysis ↗</a>
+        </div>
+        <p class="bm-sub">Notas dos modelos em testes padronizados. Scores mais altos = melhor desempenho na categoria.</p>
+        <div class="bm-meta" id="bm-meta"></div>
+      </header>
+      <div class="bm-filters" id="bm-filters" role="tablist" aria-label="Filtrar benchmarks por categoria"></div>
+      <div class="bm-grid" id="bm-grid"></div>
+      <footer class="bm-foot">
+        <span id="bm-attribution"></span>
+        <span class="bm-note">Atualização automatizada via API</span>
+      </footer>
+    </div>
+  </div>
+
   <footer class="app-footer">
     <div class="footer-credits">
       Desenvolvido por Victor Amaral, <a href="https://lapig.iesa.ufg.br/" target="_blank" rel="noopener">LAPIG</a>
@@ -200,6 +230,7 @@
   <!-- Scripts -->
   <script src="assets/data.js?v=15"></script>
   <script src="assets/render.js?v=15"></script>
+  <script src="assets/benchmarks.js?v=15"></script>
   <script src="assets/app.js?v=15"></script>
 </body>
 
