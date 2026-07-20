@@ -152,6 +152,29 @@ function processRows(allRows) {
   updateNovidades();
   rebuildV2(undefined, currentPxPerDay);
   updateZoomUI();
+  // A régua já está no DOM: se viemos do guia, salta para a empresa pedida.
+  setTimeout(focusCompanyFromHash, 120);
+}
+
+// ─── DEEP-LINK VINDO DO GUIA ───
+// guia.html linka "index.html#emp=Anthropic". Aqui localizamos o lançamento
+// mais recente daquela empresa e reusamos o mesmo focusPill das Novidades.
+// O nome já chega canônico (canonicalCompany em data.js), então bate com a
+// coluna `emp` da planilha sem tratamento extra.
+function focusCompanyFromHash() {
+  const m = (location.hash || '').match(/[#&]emp=([^&]+)/);
+  if (!m) return;
+  let target;
+  try {
+    target = decodeURIComponent(m[1]).trim().toUpperCase();
+  } catch (e) {
+    return; // hash malformado — ignora em silêncio
+  }
+  if (!target) return;
+  const hits = RAW.filter(r => (r.emp || '').trim().toUpperCase() === target);
+  if (!hits.length) return;
+  const latest = hits.reduce((a, b) => (b.dias > a.dias ? b : a));
+  focusPill(latest);
 }
 
 // ─── NOVIDADES (últimos modelos adicionados à régua) ───
@@ -898,5 +921,4 @@ document.addEventListener('DOMContentLoaded', () => {
   initZoomControls();
   initDragPan();
   loadSheetData();
-  if (typeof window.initBenchmarks === 'function') window.initBenchmarks();
 });

@@ -1,0 +1,561 @@
+/* ═══════════════════════════════════════════════════════════════
+   Panorama Global da IA Generativa — Guia "Qual modelo usar"
+   Carregado pelas DUAS páginas: o alternador (.page-switch) aparece
+   tanto na timeline quanto no guia. Reusa as variáveis de styles.css.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Alternador de páginas (Timeline ↔ Qual modelo usar) ─── */
+.page-switch {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  background: var(--paper-tint);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+}
+
+.ps-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+
+.ps-link:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.ps-link.is-active {
+  background: var(--white);
+  color: var(--ink);
+  box-shadow: var(--shadow-xs);
+}
+
+.ps-link.is-active svg { color: var(--accent); }
+
+.ps-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ─── Layout da página do guia ─── */
+.qm-main {
+  display: block;
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 26px 22px 40px;
+}
+
+.qm-navcluster {
+  flex: 1;
+  min-width: 0;
+}
+
+.qm-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.qm-navlink {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  text-decoration: none;
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.qm-navlink:hover {
+  color: var(--ink);
+  background: var(--paper-tint);
+  border-color: var(--hair);
+}
+
+/* ─── Introdução ─── */
+.qm-intro { margin-bottom: 26px; }
+
+.qm-lede {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-light);
+  max-width: 68ch;
+}
+
+.qm-lede strong { color: var(--ink); font-weight: 700; }
+
+.qm-meta {
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-muted);
+}
+
+/* ─── Seção de categoria ─── */
+.qm-cat {
+  margin-bottom: 34px;
+  scroll-margin-top: 16px;
+}
+
+.qm-cat-hd {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.qm-cat-hd h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.qm-cat-hd p {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--ink-muted);
+}
+
+/* ─── Trio de recomendações ─── */
+/* Três colunas fixas em vez de auto-fit: quando a categoria tem só dois
+   destaques (o barato também é o mais rápido), os cards mantêm a mesma
+   largura das outras seções em vez de esticar. */
+.qm-trio {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 1040px) {
+  .qm-trio { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.qm-rec {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px 16px 14px;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  box-shadow: var(--shadow-xs);
+}
+
+.qm-rec.is-best {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-soft), var(--shadow-sm);
+}
+
+.qm-rec-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.qm-slot {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--paper-tint);
+  color: var(--ink-light);
+  cursor: help;
+}
+
+.qm-slot-best {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* ─── Identificação do modelo ─── */
+.qm-rec-id {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.qm-mark {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qm-mark svg { width: 16px; height: 16px; }
+
+.qm-mark-initial {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.qm-rec-names {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+/* O min-width:0 acima e o overflow-wrap aqui garantem que o nome do modelo
+   tenha espaço próprio — no layout antigo ele era espremido a zero pela
+   coluna da empresa e sobrava só "Anthropic". */
+.qm-rec-model {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.qm-rec-company {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-muted);
+  text-decoration: none;
+  border-bottom: 1px dotted transparent;
+  align-self: flex-start;
+}
+
+.qm-rec-company:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.qm-open {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(118, 185, 0, 0.14);
+  color: #4a7300;
+}
+
+/* ─── Pontuação ─── */
+.qm-rec-score {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  padding-top: 2px;
+}
+
+.qm-rec-score strong {
+  font-family: var(--mono);
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.qm-rec.is-best .qm-rec-score strong { color: var(--accent); }
+
+.qm-rec-score span {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* ─── Fatos do card ─── */
+.qm-rec-facts {
+  list-style: none;
+  margin: 0;
+  padding: 9px 0 0;
+  border-top: 1px solid var(--hair);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.qm-rec-facts li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11.5px;
+  min-width: 0;
+}
+
+.qm-rec-facts span {
+  color: var(--ink-muted);
+  flex-shrink: 0;
+}
+
+.qm-rec-facts b {
+  font-family: var(--mono);
+  font-weight: 500;
+  color: var(--ink-light);
+  text-align: right;
+  min-width: 0;
+}
+
+.qm-variant {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 15ch;
+  cursor: help;
+}
+
+.qm-rec-delta {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--accent);
+}
+
+/* ─── Ranking completo ─── */
+.qm-full {
+  margin-top: 12px;
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  background: var(--paper);
+}
+
+.qm-full > summary {
+  cursor: pointer;
+  padding: 9px 14px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 10px;
+}
+
+.qm-full > summary::-webkit-details-marker { display: none; }
+
+.qm-full > summary::before {
+  content: "\25B8";
+  font-size: 11px;
+  transition: transform 0.15s;
+}
+
+.qm-full[open] > summary::before { transform: rotate(90deg); }
+
+.qm-full > summary:hover { color: var(--ink); }
+.qm-full > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+.qm-list {
+  list-style: none;
+  margin: 0;
+  padding: 2px 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* As colunas fixas somam pouco e o nome usa minmax(0, 1fr): o nome fica com
+   toda a folga da linha em vez de ser engolido por colunas "auto". */
+.qm-row {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) 84px 52px 64px;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 4px;
+  border-radius: 6px;
+}
+
+.qm-row:hover { background: var(--paper-tint); }
+
+.qm-rank {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+  text-align: right;
+}
+
+.qm-row.is-first .qm-rank { color: var(--accent); font-weight: 500; }
+
+.qm-row-name {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  min-width: 0;
+}
+
+.qm-dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  align-self: center;
+}
+
+.qm-row-model {
+  font-size: 12.5px;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+  min-width: 4ch;
+}
+
+.qm-row.is-first .qm-row-model { font-weight: 700; }
+
+.qm-row-variant {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--ink-muted);
+  background: var(--paper-tint);
+  padding: 1px 5px;
+  border-radius: 4px;
+  max-width: 12ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: help;
+}
+
+.qm-row-company {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.qm-barwrap {
+  height: 6px;
+  background: var(--ink-faint);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.qm-bar {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  opacity: 0.75;
+}
+
+.qm-row.is-first .qm-bar { opacity: 1; }
+
+.qm-row-score {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.qm-row-price {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--ink-muted);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.qm-src {
+  margin: 0;
+  padding: 9px 16px 12px;
+  border-top: 1px solid var(--hair);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.qm-src strong { color: var(--ink-light); }
+
+.qm-empty {
+  text-align: center;
+  color: var(--ink-muted);
+  font-size: 13px;
+  padding: 48px 0;
+}
+
+/* ─── Nota metodológica ─── */
+.qm-method {
+  margin-top: 30px;
+  padding: 18px 20px;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+}
+
+.qm-method h3 {
+  margin: 0 0 10px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.qm-method ul {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.qm-method li {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.qm-method strong { color: var(--ink-light); }
+
+/* ─── Responsivo ─── */
+@media (max-width: 720px) {
+  .qm-main { padding: 20px 14px 32px; }
+  .qm-lede { font-size: 14px; }
+  .qm-cat-hd h2 { font-size: 15.5px; }
+  .qm-trio { grid-template-columns: 1fr; gap: 10px; }
+  .qm-row { grid-template-columns: 18px minmax(0, 1fr) 46px 58px; }
+  .qm-row .qm-barwrap { display: none; }
+  .qm-row-company { display: none; }
+  .page-switch { width: 100%; }
+  .ps-link { flex: 1; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ps-link,
+  .qm-navlink,
+  .qm-full > summary::before { transition: none; }
+}

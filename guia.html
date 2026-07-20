@@ -4,18 +4,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panorama Global da IA Generativa | LAPIG</title>
+  <title>Qual modelo usar | Panorama Global da IA Generativa — LAPIG</title>
 
   <!-- SEO & Social -->
-  <meta name="description" content="Linha do tempo interativa dos lançamentos de modelos de IA generativa desde o ChatGPT (Nov/2022). Iniciativa do Laboratório de Processamento de Imagens e Geoinformação — LAPIG / IESA / UFG.">
+  <meta name="description" content="Qual modelo de IA generativa usar para cada tarefa — programação, agentes, pesquisa, instruções estruturadas. Comparação por desempenho, custo e velocidade. LAPIG / IESA / UFG.">
   <meta name="author" content="LAPIG / IESA / UFG">
   <meta name="theme-color" content="#10a37f">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/">
-  <meta property="og:title" content="Panorama Global da IA Generativa">
-  <meta property="og:description" content="Linha do tempo interativa dos lançamentos de modelos de IA generativa desde o ChatGPT (Nov/2022).">
+  <meta property="og:url" content="https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/guia.html">
+  <meta property="og:title" content="Qual modelo de IA usar para cada tarefa">
+  <meta property="og:description" content="Recomendação por tipo de tarefa: o melhor, o de melhor custo-benefício e o mais rápido — com base em benchmarks padronizados.">
   <meta property="og:site_name" content="LAPIG / UFG">
   <meta property="og:image" content="https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/assets/thumbnail.png">
   <meta property="og:image:width" content="1200">
@@ -25,8 +25,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Panorama Global da IA Generativa">
-  <meta name="twitter:description" content="Linha do tempo interativa dos lançamentos de modelos de IA generativa.">
+  <meta name="twitter:title" content="Qual modelo de IA usar para cada tarefa">
+  <meta name="twitter:description" content="Recomendação por tipo de tarefa, com base em benchmarks padronizados.">
   <meta name="twitter:image" content="https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/assets/thumbnail.png">
 
   <!-- Favicon -->
@@ -84,140 +84,77 @@
         </svg>
       </a>
       <div class="header-titlewrap">
-        <span class="header-kicker">Timeline · Modelos de IA Generativa</span>
-        <h1>Panorama Global da IA Generativa <span class="yr-suffix">(desde 2023)</span></h1>
+        <span class="header-kicker">Guia · Escolha por tipo de tarefa</span>
+        <h1>Qual modelo usar <span class="yr-suffix">(hoje)</span></h1>
       </div>
     </div>
     <div class="header-meta">
-      <div class="meta-row"><span class="meta-label">Marco zero</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-value">30 Nov 2022</span></div>
-      <div class="meta-row"><span class="meta-label">Atualizado</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-value" id="last-update-date">…</span></div>
+      <div class="meta-row"><span class="meta-label">Fonte</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-value">Artificial Analysis</span></div>
+      <div class="meta-row"><span class="meta-label">Atualizado</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-value" id="qm-updated">…</span></div>
     </div>
   </header>
 
   <div class="controls">
-    <div class="control-cluster export-cluster">
-      <button class="icon-btn" id="btnExport" onclick="downloadPNG()" type="button" title="Exportar PNG (HD)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-          <polyline points="7 10 12 15 17 10" />
-          <line x1="12" y1="15" x2="12" y2="3" />
-        </svg>
-        <span class="btn-text">PNG</span>
-      </button>
-      <button class="icon-btn" onclick="downloadSVG()" type="button" title="Exportar SVG">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-        </svg>
-        <span class="btn-text">SVG</span>
-      </button>
-    </div>
-
-    <div class="control-cluster zoom-cluster" aria-label="Controles de zoom temporal">
-      <button class="zoom-btn" id="zoom-out" type="button" aria-label="Diminuir zoom" title="Diminuir zoom (−)">−</button>
-      <input type="range" id="zoom-slider" class="zoom-slider" aria-label="Escala temporal">
-      <button class="zoom-btn" id="zoom-in" type="button" aria-label="Aumentar zoom" title="Aumentar zoom (+)">+</button>
-      <span class="zoom-label" id="zoom-label">1.5 px/dia</span>
-      <button class="icon-btn zoom-fit-btn" id="zoom-fit" type="button" title="Ajustar timeline à largura da tela (atalho: 0)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-        </svg>
-        <span class="btn-text">Tela</span>
-      </button>
-    </div>
-
-    <div class="control-cluster actions-cluster">
-      <button class="icon-btn novidades-btn" id="novidades-btn" type="button"
-              title="Últimos modelos adicionados à régua" aria-haspopup="true" aria-expanded="false" hidden>
+    <nav class="page-switch" aria-label="Seções do painel">
+      <a class="ps-link" href="index.html">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 3l1.9 5.6a2 2 0 0 0 1.3 1.3L21 12l-5.8 2.1a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.6a2 2 0 0 0-1.3-1.3L3 12l5.8-2.1a2 2 0 0 0 1.3-1.3z" />
+          <path d="M3 12h18M7 8v8M13 6v12M19 9v6" />
         </svg>
-        <span class="btn-text">Novidades</span>
-        <span class="novidades-dot" hidden aria-hidden="true"></span>
-      </button>
-
-      <nav class="page-switch" aria-label="Seções do painel">
-        <a class="ps-link is-active" href="index.html" aria-current="page">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3 12h18M7 8v8M13 6v12M19 9v6" />
-          </svg>
-          <span>Timeline</span>
-        </a>
-        <a class="ps-link" href="guia.html" title="Qual modelo usar para cada tipo de tarefa">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3 3v18h18" />
-            <path d="M7 15l4-5 3 3 5-7" />
-          </svg>
-          <span>Qual modelo usar</span>
-        </a>
-      </nav>
-
-      <button class="icon-btn help-btn" id="help-btn" type="button" title="Como usar" aria-label="Como usar">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-          <line x1="12" y1="17" x2="12.01" y2="17" />
+        <span>Timeline</span>
+      </a>
+      <a class="ps-link is-active" href="guia.html" aria-current="page">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 3v18h18" />
+          <path d="M7 15l4-5 3 3 5-7" />
         </svg>
-      </button>
+        <span>Qual modelo usar</span>
+      </a>
+    </nav>
+
+    <div class="control-cluster qm-navcluster">
+      <div class="qm-nav" id="qm-nav" aria-label="Ir para categoria"></div>
     </div>
   </div>
 
-  <div class="help-popover novidades-popover" id="novidades-popover" hidden>
-    <button class="help-close" id="novidades-close" type="button" aria-label="Fechar novidades">×</button>
-    <div class="novidades-title">Últimas adições à régua</div>
-    <ul class="novidades-list" id="novidades-list"></ul>
-    <div class="novidades-hint">Clique num item para localizá-lo na timeline.</div>
-  </div>
-
-  <div class="help-popover" id="help-popover" hidden>
-    <button class="help-close" id="help-close" type="button" aria-label="Fechar ajuda">×</button>
-    <ul>
-      <li><strong>Swimlanes:</strong> cada faixa é uma empresa/região.</li>
-      <li><strong>Escala:</strong> proporcional ao tempo desde 30 Nov 2022.</li>
-      <li><strong>Navegar:</strong> arraste horizontalmente ou use a barra de rolagem.</li>
-      <li><strong>Zoom:</strong> botões, slider, <kbd>Ctrl/⌘ + scroll</kbd> ou teclas <kbd>+</kbd> / <kbd>−</kbd>.</li>
-      <li><strong>Ajustar:</strong> botão <kbd>Tela</kbd> ou tecla <kbd>0</kbd> encaixa toda a timeline na largura.</li>
-      <li><strong>Detalhes:</strong> clique numa pílula para abrir a referência no rodapé.</li>
-    </ul>
-  </div>
-
-  <main class="main" id="main">
-    <div class="timeline-area" id="timeline-area">
-      <div class="timeline-loading" id="timeline-loading">
-        <div class="loading-spinner" aria-hidden="true"></div>
-        <p>Carregando dados da planilha…</p>
-      </div>
-      <div class="timeline-svg-wrap" id="svg-wrap" style="position:relative"></div>
+  <main class="main qm-main">
+    <div class="qm-intro">
+      <p class="qm-lede">
+        Cada tarefa tem um campeão diferente. Abaixo, para cinco tipos de uso, o modelo
+        <strong>mais capaz</strong>, o de <strong>melhor custo-benefício</strong> e o
+        <strong>mais rápido</strong> — segundo testes padronizados independentes.
+      </p>
+      <p class="qm-meta" id="qm-meta"></p>
     </div>
+
+    <div id="qm-root">
+      <p class="qm-empty">Carregando dados…</p>
+    </div>
+
+    <aside class="qm-method">
+      <h3>Como ler estes números</h3>
+      <ul>
+        <li><strong>Pontuação</strong> — resultado no benchmark que representa a categoria. Escalas diferentes entre categorias; só faz sentido comparar dentro da mesma.</li>
+        <li><strong>Custo-benefício e velocidade</strong> — escolhidos apenas entre modelos que ficam a até 12% do líder. Sem esse piso, o mais barato seria sempre o pior da lista.</li>
+        <li><strong>Preço</strong> — custo médio por 1 milhão de tokens (entrada e saída combinadas), em dólares.</li>
+        <li><strong>Configuração</strong> — nível de esforço em que o modelo atingiu a pontuação. Um mesmo modelo pode ser mais lento e mais caro no nível máximo.</li>
+        <li><strong>Ausências</strong> — não há categoria de matemática porque os testes disponíveis estão saturados (líderes acima de 99%, sem separação entre os modelos atuais).</li>
+      </ul>
+    </aside>
   </main>
-
-  <div class="tooltip" id="tooltip" role="dialog" aria-label="Detalhes do modelo"
-       onmouseenter="clearTimeout(hideTipTimeout)" onmouseleave="hideTip(false)">
-    <div class="tooltip-arrow" aria-hidden="true"></div>
-    <button class="tt-close" id="tt-close" type="button" aria-label="Fechar">×</button>
-    <div class="tt-header">
-      <div class="tt-date" id="tt-date"></div>
-      <div class="tt-day" id="tt-day"></div>
-    </div>
-    <div class="tt-model" id="tt-model"></div>
-    <div class="tt-company" id="tt-company"></div>
-    <div class="tt-impact" id="tt-impact"></div>
-  </div>
 
   <footer class="app-footer">
     <div class="footer-credits">
       Desenvolvido por Victor Amaral, <a href="https://lapig.iesa.ufg.br/" target="_blank" rel="noopener">LAPIG</a>
     </div>
     <div class="footer-meta">
-      <span>Marco zero: 30 Nov 2022 (lançamento do ChatGPT)</span>
-      <span>Dados: Google Sheets · Atualização contínua</span>
+      <span id="qm-attribution"></span>
+      <span><a href="https://artificialanalysis.ai/" target="_blank" rel="noopener">artificialanalysis.ai ↗</a> · Atualização semanal automatizada</span>
     </div>
   </footer>
 
   <!-- Scripts -->
   <script src="assets/data.js?v=16"></script>
-  <script src="assets/render.js?v=15"></script>
-  <script src="assets/app.js?v=16"></script>
+  <script src="assets/guia.js?v=16"></script>
 </body>
 
 </html>

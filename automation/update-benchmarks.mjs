@@ -1,15 +1,38 @@
 /* ═══════════════════════════════════════════════════════════════
    Panorama Global da IA Generativa — Atualizador de Benchmarks
    Busca dados na API da Artificial Analysis e gera
-   assets/benchmarks.json no formato consumido pelo site.
+   assets/benchmarks.json no formato consumido pelo guia
+   "Qual modelo usar" (guia.html).
+
+   Divisão de responsabilidades:
+     • aqui (pipeline)  → busca, normaliza empresa, colapsa variantes de esforço
+     • no navegador     → categorias e recomendações (assets/guia.js)
+   Assim, mudar a política de recomendação não exige nova chamada à API.
    ═══════════════════════════════════════════════════════════════ */
 
-import { writeFile } from 'node:fs/promises';
-import path from 'node:path';
+import { writeFile, readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+import vm from 'node:vm';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, '..');
 
 const API_URL = 'https://artificialanalysis.ai/api/v2/data/llms/models';
-const OUT_PATH = path.resolve(process.cwd(), 'assets', 'benchmarks.json');
-const TOP_N = 15;
+const OUT_PATH = join(ROOT, 'assets', 'benchmarks.json');
+
+// Nº de modelos DISTINTOS (famílias) guardados por benchmark. Como as variantes
+// de esforço são colapsadas antes do corte, 20 famílias ≈ 40-50 linhas cruas.
+const TOP_N = 20;
+
+// ── identidade das empresas: mesma fonte da régua (assets/data.js) ──
+async function loadDataJs(fields) {
+  const src = await readFile(join(ROOT, 'assets', 'data.js'), 'utf8');
+  const ctx = { Date, console };
+  vm.createContext(ctx);
+  vm.runInContext(`${src}\n;globalThis.__X = { ${fields.join(', ')} };`, ctx, { filename: 'data.js' });
+  return ctx.__X;
+}
 
 const BENCHMARKS = [
   // Inteligência geral
@@ -20,10 +43,8 @@ const BENCHMARKS = [
   { key: 'artificial_analysis_coding_index', label: 'Coding Index', category: 'Coding', description: 'Composite AA de agentes de código (DeepSWE, Terminal-Bench, SWE-Atlas)', unit: 'índice (0–100)', is_fraction: false },
   { key: 'scicode', label: 'SciCode', category: 'Coding', description: 'Geração de código científico', unit: '%', is_fraction: true },
   { key: 'livecodebench', label: 'LiveCodeBench', category: 'Coding', description: 'Problemas de programação inéditos', unit: '%', is_fraction: true },
-  // Math
-  { key: 'artificial_analysis_math_index', label: 'Math Index', category: 'Math', description: 'Composite AA de matemática', unit: 'índice (0–100)', is_fraction: false },
+  // Math — mantido só como sinal de apoio; ver nota sobre saturação abaixo.
   { key: 'aime_25', label: 'AIME 2025', category: 'Math', description: 'Olimpíada de matemática', unit: '%', is_fraction: true },
-  { key: 'math_500', label: 'MATH-500', category: 'Math', description: 'Problemas de matemática de competição', unit: '%', is_fraction: true },
   // Agents
   { key: 'terminalbench_v2_1', label: 'Terminal-Bench v2.1', category: 'Agents', description: 'Agentes em terminal (tarefas reais)', unit: '%', is_fraction: true },
   { key: 'tau2', label: 'TAU-bench', category: 'Agents', description: 'Agentes com ferramentas de atendimento', unit: '%', is_fraction: true },
@@ -33,6 +54,11 @@ const BENCHMARKS = [
   { key: 'ifbench', label: 'IFBench', category: 'Instruções', description: 'Seguimento complexo de instruções', unit: '%', is_fraction: true },
   { key: 'lcr', label: 'LCR', category: 'Instruções', description: 'Leitura crítica e raciocínio longo', unit: '%', is_fraction: true },
 ];
+
+/* Removidos de propósito:
+   • artificial_analysis_math_index — top-15 byte a byte idêntico ao aime_25.
+   • math_500 — saturado: teto 99,4% e spread de 1,3 ponto no top-15, com o #1
+     de ago/2025. Não separa mais os modelos, então só ocupava espaço. */
 
 function getValue(obj, keys) {
   for (const k of keys) {
@@ -64,11 +90,33 @@ function modelName(model) {
   return getValue(model, ['name', 'model', 'model_name', 'id']) || 'Modelo';
 }
 
+// Pesos abertos: a AA não documenta um nome único para o campo, então tentamos
+// os mais prováveis. Se nenhum existir, devolve null e o guia simplesmente não
+// mostra o selo "aberto" — nunca chuta.
+function openWeights(model) {
+  const v = getValue(model, ['open_weights', 'openWeights', 'is_open_weights', 'open_source', 'is_open_source']);
+  if (v == null) return null;
+  if (typeof v === 'boolean') return v;
+  const s = String(v).trim().toLowerCase();
+  if (['true', 'yes', '1', 'open', 'open_weights'].includes(s)) return true;
+  if (['false', 'no', '0', 'proprietary', 'closed'].includes(s)) return false;
+  return null;
+}
+
 function releaseDate(model) {
   const d = getValue(model, ['release_date', 'releaseDate', 'released_at']);
   if (!d) return null;
   // AA envia ISO; normaliza para YYYY-MM-DD
   return String(d).slice(0, 10);
+}
+
+// Separa "GPT-5.6 Sol (max)" em família + variante de esforço.
+// A API lista cada nível de esforço como um modelo próprio, o que faz um mesmo
+// modelo ocupar 4-5 vagas do ranking. Guardamos a família para colapsar.
+function splitVariant(name) {
+  const m = String(name).match(/^(.*?)\s*\(([^()]*(?:\([^()]*\)[^()]*)*)\)\s*$/);
+  if (!m) return { family: String(name).trim(), variant: null };
+  return { family: m[1].trim(), variant: m[2].trim() };
 }
 
 function benchmarkScore(model, key) {
@@ -90,6 +138,8 @@ async function main() {
     process.exit(1);
   }
 
+  const { canonicalCompany } = await loadDataJs(['canonicalCompany']);
+
   console.log(`Buscando ${API_URL}…`);
   const res = await fetch(API_URL, {
     headers: { 'x-api-key': apiKey },
@@ -105,24 +155,40 @@ async function main() {
   console.log(`Modelos recebidos: ${models.length}`);
 
   const fetchedAt = new Date().toISOString();
+  let openWeightsSeen = 0;
 
   const benchmarks = BENCHMARKS.map(b => {
     const evaluated = models
       .map(m => ({ m, score: benchmarkScore(m, b.key) }))
       .filter(x => x.score != null && !Number.isNaN(x.score));
 
-    const top = evaluated
+    // Colapsa variantes: mantém a melhor pontuação de cada família de modelo.
+    const byFamily = new Map();
+    for (const x of evaluated) {
+      const { family, variant } = splitVariant(modelName(x.m));
+      const creator = canonicalCompany(creatorName(x.m));
+      const id = `${creator} ${family}`;
+      const prev = byFamily.get(id);
+      if (!prev || x.score > prev.score) {
+        byFamily.set(id, { m: x.m, score: x.score, family, variant, creator });
+      }
+    }
+
+    const top = [...byFamily.values()]
       .sort((a, b) => b.score - a.score)
       .slice(0, TOP_N)
       .map(x => {
-        const m = x.m;
+        const ow = openWeights(x.m);
+        if (ow != null) openWeightsSeen++;
         return {
-          model: modelName(m),
-          creator: creatorName(m),
+          model: x.family,          // nome curto, sem o sufixo de esforço
+          variant: x.variant,       // nível de esforço que atingiu a pontuação
+          creator: x.creator,       // já canônico (mesmo nome/cor da régua)
           score: x.score,
-          release_date: releaseDate(m),
-          price_1m_blended: priceBlended(m),
-          tok_per_sec: tokenSpeed(m) ?? 0,
+          release_date: releaseDate(x.m),
+          price_1m_blended: priceBlended(x.m),
+          tok_per_sec: tokenSpeed(x.m) ?? 0,
+          open_weights: ow,
         };
       });
 
@@ -133,7 +199,8 @@ async function main() {
       description: b.description,
       unit: b.unit,
       is_fraction: b.is_fraction,
-      models_evaluated: evaluated.length,
+      models_evaluated: evaluated.length,   // entradas cruas avaliadas pela AA
+      families_evaluated: byFamily.size,    // modelos distintos após colapsar
       top,
     };
   });
@@ -144,6 +211,7 @@ async function main() {
     attribution: 'Dados: Artificial Analysis — artificialanalysis.ai',
     models_total: models.length,
     fetched_at: fetchedAt,
+    has_open_weights: openWeightsSeen > 0,
     benchmarks,
   };
 
@@ -151,9 +219,10 @@ async function main() {
 
   console.log(`\nSalvo: ${OUT_PATH}`);
   console.log(`Modelos: ${models.length} · Benchmarks: ${benchmarks.length} · Data: ${fetchedAt.slice(0, 10)}`);
+  console.log(`Campo open_weights: ${openWeightsSeen > 0 ? `presente (${openWeightsSeen} linhas)` : 'AUSENTE na API — selo "aberto" fica oculto'}`);
   benchmarks.forEach(b => {
     const first = b.top[0];
-    console.log(`  ${b.label.padEnd(24)} ${String(b.models_evaluated).padStart(4)} modelos  #1 ${first ? `${first.model} (${first.score})` : '—'}`);
+    console.log(`  ${b.label.padEnd(24)} ${String(b.families_evaluated).padStart(4)} modelos  #1 ${first ? `${first.model} (${first.score})` : '—'}`);
   });
 }
 

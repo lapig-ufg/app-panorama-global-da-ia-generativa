@@ -4,6 +4,7 @@
   "attribution": "Dados: Artificial Analysis — artificialanalysis.ai",
   "models_total": 576,
   "fetched_at": "2026-07-20T14:05:20Z",
+  "has_open_weights": false,
   "benchmarks": [
     {
       "key": "artificial_analysis_intelligence_index",
@@ -12,129 +13,110 @@
       "description": "Composite AA de raciocínio geral (v4.1)",
       "unit": "índice (0–100)",
       "is_fraction": false,
+      "models_evaluated": 563,
+      "families_evaluated": 10,
       "top": [
         {
-          "model": "Claude Fable 5 (Adaptive Reasoning, Max Effort, Opus 4.8 Fallback)",
+          "model": "Claude Fable 5",
+          "variant": "Adaptive Reasoning, Max Effort, Opus 4.8 Fallback",
           "creator": "Anthropic",
           "score": 59.9,
           "release_date": "2026-06-09",
           "price_1m_blended": 20,
-          "tok_per_sec": 68.066
+          "tok_per_sec": 68.066,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Sol (max)",
+          "model": "GPT-5.6 Sol",
+          "variant": "max",
           "creator": "OpenAI",
           "score": 58.9,
           "release_date": "2026-07-09",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 71.245
-        },
-        {
-          "model": "GPT-5.6 Sol (xhigh)",
-          "creator": "OpenAI",
-          "score": 57.7,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 66.827
+          "tok_per_sec": 71.245,
+          "open_weights": null
         },
         {
           "model": "Kimi K3",
-          "creator": "Kimi",
+          "variant": null,
+          "creator": "Moonshot AI",
           "score": 57.1,
           "release_date": "2026-07-16",
           "price_1m_blended": 6,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Sol (high)",
-          "creator": "OpenAI",
-          "score": 55.9,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 61.236
-        },
-        {
-          "model": "Claude Opus 4.8 (Adaptive Reasoning, Max Effort)",
+          "model": "Claude Opus 4.8",
+          "variant": "Adaptive Reasoning, Max Effort",
           "creator": "Anthropic",
           "score": 55.7,
           "release_date": "2026-05-28",
           "price_1m_blended": 10,
-          "tok_per_sec": 60.732
+          "tok_per_sec": 60.732,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Terra (max)",
+          "model": "GPT-5.6 Terra",
+          "variant": "max",
           "creator": "OpenAI",
           "score": 55,
           "release_date": "2026-07-09",
           "price_1m_blended": 5.625,
-          "tok_per_sec": 145.75
+          "tok_per_sec": 145.75,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.5 (xhigh)",
+          "model": "GPT-5.5",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 54.8,
           "release_date": "2026-04-23",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 85.791
+          "tok_per_sec": 85.791,
+          "open_weights": null
         },
         {
-          "model": "Grok 4.5 (high)",
-          "creator": "SpaceXAI",
+          "model": "Grok 4.5",
+          "variant": "high",
+          "creator": "xAI",
           "score": 53.8,
           "release_date": "2026-07-08",
           "price_1m_blended": 3,
-          "tok_per_sec": 73.063
+          "tok_per_sec": 73.063,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Sol (medium)",
-          "creator": "OpenAI",
-          "score": 53.6,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 61.057
-        },
-        {
-          "model": "Claude Opus 4.7 (Adaptive Reasoning, Max Effort)",
+          "model": "Claude Opus 4.7",
+          "variant": "Adaptive Reasoning, Max Effort",
           "creator": "Anthropic",
           "score": 53.5,
           "release_date": "2026-04-16",
           "price_1m_blended": 10,
-          "tok_per_sec": 54.337
+          "tok_per_sec": 54.337,
+          "open_weights": null
         },
         {
-          "model": "Claude Sonnet 5 (Adaptive Reasoning, Max Effort)",
+          "model": "Claude Sonnet 5",
+          "variant": "Adaptive Reasoning, Max Effort",
           "creator": "Anthropic",
           "score": 53.4,
           "release_date": "2026-06-30",
           "price_1m_blended": 4,
-          "tok_per_sec": 80.924
+          "tok_per_sec": 80.924,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.5 (high)",
-          "creator": "OpenAI",
-          "score": 53.1,
-          "release_date": "2026-04-23",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 74.795
-        },
-        {
-          "model": "GPT-5.6 Terra (xhigh)",
-          "creator": "OpenAI",
-          "score": 51.6,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 5.625,
-          "tok_per_sec": 133.932
-        },
-        {
-          "model": "GPT-5.4 (xhigh)",
+          "model": "GPT-5.4",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 51.4,
           "release_date": "2026-03-05",
           "price_1m_blended": 5.625,
-          "tok_per_sec": 163.198
+          "tok_per_sec": 163.198,
+          "open_weights": null
         }
-      ],
-      "models_evaluated": 563
+      ]
     },
     {
       "key": "artificial_analysis_coding_index",
@@ -143,260 +125,110 @@
       "description": "Composite AA de agentes de código (DeepSWE, Terminal-Bench, SWE-Atlas)",
       "unit": "índice (0–100)",
       "is_fraction": false,
+      "models_evaluated": 177,
+      "families_evaluated": 10,
       "top": [
         {
-          "model": "GPT-5.6 Sol (xhigh)",
+          "model": "GPT-5.6 Sol",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 78.3,
           "release_date": "2026-07-09",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 66.827
+          "tok_per_sec": 66.827,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Sol (max)",
-          "creator": "OpenAI",
-          "score": 77.4,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 71.245
-        },
-        {
-          "model": "GPT-5.6 Sol (high)",
-          "creator": "OpenAI",
-          "score": 77.2,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 61.236
-        },
-        {
-          "model": "GPT-5.6 Terra (max)",
+          "model": "GPT-5.6 Terra",
+          "variant": "max",
           "creator": "OpenAI",
           "score": 76.7,
           "release_date": "2026-07-09",
           "price_1m_blended": 5.625,
-          "tok_per_sec": 145.75
+          "tok_per_sec": 145.75,
+          "open_weights": null
         },
         {
-          "model": "Claude Fable 5 (Adaptive Reasoning, Max Effort, Opus 4.8 Fallback)",
+          "model": "Claude Fable 5",
+          "variant": "Adaptive Reasoning, Max Effort, Opus 4.8 Fallback",
           "creator": "Anthropic",
           "score": 76.5,
           "release_date": "2026-06-09",
           "price_1m_blended": 20,
-          "tok_per_sec": 68.066
-        },
-        {
-          "model": "GPT-5.6 Sol (medium)",
-          "creator": "OpenAI",
-          "score": 76.3,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 61.057
+          "tok_per_sec": 68.066,
+          "open_weights": null
         },
         {
           "model": "Kimi K3",
-          "creator": "Kimi",
+          "variant": null,
+          "creator": "Moonshot AI",
           "score": 76.2,
           "release_date": "2026-07-16",
           "price_1m_blended": 6,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.5 (xhigh)",
+          "model": "GPT-5.5",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 74.9,
           "release_date": "2026-04-23",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 85.791
+          "tok_per_sec": 85.791,
+          "open_weights": null
         },
         {
-          "model": "Claude Opus 4.8 (Adaptive Reasoning, Max Effort)",
+          "model": "Claude Opus 4.8",
+          "variant": "Adaptive Reasoning, Max Effort",
           "creator": "Anthropic",
           "score": 74.3,
           "release_date": "2026-05-28",
           "price_1m_blended": 10,
-          "tok_per_sec": 60.732
+          "tok_per_sec": 60.732,
+          "open_weights": null
         },
         {
-          "model": "Claude Opus 4.7 (Adaptive Reasoning, Max Effort)",
+          "model": "Claude Opus 4.7",
+          "variant": "Adaptive Reasoning, Max Effort",
           "creator": "Anthropic",
           "score": 73.6,
           "release_date": "2026-04-16",
           "price_1m_blended": 10,
-          "tok_per_sec": 54.337
+          "tok_per_sec": 54.337,
+          "open_weights": null
         },
         {
-          "model": "Grok 4.5 (high)",
-          "creator": "SpaceXAI",
+          "model": "Grok 4.5",
+          "variant": "high",
+          "creator": "xAI",
           "score": 72.4,
           "release_date": "2026-07-08",
           "price_1m_blended": 3,
-          "tok_per_sec": 73.063
+          "tok_per_sec": 73.063,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.5 (high)",
-          "creator": "OpenAI",
-          "score": 71.6,
-          "release_date": "2026-04-23",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 74.795
-        },
-        {
-          "model": "GPT-5.5 (medium)",
-          "creator": "OpenAI",
-          "score": 71.5,
-          "release_date": "2026-04-23",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 74.73
-        },
-        {
-          "model": "Claude Sonnet 5 (Adaptive Reasoning, Max Effort)",
+          "model": "Claude Sonnet 5",
+          "variant": "Adaptive Reasoning, Max Effort",
           "creator": "Anthropic",
           "score": 71.5,
           "release_date": "2026-06-30",
           "price_1m_blended": 4,
-          "tok_per_sec": 80.924
+          "tok_per_sec": 80.924,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Luna (max)",
+          "model": "GPT-5.6 Luna",
+          "variant": "max",
           "creator": "OpenAI",
           "score": 71.4,
           "release_date": "2026-07-09",
           "price_1m_blended": 2.25,
-          "tok_per_sec": 212.102
+          "tok_per_sec": 212.102,
+          "open_weights": null
         }
-      ],
-      "models_evaluated": 177
-    },
-    {
-      "key": "artificial_analysis_math_index",
-      "label": "Math Index",
-      "category": "Math",
-      "description": "Composite AA de matemática",
-      "unit": "índice (0–100)",
-      "is_fraction": false,
-      "top": [
-        {
-          "model": "GPT-5.2 (xhigh)",
-          "creator": "OpenAI",
-          "score": 99,
-          "release_date": "2025-12-11",
-          "price_1m_blended": 4.813,
-          "tok_per_sec": 85.455
-        },
-        {
-          "model": "GPT-5 Codex (high)",
-          "creator": "OpenAI",
-          "score": 98.7,
-          "release_date": "2025-09-23",
-          "price_1m_blended": 3.438,
-          "tok_per_sec": 170.972
-        },
-        {
-          "model": "Gemini 3 Flash Preview (Reasoning)",
-          "creator": "Google",
-          "score": 97,
-          "release_date": "2025-12-17",
-          "price_1m_blended": 1.125,
-          "tok_per_sec": 227.907
-        },
-        {
-          "model": "GPT-5.2 (medium)",
-          "creator": "OpenAI",
-          "score": 96.7,
-          "release_date": "2025-12-11",
-          "price_1m_blended": 4.813,
-          "tok_per_sec": 0
-        },
-        {
-          "model": "DeepSeek V3.2 Speciale",
-          "creator": "DeepSeek",
-          "score": 96.7,
-          "release_date": "2025-12-01",
-          "price_1m_blended": 0,
-          "tok_per_sec": 0
-        },
-        {
-          "model": "MiMo-V2-Flash (Reasoning)",
-          "creator": "Xiaomi",
-          "score": 96.3,
-          "release_date": "2025-12-16",
-          "price_1m_blended": 0.15,
-          "tok_per_sec": 0
-        },
-        {
-          "model": "GPT-5.1 Codex (high)",
-          "creator": "OpenAI",
-          "score": 95.7,
-          "release_date": "2025-11-13",
-          "price_1m_blended": 3.438,
-          "tok_per_sec": 205.034
-        },
-        {
-          "model": "Gemini 3 Pro Preview (high)",
-          "creator": "Google",
-          "score": 95.7,
-          "release_date": "2025-11-18",
-          "price_1m_blended": 4.5,
-          "tok_per_sec": 0
-        },
-        {
-          "model": "GLM-4.7 (Reasoning)",
-          "creator": "Z AI",
-          "score": 95,
-          "release_date": "2025-12-22",
-          "price_1m_blended": 1,
-          "tok_per_sec": 116.121
-        },
-        {
-          "model": "KAT-Coder-Pro V1",
-          "creator": "KwaiKAT",
-          "score": 94.7,
-          "release_date": "2025-11-11",
-          "price_1m_blended": 0,
-          "tok_per_sec": 0
-        },
-        {
-          "model": "Kimi K2 Thinking",
-          "creator": "Kimi",
-          "score": 94.7,
-          "release_date": "2025-11-06",
-          "price_1m_blended": 1.075,
-          "tok_per_sec": 132.079
-        },
-        {
-          "model": "Nova 2.0 Lite (high)",
-          "creator": "Amazon",
-          "score": 94.3,
-          "release_date": "2025-10-29",
-          "price_1m_blended": 0.85,
-          "tok_per_sec": 196.138
-        },
-        {
-          "model": "GPT-5 (high)",
-          "creator": "OpenAI",
-          "score": 94.3,
-          "release_date": "2025-08-07",
-          "price_1m_blended": 3.438,
-          "tok_per_sec": 112.377
-        },
-        {
-          "model": "GPT-5.1 (high)",
-          "creator": "OpenAI",
-          "score": 94,
-          "release_date": "2025-11-13",
-          "price_1m_blended": 3.438,
-          "tok_per_sec": 108.765
-        },
-        {
-          "model": "gpt-oss-120b (high)",
-          "creator": "OpenAI",
-          "score": 93.4,
-          "release_date": "2025-08-05",
-          "price_1m_blended": 0.262,
-          "tok_per_sec": 300.994
-        }
-      ],
-      "models_evaluated": 269
+      ]
     },
     {
       "key": "gpqa",
@@ -405,129 +237,110 @@
       "description": "Perguntas de nível PhD — raciocínio profundo",
       "unit": "%",
       "is_fraction": true,
+      "models_evaluated": 541,
+      "families_evaluated": 10,
       "top": [
         {
-          "model": "GPT-5.6 Sol (max)",
+          "model": "GPT-5.6 Sol",
+          "variant": "max",
           "creator": "OpenAI",
           "score": 94.1,
           "release_date": "2026-07-09",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 71.245
+          "tok_per_sec": 71.245,
+          "open_weights": null
         },
         {
           "model": "Gemini 3.1 Pro Preview",
+          "variant": null,
           "creator": "Google",
           "score": 94.1,
           "release_date": "2026-02-19",
           "price_1m_blended": 4.5,
-          "tok_per_sec": 137.113
+          "tok_per_sec": 137.113,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.5 (xhigh)",
+          "model": "GPT-5.5",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 93.5,
           "release_date": "2026-04-23",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 85.791
+          "tok_per_sec": 85.791,
+          "open_weights": null
         },
         {
           "model": "Kimi K3",
-          "creator": "Kimi",
+          "variant": null,
+          "creator": "Moonshot AI",
           "score": 93.5,
           "release_date": "2026-07-16",
           "price_1m_blended": 6,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.5 (high)",
-          "creator": "OpenAI",
-          "score": 93.2,
-          "release_date": "2026-04-23",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 74.795
-        },
-        {
-          "model": "GPT-5.6 Sol (xhigh)",
-          "creator": "OpenAI",
-          "score": 93.1,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 66.827
-        },
-        {
-          "model": "Grok 4.5 (high)",
-          "creator": "SpaceXAI",
+          "model": "Grok 4.5",
+          "variant": "high",
+          "creator": "xAI",
           "score": 93.1,
           "release_date": "2026-07-08",
           "price_1m_blended": 3,
-          "tok_per_sec": 73.063
+          "tok_per_sec": 73.063,
+          "open_weights": null
         },
         {
           "model": "MiniMax-M3",
+          "variant": null,
           "creator": "MiniMax",
           "score": 92.9,
           "release_date": "2026-06-01",
           "price_1m_blended": 0.525,
-          "tok_per_sec": 98.637
+          "tok_per_sec": 98.637,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Sol (high)",
-          "creator": "OpenAI",
-          "score": 92.8,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 61.236
-        },
-        {
-          "model": "GPT-5.5 (medium)",
-          "creator": "OpenAI",
-          "score": 92.6,
-          "release_date": "2026-04-23",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 74.73
-        },
-        {
-          "model": "GPT-5.6 Sol (medium)",
-          "creator": "OpenAI",
-          "score": 92.6,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 61.057
-        },
-        {
-          "model": "Claude Fable 5 (Adaptive Reasoning, Max Effort, Opus 4.8 Fallback)",
+          "model": "Claude Fable 5",
+          "variant": "Adaptive Reasoning, Max Effort, Opus 4.8 Fallback",
           "creator": "Anthropic",
           "score": 92.6,
           "release_date": "2026-06-09",
           "price_1m_blended": 20,
-          "tok_per_sec": 68.066
+          "tok_per_sec": 68.066,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Terra (max)",
+          "model": "GPT-5.6 Terra",
+          "variant": "max",
           "creator": "OpenAI",
           "score": 92.5,
           "release_date": "2026-07-09",
           "price_1m_blended": 5.625,
-          "tok_per_sec": 145.75
+          "tok_per_sec": 145.75,
+          "open_weights": null
         },
         {
           "model": "Qwen3.7 Max",
+          "variant": null,
           "creator": "Alibaba",
           "score": 92.3,
           "release_date": "2026-05-19",
           "price_1m_blended": 3.75,
-          "tok_per_sec": 206.199
+          "tok_per_sec": 206.199,
+          "open_weights": null
         },
         {
-          "model": "Gemini 3.5 Flash (high)",
+          "model": "Gemini 3.5 Flash",
+          "variant": "high",
           "creator": "Google",
           "score": 92.2,
           "release_date": "2026-05-19",
           "price_1m_blended": 3.375,
-          "tok_per_sec": 312.419
+          "tok_per_sec": 312.419,
+          "open_weights": null
         }
-      ],
-      "models_evaluated": 541
+      ]
     },
     {
       "key": "hle",
@@ -536,129 +349,120 @@
       "description": "Perguntas de especialistas — fronteira do conhecimento",
       "unit": "%",
       "is_fraction": true,
+      "models_evaluated": 537,
+      "families_evaluated": 11,
       "top": [
         {
-          "model": "Claude Fable 5 (Adaptive Reasoning, Max Effort, Opus 4.8 Fallback)",
+          "model": "Claude Fable 5",
+          "variant": "Adaptive Reasoning, Max Effort, Opus 4.8 Fallback",
           "creator": "Anthropic",
           "score": 53.3,
           "release_date": "2026-06-09",
           "price_1m_blended": 20,
-          "tok_per_sec": 68.066
+          "tok_per_sec": 68.066,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Sol (max)",
+          "model": "GPT-5.6 Sol",
+          "variant": "max",
           "creator": "OpenAI",
           "score": 47.2,
           "release_date": "2026-07-09",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 71.245
+          "tok_per_sec": 71.245,
+          "open_weights": null
         },
         {
-          "model": "Claude Opus 4.8 (Adaptive Reasoning, Max Effort)",
+          "model": "Claude Opus 4.8",
+          "variant": "Adaptive Reasoning, Max Effort",
           "creator": "Anthropic",
           "score": 45.7,
           "release_date": "2026-05-28",
           "price_1m_blended": 10,
-          "tok_per_sec": 60.732
+          "tok_per_sec": 60.732,
+          "open_weights": null
         },
         {
-          "model": "Muse Spark 1.1 (xhigh)",
+          "model": "Muse Spark 1.1",
+          "variant": "xhigh",
           "creator": "Meta",
           "score": 45.1,
           "release_date": "2026-07-09",
           "price_1m_blended": 2,
-          "tok_per_sec": 121.694
-        },
-        {
-          "model": "GPT-5.6 Sol (xhigh)",
-          "creator": "OpenAI",
-          "score": 44.7,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 66.827
+          "tok_per_sec": 121.694,
+          "open_weights": null
         },
         {
           "model": "Gemini 3.1 Pro Preview",
+          "variant": null,
           "creator": "Google",
           "score": 44.7,
           "release_date": "2026-02-19",
           "price_1m_blended": 4.5,
-          "tok_per_sec": 137.113
+          "tok_per_sec": 137.113,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.5 (xhigh)",
+          "model": "GPT-5.5",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 44.3,
           "release_date": "2026-04-23",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 85.791
+          "tok_per_sec": 85.791,
+          "open_weights": null
         },
         {
           "model": "Kimi K3",
-          "creator": "Kimi",
+          "variant": null,
+          "creator": "Moonshot AI",
           "score": 44.3,
           "release_date": "2026-07-16",
           "price_1m_blended": 6,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Sol (high)",
-          "creator": "OpenAI",
-          "score": 44.1,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 61.236
-        },
-        {
-          "model": "GPT-5.5 (high)",
-          "creator": "OpenAI",
-          "score": 43.0,
-          "release_date": "2026-04-23",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 74.795
-        },
-        {
-          "model": "GPT-5.6 Terra (max)",
+          "model": "GPT-5.6 Terra",
+          "variant": "max",
           "creator": "OpenAI",
           "score": 41.8,
           "release_date": "2026-07-09",
           "price_1m_blended": 5.625,
-          "tok_per_sec": 145.75
+          "tok_per_sec": 145.75,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.4 (xhigh)",
+          "model": "GPT-5.4",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 41.6,
           "release_date": "2026-03-05",
           "price_1m_blended": 5.625,
-          "tok_per_sec": 163.198
+          "tok_per_sec": 163.198,
+          "open_weights": null
         },
         {
-          "model": "Gemini 3.5 Flash (high)",
+          "model": "Gemini 3.5 Flash",
+          "variant": "high",
           "creator": "Google",
-          "score": 41.0,
+          "score": 41,
           "release_date": "2026-05-19",
           "price_1m_blended": 3.375,
-          "tok_per_sec": 312.419
+          "tok_per_sec": 312.419,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.5 (medium)",
-          "creator": "OpenAI",
-          "score": 40.6,
-          "release_date": "2026-04-23",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 74.73
-        },
-        {
-          "model": "Grok 4.5 (high)",
-          "creator": "SpaceXAI",
+          "model": "Grok 4.5",
+          "variant": "high",
+          "creator": "xAI",
           "score": 40.3,
           "release_date": "2026-07-08",
           "price_1m_blended": 3,
-          "tok_per_sec": 73.063
+          "tok_per_sec": 73.063,
+          "open_weights": null
         }
-      ],
-      "models_evaluated": 537
+      ]
     },
     {
       "key": "mmlu_pro",
@@ -667,129 +471,120 @@
       "description": "Conhecimento acadêmico multi-domínio",
       "unit": "%",
       "is_fraction": true,
+      "models_evaluated": 345,
+      "families_evaluated": 11,
       "top": [
         {
-          "model": "Gemini 3 Pro Preview (high)",
+          "model": "Gemini 3 Pro Preview",
+          "variant": "high",
           "creator": "Google",
           "score": 89.8,
           "release_date": "2025-11-18",
           "price_1m_blended": 4.5,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "Gemini 3 Pro Preview (low)",
-          "creator": "Google",
-          "score": 89.5,
-          "release_date": "2025-11-18",
-          "price_1m_blended": 4.5,
-          "tok_per_sec": 0
-        },
-        {
-          "model": "Claude Opus 4.5 (Reasoning)",
+          "model": "Claude Opus 4.5",
+          "variant": "Reasoning",
           "creator": "Anthropic",
           "score": 89.5,
           "release_date": "2025-11-24",
           "price_1m_blended": 10,
-          "tok_per_sec": 56.979
+          "tok_per_sec": 56.979,
+          "open_weights": null
         },
         {
-          "model": "Gemini 3 Flash Preview (Reasoning)",
+          "model": "Gemini 3 Flash Preview",
+          "variant": "Reasoning",
           "creator": "Google",
-          "score": 89.0,
+          "score": 89,
           "release_date": "2025-12-17",
           "price_1m_blended": 1.125,
-          "tok_per_sec": 227.907
+          "tok_per_sec": 227.907,
+          "open_weights": null
         },
         {
-          "model": "Claude Opus 4.5 (Non-reasoning)",
+          "model": "Claude 4.1 Opus",
+          "variant": "Reasoning",
           "creator": "Anthropic",
-          "score": 88.9,
-          "release_date": "2025-11-24",
-          "price_1m_blended": 10,
-          "tok_per_sec": 55.986
-        },
-        {
-          "model": "Gemini 3 Flash Preview (Non-reasoning)",
-          "creator": "Google",
-          "score": 88.2,
-          "release_date": "2025-12-17",
-          "price_1m_blended": 1.125,
-          "tok_per_sec": 221.293
-        },
-        {
-          "model": "Claude 4.1 Opus (Reasoning)",
-          "creator": "Anthropic",
-          "score": 88.0,
+          "score": 88,
           "release_date": "2025-08-05",
           "price_1m_blended": 30,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "Claude 4.5 Sonnet (Reasoning)",
+          "model": "Claude 4.5 Sonnet",
+          "variant": "Reasoning",
           "creator": "Anthropic",
           "score": 87.5,
           "release_date": "2025-09-29",
           "price_1m_blended": 6,
-          "tok_per_sec": 51.429
+          "tok_per_sec": 51.429,
+          "open_weights": null
         },
         {
           "model": "MiniMax-M2.1",
+          "variant": null,
           "creator": "MiniMax",
           "score": 87.5,
           "release_date": "2025-12-23",
           "price_1m_blended": 0.525,
-          "tok_per_sec": 80.013
+          "tok_per_sec": 80.013,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.2 (xhigh)",
+          "model": "GPT-5.2",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 87.4,
           "release_date": "2025-12-11",
           "price_1m_blended": 4.813,
-          "tok_per_sec": 85.455
+          "tok_per_sec": 85.455,
+          "open_weights": null
         },
         {
-          "model": "Claude 4 Opus (Reasoning)",
+          "model": "Claude 4 Opus",
+          "variant": "Reasoning",
           "creator": "Anthropic",
           "score": 87.3,
           "release_date": "2025-05-22",
           "price_1m_blended": 30,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "GPT-5 (high)",
+          "model": "GPT-5",
+          "variant": "high",
           "creator": "OpenAI",
           "score": 87.1,
           "release_date": "2025-08-07",
           "price_1m_blended": 3.438,
-          "tok_per_sec": 112.377
+          "tok_per_sec": 112.377,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.1 (high)",
+          "model": "GPT-5.1",
+          "variant": "high",
           "creator": "OpenAI",
-          "score": 87.0,
+          "score": 87,
           "release_date": "2025-11-13",
           "price_1m_blended": 3.438,
-          "tok_per_sec": 108.765
-        },
-        {
-          "model": "GPT-5 (medium)",
-          "creator": "OpenAI",
-          "score": 86.7,
-          "release_date": "2025-08-07",
-          "price_1m_blended": 3.438,
-          "tok_per_sec": 96.474
+          "tok_per_sec": 108.765,
+          "open_weights": null
         },
         {
           "model": "Grok 4",
-          "creator": "SpaceXAI",
+          "variant": null,
+          "creator": "xAI",
           "score": 86.6,
           "release_date": "2025-07-10",
           "price_1m_blended": 11,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         }
-      ],
-      "models_evaluated": 345
+      ]
     },
     {
       "key": "scicode",
@@ -798,129 +593,110 @@
       "description": "Geração de código científico",
       "unit": "%",
       "is_fraction": true,
+      "models_evaluated": 535,
+      "families_evaluated": 10,
       "top": [
         {
-          "model": "Claude Fable 5 (Adaptive Reasoning, Max Effort, Opus 4.8 Fallback)",
+          "model": "Claude Fable 5",
+          "variant": "Adaptive Reasoning, Max Effort, Opus 4.8 Fallback",
           "creator": "Anthropic",
           "score": 60.2,
           "release_date": "2026-06-09",
           "price_1m_blended": 20,
-          "tok_per_sec": 68.066
+          "tok_per_sec": 68.066,
+          "open_weights": null
         },
         {
           "model": "Gemini 3.1 Pro Preview",
+          "variant": null,
           "creator": "Google",
           "score": 58.9,
           "release_date": "2026-02-19",
           "price_1m_blended": 4.5,
-          "tok_per_sec": 137.113
+          "tok_per_sec": 137.113,
+          "open_weights": null
         },
         {
           "model": "Kimi K3",
-          "creator": "Kimi",
+          "variant": null,
+          "creator": "Moonshot AI",
           "score": 58.7,
           "release_date": "2026-07-16",
           "price_1m_blended": 6,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "Muse Spark 1.1 (xhigh)",
+          "model": "Muse Spark 1.1",
+          "variant": "xhigh",
           "creator": "Meta",
           "score": 58.2,
           "release_date": "2026-07-09",
           "price_1m_blended": 2,
-          "tok_per_sec": 121.694
+          "tok_per_sec": 121.694,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Sol (high)",
+          "model": "GPT-5.6 Sol",
+          "variant": "high",
           "creator": "OpenAI",
           "score": 56.9,
           "release_date": "2026-07-09",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 61.236
+          "tok_per_sec": 61.236,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.4 (xhigh)",
+          "model": "GPT-5.4",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 56.6,
           "release_date": "2026-03-05",
           "price_1m_blended": 5.625,
-          "tok_per_sec": 163.198
+          "tok_per_sec": 163.198,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Sol (medium)",
-          "creator": "OpenAI",
-          "score": 56.5,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 61.057
-        },
-        {
-          "model": "GPT-5.5 (xhigh)",
+          "model": "GPT-5.5",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 56.1,
           "release_date": "2026-04-23",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 85.791
+          "tok_per_sec": 85.791,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Sol (max)",
-          "creator": "OpenAI",
-          "score": 56.1,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 71.245
-        },
-        {
-          "model": "Gemini 3 Pro Preview (high)",
+          "model": "Gemini 3 Pro Preview",
+          "variant": "high",
           "creator": "Google",
           "score": 56.1,
           "release_date": "2025-11-18",
           "price_1m_blended": 4.5,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Sol (xhigh)",
-          "creator": "OpenAI",
-          "score": 56.0,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 66.827
-        },
-        {
-          "model": "GPT-5.5 (high)",
-          "creator": "OpenAI",
-          "score": 55.9,
-          "release_date": "2026-04-23",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 74.795
-        },
-        {
-          "model": "GPT-5.6 Sol (low)",
-          "creator": "OpenAI",
-          "score": 55.4,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 59.207
-        },
-        {
-          "model": "GPT-5.2 Codex (xhigh)",
+          "model": "GPT-5.2 Codex",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 54.6,
           "release_date": "2025-12-11",
           "price_1m_blended": 4.813,
-          "tok_per_sec": 153.708
+          "tok_per_sec": 153.708,
+          "open_weights": null
         },
         {
-          "model": "Claude Opus 4.7 (Adaptive Reasoning, Max Effort)",
+          "model": "Claude Opus 4.7",
+          "variant": "Adaptive Reasoning, Max Effort",
           "creator": "Anthropic",
           "score": 54.5,
           "release_date": "2026-04-16",
           "price_1m_blended": 10,
-          "tok_per_sec": 54.337
+          "tok_per_sec": 54.337,
+          "open_weights": null
         }
-      ],
-      "models_evaluated": 535
+      ]
     },
     {
       "key": "livecodebench",
@@ -929,129 +705,140 @@
       "description": "Problemas de programação inéditos",
       "unit": "%",
       "is_fraction": true,
+      "models_evaluated": 343,
+      "families_evaluated": 13,
       "top": [
         {
-          "model": "Gemini 3 Pro Preview (high)",
+          "model": "Gemini 3 Pro Preview",
+          "variant": "high",
           "creator": "Google",
           "score": 91.7,
           "release_date": "2025-11-18",
           "price_1m_blended": 4.5,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "Gemini 3 Flash Preview (Reasoning)",
+          "model": "Gemini 3 Flash Preview",
+          "variant": "Reasoning",
           "creator": "Google",
           "score": 90.8,
           "release_date": "2025-12-17",
           "price_1m_blended": 1.125,
-          "tok_per_sec": 227.907
+          "tok_per_sec": 227.907,
+          "open_weights": null
         },
         {
           "model": "DeepSeek V3.2 Speciale",
+          "variant": null,
           "creator": "DeepSeek",
           "score": 89.6,
           "release_date": "2025-12-01",
           "price_1m_blended": 0,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.2 (medium)",
+          "model": "GPT-5.2",
+          "variant": "medium",
           "creator": "OpenAI",
           "score": 89.4,
           "release_date": "2025-12-11",
           "price_1m_blended": 4.813,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "GLM-4.7 (Reasoning)",
-          "creator": "Z AI",
+          "model": "GLM-4.7",
+          "variant": "Reasoning",
+          "creator": "Zhipu AI",
           "score": 89.4,
           "release_date": "2025-12-22",
           "price_1m_blended": 1,
-          "tok_per_sec": 116.121
+          "tok_per_sec": 116.121,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.2 (xhigh)",
-          "creator": "OpenAI",
-          "score": 88.9,
-          "release_date": "2025-12-11",
-          "price_1m_blended": 4.813,
-          "tok_per_sec": 85.455
-        },
-        {
-          "model": "gpt-oss-120b (high)",
+          "model": "gpt-oss-120b",
+          "variant": "high",
           "creator": "OpenAI",
           "score": 87.8,
           "release_date": "2025-08-05",
           "price_1m_blended": 0.262,
-          "tok_per_sec": 300.994
+          "tok_per_sec": 300.994,
+          "open_weights": null
         },
         {
-          "model": "Claude Opus 4.5 (Reasoning)",
+          "model": "Claude Opus 4.5",
+          "variant": "Reasoning",
           "creator": "Anthropic",
           "score": 87.1,
           "release_date": "2025-11-24",
           "price_1m_blended": 10,
-          "tok_per_sec": 56.979
+          "tok_per_sec": 56.979,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.1 (high)",
+          "model": "GPT-5.1",
+          "variant": "high",
           "creator": "OpenAI",
           "score": 86.8,
           "release_date": "2025-11-13",
           "price_1m_blended": 3.438,
-          "tok_per_sec": 108.765
+          "tok_per_sec": 108.765,
+          "open_weights": null
         },
         {
-          "model": "MiMo-V2-Flash (Reasoning)",
+          "model": "MiMo-V2-Flash",
+          "variant": "Reasoning",
           "creator": "Xiaomi",
           "score": 86.8,
           "release_date": "2025-12-16",
           "price_1m_blended": 0.15,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "DeepSeek V3.2 (Reasoning)",
+          "model": "DeepSeek V3.2",
+          "variant": "Reasoning",
           "creator": "DeepSeek",
           "score": 86.2,
           "release_date": "2025-12-01",
           "price_1m_blended": 0.315,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "o4-mini (high)",
+          "model": "o4-mini",
+          "variant": "high",
           "creator": "OpenAI",
           "score": 85.9,
           "release_date": "2025-04-16",
           "price_1m_blended": 1.925,
-          "tok_per_sec": 186.4
-        },
-        {
-          "model": "Gemini 3 Pro Preview (low)",
-          "creator": "Google",
-          "score": 85.7,
-          "release_date": "2025-11-18",
-          "price_1m_blended": 4.5,
-          "tok_per_sec": 0
+          "tok_per_sec": 186.4,
+          "open_weights": null
         },
         {
           "model": "Kimi K2 Thinking",
-          "creator": "Kimi",
+          "variant": null,
+          "creator": "Moonshot AI",
           "score": 85.3,
           "release_date": "2025-11-06",
           "price_1m_blended": 1.075,
-          "tok_per_sec": 132.079
+          "tok_per_sec": 132.079,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.1 Codex (high)",
+          "model": "GPT-5.1 Codex",
+          "variant": "high",
           "creator": "OpenAI",
           "score": 84.9,
           "release_date": "2025-11-13",
           "price_1m_blended": 3.438,
-          "tok_per_sec": 205.034
+          "tok_per_sec": 205.034,
+          "open_weights": null
         }
-      ],
-      "models_evaluated": 343
+      ]
     },
     {
       "key": "aime_25",
@@ -1060,260 +847,150 @@
       "description": "Olimpíada de matemática",
       "unit": "%",
       "is_fraction": true,
+      "models_evaluated": 269,
+      "families_evaluated": 14,
       "top": [
         {
-          "model": "GPT-5.2 (xhigh)",
+          "model": "GPT-5.2",
+          "variant": "xhigh",
           "creator": "OpenAI",
-          "score": 99.0,
+          "score": 99,
           "release_date": "2025-12-11",
           "price_1m_blended": 4.813,
-          "tok_per_sec": 85.455
+          "tok_per_sec": 85.455,
+          "open_weights": null
         },
         {
-          "model": "GPT-5 Codex (high)",
+          "model": "GPT-5 Codex",
+          "variant": "high",
           "creator": "OpenAI",
           "score": 98.7,
           "release_date": "2025-09-23",
           "price_1m_blended": 3.438,
-          "tok_per_sec": 170.972
+          "tok_per_sec": 170.972,
+          "open_weights": null
         },
         {
-          "model": "Gemini 3 Flash Preview (Reasoning)",
+          "model": "Gemini 3 Flash Preview",
+          "variant": "Reasoning",
           "creator": "Google",
-          "score": 97.0,
+          "score": 97,
           "release_date": "2025-12-17",
           "price_1m_blended": 1.125,
-          "tok_per_sec": 227.907
-        },
-        {
-          "model": "GPT-5.2 (medium)",
-          "creator": "OpenAI",
-          "score": 96.7,
-          "release_date": "2025-12-11",
-          "price_1m_blended": 4.813,
-          "tok_per_sec": 0
+          "tok_per_sec": 227.907,
+          "open_weights": null
         },
         {
           "model": "DeepSeek V3.2 Speciale",
+          "variant": null,
           "creator": "DeepSeek",
           "score": 96.7,
           "release_date": "2025-12-01",
           "price_1m_blended": 0,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "MiMo-V2-Flash (Reasoning)",
+          "model": "MiMo-V2-Flash",
+          "variant": "Reasoning",
           "creator": "Xiaomi",
           "score": 96.3,
           "release_date": "2025-12-16",
           "price_1m_blended": 0.15,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.1 Codex (high)",
+          "model": "GPT-5.1 Codex",
+          "variant": "high",
           "creator": "OpenAI",
           "score": 95.7,
           "release_date": "2025-11-13",
           "price_1m_blended": 3.438,
-          "tok_per_sec": 205.034
+          "tok_per_sec": 205.034,
+          "open_weights": null
         },
         {
-          "model": "Gemini 3 Pro Preview (high)",
+          "model": "Gemini 3 Pro Preview",
+          "variant": "high",
           "creator": "Google",
           "score": 95.7,
           "release_date": "2025-11-18",
           "price_1m_blended": 4.5,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "GLM-4.7 (Reasoning)",
-          "creator": "Z AI",
-          "score": 95.0,
+          "model": "GLM-4.7",
+          "variant": "Reasoning",
+          "creator": "Zhipu AI",
+          "score": 95,
           "release_date": "2025-12-22",
           "price_1m_blended": 1,
-          "tok_per_sec": 116.121
+          "tok_per_sec": 116.121,
+          "open_weights": null
         },
         {
           "model": "KAT-Coder-Pro V1",
-          "creator": "KwaiKAT",
+          "variant": null,
+          "creator": "Kuaishou",
           "score": 94.7,
           "release_date": "2025-11-11",
           "price_1m_blended": 0,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
           "model": "Kimi K2 Thinking",
-          "creator": "Kimi",
+          "variant": null,
+          "creator": "Moonshot AI",
           "score": 94.7,
           "release_date": "2025-11-06",
           "price_1m_blended": 1.075,
-          "tok_per_sec": 132.079
+          "tok_per_sec": 132.079,
+          "open_weights": null
         },
         {
-          "model": "Nova 2.0 Lite (high)",
+          "model": "Nova 2.0 Lite",
+          "variant": "high",
           "creator": "Amazon",
           "score": 94.3,
           "release_date": "2025-10-29",
           "price_1m_blended": 0.85,
-          "tok_per_sec": 196.138
+          "tok_per_sec": 196.138,
+          "open_weights": null
         },
         {
-          "model": "GPT-5 (high)",
+          "model": "GPT-5",
+          "variant": "high",
           "creator": "OpenAI",
           "score": 94.3,
           "release_date": "2025-08-07",
           "price_1m_blended": 3.438,
-          "tok_per_sec": 112.377
+          "tok_per_sec": 112.377,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.1 (high)",
+          "model": "GPT-5.1",
+          "variant": "high",
           "creator": "OpenAI",
-          "score": 94.0,
+          "score": 94,
           "release_date": "2025-11-13",
           "price_1m_blended": 3.438,
-          "tok_per_sec": 108.765
+          "tok_per_sec": 108.765,
+          "open_weights": null
         },
         {
-          "model": "gpt-oss-120b (high)",
+          "model": "gpt-oss-120b",
+          "variant": "high",
           "creator": "OpenAI",
           "score": 93.4,
           "release_date": "2025-08-05",
           "price_1m_blended": 0.262,
-          "tok_per_sec": 300.994
+          "tok_per_sec": 300.994,
+          "open_weights": null
         }
-      ],
-      "models_evaluated": 269
-    },
-    {
-      "key": "math_500",
-      "label": "MATH-500",
-      "category": "Math",
-      "description": "Problemas de matemática de competição",
-      "unit": "%",
-      "is_fraction": true,
-      "top": [
-        {
-          "model": "GPT-5 (high)",
-          "creator": "OpenAI",
-          "score": 99.4,
-          "release_date": "2025-08-07",
-          "price_1m_blended": 3.438,
-          "tok_per_sec": 112.377
-        },
-        {
-          "model": "o3",
-          "creator": "OpenAI",
-          "score": 99.2,
-          "release_date": "2025-04-16",
-          "price_1m_blended": 3.5,
-          "tok_per_sec": 151.611
-        },
-        {
-          "model": "Grok 3 mini Reasoning (high)",
-          "creator": "SpaceXAI",
-          "score": 99.2,
-          "release_date": "2025-02-19",
-          "price_1m_blended": 0.35,
-          "tok_per_sec": 42.582
-        },
-        {
-          "model": "GPT-5 (medium)",
-          "creator": "OpenAI",
-          "score": 99.1,
-          "release_date": "2025-08-07",
-          "price_1m_blended": 3.438,
-          "tok_per_sec": 96.474
-        },
-        {
-          "model": "Claude 4 Sonnet (Reasoning)",
-          "creator": "Anthropic",
-          "score": 99.1,
-          "release_date": "2025-05-22",
-          "price_1m_blended": 6,
-          "tok_per_sec": 0
-        },
-        {
-          "model": "Grok 4",
-          "creator": "SpaceXAI",
-          "score": 99.0,
-          "release_date": "2025-07-10",
-          "price_1m_blended": 11,
-          "tok_per_sec": 0
-        },
-        {
-          "model": "o4-mini (high)",
-          "creator": "OpenAI",
-          "score": 98.9,
-          "release_date": "2025-04-16",
-          "price_1m_blended": 1.925,
-          "tok_per_sec": 186.4
-        },
-        {
-          "model": "GPT-5 (low)",
-          "creator": "OpenAI",
-          "score": 98.7,
-          "release_date": "2025-08-07",
-          "price_1m_blended": 3.438,
-          "tok_per_sec": 85.591
-        },
-        {
-          "model": "Gemini 2.5 Pro Preview (May' 25)",
-          "creator": "Google",
-          "score": 98.6,
-          "release_date": "2025-05-06",
-          "price_1m_blended": 3.438,
-          "tok_per_sec": 0
-        },
-        {
-          "model": "o3-mini (high)",
-          "creator": "OpenAI",
-          "score": 98.5,
-          "release_date": "2025-01-31",
-          "price_1m_blended": 1.925,
-          "tok_per_sec": 245.127
-        },
-        {
-          "model": "Qwen3 235B A22B 2507 (Reasoning)",
-          "creator": "Alibaba",
-          "score": 98.4,
-          "release_date": "2025-07-25",
-          "price_1m_blended": 2.625,
-          "tok_per_sec": 79.56
-        },
-        {
-          "model": "Llama Nemotron Super 49B v1.5 (Reasoning)",
-          "creator": "NVIDIA",
-          "score": 98.3,
-          "release_date": "2025-07-25",
-          "price_1m_blended": 0.4,
-          "tok_per_sec": 109.319
-        },
-        {
-          "model": "DeepSeek R1 0528 (May '25)",
-          "creator": "DeepSeek",
-          "score": 98.3,
-          "release_date": "2025-05-28",
-          "price_1m_blended": 2.063,
-          "tok_per_sec": 0
-        },
-        {
-          "model": "Claude 4 Opus (Reasoning)",
-          "creator": "Anthropic",
-          "score": 98.2,
-          "release_date": "2025-05-22",
-          "price_1m_blended": 30,
-          "tok_per_sec": 0
-        },
-        {
-          "model": "Gemini 2.5 Flash (Reasoning)",
-          "creator": "Google",
-          "score": 98.1,
-          "release_date": "2025-05-20",
-          "price_1m_blended": 0.85,
-          "tok_per_sec": 225.122
-        }
-      ],
-      "models_evaluated": 204
+      ]
     },
     {
       "key": "terminalbench_v2_1",
@@ -1322,129 +999,110 @@
       "description": "Agentes em terminal (tarefas reais)",
       "unit": "%",
       "is_fraction": true,
+      "models_evaluated": 157,
+      "families_evaluated": 10,
       "top": [
         {
-          "model": "GPT-5.6 Sol (xhigh)",
+          "model": "GPT-5.6 Sol",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 89.5,
           "release_date": "2026-07-09",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 66.827
+          "tok_per_sec": 66.827,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Terra (max)",
+          "model": "GPT-5.6 Terra",
+          "variant": "max",
           "creator": "OpenAI",
-          "score": 88.0,
+          "score": 88,
           "release_date": "2026-07-09",
           "price_1m_blended": 5.625,
-          "tok_per_sec": 145.75
-        },
-        {
-          "model": "GPT-5.6 Sol (max)",
-          "creator": "OpenAI",
-          "score": 88.0,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 71.245
-        },
-        {
-          "model": "GPT-5.6 Sol (high)",
-          "creator": "OpenAI",
-          "score": 87.3,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 61.236
-        },
-        {
-          "model": "GPT-5.6 Sol (medium)",
-          "creator": "OpenAI",
-          "score": 86.1,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 61.057
+          "tok_per_sec": 145.75,
+          "open_weights": null
         },
         {
           "model": "Kimi K3",
-          "creator": "Kimi",
-          "score": 85.0,
+          "variant": null,
+          "creator": "Moonshot AI",
+          "score": 85,
           "release_date": "2026-07-16",
           "price_1m_blended": 6,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "Claude Fable 5 (Adaptive Reasoning, Max Effort, Opus 4.8 Fallback)",
+          "model": "Claude Fable 5",
+          "variant": "Adaptive Reasoning, Max Effort, Opus 4.8 Fallback",
           "creator": "Anthropic",
           "score": 84.6,
           "release_date": "2026-06-09",
           "price_1m_blended": 20,
-          "tok_per_sec": 68.066
+          "tok_per_sec": 68.066,
+          "open_weights": null
         },
         {
-          "model": "Claude Opus 4.8 (Adaptive Reasoning, Max Effort)",
+          "model": "Claude Opus 4.8",
+          "variant": "Adaptive Reasoning, Max Effort",
           "creator": "Anthropic",
           "score": 84.6,
           "release_date": "2026-05-28",
           "price_1m_blended": 10,
-          "tok_per_sec": 60.732
+          "tok_per_sec": 60.732,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.5 (xhigh)",
+          "model": "GPT-5.5",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 84.3,
           "release_date": "2026-04-23",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 85.791
+          "tok_per_sec": 85.791,
+          "open_weights": null
         },
         {
-          "model": "Claude Opus 4.7 (Adaptive Reasoning, Max Effort)",
+          "model": "Claude Opus 4.7",
+          "variant": "Adaptive Reasoning, Max Effort",
           "creator": "Anthropic",
           "score": 83.1,
           "release_date": "2026-04-16",
           "price_1m_blended": 10,
-          "tok_per_sec": 54.337
+          "tok_per_sec": 54.337,
+          "open_weights": null
         },
         {
-          "model": "Grok 4.5 (high)",
-          "creator": "SpaceXAI",
+          "model": "Grok 4.5",
+          "variant": "high",
+          "creator": "xAI",
           "score": 81.6,
           "release_date": "2026-07-08",
           "price_1m_blended": 3,
-          "tok_per_sec": 73.063
+          "tok_per_sec": 73.063,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Luna (max)",
+          "model": "GPT-5.6 Luna",
+          "variant": "max",
           "creator": "OpenAI",
           "score": 80.9,
           "release_date": "2026-07-09",
           "price_1m_blended": 2.25,
-          "tok_per_sec": 212.102
+          "tok_per_sec": 212.102,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.5 (medium)",
-          "creator": "OpenAI",
-          "score": 80.5,
-          "release_date": "2026-04-23",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 74.73
-        },
-        {
-          "model": "Claude Sonnet 5 (Adaptive Reasoning, Max Effort)",
+          "model": "Claude Sonnet 5",
+          "variant": "Adaptive Reasoning, Max Effort",
           "creator": "Anthropic",
           "score": 80.5,
           "release_date": "2026-06-30",
           "price_1m_blended": 4,
-          "tok_per_sec": 80.924
-        },
-        {
-          "model": "GPT-5.6 Terra (xhigh)",
-          "creator": "OpenAI",
-          "score": 80.1,
-          "release_date": "2026-07-09",
-          "price_1m_blended": 5.625,
-          "tok_per_sec": 133.932
+          "tok_per_sec": 80.924,
+          "open_weights": null
         }
-      ],
-      "models_evaluated": 157
+      ]
     },
     {
       "key": "tau2",
@@ -1453,129 +1111,140 @@
       "description": "Agentes com ferramentas de atendimento",
       "unit": "%",
       "is_fraction": true,
+      "models_evaluated": 440,
+      "families_evaluated": 13,
       "top": [
         {
           "model": "JT-35B-Flash",
+          "variant": null,
           "creator": "China Mobile",
           "score": 99.1,
           "release_date": "2026-05-14",
           "price_1m_blended": 0,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "GLM-5.2 (max)",
-          "creator": "Z AI",
+          "model": "GLM-5.2",
+          "variant": "max",
+          "creator": "Zhipu AI",
           "score": 99.1,
           "release_date": "2026-06-16",
           "price_1m_blended": 2.15,
-          "tok_per_sec": 187.644
+          "tok_per_sec": 187.644,
+          "open_weights": null
         },
         {
-          "model": "GLM-4.7-Flash (Reasoning)",
-          "creator": "Z AI",
+          "model": "GLM-4.7-Flash",
+          "variant": "Reasoning",
+          "creator": "Zhipu AI",
           "score": 98.8,
           "release_date": "2026-01-19",
           "price_1m_blended": 0.153,
-          "tok_per_sec": 83.393
+          "tok_per_sec": 83.393,
+          "open_weights": null
         },
         {
-          "model": "Claude Fable 5 (Adaptive Reasoning, Max Effort, Opus 4.8 Fallback)",
+          "model": "Claude Fable 5",
+          "variant": "Adaptive Reasoning, Max Effort, Opus 4.8 Fallback",
           "creator": "Anthropic",
           "score": 98.5,
           "release_date": "2026-06-09",
           "price_1m_blended": 20,
-          "tok_per_sec": 68.066
+          "tok_per_sec": 68.066,
+          "open_weights": null
         },
         {
           "model": "Step 3.7 Flash",
+          "variant": null,
           "creator": "StepFun",
           "score": 98.5,
           "release_date": "2026-05-29",
           "price_1m_blended": 0.438,
-          "tok_per_sec": 392.241
+          "tok_per_sec": 392.241,
+          "open_weights": null
         },
         {
-          "model": "GLM 5V Turbo (Reasoning)",
-          "creator": "Z AI",
+          "model": "GLM 5V Turbo",
+          "variant": "Reasoning",
+          "creator": "Zhipu AI",
           "score": 98.5,
           "release_date": "2026-04-01",
           "price_1m_blended": 0,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
           "model": "GLM-5-Turbo",
-          "creator": "Z AI",
+          "variant": null,
+          "creator": "Zhipu AI",
           "score": 98.5,
           "release_date": "2026-03-15",
           "price_1m_blended": 0,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "GLM-5 (Reasoning)",
-          "creator": "Z AI",
+          "model": "GLM-5",
+          "variant": "Reasoning",
+          "creator": "Zhipu AI",
           "score": 98.2,
           "release_date": "2026-02-11",
           "price_1m_blended": 1.55,
-          "tok_per_sec": 54.079
+          "tok_per_sec": 54.079,
+          "open_weights": null
         },
         {
-          "model": "Grok 4.3 (high)",
-          "creator": "SpaceXAI",
+          "model": "Grok 4.3",
+          "variant": "high",
+          "creator": "xAI",
           "score": 97.7,
           "release_date": "2026-04-30",
           "price_1m_blended": 1.563,
-          "tok_per_sec": 121.739
+          "tok_per_sec": 121.739,
+          "open_weights": null
         },
         {
-          "model": "GLM-5.1 (Reasoning)",
-          "creator": "Z AI",
+          "model": "GLM-5.1",
+          "variant": "Reasoning",
+          "creator": "Zhipu AI",
           "score": 97.7,
           "release_date": "2026-04-07",
           "price_1m_blended": 2.15,
-          "tok_per_sec": 86.405
+          "tok_per_sec": 86.405,
+          "open_weights": null
         },
         {
           "model": "Qwen3.6 Plus",
+          "variant": null,
           "creator": "Alibaba",
           "score": 97.7,
           "release_date": "2026-04-02",
           "price_1m_blended": 1.125,
-          "tok_per_sec": 52.574
+          "tok_per_sec": 52.574,
+          "open_weights": null
         },
         {
-          "model": "GLM-5 (Non-reasoning)",
-          "creator": "Z AI",
-          "score": 97.4,
-          "release_date": "2026-02-11",
-          "price_1m_blended": 1.55,
-          "tok_per_sec": 67.58
-        },
-        {
-          "model": "GLM-5.1 (Non-reasoning)",
-          "creator": "Z AI",
-          "score": 97.1,
-          "release_date": "2026-04-07",
-          "price_1m_blended": 2.15,
-          "tok_per_sec": 64.228
-        },
-        {
-          "model": "Grok 4.20 0309 (Reasoning)",
-          "creator": "SpaceXAI",
+          "model": "Grok 4.20 0309",
+          "variant": "Reasoning",
+          "creator": "xAI",
           "score": 96.5,
           "release_date": "2026-03-10",
           "price_1m_blended": 3,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "DeepSeek V4 Pro (Reasoning, Max Effort)",
+          "model": "DeepSeek V4 Pro",
+          "variant": "Reasoning, Max Effort",
           "creator": "DeepSeek",
           "score": 96.2,
           "release_date": "2026-04-24",
           "price_1m_blended": 0.544,
-          "tok_per_sec": 67.074
+          "tok_per_sec": 67.074,
+          "open_weights": null
         }
-      ],
-      "models_evaluated": 440
+      ]
     },
     {
       "key": "ifbench",
@@ -1584,129 +1253,130 @@
       "description": "Seguir instruções (instruction following)",
       "unit": "%",
       "is_fraction": true,
+      "models_evaluated": 449,
+      "families_evaluated": 12,
       "top": [
         {
-          "model": "Grok 4.3 (medium)",
-          "creator": "SpaceXAI",
+          "model": "Grok 4.3",
+          "variant": "medium",
+          "creator": "xAI",
           "score": 83.3,
           "release_date": "2026-04-30",
           "price_1m_blended": 1.563,
-          "tok_per_sec": 123.759
+          "tok_per_sec": 123.759,
+          "open_weights": null
         },
         {
           "model": "MiniMax-M3",
+          "variant": null,
           "creator": "MiniMax",
           "score": 82.9,
           "release_date": "2026-06-01",
           "price_1m_blended": 0.525,
-          "tok_per_sec": 98.637
+          "tok_per_sec": 98.637,
+          "open_weights": null
         },
         {
-          "model": "Grok 4.20 0309 (Reasoning)",
-          "creator": "SpaceXAI",
+          "model": "Grok 4.20 0309",
+          "variant": "Reasoning",
+          "creator": "xAI",
           "score": 82.9,
           "release_date": "2026-03-10",
           "price_1m_blended": 3,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "Nemotron 3 Ultra 550B A55B (Reasoning)",
+          "model": "Nemotron 3 Ultra 550B A55B",
+          "variant": "Reasoning",
           "creator": "NVIDIA",
           "score": 81.4,
           "release_date": "2026-06-04",
           "price_1m_blended": 1.175,
-          "tok_per_sec": 220.284
+          "tok_per_sec": 220.284,
+          "open_weights": null
         },
         {
-          "model": "Grok 4.3 (high)",
-          "creator": "SpaceXAI",
-          "score": 81.3,
-          "release_date": "2026-04-30",
-          "price_1m_blended": 1.563,
-          "tok_per_sec": 121.739
-        },
-        {
-          "model": "Grok 4.20 0309 v2 (Reasoning)",
-          "creator": "SpaceXAI",
+          "model": "Grok 4.20 0309 v2",
+          "variant": "Reasoning",
+          "creator": "xAI",
           "score": 81.2,
           "release_date": "2026-04-07",
           "price_1m_blended": 3,
-          "tok_per_sec": 215.2
-        },
-        {
-          "model": "Grok 4.3 (low)",
-          "creator": "SpaceXAI",
-          "score": 81.0,
-          "release_date": "2026-04-30",
-          "price_1m_blended": 1.563,
-          "tok_per_sec": 104.697
+          "tok_per_sec": 215.2,
+          "open_weights": null
         },
         {
           "model": "Qwen3.7 Max",
+          "variant": null,
           "creator": "Alibaba",
           "score": 80.5,
           "release_date": "2026-05-19",
           "price_1m_blended": 3.75,
-          "tok_per_sec": 206.199
+          "tok_per_sec": 206.199,
+          "open_weights": null
         },
         {
           "model": "Nemotron Cascade 2 30B A3B",
+          "variant": null,
           "creator": "NVIDIA",
           "score": 80.4,
           "release_date": "2026-03-19",
           "price_1m_blended": 0,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
           "model": "MiMo-V2.5-Pro",
+          "variant": null,
           "creator": "Xiaomi",
           "score": 79.9,
           "release_date": "2026-04-22",
           "price_1m_blended": 0.544,
-          "tok_per_sec": 61.135
+          "tok_per_sec": 61.135,
+          "open_weights": null
         },
         {
-          "model": "Nova 2.0 Pro Preview (low)",
+          "model": "Nova 2.0 Pro Preview",
+          "variant": "low",
           "creator": "Amazon",
           "score": 79.6,
           "release_date": "2025-11-27",
           "price_1m_blended": 3.438,
-          "tok_per_sec": 144.386
+          "tok_per_sec": 144.386,
+          "open_weights": null
         },
         {
-          "model": "DeepSeek V4 Flash (Reasoning, Max Effort)",
+          "model": "DeepSeek V4 Flash",
+          "variant": "Reasoning, Max Effort",
           "creator": "DeepSeek",
           "score": 79.2,
           "release_date": "2026-04-24",
           "price_1m_blended": 0.175,
-          "tok_per_sec": 111.856
+          "tok_per_sec": 111.856,
+          "open_weights": null
         },
         {
-          "model": "Nova 2.0 Pro Preview (medium)",
-          "creator": "Amazon",
-          "score": 79.0,
-          "release_date": "2025-11-27",
-          "price_1m_blended": 3.438,
-          "tok_per_sec": 132.016
-        },
-        {
-          "model": "Qwen3.5 397B A17B (Reasoning)",
+          "model": "Qwen3.5 397B A17B",
+          "variant": "Reasoning",
           "creator": "Alibaba",
           "score": 78.8,
           "release_date": "2026-02-16",
           "price_1m_blended": 1.35,
-          "tok_per_sec": 61.001
+          "tok_per_sec": 61.001,
+          "open_weights": null
         },
         {
           "model": "Qwen3.7 Plus",
+          "variant": null,
           "creator": "Alibaba",
-          "score": 78.0,
+          "score": 78,
           "release_date": "2026-06-01",
           "price_1m_blended": 0.7,
-          "tok_per_sec": 52.864
+          "tok_per_sec": 52.864,
+          "open_weights": null
         }
-      ],
-      "models_evaluated": 449
+      ]
     },
     {
       "key": "lcr",
@@ -1715,129 +1385,150 @@
       "description": "Completude lógica da resposta",
       "unit": "%",
       "is_fraction": true,
+      "models_evaluated": 469,
+      "families_evaluated": 14,
       "top": [
         {
-          "model": "GPT-5.2 Codex (xhigh)",
+          "model": "GPT-5.2 Codex",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 75.7,
           "release_date": "2025-12-11",
           "price_1m_blended": 4.813,
-          "tok_per_sec": 153.708
+          "tok_per_sec": 153.708,
+          "open_weights": null
         },
         {
-          "model": "GPT-5 (high)",
+          "model": "GPT-5",
+          "variant": "high",
           "creator": "OpenAI",
           "score": 75.6,
           "release_date": "2025-08-07",
           "price_1m_blended": 3.438,
-          "tok_per_sec": 112.377
+          "tok_per_sec": 112.377,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.1 (high)",
+          "model": "GPT-5.1",
+          "variant": "high",
           "creator": "OpenAI",
-          "score": 75.0,
+          "score": 75,
           "release_date": "2025-11-13",
           "price_1m_blended": 3.438,
-          "tok_per_sec": 108.765
+          "tok_per_sec": 108.765,
+          "open_weights": null
         },
         {
           "model": "Kimi K3",
-          "creator": "Kimi",
+          "variant": null,
+          "creator": "Moonshot AI",
           "score": 74.7,
           "release_date": "2026-07-16",
           "price_1m_blended": 6,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.5 (xhigh)",
+          "model": "GPT-5.5",
+          "variant": "xhigh",
           "creator": "OpenAI",
           "score": 74.3,
           "release_date": "2026-04-23",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 85.791
+          "tok_per_sec": 85.791,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Terra (max)",
+          "model": "GPT-5.6 Terra",
+          "variant": "max",
           "creator": "OpenAI",
-          "score": 74.0,
+          "score": 74,
           "release_date": "2026-07-09",
           "price_1m_blended": 5.625,
-          "tok_per_sec": 145.75
+          "tok_per_sec": 145.75,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Luna (max)",
+          "model": "GPT-5.6 Luna",
+          "variant": "max",
           "creator": "OpenAI",
-          "score": 74.0,
+          "score": 74,
           "release_date": "2026-07-09",
           "price_1m_blended": 2.25,
-          "tok_per_sec": 212.102
+          "tok_per_sec": 212.102,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.3 Codex (xhigh)",
+          "model": "GPT-5.3 Codex",
+          "variant": "xhigh",
           "creator": "OpenAI",
-          "score": 74.0,
+          "score": 74,
           "release_date": "2026-02-05",
           "price_1m_blended": 4.813,
-          "tok_per_sec": 119.787
+          "tok_per_sec": 119.787,
+          "open_weights": null
         },
         {
           "model": "MiniMax-M3",
+          "variant": null,
           "creator": "MiniMax",
-          "score": 74.0,
+          "score": 74,
           "release_date": "2026-06-01",
           "price_1m_blended": 0.525,
-          "tok_per_sec": 98.637
+          "tok_per_sec": 98.637,
+          "open_weights": null
         },
         {
           "model": "KAT-Coder-Pro V1",
-          "creator": "KwaiKAT",
-          "score": 74.0,
+          "variant": null,
+          "creator": "Kuaishou",
+          "score": 74,
           "release_date": "2025-11-11",
           "price_1m_blended": 0,
-          "tok_per_sec": 0
+          "tok_per_sec": 0,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.4 (xhigh)",
+          "model": "GPT-5.4",
+          "variant": "xhigh",
           "creator": "OpenAI",
-          "score": 74.0,
+          "score": 74,
           "release_date": "2026-03-05",
           "price_1m_blended": 5.625,
-          "tok_per_sec": 163.198
+          "tok_per_sec": 163.198,
+          "open_weights": null
         },
         {
-          "model": "Claude Opus 4.5 (Reasoning)",
+          "model": "Claude Opus 4.5",
+          "variant": "Reasoning",
           "creator": "Anthropic",
-          "score": 74.0,
+          "score": 74,
           "release_date": "2025-11-24",
           "price_1m_blended": 10,
-          "tok_per_sec": 56.979
+          "tok_per_sec": 56.979,
+          "open_weights": null
         },
         {
-          "model": "GPT-5.6 Sol (max)",
+          "model": "GPT-5.6 Sol",
+          "variant": "max",
           "creator": "OpenAI",
           "score": 73.7,
           "release_date": "2026-07-09",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 71.245
-        },
-        {
-          "model": "GPT-5.5 (high)",
-          "creator": "OpenAI",
-          "score": 73.3,
-          "release_date": "2026-04-23",
-          "price_1m_blended": 11.25,
-          "tok_per_sec": 74.795
+          "tok_per_sec": 71.245,
+          "open_weights": null
         },
         {
           "model": "MiMo-V2.5-Pro",
+          "variant": null,
           "creator": "Xiaomi",
           "score": 73.3,
           "release_date": "2026-04-22",
           "price_1m_blended": 0.544,
-          "tok_per_sec": 61.135
+          "tok_per_sec": 61.135,
+          "open_weights": null
         }
-      ],
-      "models_evaluated": 469
+      ]
     }
   ]
 }

@@ -115,6 +115,61 @@ const COMPANY_COLORS = {
   Mistral: '#FA520F'
 };
 
+// ─── CORES DE EMPRESAS SÓ-BENCHMARK ───
+// Empresas que aparecem nos benchmarks mas ainda não têm lançamento na régua.
+// IMPORTANTE: ficam FORA de COMPANY_COLORS de propósito. KNOWN_COMPANIES deriva
+// de COMPANY_COLORS, e uma empresa "conhecida" sem track própria em LAYOUT_GROUPS
+// não casa com nenhum filtro — sumiria da régua em vez de cair no "Outros".
+// Quando uma delas ganhar track própria, é só mover para COMPANY_COLORS.
+const BENCH_ONLY_COLORS = {
+  Amazon: '#FF9900',
+  Kuaishou: '#FF5000',
+  StepFun: '#0066FF',
+  'China Mobile': '#E60012'
+};
+
+// ─── APELIDOS DE EMPRESA (fonte externa → nome canônico) ───
+// A Artificial Analysis nomeia algumas empresas de forma diferente da régua
+// (ex.: "Kimi" é o modelo, a empresa é a Moonshot AI). Sem esta tabela a mesma
+// empresa aparece com nome e cor diferentes em cada aba.
+// Consumida por assets/guia.js (navegador) e automation/update-benchmarks.mjs (Node,
+// via loadDataJs) — mesma regra dos dois lados.
+const COMPANY_ALIASES = {
+  'KIMI': 'Moonshot AI',
+  'MOONSHOT': 'Moonshot AI',
+  'Z AI': 'Zhipu AI',
+  'ZAI': 'Zhipu AI',
+  'ZHIPU': 'Zhipu AI',
+  'SPACEXAI': 'xAI',
+  'XAI': 'xAI',
+  'KWAIKAT': 'Kuaishou',
+  'KWAI': 'Kuaishou',
+  'ALIBABA CLOUD': 'Alibaba',
+  'QWEN': 'Alibaba',
+  'META AI': 'Meta',
+  'MISTRAL AI': 'Mistral',
+  'AMAZON WEB SERVICES': 'Amazon',
+  'AWS': 'Amazon'
+};
+
+// Resolve o nome de empresa vindo de qualquer fonte para o nome canônico da régua.
+function canonicalCompany(name) {
+  const raw = String(name || '').trim();
+  if (!raw) return '';
+  const alias = COMPANY_ALIASES[raw.toUpperCase()];
+  if (alias) return alias;
+  // Já canônico? devolve com a grafia oficial das tabelas de cor.
+  const all = { ...COMPANY_COLORS, ...BENCH_ONLY_COLORS };
+  const hit = Object.keys(all).find(k => k.toUpperCase() === raw.toUpperCase());
+  return hit || raw;
+}
+
+// Cor canônica da empresa — mesma resposta na régua e no guia.
+function companyColor(name) {
+  const c = canonicalCompany(name);
+  return COMPANY_COLORS[c] || BENCH_ONLY_COLORS[c] || '#6b6860';
+}
+
 // ─── ROTEAMENTO DE EMPRESAS DESCONHECIDAS ───
 // Empresa "conhecida" = tem entrada em COMPANY_COLORS (mesma definição do publish.mjs).
 // Lançamento de empresa desconhecida não some da régua: cai no "Outros" do grupo
