@@ -170,6 +170,41 @@ function companyColor(name) {
   return COMPANY_COLORS[c] || BENCH_ONLY_COLORS[c] || '#6b6860';
 }
 
+// Normaliza nome de modelo para comparação entre a planilha e os benchmarks.
+// Só serve para dizer se DUAS fontes falam do mesmo modelo — nunca para exibir.
+function normModel(s) {
+  return String(s == null ? '' : s).toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]/g, '');
+}
+
+// ─── CARREGAMENTO DA PLANILHA (Google Sheets via gviz/JSONP) ───
+// Mora aqui porque as DUAS páginas precisam: a régua para desenhar a timeline,
+// o guia para saber quais modelos existem na régua e poder linkar para eles.
+function gvizFetch(tab) {
+  return new Promise((resolve, reject) => {
+    const cb = '_gv_' + tab.replace(/[^a-zA-Z0-9]/g, '_') + '_' + Date.now();
+    const timer = setTimeout(() => {
+      delete window[cb];
+      reject(new Error('timeout'));
+    }, 15000);
+    window[cb] = function (resp) {
+      clearTimeout(timer);
+      delete window[cb];
+      resolve(resp);
+    };
+    const s = document.createElement('script');
+    s.src = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(tab)}&tqx=responseHandler:${cb}`;
+    s.onerror = () => {
+      clearTimeout(timer);
+      delete window[cb];
+      reject(new Error('load failed'));
+    };
+    s.onload = () => { if (s.parentNode) s.parentNode.removeChild(s); };
+    document.head.appendChild(s);
+  });
+}
+
 // ─── ROTEAMENTO DE EMPRESAS DESCONHECIDAS ───
 // Empresa "conhecida" = tem entrada em COMPANY_COLORS (mesma definição do publish.mjs).
 // Lançamento de empresa desconhecida não some da régua: cai no "Outros" do grupo

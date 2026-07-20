@@ -3,30 +3,8 @@
    Carregamento de dados, tooltip, drag-to-pan, exportação PNG
    ═══════════════════════════════════════════════════════════════ */
 
-// ─── CARREGAMENTO DA PLANILHA (Google Sheets via gviz/JSONP) ───
-function gvizFetch(tab) {
-  return new Promise((resolve, reject) => {
-    const cb = '_gv_' + tab.replace(/[^a-zA-Z0-9]/g, '_') + '_' + Date.now();
-    const timer = setTimeout(() => {
-      delete window[cb];
-      reject(new Error('timeout'));
-    }, 15000);
-    window[cb] = function (resp) {
-      clearTimeout(timer);
-      delete window[cb];
-      resolve(resp);
-    };
-    const s = document.createElement('script');
-    s.src = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(tab)}&tqx=responseHandler:${cb}`;
-    s.onerror = () => {
-      clearTimeout(timer);
-      delete window[cb];
-      reject(new Error('load failed'));
-    };
-    s.onload = () => { if (s.parentNode) s.parentNode.removeChild(s); };
-    document.head.appendChild(s);
-  });
-}
+// gvizFetch mora em data.js: o guia também carrega a planilha, para saber
+// quais modelos existem na régua e poder linkar para a pílula certa.
 
 // ─── CACHE LOCAL (sessionStorage) ───
 function readCache() {
@@ -157,21 +135,29 @@ function processRows(allRows) {
 }
 
 // ─── DEEP-LINK VINDO DO GUIA ───
-// guia.html linka "index.html#emp=Anthropic". Aqui localizamos o lançamento
-// mais recente daquela empresa e reusamos o mesmo focusPill das Novidades.
-// O nome já chega canônico (canonicalCompany em data.js), então bate com a
-// coluna `emp` da planilha sem tratamento extra.
+// O guia linka "index.html#emp=OpenAI&mod=GPT-5.6 Sol" quando o modelo existe
+// na régua, ou só "#emp=OpenAI" quando não existe (aí abre o lançamento mais
+// recente da empresa). Reusa o focusPill das Novidades, que rola a régua até a
+// pílula e abre o tooltip. O nome da empresa já chega canônico via data.js.
 function focusCompanyFromHash() {
-  const m = (location.hash || '').match(/[#&]emp=([^&]+)/);
-  if (!m) return;
-  let target;
-  try {
-    target = decodeURIComponent(m[1]).trim().toUpperCase();
-  } catch (e) {
-    return; // hash malformado — ignora em silêncio
+  const hash = location.hash || '';
+  const readParam = re => {
+    const m = hash.match(re);
+    if (!m) return '';
+    try { return decodeURIComponent(m[1]).trim(); } catch (e) { return ''; }
+  };
+  const emp = readParam(/[#&]emp=([^&]+)/);
+  const mod = readParam(/[#&]mod=([^&]+)/);
+  if (!emp && !mod) return;
+
+  let hits = RAW;
+  if (emp) hits = hits.filter(r => (r.emp || '').trim().toUpperCase() === emp.toUpperCase());
+  // Com modelo: exige nome idêntico (normalizado). Nunca aproxima — mandar para
+  // o modelo errado é pior do que só posicionar na empresa.
+  if (mod) {
+    const exact = hits.filter(r => normModel(r.mod) === normModel(mod));
+    if (exact.length) hits = exact;
   }
-  if (!target) return;
-  const hits = RAW.filter(r => (r.emp || '').trim().toUpperCase() === target);
   if (!hits.length) return;
   const latest = hits.reduce((a, b) => (b.dias > a.dias ? b : a));
   focusPill(latest);

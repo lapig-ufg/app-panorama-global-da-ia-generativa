@@ -87,6 +87,12 @@
   border-color: var(--hair);
 }
 
+/* Categoria sem dados nesta rodada */
+.qm-navlink.is-off {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
 /* ─── Introdução ─── */
 .qm-intro { margin-bottom: 26px; }
 
@@ -235,6 +241,55 @@
   color: var(--ink);
   line-height: 1.25;
   overflow-wrap: anywhere;
+}
+
+/* Nome do modelo que existe na régua: clicável, leva à pílula dele.
+   O sublinhado fica sempre visível — sem ele não há como saber quais nomes
+   levam à régua e quais são só texto. */
+.qm-modellink {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink-faint);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.qm-modellink:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.qm-modellink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.qm-goto {
+  width: 10px;
+  height: 10px;
+  margin-left: 3px;
+  opacity: 0;
+  vertical-align: 1px;
+  transition: opacity 0.15s;
+}
+
+.qm-modellink:hover .qm-goto,
+.qm-modellink:focus-visible .qm-goto { opacity: 0.75; }
+
+/* Modelo ainda não cadastrado na régua: sem link, sem chamar atenção. */
+.qm-nolink { cursor: help; }
+
+/* Cobertura do ranking na régua */
+.qm-cov {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.03em;
+  text-transform: none;
+  color: var(--ink-muted);
+  background: var(--paper-tint);
+  padding: 2px 7px;
+  border-radius: 999px;
+  margin-left: 2px;
 }
 
 .qm-rec-company {
@@ -503,6 +558,29 @@
   color: var(--ink-muted);
   font-size: 13px;
   padding: 48px 0;
+}
+
+/* Categoria sem dados: visível, não escondida */
+.qm-cat.is-unavailable .qm-cat-hd { border-bottom-color: var(--hair); }
+.qm-cat.is-unavailable h2 { color: var(--ink-muted); }
+
+.qm-unavailable {
+  margin: 0;
+  padding: 16px 18px;
+  background: var(--paper);
+  border: 1px dashed var(--hair);
+  border-radius: 10px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.qm-unavailable code {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--paper-tint);
+  padding: 1px 5px;
+  border-radius: 4px;
 }
 
 /* ─── Nota metodológica ─── */

@@ -138,7 +138,8 @@ async function main() {
     process.exit(1);
   }
 
-  const { canonicalCompany } = await loadDataJs(['canonicalCompany']);
+  const { canonicalCompany, COMPANY_COLORS, BENCH_ONLY_COLORS } =
+    await loadDataJs(['canonicalCompany', 'COMPANY_COLORS', 'BENCH_ONLY_COLORS']);
 
   console.log(`Buscando ${API_URL}…`);
   const res = await fetch(API_URL, {
@@ -204,6 +205,45 @@ async function main() {
       top,
     };
   });
+
+  /* ─── Guardas ───
+     Sem isto, uma resposta ruim da API sobrescreve em silêncio um arquivo bom,
+     e o site publica uma página vazia até alguém reparar. Preferimos abortar e
+     manter o benchmarks.json anterior no ar. */
+  const vazios = benchmarks.filter(b => !b.top.length);
+
+  if (models.length < 50) {
+    console.error(`::error::A API devolveu só ${models.length} modelos (esperado: centenas). ` +
+      'Nada foi escrito — o benchmarks.json anterior continua valendo.');
+    process.exit(1);
+  }
+  if (vazios.length > benchmarks.length / 2) {
+    console.error(`::error::${vazios.length} de ${benchmarks.length} benchmarks voltaram vazios. ` +
+      'Nada foi escrito — o benchmarks.json anterior continua valendo.');
+    process.exit(1);
+  }
+
+  /* Um benchmark isolado vazio provavelmente é chave renomeada na AA
+     (ex.: terminalbench_v2_1 -> v3). O arquivo é gravado do mesmo jeito, para
+     não travar os benchmarks saudáveis, mas o aviso aparece na aba Actions —
+     e o guia mostra a categoria como indisponível em vez de escondê-la. */
+  for (const b of vazios) {
+    console.log(`::warning::Benchmark "${b.key}" (${b.label}) voltou sem nenhum modelo. ` +
+      'A AA pode ter renomeado ou aposentado a chave — confira em artificialanalysis.ai ' +
+      'e atualize BENCHMARKS em automation/update-benchmarks.mjs.');
+  }
+
+  // Empresa nova sem cor/apelido em data.js aparece cinza e com o nome da AA.
+  const conhecidas = new Set(
+    [...Object.keys(COMPANY_COLORS), ...Object.keys(BENCH_ONLY_COLORS)].map(s => s.toUpperCase()));
+  const novas = new Set();
+  for (const b of benchmarks) {
+    for (const m of b.top) if (!conhecidas.has(String(m.creator).toUpperCase())) novas.add(m.creator);
+  }
+  if (novas.size) {
+    console.log(`::warning::Empresas sem entrada em data.js: ${[...novas].join(', ')}. ` +
+      'Adicione em BENCH_ONLY_COLORS (e em COMPANY_ALIASES se a régua usa outro nome).');
+  }
 
   const out = {
     source: 'Artificial Analysis Data API',

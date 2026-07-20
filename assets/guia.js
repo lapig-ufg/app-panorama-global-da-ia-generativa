@@ -66,12 +66,13 @@
   ];
 
   const SLOTS = {
-    best: { key: 'best', label: 'O melhor', hint: 'maior pontuação, sem olhar preço' },
-    value: { key: 'value', label: 'Custo-benefício', hint: 'quase o mesmo desempenho, bem mais barato' },
-    fast: { key: 'fast', label: 'Mais rápido', hint: 'maior velocidade entre os bons' },
+    best: { key: 'best', label: 'O melhor' },
+    value: { key: 'value', label: 'Custo-benefício' },
+    fast: { key: 'fast', label: 'Mais rápido' },
   };
 
   let bmData = null;
+  let reguaIndex = null;   // Map(nome normalizado → linha da régua) ou null se a planilha não carregou
 
   function escapeHtml(s) {
     return String(s == null ? '' : s)
@@ -106,47 +107,89 @@
     return `<span class="qm-mark" style="background:${color}">${inner}</span>`;
   }
 
-  // ─── Escolhe os destaques de uma categoria ───
-  // Quando o mesmo modelo ganha dois papéis (comum: o barato também é o rápido),
-  // os selos se juntam num card só em vez de repetir o modelo.
+  // ─── Escolhe os três destaques de uma categoria ───
+  // Sempre três modelos DISTINTOS. Quando o campeão de um critério já ocupa
+  // outro card (o mais barato costuma ser o mais rápido), passamos para o
+  // próximo daquele critério — e a legenda do card diz exatamente isso, para
+  // não afirmar "o mais rápido" sobre quem é o segundo.
   function pickRecommendations(list) {
     if (!list.length) return [];
     const best = list[0];
     const floor = best.score * FLOOR;
-    const qualified = list.filter(m => m.score >= floor);
+    let qualified = list.filter(m => m.score >= floor);
+    if (qualified.length < 3) qualified = list.slice(0, 3); // piso restritivo demais
 
-    const cheapest = qualified
-      .filter(m => m.price_1m_blended > 0)
-      .sort((a, b) => a.price_1m_blended - b.price_1m_blended)[0];
-    const fastest = qualified
-      .filter(m => m.tok_per_sec > 0)
-      .sort((a, b) => b.tok_per_sec - a.tok_per_sec)[0];
+    const keyOf = m => `${m.creator}|${m.model}`;
+    const taken = new Set();
+
+    // Custo-benefício = maior pontuação por dólar (não o mais barato: o mais
+    // barato tende a ser o pior da lista que ainda passa no piso).
+    const byValue = qualified.filter(m => m.price_1m_blended > 0)
+      .slice().sort((a, b) => (b.score / b.price_1m_blended) - (a.score / a.price_1m_blended));
+    const bySpeed = qualified.filter(m => m.tok_per_sec > 0)
+      .slice().sort((a, b) => b.tok_per_sec - a.tok_per_sec);
 
     const slots = [];
-    const add = (m, slot) => {
-      if (!m) return;
-      const key = `${m.creator}|${m.model}`;
-      const hit = slots.find(s => s.key === key);
-      if (hit) hit.slots.push(slot);
-      else slots.push({ key, model: m, slots: [slot] });
+    const add = (m, slot, hintTop, hintNext, ranking) => {
+      if (!m || taken.has(keyOf(m))) return;
+      taken.add(keyOf(m));
+      const isTop = ranking && ranking[0] && keyOf(ranking[0]) === keyOf(m);
+      slots.push({ model: m, slot, hint: isTop ? hintTop : hintNext });
     };
-    add(best, SLOTS.best);
-    add(cheapest, SLOTS.value);
-    add(fastest, SLOTS.fast);
+    const free = arr => arr.find(m => !taken.has(keyOf(m)));
+
+    add(best, SLOTS.best, 'maior pontuação da categoria', 'maior pontuação da categoria', [best]);
+    add(free(byValue), SLOTS.value,
+      'melhor pontuação por dólar entre os que passam no piso',
+      'melhor pontuação por dólar entre as demais opções', byValue);
+    add(free(bySpeed), SLOTS.fast,
+      'maior velocidade entre os que passam no piso',
+      'maior velocidade entre as demais opções', bySpeed);
+
+    // Se algum critério não teve candidato (sem preço ou sem velocidade
+    // medidos), completa por pontuação para manter os três cards.
+    for (const m of qualified) {
+      if (slots.length >= 3) break;
+      add(m, SLOTS.best, 'próxima melhor pontuação', 'próxima melhor pontuação', null);
+    }
     return slots;
+  }
+
+  // ─── Ligação com a régua ───
+  // Só linkamos com nome idêntico (normalizado). Aproximar seria pior que não
+  // linkar: "GPT-5.6 Sol" contém "GPT-5" sem ser o mesmo modelo.
+  function reguaLink(m) {
+    const canonical = (typeof canonicalCompany === 'function') ? canonicalCompany(m.creator) : m.creator;
+    const hit = reguaIndex && reguaIndex.get(normModel(m.model));
+    if (hit) {
+      return {
+        href: `index.html#emp=${encodeURIComponent(hit.emp)}&mod=${encodeURIComponent(hit.mod)}`,
+        title: `Ver "${hit.mod}" na régua`,
+        onRegua: true,
+        company: canonical,
+      };
+    }
+    return { href: null, title: '', onRegua: false, company: canonical };
+  }
+
+  // Quantos modelos de um ranking existem na régua
+  function coverage(bench) {
+    if (!reguaIndex) return null;
+    const total = bench.top.length;
+    const on = bench.top.filter(m => reguaIndex.has(normModel(m.model))).length;
+    return { on, total };
   }
 
   // ─── Card de recomendação ───
   function recCard(entry, bench, best) {
     const m = entry.model;
-    const isBest = entry.slots.some(s => s.key === 'best');
+    const isBest = entry.slot.key === 'best';
     const price = fmtPrice(m.price_1m_blended);
     const speed = fmtSpeed(m.tok_per_sec);
-    const canonical = (typeof canonicalCompany === 'function') ? canonicalCompany(m.creator) : m.creator;
+    const link = reguaLink(m);
+    const canonical = link.company;
 
-    const tags = entry.slots.map(s =>
-      `<span class="qm-slot qm-slot-${s.key}" title="${escapeHtml(s.hint)}">${escapeHtml(s.label)}</span>`
-    ).join('');
+    const tags = `<span class="qm-slot qm-slot-${entry.slot.key}" title="${escapeHtml(entry.hint)}">${escapeHtml(entry.slot.label)}</span>`;
 
     // Quanto o alternativo economiza / entrega em relação ao líder
     let delta = '';
@@ -163,13 +206,18 @@
       ? '<span class="qm-open" title="Pesos abertos — pode ser executado localmente">aberto</span>'
       : '';
 
+    // Nome do modelo vira link só quando existe na régua com o mesmo nome.
+    const nameHtml = link.onRegua
+      ? `<a class="qm-modellink" href="${link.href}" title="${escapeHtml(link.title)}">${escapeHtml(m.model)}<svg class="qm-goto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>`
+      : `<span class="qm-nolink" title="Ainda não está na régua">${escapeHtml(m.model)}</span>`;
+
     return `
       <article class="qm-rec${isBest ? ' is-best' : ''}">
         <div class="qm-rec-slots">${tags}</div>
         <div class="qm-rec-id">
           ${companyMark(m.creator)}
           <div class="qm-rec-names">
-            <span class="qm-rec-model">${escapeHtml(m.model)}${openTag}</span>
+            <span class="qm-rec-model">${nameHtml}${openTag}</span>
             <a class="qm-rec-company" href="index.html#emp=${encodeURIComponent(canonical)}"
                title="Ver os lançamentos da ${escapeHtml(canonical)} na régua">${escapeHtml(canonical)}</a>
           </div>
@@ -195,12 +243,16 @@
       const canonical = (typeof canonicalCompany === 'function') ? canonicalCompany(m.creator) : m.creator;
       const color = (typeof companyColor === 'function') ? companyColor(m.creator) : '#6b6860';
       const price = fmtPrice(m.price_1m_blended);
+      const link = reguaLink(m);
+      const nameHtml = link.onRegua
+        ? `<a class="qm-row-model qm-modellink" href="${link.href}" title="${escapeHtml(link.title)}">${escapeHtml(m.model)}</a>`
+        : `<span class="qm-row-model qm-nolink" title="Ainda não está na régua">${escapeHtml(m.model)}</span>`;
       return `
         <li class="qm-row${i === 0 ? ' is-first' : ''}">
           <span class="qm-rank">${i + 1}</span>
           <span class="qm-row-name">
             <span class="qm-dot" style="background:${color}"></span>
-            <span class="qm-row-model">${escapeHtml(m.model)}</span>
+            ${nameHtml}
             ${m.variant ? `<span class="qm-row-variant" title="${escapeHtml(m.variant)}">${escapeHtml(m.variant)}</span>` : ''}
             <span class="qm-row-company">${escapeHtml(canonical)}</span>
           </span>
@@ -214,7 +266,22 @@
   // ─── Uma seção de categoria ───
   function categorySection(cat) {
     const bench = bmData.benchmarks.find(b => b.key === cat.primary);
-    if (!bench || !bench.top.length) return '';
+    // Categoria sem dados fica VISÍVEL como indisponível. Escondê-la faria o
+    // benchmark aposentado pela AA (ex.: terminalbench_v2_1 -> v3) sumir a
+    // categoria inteira da página sem ninguém perceber.
+    if (!bench || !bench.top.length) {
+      return `
+        <section class="qm-cat is-unavailable" id="cat-${cat.id}">
+          <header class="qm-cat-hd">
+            <h2>${escapeHtml(cat.label)}</h2>
+            <p>${escapeHtml(cat.question)}</p>
+          </header>
+          <p class="qm-unavailable">
+            Sem dados nesta rodada — o teste que embasa esta categoria
+            (<code>${escapeHtml(cat.primary)}</code>) não veio na última coleta.
+          </p>
+        </section>`;
+    }
 
     const recs = pickRecommendations(bench.top);
     const best = bench.top[0];
@@ -226,6 +293,11 @@
       ? ` · também medido por ${support.map(b => b.label).join(', ')}`
       : '';
 
+    const cov = coverage(bench);
+    const covTxt = cov
+      ? ` <span class="qm-cov">${cov.on} de ${cov.total} estão na régua</span>`
+      : '';
+
     return `
       <section class="qm-cat" id="cat-${cat.id}">
         <header class="qm-cat-hd">
@@ -234,7 +306,7 @@
         </header>
         <div class="qm-trio">${recs.map(r => recCard(r, bench, best)).join('')}</div>
         <details class="qm-full">
-          <summary>Ranking completo — ${bench.top.length} modelos</summary>
+          <summary>Ranking completo — ${bench.top.length} modelos${covTxt}</summary>
           <ul class="qm-list">${fullList(bench)}</ul>
           <p class="qm-src">
             Base: <strong>${escapeHtml(bench.label)}</strong> — ${escapeHtml(bench.description)}.
@@ -244,13 +316,65 @@
       </section>`;
   }
 
+  // ─── Índice da régua (planilha) ───
+  // Sabendo quais modelos estão na régua, o guia linka para a pílula certa e
+  // mostra a cobertura — o que também expõe o que falta cadastrar na planilha.
+  function parseSheetRows(data) {
+    const rows = [];
+    if (!data || !data.table || !data.table.rows) return rows;
+    for (const row of data.table.rows.slice(1)) {   // pula o cabeçalho
+      const c = row.c;
+      if (!c || !c[0] || !c[1] || !c[2]) continue;
+      if (!c[5] || String(c[5].v || '').toLowerCase() !== 'publicado') continue;
+      rows.push({ emp: String(c[1].v || '').trim(), mod: String(c[2].v || '').trim() });
+    }
+    return rows;
+  }
+
+  function rowsFromCache() {
+    try {
+      const raw = sessionStorage.getItem(CONFIG.CACHE_KEY);
+      if (!raw) return null;
+      const obj = JSON.parse(raw);
+      if (!obj || !obj.ts || !Array.isArray(obj.rows)) return null;
+      if (Date.now() - obj.ts > CONFIG.CACHE_TTL_MS) return null;
+      return obj.rows;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async function loadRegua() {
+    // Se a timeline foi aberta nesta sessão, reaproveita o cache dela.
+    let rows = rowsFromCache();
+    if (!rows) {
+      try {
+        rows = parseSheetRows(await gvizFetch(CONFIG.SHEET_TABS[0]));
+      } catch (e) {
+        console.warn('Régua indisponível — o guia segue sem os links:', e);
+        return null;   // degrada: nomes viram texto simples, sem cobertura
+      }
+    }
+    const idx = new Map();
+    for (const r of rows) {
+      if (r && r.mod) idx.set(normModel(r.mod), { emp: r.emp, mod: r.mod });
+    }
+    return idx;
+  }
+
   // ─── Índice de navegação entre categorias ───
   function renderNav() {
     const el = document.getElementById('qm-nav');
     if (!el) return;
+    // Todas as categorias entram no índice, inclusive as sem dados: a seção
+    // delas existe na página (marcada como indisponível), então o link tem
+    // destino — e a ausência fica visível em vez de silenciosa.
     el.innerHTML = CATEGORIES
-      .filter(c => bmData.benchmarks.some(b => b.key === c.primary && b.top.length))
-      .map(c => `<a class="qm-navlink" href="#cat-${c.id}">${escapeHtml(c.label)}</a>`)
+      .map(c => {
+        const b = bmData.benchmarks.find(x => x.key === c.primary);
+        const off = (!b || !b.top.length) ? ' is-off' : '';
+        return `<a class="qm-navlink${off}" href="#cat-${c.id}">${escapeHtml(c.label)}</a>`;
+      })
       .join('');
   }
 
@@ -287,6 +411,10 @@
         : '<p class="qm-empty">Não foi possível carregar os dados de benchmark agora.</p>';
       return;
     }
+    // A régua é complementar: se a planilha falhar, o guia renderiza igual,
+    // só sem os links e sem a linha de cobertura.
+    reguaIndex = await loadRegua();
+
     renderMeta();
     renderNav();
     root.innerHTML = CATEGORIES.map(categorySection).join('') ||
