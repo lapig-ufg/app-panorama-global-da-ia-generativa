@@ -138,8 +138,8 @@ async function main() {
     process.exit(1);
   }
 
-  const { canonicalCompany, COMPANY_COLORS, BENCH_ONLY_COLORS } =
-    await loadDataJs(['canonicalCompany', 'COMPANY_COLORS', 'BENCH_ONLY_COLORS']);
+  const { canonicalCompany, COMPANY_COLORS, BENCH_ONLY_COLORS, MODEL_ALIASES } =
+    await loadDataJs(['canonicalCompany', 'COMPANY_COLORS', 'BENCH_ONLY_COLORS', 'MODEL_ALIASES']);
 
   console.log(`Buscando ${API_URL}…`);
   const res = await fetch(API_URL, {
@@ -243,6 +243,29 @@ async function main() {
   if (novas.size) {
     console.log(`::warning::Empresas sem entrada em data.js: ${[...novas].join(', ')}. ` +
       'Adicione em BENCH_ONLY_COLORS (e em COMPANY_ALIASES se a régua usa outro nome).');
+  }
+
+  // Modelos do top-N que a régua provavelmente já tem sob outro nome, mas que
+  // não casam nem direto nem via MODEL_ALIASES. Sinal para o curador adicionar
+  // um alias (ou cadastrar o modelo na régua, se for realmente novo).
+  // Aviso apenas — não bloqueia a gravação do benchmarks.json.
+  const aliasValues = new Set(Object.values(MODEL_ALIASES || {}));
+  const semLink = new Set();
+  for (const b of benchmarks) {
+    for (const m of b.top) {
+      const norm = String(m.model).toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]/g, '');
+      if (MODEL_ALIASES && (MODEL_ALIASES[norm] || aliasValues.has(norm))) continue;
+      semLink.add(`${m.creator} · ${m.model}`);
+    }
+  }
+  if (semLink.size) {
+    const lista = [...semLink].slice(0, 20).join(' | ');
+    console.log(`::notice::${semLink.size} modelo(s) no top-N sem link para a régua ` +
+      `(sem correspondência direta nem em MODEL_ALIASES). Se algum já está na régua ` +
+      `sob outro nome, adicione o alias em assets/data.js. Primeiros: ${lista}` +
+      (semLink.size > 20 ? ` … (+${semLink.size - 20})` : ''));
   }
 
   const out = {

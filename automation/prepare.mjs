@@ -25,7 +25,7 @@ function loadDataJs(fields) {
   vm.runInContext(`${src}\n;globalThis.__X = { ${fields.join(', ')} };`, ctx, { filename: 'data.js' });
   return ctx.__X;
 }
-const { COMPANY_COLORS, LOGO_MAP, CONFIG } = loadDataJs(['COMPANY_COLORS', 'LOGO_MAP', 'CONFIG']);
+const { COMPANY_COLORS, LOGO_MAP, CONFIG, normModel } = loadDataJs(['COMPANY_COLORS', 'LOGO_MAP', 'CONFIG', 'normModel']);
 const companies = [...new Set([...Object.keys(COMPANY_COLORS), ...Object.keys(LOGO_MAP)])].sort();
 
 // ── 2. Lê a planilha via gviz, espelhando o parse de assets/app.js ──
@@ -71,7 +71,10 @@ for (const tab of tabs) {
     console.error(`[prepare] aviso: não li a aba "${tab}" (${e.message}) — seguindo`);
   }
 }
-const dedup = new Set(existing.map(r => `${r.date}|${r.emp.trim().toUpperCase()}|${r.mod.trim().toUpperCase()}`));
+// Dedup por data + empresa + MODELO NORMALIZADO (normModel aplica MODEL_ALIASES):
+// assim um candidato "GPT-5.6 Sol" não vira duplicata do "GPT-5.6 (SOL, TERRA E
+// LUNA)" só por grafia diferente — ambos colapsam no mesmo canonical.
+const dedup = new Set(existing.map(r => `${r.date}|${r.emp.trim().toUpperCase()}|${normModel(r.mod)}`));
 
 // ── 3. Monta a janela e o prompt ──
 const iso = d => d.toISOString().slice(0, 10);

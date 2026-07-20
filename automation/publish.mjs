@@ -28,7 +28,7 @@ function loadDataJs(fields) {
   vm.runInContext(`${src}\n;globalThis.__X = { ${fields.join(', ')} };`, ctx, { filename: 'data.js' });
   return ctx.__X;
 }
-const { COMPANY_COLORS } = loadDataJs(['COMPANY_COLORS']);
+const { COMPANY_COLORS, normModel } = loadDataJs(['COMPANY_COLORS', 'normModel']);
 const known = new Set(Object.keys(COMPANY_COLORS).map(k => k.toUpperCase()));
 
 // Usamos process.exitCode (não process.exit) para deixar o event loop drenar
@@ -70,7 +70,11 @@ for (const [i, c] of all.entries()) {
   if (!/^https?:\/\//.test(c.referencia || '')) { descartes.push(`${tag}: referência sem URL`); continue; }
   const conf = Number(c.confianca);
   if (Number.isNaN(conf) || conf < CONF_MIN) { descartes.push(`${tag}: confiança ${c.confianca} < ${CONF_MIN}`); continue; }
-  const key = `${c.data}|${String(c.empresa).trim().toUpperCase()}|${String(c.modelo).trim().toUpperCase()}`;
+  // Chave de dedup alinhada com prepare.mjs: empresa em MAIÚSCULAS + modelo
+  // normalizado via normModel (MODEL_ALIASES colapsa sinônimos). Assim um
+  // candidato "GPT-5.6 Sol" é reconhecido como já cadastrado quando a régua tem
+  // "GPT-5.6 (SOL, TERRA E LUNA)" — sem reentrar como duplicata.
+  const key = `${c.data}|${String(c.empresa).trim().toUpperCase()}|${normModel(c.modelo)}`;
   if (dedupKeys.has(key)) { descartes.push(`${tag}: já cadastrado (dedup)`); continue; }
   dedupKeys.add(key);
   valid.push(c);
@@ -114,8 +118,48 @@ async function buildSnippet(c) {
   ].join('\n');
 }
 
+// Gera entradas sugeridas de MODEL_ALIASES quando o modelo da régua agrupa
+// variantes entre parênteses — ex.: "GPT-5.6 (SOL, TERRA E LUNA)" gera três
+// aliases (uma por variante) apontando para o nome canônico da régua. Assim o
+// guia linka cada variante que vier da AA, e a automação reconhece cada uma
+// como já cadastrada (dedup via normModel). Sem parênteses → não há o que
+// colapsar, devolve string vazia.
+function buildModelAliasesSnippet(modelo) {
+  const m = String(modelo || '').match(/^(.*?)\s*\(([^()]+)\)\s*$/);
+  if (!m) return '';
+  const family = m[1].trim();
+  // Separadores aceitos: ",", "/" e " E " (a régua às vezes grafou "SOL, TERRA E LUNA").
+  const variants = m[2].split(/[,\/]|\s+e\s+/i).map(v => v.trim()).filter(Boolean);
+  if (variants.length < 2) return '';
+  const canonicalNorm = normModel(modelo);
+  const famNorm = normModel(family);
+  const lines = variants.map(v => {
+    const vNorm = normModel(v);
+    // Sempre qualifica a variante com a família — alias "terra" sozinho colidiria
+    // com qualquer modelo chamado só "Terra". Só não qualifica se a variante
+    // já contiver a família (ex.: "Claude Opus" → "claudeopus" já tem "claude").
+    const specific = vNorm.startsWith(famNorm) ? vNorm : `${famNorm}${vNorm}`;
+    if (specific === canonicalNorm) return null;
+    return `  '${specific}': '${canonicalNorm}', // ${family} ${v} → ${modelo}`;
+  }).filter(Boolean);
+  if (!lines.length) return '';
+  return [
+    `// ── MODEL_ALIASES p/ "${modelo}" (colapsa variantes da AA no nome da régua) ──`,
+    ...lines,
+  ].join('\n');
+}
+
 const snippets = [];
 for (const c of novas) snippets.push({ empresa: c.empresa, snippet: await buildSnippet(c) });
+
+// Aliases sugeridos para todo modelo válido cujo nome agrupa variantes entre
+// parênteses (não só empresas novas — o nome agrupado pode aparecer em empresa
+// já conhecida, como "GPT-5.6 (SOL, TERRA E LUNA)" na OpenAI). Um por modelo.
+const aliasSnippets = [];
+for (const c of valid) {
+  const a = buildModelAliasesSnippet(c.modelo);
+  if (a) aliasSnippets.push({ modelo: c.modelo, snippet: a });
+}
 
 // ── resumo legível (sempre impresso) ──
 console.log('\n════════ RESUMO ════════');
@@ -132,6 +176,10 @@ if (snippets.length) {
   console.log('\nSNIPPETS (empresa nova):');
   for (const s of snippets) console.log(`\n${s.snippet}`);
 }
+if (aliasSnippets.length) {
+  console.log('\nMODEL_ALIASES sugeridos (variantes agrupadas entre parênteses):');
+  for (const s of aliasSnippets) console.log(`\n${s.snippet}`);
+}
 
 // ── payload p/ o Apps Script ──
 const payload = {
@@ -145,6 +193,7 @@ const payload = {
     grupo: c.grupo_sugerido || '', pais: c.pais || '',
   })),
   novas: snippets,
+  aliases: aliasSnippets,
 };
 
 if (!valid.length) {

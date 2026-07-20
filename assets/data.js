@@ -170,12 +170,54 @@ function companyColor(name) {
   return COMPANY_COLORS[c] || BENCH_ONLY_COLORS[c] || '#6b6860';
 }
 
+// ─── APELIDOS DE MODELO (fonte externa → nome canônico da régua) ───
+// Análoga a COMPANY_ALIASES, mas para modelos. A Artificial Analysis e a régua
+// nem sempre grafam o mesmo modelo do mesmo jeito — sem esta tabela o guia
+// "Qual modelo usar" deixa de linkar modelos que estão na régua, e a automação
+// pode repor lançamento já cadastrado sob outro nome.
+//
+// Três famílias de caso (todas versão no git — nunca fuzzy automático):
+//   1. Variantes agrupadas numa linha só da régua
+//      (AA lista "GPT-5.6 Sol/Terra/Luna" separadas; a régua tem uma linha
+//      "GPT-5.6 (SOL, TERRA E LUNA)").
+//   2. Nome comercial diferente
+//      (AA: "GPT-5.5", régua: "ChatGPT 5.5"; AA: "Claude Opus 4.8", régua: "Opus 4.8").
+//   3. Sufixo "Preview"/"Beta"/configuração que a régua não repete
+//      (AA: "Gemini 3.1 Pro Preview", régua: "Gemini 3.1 Pro").
+//
+// A chave é o normModel do nome COMO VEM da fonte externa; o valor é o
+// normModel do nome COMO ESTÁ NA RÉGUA. Consumida por assets/guia.js (link),
+// assets/app.js (deep-link) e automation/prepare.mjs/publish.mjs (dedup).
+const MODEL_ALIASES = {
+  // 1 — variantes agrupadas numa linha da régua:
+  'gpt56sol':           'gpt56solterraeluna',   // GPT-5.6 Sol       → GPT-5.6 (SOL, TERRA E LUNA)
+  'gpt56terra':         'gpt56solterraeluna',
+  'gpt56luna':          'gpt56solterraeluna',
+  'claude4opus':        'claude4opussonnet',    // Claude 4 Opus     → Claude 4 (Opus/Sonnet)
+  'claude4sonnet':      'claude4opussonnet',
+  // 2 — nome comercial diferente:
+  'gpt55':              'chatgpt55',            // GPT-5.5           → ChatGPT 5.5
+  'claudeopus48':       'opus48',               // Claude Opus 4.8   → Opus 4.8
+  'gpt5codex':          'codex',                // GPT-5 Codex       → Codex
+  // 3 — sufixo "Preview"/"Beta"/configuração que a régua não repete:
+  'gemini31propreview': 'gemini31pro',          // Gemini 3.1 Pro Preview → Gemini 3.1 Pro
+  'gemini3propreview':  'gemini3',              // Gemini 3 Pro Preview   → Gemini 3
+  'grok43':             'grok43beta',           // Grok 4.3          → Grok 4.3 (BETA)
+  'musespark11':        'musespark',            // Muse Spark 1.1    → Muse Spark
+  'nemotron3ultra550ba55b': 'nemotron3ultra',   // Nemotron 3 Ultra 550B A55B → Nemotron 3 Ultra
+  'deepseekv32speciale': 'deepseekv32',         // DeepSeek V3.2 Speciale → DeepSeek-V3.2
+};
+
 // Normaliza nome de modelo para comparação entre a planilha e os benchmarks.
 // Só serve para dizer se DUAS fontes falam do mesmo modelo — nunca para exibir.
+// Aplica MODEL_ALIASES depois de normalizar: dois sinônimos colapsam no mesmo
+// canonical, e o nome canônico da régua casa consigo mesmo (o alias aponta pra
+// ele). Quem não está na tabela devolve o próprio nome normalizado.
 function normModel(s) {
-  return String(s == null ? '' : s).toLowerCase()
+  const raw = String(s == null ? '' : s).toLowerCase()
     .normalize('NFD').replace(/[̀-ͯ]/g, '')
     .replace(/[^a-z0-9]/g, '');
+  return MODEL_ALIASES[raw] || raw;
 }
 
 // ─── CARREGAMENTO DA PLANILHA (Google Sheets via gviz/JSONP) ───

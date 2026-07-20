@@ -168,8 +168,11 @@
   }
 
   // ─── Ligação com a régua ───
-  // Só linkamos com nome idêntico (normalizado). Aproximar seria pior que não
-  // linkar: "GPT-5.6 Sol" contém "GPT-5" sem ser o mesmo modelo.
+  // Linka pelo nome normalizado via MODEL_ALIASES (data.js): sinônimos conhecidos
+  // (variantes agrupadas, nome comercial diferente, sufixo "Preview"/"Beta")
+  // colapsam no nome canônico da régua. Aproximação fuzzy automática NÃO acontece
+  // — só mapeamentos explícitos e versionados no git. Quem não está na tabela
+  // precisa de nome idêntico para linkar.
   function reguaLink(m) {
     const canonical = (typeof canonicalCompany === 'function') ? canonicalCompany(m.creator) : m.creator;
     const hit = reguaIndex && reguaIndex.get(normModel(m.model));
