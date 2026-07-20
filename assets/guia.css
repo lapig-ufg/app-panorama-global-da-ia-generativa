@@ -196,7 +196,7 @@
   color: var(--accent);
 }
 
-/* Selo posicional ("2º melhor"): não é superlativo, então fica discreto */
+/* Selo posicional ("2º mais capaz"): não é superlativo, então fica discreto */
 .qm-slot-rank {
   background: transparent;
   color: var(--ink-muted);

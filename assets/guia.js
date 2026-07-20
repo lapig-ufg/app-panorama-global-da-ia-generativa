@@ -66,7 +66,7 @@
   ];
 
   const SLOTS = {
-    best: { key: 'best', label: 'O melhor', hint: 'maior pontuação da categoria' },
+    best: { key: 'best', label: 'Mais capaz', hint: 'maior pontuação da categoria' },
     value: { key: 'value', label: 'Custo-benefício', hint: 'maior pontuação por dólar' },
     fast: { key: 'fast', label: 'Mais rápido', hint: 'maior velocidade (tokens por segundo)' },
   };
@@ -115,7 +115,7 @@
   // rápido" ao segundo colocado seria simplesmente falso, já que o card ao lado
   // mostraria um tok/s maior.
   //
-  // A vaga que sobra é preenchida por posição ("2º melhor"), que é verdadeira
+  // A vaga que sobra é preenchida por posição ("2º mais capaz"), que é verdadeira
   // por construção: não afirma superioridade em critério nenhum, só diz onde o
   // modelo está no ranking de pontuação.
   function pickRecommendations(list) {
@@ -153,17 +153,24 @@
         model: m,
         slots: [{
           key: 'rank',
-          label: `${i + 1}º melhor`,
+          label: `${i + 1}º mais capaz`,
           hint: `${i + 1}ª maior pontuação da categoria`,
         }],
       });
     }
 
-    // O campeão primeiro; os demais por pontuação.
+    // Ordem dos cards: mais capaz → custo-benefício → mais rápido; demais por pontuação.
+    const SLOT_RANK = { best: 0, value: 1, fast: 2 };
+    const slotRank = c => {
+      let r = Infinity;
+      for (const s of c.slots) {
+        if (SLOT_RANK[s.key] !== undefined) r = Math.min(r, SLOT_RANK[s.key]);
+      }
+      return r;
+    };
     return [...cards.values()].sort((a, b) => {
-      const aB = a.slots.some(s => s.key === 'best') ? 1 : 0;
-      const bB = b.slots.some(s => s.key === 'best') ? 1 : 0;
-      return aB !== bB ? bB - aB : b.model.score - a.model.score;
+      const ra = slotRank(a), rb = slotRank(b);
+      return ra !== rb ? ra - rb : b.model.score - a.model.score;
     });
   }
 
