@@ -94,16 +94,21 @@ body {
 .header-brand {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 20px;
+}
+
+.header-logos {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
 }
 
 .header-logo {
-  height: 52px;
-  width: auto;
-  display: block;
-  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   text-decoration: none;
-  color: inherit;
   cursor: pointer;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
@@ -121,10 +126,26 @@ body {
   border-radius: 4px;
 }
 
-.header-logo svg {
-  height: 100%;
+.header-logo img {
+  height: 44px;
   width: auto;
   display: block;
+  object-fit: contain;
+}
+
+.header-logo.logo-lapig img {
+  height: 48px;
+}
+
+.header-logo.logo-ufg img {
+  height: 42px;
+}
+
+.logo-sep {
+  width: 1px;
+  height: 30px;
+  background: var(--ink-faint);
+  display: inline-block;
 }
 
 .header-titlewrap {
@@ -1183,8 +1204,16 @@ kbd {
     flex-wrap: wrap;
   }
 
-  .header-logo {
-    height: 40px;
+  .header-logo.logo-lapig img {
+    height: 36px;
+  }
+
+  .header-logo.logo-ufg img {
+    height: 32px;
+  }
+
+  .logo-sep {
+    height: 22px;
   }
 
   .app-header h1 {
