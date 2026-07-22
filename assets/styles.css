@@ -1072,37 +1072,77 @@ kbd {
   }
 }
 
-/* ─── BACK TO OBSERVATORY (discreto) ─── */
-.back-to-observatory {
-  position: fixed;
-  bottom: 18px;
-  left: 18px;
-  z-index: 90;
-  display: inline-flex;
+/* ─── BREADCRUMB / BACK TO OBSERVATORY ─── */
+.header-breadcrumb {
+  display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--hair);
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(12px) saturate(140%);
-  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  flex-wrap: wrap;
+}
+
+.header-breadcrumb .bc-sep {
+  font-family: var(--mono);
+  font-size: 10px;
   color: var(--ink-muted);
+  font-weight: 500;
+  opacity: 0.45;
+}
+
+.back-to-observatory {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px 3px 7px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  border: 1px solid rgba(16, 163, 127, 0.28);
+  color: var(--accent);
   font-family: var(--sans);
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.01em;
   text-decoration: none;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 0 1px 6px rgba(16, 163, 127, 0.15);
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* Brilho reluzente discreto (sheen/shimmer) que passa suavemente a cada 5 segundos */
+.back-to-observatory::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  animation: obs-shimmer 5s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes obs-shimmer {
+  0%, 75% {
+    left: -120%;
+  }
+  100% {
+    left: 220%;
+  }
 }
 
 .back-to-observatory:hover,
 .back-to-observatory:focus-visible {
-  background: var(--white);
-  color: var(--accent);
+  background: var(--accent);
+  color: var(--white);
+  border-color: var(--accent);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 3px 12px rgba(16, 163, 127, 0.32);
   outline: none;
 }
 
@@ -1113,22 +1153,11 @@ kbd {
 
 .back-to-observatory svg {
   flex-shrink: 0;
+  transition: transform 0.18s ease;
 }
 
-@media (max-width: 720px) {
-  .back-to-observatory {
-    bottom: 12px;
-    left: 12px;
-    padding: 7px 10px;
-    font-size: 10px;
-  }
-
-  .back-to-observatory span {
-    max-width: 170px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.back-to-observatory:hover svg {
+  transform: translateX(-2px);
 }
 
 /* Reduce-motion friendly */
