@@ -134,16 +134,16 @@ body {
 }
 
 .header-logo.logo-lapig img {
-  height: 72px;
+  height: 52px;
 }
 
 .header-logo.logo-ufg img {
-  height: 44px;
+  height: 40px;
 }
 
 .logo-sep {
   width: 1px;
-  height: 40px;
+  height: 32px;
   background: var(--ink-faint);
   display: inline-block;
 }
@@ -1205,15 +1205,15 @@ kbd {
   }
 
   .header-logo.logo-lapig img {
-    height: 54px;
+    height: 40px;
   }
 
   .header-logo.logo-ufg img {
-    height: 34px;
+    height: 30px;
   }
 
   .logo-sep {
-    height: 30px;
+    height: 24px;
   }
 
   .app-header h1 {
