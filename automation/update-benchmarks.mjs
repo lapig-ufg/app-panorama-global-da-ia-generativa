@@ -146,7 +146,9 @@ function benchmarkScore(model, key) {
 // AA volte atrás, evitando multiplicar duas vezes.
 function normalizeScore(v, isFraction) {
   if (v == null || Number.isNaN(v)) return v;
-  return (isFraction && v <= 1) ? v * 100 : v;
+  // 0–1 → 0–100, arredondando p/ 4 casas: mata o ruído de ponto flutuante
+  // (0.533 * 100 = 53.300000000000004) sem perder fidelidade de ranking.
+  return (isFraction && v <= 1) ? Math.round(v * 1e6) / 1e4 : v;
 }
 
 async function main() {
