@@ -473,21 +473,61 @@
     let table = '';
     if (compare.length) {
       const models = compare.map(k => modelIndex.get(k)).filter(Boolean);
+      // Quem vence em cada linha: a melhor nota ENTRE os modelos comparados
+      // (não o líder global). Empate de nota = vitória para ambos. O placar
+      // conta só nas categorias de capacidade — preço e velocidade só ganham
+      // destaque na própria linha.
+      const wins = new Map(models.map(p => [p.key, 0]));
+      const bestScoreAmong = (catId) => {
+        let best = null;
+        for (const p of models) {
+          const c = p.cats[catId];
+          if (c && (best === null || c.score > best)) best = c.score;
+        }
+        return best;
+      };
+      for (const cat of CATEGORIES) {
+        const best = bestScoreAmong(cat.id);
+        if (best === null) continue;
+        for (const p of models) {
+          const c = p.cats[cat.id];
+          if (c && c.score === best) wins.set(p.key, (wins.get(p.key) || 0) + 1);
+        }
+      }
+      const maxWins = models.reduce((mx, p) => Math.max(mx, wins.get(p.key) || 0), 0);
+
       const rowFor = (cat) => {
+        const best = bestScoreAmong(cat.id);
         const cells = models.map(p => {
           const c = p.cats[cat.id];
           if (!c) return `<td class="qm-cmp-out">—</td>`;
-          const lead = c.rank === 1 ? ' is-lead' : '';
-          return `<td class="qm-cmp-v${lead}">${fmtScore(c.is_fraction, c.score)}<span class="qm-cmp-rank">#${c.rank}</span></td>`;
+          const cls = `qm-cmp-v${c.rank === 1 ? ' is-lead' : ''}${best !== null && c.score === best ? ' is-winner' : ''}`;
+          return `<td class="${cls}">${fmtScore(c.is_fraction, c.score)}<span class="qm-cmp-rank">#${c.rank}</span></td>`;
         }).join('');
         return `<tr><th scope="row">${escapeHtml(cat.label)}</th>${cells}</tr>`;
       };
+      // Preço: o menor vence. Velocidade: a maior vence.
+      const priceVals = models.map(p => p.price).filter(v => v != null && v > 0);
+      const minPrice = priceVals.length ? Math.min(...priceVals) : null;
+      const speedVals = models.map(p => p.speed).filter(v => v > 0);
+      const maxSpeed = speedVals.length ? Math.max(...speedVals) : null;
       const priceRow = `<tr class="qm-cmp-sep"><th scope="row">Preço</th>${
-        models.map(p => `<td>${p.price != null ? escapeHtml(fmtPrice(p.price)) : '—'}</td>`).join('')}</tr>`;
+        models.map(p => {
+          const win = minPrice !== null && p.price === minPrice ? ' is-winner' : '';
+          return `<td class="qm-cmp-v${win}">${p.price != null ? escapeHtml(fmtPrice(p.price)) : '—'}</td>`;
+        }).join('')}</tr>`;
       const speedRow = `<tr><th scope="row">Velocidade</th>${
-        models.map(p => `<td>${p.speed > 0 ? escapeHtml(fmtSpeed(p.speed)) : '—'}</td>`).join('')}</tr>`;
-      const headCols = models.map(p =>
-        `<th scope="col"><span class="qm-cmp-h">${companyMark(p.creator, 'sm')}<span>${escapeHtml(p.name)}</span></span></th>`).join('');
+        models.map(p => {
+          const win = maxSpeed !== null && p.speed === maxSpeed ? ' is-winner' : '';
+          return `<td class="qm-cmp-v${win}">${p.speed > 0 ? escapeHtml(fmtSpeed(p.speed)) : '—'}</td>`;
+        }).join('')}</tr>`;
+      const headCols = models.map(p => {
+        const w = wins.get(p.key) || 0;
+        const crown = maxWins > 0 && w === maxWins
+          ? `<span class="qm-cmp-crown" title="Vence em mais categorias entre os comparados">★</span>` : '';
+        const wbadge = w > 0 ? `<span class="qm-cmp-wins">${w} ${w === 1 ? 'vitória' : 'vitórias'}</span>` : '';
+        return `<th scope="col"><span class="qm-cmp-hcol"><span class="qm-cmp-h">${companyMark(p.creator, 'sm')}<span>${escapeHtml(p.name)}</span></span>${crown}${wbadge}</span></th>`;
+      }).join('');
       table = `
         <div class="qm-cmp-scroll">
           <table class="qm-cmp-table">
@@ -499,7 +539,7 @@
             </tbody>
           </table>
         </div>
-        <p class="qm-cmp-note">Pontuação e posição de cada modelo em cada categoria. “—” = o modelo não foi avaliado naquele teste. <span class="qm-cmp-lead-key">#1</span> = líder da categoria.</p>`;
+        <p class="qm-cmp-note">A célula <span class="qm-cmp-win-key">destacada</span> vence aquela categoria entre os modelos comparados; <span class="qm-cmp-lead-key">#1</span> é o líder global da categoria. “—” = não avaliado. O <span class="qm-cmp-crown-key">★</span> marca quem vence em mais categorias.</p>`;
     } else {
       table = `<p class="qm-cmp-hint">Busque um modelo acima ou toque no <b>+</b> de uma linha para comparar até ${MAX_COMPARE} modelos, lado a lado, em todas as categorias.</p>`;
     }

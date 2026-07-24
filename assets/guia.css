@@ -321,15 +321,38 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
 }
 
 .qm-cmp-h { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--ink); }
+.qm-cmp-hcol { display: inline-flex; flex-direction: column; align-items: center; gap: 3px; }
+.qm-cmp-crown { color: var(--accent); font-size: 13px; line-height: 1; }
+.qm-cmp-wins {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  background: var(--paper-tint);
+  padding: 1px 7px;
+  border-radius: 999px;
+}
 
 .qm-cmp-v { font-family: var(--mono); color: var(--ink); }
 .qm-cmp-v.is-lead { color: var(--accent); font-weight: 500; }
+/* Vencedor entre os modelos comparados naquela linha — o destaque principal. */
+.qm-cmp-v.is-winner {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+}
 .qm-cmp-rank { font-size: 9.5px; color: var(--ink-muted); margin-left: 5px; }
-.qm-cmp-v.is-lead .qm-cmp-rank { color: var(--accent); }
+.qm-cmp-v.is-lead .qm-cmp-rank,
+.qm-cmp-v.is-winner .qm-cmp-rank { color: var(--accent); }
 .qm-cmp-out { color: var(--ink-faint); }
 .qm-cmp-table tr.qm-cmp-sep th,
 .qm-cmp-table tr.qm-cmp-sep td { border-top: 1px solid var(--hair); padding-top: 10px; }
 .qm-cmp-table tbody td:not(.qm-cmp-v):not(.qm-cmp-out) { font-family: var(--mono); color: var(--ink-light); }
+
+/* Chaves de legenda na nota abaixo da tabela. */
+.qm-cmp-win-key { color: var(--accent); font-weight: 700; background: var(--accent-soft); padding: 0 5px; border-radius: 4px; }
+.qm-cmp-crown-key { color: var(--accent); font-weight: 700; }
 
 /* ═══ Abas de categoria ═══ */
 .qm-tabs-label {
@@ -416,37 +439,45 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
 .qm-sortgroup {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  padding: 3px;
+  gap: 6px;
+  padding: 6px;
   background: var(--paper-tint);
   border: 1px solid var(--hair);
-  border-radius: 9px;
+  border-radius: 13px;
 }
 
 .qm-sortlabel {
+  flex: 0 0 auto;
   font-family: var(--mono);
-  font-size: 9.5px;
-  letter-spacing: 0.06em;
+  font-size: 11px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ink-muted);
-  padding: 0 6px 0 4px;
+  color: var(--ink-light);
+  font-weight: 600;
+  padding: 0 8px 0 6px;
 }
 
 .qm-sort {
-  padding: 5px 12px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
+  padding: 8px 14px;
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  background: var(--white);
   font-family: inherit;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 600;
   color: var(--ink-muted);
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
-.qm-sort:hover { color: var(--ink); }
-.qm-sort.is-active { background: var(--white); color: var(--accent); box-shadow: var(--shadow-xs); }
+.qm-sort:hover { color: var(--ink); border-color: var(--ink-faint); }
+.qm-sort.is-active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(16, 163, 127, 0.18);
+}
 .qm-sort:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
 .qm-sorthint {
