@@ -334,64 +334,66 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
 /* ═══ Abas de categoria ═══ */
 .qm-tabs-label {
   font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: 11px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ink-faint);
-  margin: 0 0 8px 3px;
+  color: var(--ink-light);
+  font-weight: 600;
+  margin: 0 0 9px 4px;
 }
 
 .qm-tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 3px;
-  padding: 4px;
+  gap: 6px;
+  padding: 6px;
   margin-bottom: 10px;
   background: var(--paper-tint);
   border: 1px solid var(--hair);
-  border-radius: 12px;
+  border-radius: 13px;
 }
 
 .qm-tabs-caption {
-  margin: 0 3px 18px;
+  margin: 0 4px 18px;
   font-size: 13.5px;
   line-height: 1.45;
   font-weight: 500;
   color: var(--ink);
 }
 
+/* Cada aba é um pill com contorno próprio — o contorno entre elas fica visível
+   mesmo sem a aba ativa, deixando claro que são seleções separadas. A ativa
+   preenche na cor de destaque. */
 .qm-tab {
   flex: 1 1 auto;
   min-width: max-content;
   padding: 11px 16px;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  background: var(--white);
   font-family: inherit;
   font-size: 13.5px;
   font-weight: 600;
   color: var(--ink-muted);
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
 
-.qm-tab:hover { color: var(--ink); }
+.qm-tab:hover { color: var(--ink); border-color: var(--ink-faint); }
 .qm-tab.is-active {
-  background: var(--white);
-  color: var(--ink);
-  box-shadow: var(--shadow-xs);
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(16, 163, 127, 0.18);
 }
-.qm-tab.is-active::after {
-  content: "";
-  display: block;
-  height: 2px;
-  margin: 7px auto 0;
-  width: 22px;
-  border-radius: 2px;
-  background: var(--accent);
+.qm-tab.is-off {
+  opacity: 0.4;
+  border-style: dashed;
+  text-decoration: line-through;
+  cursor: not-allowed;
 }
-.qm-tab.is-off { opacity: 0.4; text-decoration: line-through; cursor: not-allowed; }
 .qm-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* ─── Cabeçalho da categoria ─── */
@@ -484,25 +486,57 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
   grid-column: 1 / -1;
   display: none;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 16px;
-  padding: 7px 4px 9px 35px;
+  align-items: center;
+  gap: 4px 18px;
+  padding: 8px 4px 9px 35px;
   margin-top: 3px;
   border-top: 1px dashed var(--hair);
   font-size: 11.5px;
 }
 #qm-panel.is-show-extras .qm-row-extras { display: flex; }
 .qm-extras-label {
+  flex: 0 0 auto;
   font-family: var(--mono);
   font-size: 9px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-faint);
 }
-.qm-extra { display: inline-flex; align-items: baseline; gap: 5px; }
-.qm-extra-name { color: var(--ink-muted); }
-.qm-extra-val { font-family: var(--mono); font-weight: 600; color: var(--ink-light); }
-.qm-extra-val.is-na { color: var(--ink-faint); font-weight: 400; }
+.qm-extra {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 175px;
+  flex: 0 1 auto;
+}
+.qm-extra-name {
+  flex: 0 0 auto;
+  min-width: 96px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+.qm-extra-barwrap {
+  flex: 1 1 auto;
+  min-width: 38px;
+  height: 6px;
+  background: var(--paper-tint);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.qm-extra-bar {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  opacity: 0.85;
+}
+.qm-extra-val {
+  flex: 0 0 auto;
+  min-width: 42px;
+  text-align: right;
+  font-family: var(--mono);
+  font-weight: 600;
+  color: var(--ink-light);
+}
 
 /* ─── "Como medimos" por categoria ─── */
 .qm-method-cat {
@@ -757,9 +791,8 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
   .qm-main { padding: 20px 14px 32px; }
   .qm-lede { font-size: 14px; }
   .qm-cat-hd h2 { font-size: 16px; }
-  .qm-tabs { gap: 2px; }
+  .qm-tabs { gap: 4px; padding: 4px; }
   .qm-tab { flex: 1 1 40%; font-size: 12px; padding: 8px 8px; }
-  .qm-tab.is-active::after { display: none; }
 
   /* rank | modelo | pontos-ativo | barra | + — some com preço/veloc. exatos,
      que continuam na comparação; a barra do critério ativo permanece. */
@@ -779,6 +812,8 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
   .qm-extras-toggle { margin-left: 0; }
   .qm-tabs-caption { font-size: 12.5px; }
   .qm-row-extras { padding-left: 28px; }
+  .qm-extra { min-width: 150px; }
+  .qm-extra-name { min-width: 80px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

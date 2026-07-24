@@ -26,24 +26,31 @@
 
   /* ─── AS CATEGORIAS ───
      Cada categoria = UMA pergunta do usuário, respondida por UM benchmark
-     principal (alguns são compostos da própria AA). Os de apoio entram só
-     como contexto no "como medimos". Regra ao montar a lista: só existe
-     categoria onde o dado ainda separa os modelos. Por isso não há categoria
-     de Matemática — o AIME está saturado (>99%) e não distingue os atuais. */
+     principal (alguns são compostos da própria AA). Os de apoio medem a mesma
+     área de outras formas: entram só como referência cruzada no "como medimos"
+     e na linha "outros testes" — nunca no cálculo da posição. Regra ao montar
+     a lista: só existe categoria onde o dado ainda separa os modelos. Por isso
+     não há categoria de Matemática — o AIME está saturado (>99%) e não
+     distingue os atuais.
+
+     Apoios estagnados foram removidos (24/jul/2026): MMLU-Pro, LiveCodeBench e
+     AIME 2025 não avaliaram os modelos atuais do topo — casavam 0/20 e só
+     geravam "—". Em runtime, apoios que casam com menos de 5 dos 20 modelos do
+     ranking principal também são ocultados (rede contra envelhecimento futuro). */
   const CATEGORIES = [
     {
       id: 'geral',
       label: 'Uso geral',
       question: 'Conversar, escrever, resumir, tirar dúvidas do dia a dia.',
       primary: 'artificial_analysis_intelligence_index',
-      support: ['mmlu_pro'],
+      support: ['gpqa'],
     },
     {
       id: 'codigo',
       label: 'Programação',
       question: 'Escrever, revisar e consertar código.',
       primary: 'artificial_analysis_coding_index',
-      support: ['scicode', 'livecodebench'],
+      support: ['scicode'],
     },
     {
       id: 'agentes',
@@ -57,7 +64,7 @@
       label: 'Pesquisa e raciocínio',
       question: 'Problemas difíceis, análise profunda, apoio à pesquisa científica.',
       primary: 'hle',
-      support: ['gpqa', 'aime_25'],
+      support: ['gpqa'],
     },
     {
       id: 'instrucoes',
@@ -145,6 +152,14 @@
     return m;
   }
 
+  // Maior pontuação do benchmark (o líder) — para escalar a barrinha dos
+  // "outros testes" relativa ao topo daquele teste, não a uma faixa arbitrária.
+  function maxScore(bench) {
+    let mx = 0;
+    for (const x of (bench.full || bench.top || [])) if (x.score > mx) mx = x.score;
+    return mx;
+  }
+
   // ─── Marca da empresa (mesma fonte da régua: data.js) ───
   function companyMark(company, size) {
     const canonical = (typeof canonicalCompany === 'function') ? canonicalCompany(company) : company;
@@ -219,17 +234,29 @@
     const moved = sortMode !== 'best' && entry.baseRank !== i + 1;
 
     // "Outros testes" desta categoria: a nota do modelo em cada benchmark de
-    // apoio (referência cruzada). Ocultos por padrão; visíveis quando o painel
-    // ganha a classe is-show-extras (botão "ver outros testes").
-    const extras = (supportMaps && supportMaps.length) ? `
+    // apoio (referência cruzada), com uma barrinha relativa ao líder daquele
+    // teste. Ocultos por padrão; visíveis quando o painel ganha a classe
+    // is-show-extras (botão "ver outros testes"). Só renderizamos o apoio
+    // quando o modelo tem nota de verdade — sem nota, omitimos (nada de "—").
+    const extras = (() => {
+      if (!supportMaps || !supportMaps.length) return '';
+      const items = supportMaps.map(({ bench: sb, map, max }) => {
+        const s = map.get(key);
+        if (!s) return ''; // modelo não avaliado neste apoio: omite
+        const val = fmtScore(sb.is_fraction, s.score);
+        const barPct = max > 0 ? Math.max(3, (s.score / max) * 100) : 0;
+        return `<span class="qm-extra">
+              <span class="qm-extra-name">${escapeHtml(sb.label)}</span>
+              <span class="qm-extra-barwrap"><span class="qm-extra-bar" style="width:${barPct}%;background:${color}"></span></span>
+              <span class="qm-extra-val">${val}</span>
+            </span>`;
+      }).join('');
+      return items ? `
         <div class="qm-row-extras">
           <span class="qm-extras-label">outros testes</span>
-          ${supportMaps.map(({ bench: sb, map }) => {
-            const s = map.get(key);
-            const val = s ? fmtScore(sb.is_fraction, s.score) : '—';
-            return `<span class="qm-extra"><span class="qm-extra-name">${escapeHtml(sb.label)}</span><span class="qm-extra-val${s ? '' : ' is-na'}">${val}</span></span>`;
-          }).join('')}
+          ${items}
         </div>` : '';
+    })();
 
     return `
       <li class="qm-row${i === 0 ? ' is-first' : ''}">
@@ -281,11 +308,17 @@
       `<button class="qm-sort${s.key === sortMode ? ' is-active' : ''}" data-sort="${s.key}">${s.label}</button>`
     ).join('');
 
-    // Benchmarks de apoio da categoria — só os que trouxeram dados. `supportMaps`
-    // alimenta tanto a explicação do "como medimos" quanto a linha "outros
-    // testes" de cada modelo (nota dele em cada teste de apoio).
-    const support = cat.support.map(k => benchByKey(k)).filter(b => b && b.top && b.top.length);
-    const supportMaps = support.map(b => ({ bench: b, map: rankMap(b) }));
+    // Benchmarks de apoio da categoria — só os que casam com os modelos atuais.
+    // Descarta apoios estagnados (não avaliaram os modelos do topo do ranking
+    // principal): casam < 5 dos 20 e só gerariam "—". Rede contra envelhecimento
+    // futuro da fonte. `supportMaps` alimenta o "como medimos" e a linha "outros
+    // testes" de cada modelo (nota + barrinha relativa ao líder do apoio).
+    const supportMaps = cat.support
+      .map(k => benchByKey(k))
+      .filter(b => b && b.top && b.top.length)
+      .map(b => ({ bench: b, map: rankMap(b), max: maxScore(b) }))
+      .filter(sm => bench.top.filter(m => sm.map.has(idKey(m.model))).length >= 5);
+    const support = supportMaps.map(sm => sm.bench);
     const cov = coverage(bench);
 
     // "Como medimos" — o que é o número, de onde vem, e o papel do apoio.
@@ -347,7 +380,7 @@
     if (!el) return;
     const cat = catById(activeCat);
     el.innerHTML = `
-      <div class="qm-tabs-label">Selecione o tipo de tarefa</div>
+      <div class="qm-tabs-label">Selecione um uso</div>
       <div class="qm-tabs" role="tablist" aria-label="Categorias">
         ${CATEGORIES.map(c => {
           const off = hasData(c) ? '' : ' is-off';
