@@ -39,7 +39,7 @@
 
   <!-- Estilos -->
   <link rel="stylesheet" href="assets/styles.css">
-  <link rel="stylesheet" href="assets/guia.css?v=17">
+  <link rel="stylesheet" href="assets/guia.css?v=19">
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSBR3JMT2X"></script>
@@ -123,17 +123,15 @@
       </a>
     </nav>
 
-    <div class="control-cluster qm-navcluster">
-      <div class="qm-nav" id="qm-nav" aria-label="Ir para categoria"></div>
-    </div>
   </div>
 
   <main class="main qm-main">
     <div class="qm-intro">
       <p class="qm-lede">
-        Cada tarefa tem um campeão diferente. Abaixo, para cinco tipos de uso, o modelo
-        <strong>mais capaz</strong>, o de <strong>melhor custo-benefício</strong> e o
-        <strong>mais rápido</strong> — segundo testes padronizados independentes.
+        Escolha um <strong>tipo de tarefa</strong> nas abas e veja o ranking dos modelos.
+        Reordene por <strong>mais capaz</strong>, <strong>custo-benefício</strong> ou
+        <strong>mais rápido</strong>, e use a busca para <strong>comparar modelos</strong>
+        lado a lado em todas as categorias — segundo testes padronizados independentes.
       </p>
       <p class="qm-meta" id="qm-meta"></p>
     </div>
@@ -145,12 +143,12 @@
     <aside class="qm-method">
       <h3>Como ler estes números</h3>
       <ul>
-        <li><strong>Pontuação</strong> — resultado no benchmark que representa a categoria. Escalas diferentes entre categorias; só faz sentido comparar dentro da mesma.</li>
-        <li><strong>Custo-benefício</strong> — maior pontuação por dólar, não o mais barato. Só entram modelos a até 12% do líder; sem esse piso, o mais barato seria sempre o pior da lista.</li>
-        <li><strong>Os três cards</strong> — os selos <em>mais capaz</em>, <em>custo-benefício</em> e <em>mais rápido</em> vão sempre para quem de fato vence o critério. Quando um mesmo modelo vence dois, ele leva os dois selos, e a vaga restante vai para o próximo colocado em pontuação — marcado pela posição (<em>2º mais capaz</em>), nunca por um superlativo que não seja verdade.</li>
-        <li><strong>Nomes clicáveis</strong> — levam ao modelo na régua. Só linkamos quando o nome bate exatamente; modelo ainda não cadastrado aparece sem link. O contador ao lado de cada ranking mostra quantos já estão lá.</li>
-        <li><strong>Preço</strong> — custo médio por 1 milhão de tokens (entrada e saída combinadas), em dólares.</li>
-        <li><strong>Configuração</strong> — nível de esforço em que o modelo atingiu a pontuação. Um mesmo modelo pode ser mais lento e mais caro no nível máximo.</li>
+        <li><strong>Categorias e composição</strong> — cada categoria é medida por um teste principal (às vezes um índice composto da própria Artificial Analysis); os testes de apoio são só contexto. O botão <em>como medimos</em> em cada categoria mostra a composição completa.</li>
+        <li><strong>Ordenar</strong> — <em>mais capaz</em> usa a pontuação da categoria; <em>custo-benefício</em>, a maior pontuação por dólar (não o mais barato); <em>mais rápido</em>, os tokens por segundo. A barra de cada linha mostra o critério ativo.</li>
+        <li><strong>Piso de qualidade</strong> — como a lista já é o corte dos mais capazes, custo-benefício e velocidade sempre comparam modelos que passam num piso: o barato ruim nunca lidera.</li>
+        <li><strong>Comparar</strong> — busque um modelo ou toque no <em>+</em> de uma linha para pôr até quatro lado a lado. A tabela mostra a pontuação e a posição de cada um em todas as categorias; “—” significa que o modelo ficou fora do top daquela categoria.</li>
+        <li><strong>Nomes clicáveis</strong> — levam ao modelo na régua. Só linkamos quando o nome bate exatamente; modelo ainda não cadastrado aparece sem link.</li>
+        <li><strong>Preço e velocidade</strong> — custo médio por 1 milhão de tokens (entrada e saída combinadas, em dólares) e a velocidade de geração. “—” quando a fonte não publica o dado.</li>
         <li><strong>Ausências</strong> — não há categoria de matemática porque os testes disponíveis estão saturados (líderes acima de 99%, sem separação entre os modelos atuais).</li>
       </ul>
     </aside>
@@ -168,7 +166,7 @@
 
   <!-- Scripts -->
   <script src="assets/data.js?v=18"></script>
-  <script src="assets/guia.js?v=18"></script>
+  <script src="assets/guia.js?v=19"></script>
 </body>
 
 </html>
