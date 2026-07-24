@@ -1,8 +1,13 @@
 name: Atualizar benchmarks
 
 on:
-  schedule:
-    - cron: '0 9 * * 1'  # toda segunda-feira, 09:00 UTC (06:00 BRT)
+  # CRON PAUSADO em 24/jul/2026: a API da Artificial Analysis mudou o schema
+  # (criador/preco/velocidade renomeados) e o pipeline gravava creator="Desconhecido",
+  # price=null e tok_per_sec=0 para todos os modelos, sem as guardas pegarem.
+  # Reativar (descomentar) so depois de corrigir o mapeamento de campos em
+  # automation/update-benchmarks.mjs e adicionar guarda p/ criador/preco vazios.
+  # schedule:
+  #   - cron: '0 9 * * 1'  # toda segunda-feira, 09:00 UTC (06:00 BRT)
   workflow_dispatch:
 
 permissions:
