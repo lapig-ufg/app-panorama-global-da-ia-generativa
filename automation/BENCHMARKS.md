@@ -160,19 +160,41 @@ Página **interativa** (reformulada em jul/2026). Tudo é renderizado por `guia.
 do `benchmarks.json`; a régua (planilha) é complementar (linka nomes e mostra cobertura).
 
 **Categorias (abas).** 5 categorias, cada uma = UMA pergunta respondida por UM benchmark
-**principal** (definidas em `CATEGORIES`), mais benchmarks de **apoio** (só contexto). Não há
-categoria de matemática de propósito — os testes disponíveis estão saturados (>99%) e não
-separam os modelos.
+**principal** (definidas em `CATEGORIES`), mais benchmarks de **apoio** (só contexto, no
+"como medimos" e na linha "outros testes"). Não há categoria de matemática de propósito —
+os testes disponíveis estão saturados (>99%) e não separam os modelos.
 
 | Categoria | Principal | Apoio |
 |---|---|---|
-| Uso geral | `artificial_analysis_intelligence_index` | `mmlu_pro` |
-| Programação | `artificial_analysis_coding_index` | `scicode`, `livecodebench` |
+| Uso geral | `artificial_analysis_intelligence_index` | `gpqa` |
+| Programação | `artificial_analysis_coding_index` | `scicode` |
 | Agentes e automação | `terminalbench_v2_1` | `tau2` |
-| Pesquisa e raciocínio | `hle` | `gpqa`, `aime_25` |
+| Pesquisa e raciocínio | `hle` | `gpqa` |
 | Instruções e dados | `ifbench` | `lcr` |
 
-**Ordenação (os "filtros").** Uma lista única por categoria, reordenável:
+> **Apoios estagnados foram removidos (24/jul/2026).** MMLU-Pro, LiveCodeBench e AIME 2025
+> não avaliaram os modelos atuais do topo (casavam 0/20 com o ranking principal) e só
+> geravam "—" na linha "outros testes". Uso geral trocou MMLU-Pro por **GPQA** (casa 20/20).
+> Em runtime, `renderPanel` ainda **oculta apoios que casam < 5/20** do principal — rede
+> contra envelhecimento futuro da fonte (se a AA parar de avaliar um teste, ele some sozinho).
+
+> **⚠️ Nuance de composição (importante pra mudar categoria).** O `artificial_analysis_intelligence_index`
+> **v4.1 é um composite** que JÁ inclui GPQA, HLE, SciCode, Terminal-Bench e LCR como
+> ingredientes. Consequências:
+> - **Pesquisa (HLE)** e **Agentes (Terminal-Bench)** são "vistas focadas" de peças que
+>   também alimentam o Uso geral — não são categorias 100% independentes, mas produzem
+>   rankings diferentes do composite amplo (útil mesmo assim).
+> - Um apoio que é ingrediente do primário (ex.: GPQA no Uso geral) **não é enganoso**: o
+>   "como medimos" diz que o apoio "não entra na posição do ranking" — o ranking é pelo
+>   primário, o apoio é só exibido. Válido mesmo quando é ingrediente do composite.
+>
+> Se um dia quiser categorias mais independentes, os únicos benchmarks **fora** do
+> Intelligence Index são: IFBench, TAU-bench, MMLU-Pro (estagnado), LiveCodeBench
+> (estagnado) e AIME (saturado).
+
+**Ordenação (os "filtros").** Uma lista única por categoria, reordenável. Os três botões
+(`Mais capaz` / `Custo-benefício` / `Mais rápido`) formam um **controle segmentado** com
+contorno, a ativa preenchida na cor de destaque — mesmo idioma visual das abas de categoria.
 - **Mais capaz** (padrão) — pontuação da categoria.
 - **Custo-benefício** — pontuação por dólar (não o mais barato). Como a lista já é o top-20
   dos mais capazes, o barato ruim nunca lidera (`FLOOR = 0.88` documenta o piso de qualidade).
@@ -180,13 +202,32 @@ separam os modelos.
 
 A barra de cada linha reflete o critério ativo; ao reordenar, mostra-se "Nº em capacidade".
 
-**"Como medimos".** Botão por categoria que abre a **composição** (principal + apoio, com o
-que cada teste mede + cobertura na régua). Atende ao pedido de explicar como a categoria é
-formada.
+**"Como medimos" + "outros testes".** Botão por categoria que abre a **composição** (principal
++ apoio, com o que cada teste mede + cobertura na régua). Um segundo botão, **"ver outros
+testes desta categoria"**, revela uma linha por modelo com a nota dele em cada benchmark de
+apoio + uma **barrinha** relativa ao líder daquele apoio (cor da empresa). Sem nota, a linha
+é **omitida** (não mostra "—"). O painel ganha a classe `is-show-extras` para alternar.
 
-**Busca + comparação.** Campo de busca com sugestões; até `MAX_COMPARE = 4` modelos numa
-bandeja compacta que mostra pontuação **e posição de cada modelo em todas as categorias**,
-mais preço e velocidade. `"—"` = fora do top daquela categoria; `#1` = líder (destacado).
+**Busca + comparação.** Campo de busca com sugestões; até `MAX_COMPARE = 4` modelos num
+acordeão `<details>` ("Quer comparar modelos?") que abre sozinho ao adicionar o 1º. A tabela
+mostra pontuação **e posição de cada modelo em todas as categorias**, mais preço e velocidade.
+
+**Quem vence (24/jul/2026).** Em cada linha (categoria, preço, velocidade) a célula do modelo
+que **vence entre os comparados** ganha destaque (fundo accent-soft + negrito) — não só o
+`#1` global (`is-lead` virou secundário). O cabeçalho de cada modelo mostra o **placar**
+("N vitórias") e uma **coroa ★** para quem vence em mais categorias. **Preço = menor vence;
+velocidade = maior vence.** O placar conta só as 5 categorias de capacidade (preço/velocidade
+só ganham destaque na própria linha). `bestScoreAmong()` decide o vencedor por nota (empate
+de nota = vitória para ambos); `wins`/`maxWins` montam o placar e a coroa.
+
+**Campo `full` do `benchmarks.json` (24/jul/2026).** Além do `top` (top-20, campos ricos:
+preço/velocidade/variante), cada benchmark traz um `full` = **todas as famílias avaliadas**,
+em campos mínimos (`model`, `creator`, `score`; posto implícito pela posição). Sem custo
+extra de API — a chamada única já devolve todos os modelos; antes o `slice(TOP_N)` descartava
+o resto. `buildModelIndex`/`rankMap` usam `full` (fallback `top`) para a comparação e os
+"outros testes": assim um modelo aparece com nota e posto em todas as categorias onde foi
+avaliado, **mesmo fora do top-20** (ex.: GLM 5.1 fora dos 20 em código ainda mostra a nota
+dele lá). `"—"` na tabela = o modelo não foi avaliado naquele teste.
 
 **Identidade vs. link da régua (cuidado!).** A comparação usa `idKey()` — nome normalizado
 **sem** `MODEL_ALIASES`. O link da régua usa `normModel()` — **com** aliases. Motivo: os
@@ -215,7 +256,7 @@ Categoria sem dados → aparece como "sem dados nesta rodada" (não some). Abert
 
 ## 9. Changelog
 
-### 2026-07-24
+### 2026-07-24 — schema v2 + refactor interativo
 - **Pipeline:** corrigido para o **schema v2** da Artificial Analysis (criador em
   `model_creator.name`, preço em `pricing.*`, velocidade em `median_output_tokens_per_second`,
   scores percentuais em fração 0–1). Adicionadas **guardas de criador/preço** e o modo
@@ -224,3 +265,22 @@ Categoria sem dados → aparece como "sem dados nesta rodada" (não some). Abert
   **abas**, mais capaz / custo-benefício / mais rápido como **ordenações** de uma lista única,
   **busca + comparação** de até 4 modelos entre categorias, e **"como medimos"** por categoria.
   Introduzido `idKey()` (identidade de benchmark ≠ link da régua). `?v=` → 19.
+
+### 2026-07-24 — UX: comunicação, comparação e dados completos
+- **Pipeline:** adicionado o campo **`full`** por benchmark (todas as famílias, campos
+  mínimos) para lookup — a comparação e os "outros testes" passam a mostrar nota/posto de
+  um modelo mesmo fora do top-20. Sem custo extra de API. (§7)
+- **Apoios curateados:** removidos MMLU-Pro, LiveCodeBench e AIME 2025 (estagnados, 0/20 de
+  casamento); Uso geral trocou MMLU-Pro por **GPQA**. Filtro de runtime oculta apoios < 5/20
+  (rede contra envelhecimento futuro). (§7)
+- **"Outros testes":** cada apoio agora tem **barrinha** (relativa ao líder, cor da empresa)
+  + nota; sem nota, **omite** em vez de "—". (§7)
+- **Controles segmentados:** abas de categoria e "Ordenar por" viraram pills com contorno,
+  ativas preenchidas na cor de destaque. Rótulo **"Selecione um uso"** acima das abas. (§7)
+- **Comparação "quem vence":** destaque por linha do modelo que vence **entre os comparados**
+  (não só `#1` global) + placar "N vitórias" + coroa **★**. Preço = menor; velocidade = maior. (§7)
+- **Verificação de categorias:** confirmados os 5 primários como tematicamente corretos;
+  documentado o nuance de que o Intelligence Index v4.1 é composite e inclui GPQA/HLE/SciCode/
+  Terminal-Bench/LCR. **A AA não tem benchmark de front-end** — não há como adicionar um de
+  programação pelo pipeline. (§7)
+- `?v=` → 22.
