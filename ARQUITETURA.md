@@ -4,6 +4,11 @@ Documento de arquitetura e operação do sistema completo: o site, a planilha (b
 dados), a automação semanal de pesquisa, o Apps Script e a PWA de curadoria.
 Última atualização: **02/jul/2026**.
 
+> Este documento é sobre o **sistema de lançamentos** (timeline + curadoria). O
+> subsistema de **benchmarks** (cron da Artificial Analysis → `benchmarks.json` → página
+> "Qual modelo usar") é independente e **auto-publica sem trava** — está documentado em
+> **[automation/BENCHMARKS.md](automation/BENCHMARKS.md)**.
+
 > **Identidades** (importante p/ não se perder):
 > - Conta Google (planilha + Apps Script + clasp): **victoramaral.lapig@gmail.com**
 > - Conta GitHub (repo + secrets): **VictorGit10** (admin no repo)

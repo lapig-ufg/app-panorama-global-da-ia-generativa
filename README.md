@@ -25,8 +25,13 @@ determinístico valida tudo mecanicamente (lento de pensar, mas implacável), e 
 linha chega ao público sem aprovação humana. Ver o porquê completo em
 [ARQUITETURA.md § 0](ARQUITETURA.md#0-o-problema-e-a-filosofia-do-sistema).
 
+Há ainda um **quarto subsistema, independente**: o cron de **benchmarks** busca dados da
+Artificial Analysis, grava `assets/benchmarks.json` e alimenta a página **"Qual modelo usar"**
+(`guia.html`). Esse **auto-publica** (sem a trava de curadoria) — documentado à parte em
+[automation/BENCHMARKS.md](automation/BENCHMARKS.md).
+
 📖 **Como tudo funciona em detalhe (inclusive como roda no GitHub e por quê): [ARQUITETURA.md](ARQUITETURA.md).**
-Docs específicas: [automation/README.md](automation/README.md) (pipeline) · [admin/README.md](admin/README.md) (PWA).
+Docs específicas: [automation/README.md](automation/README.md) (pipeline de lançamentos) · [automation/BENCHMARKS.md](automation/BENCHMARKS.md) (benchmarks + guia) · [admin/README.md](admin/README.md) (PWA).
 
 ---
 
@@ -50,16 +55,23 @@ Docs específicas: [automation/README.md](automation/README.md) (pipeline) · [a
 ```
 panorama-llms/
 ├── index.html              # Página principal do site (timeline)
+├── guia.html               # "Qual modelo usar" — rankings de benchmarks (interativa)
+├── gratuitos.html          # Catálogo de IAs gratuitas
 ├── assets/
-│   ├── styles.css          # Todos os estilos
-│   ├── data.js             # Logos, bandeiras, cores, grupos + SHEET_ID
+│   ├── styles.css          # Estilos da timeline
+│   ├── data.js             # Logos, bandeiras, cores, grupos, aliases + SHEET_ID
 │   ├── render.js           # Lógica de construção do SVG (timeline)
-│   └── app.js              # Carregamento de dados, tooltip, drag, exportação
+│   ├── app.js              # Carregamento de dados, tooltip, drag, exportação
+│   ├── benchmarks.json     # Dados da Artificial Analysis (gerado pelo cron)
+│   ├── guia.js / guia.css  # Página "Qual modelo usar" (abas, ordenação, comparação)
+│   └── gratuitos.*         # Página de IAs gratuitas
 ├── admin/                  # PWA de curadoria (aprovar/rejeitar pendentes)
-├── automation/             # Pipeline semanal (prepare/publish + Apps Script)
-├── .github/workflows/      # auto-update.yml — o cron do GitHub Actions
+├── automation/             # Pipelines: lançamentos (prepare/publish) + benchmarks (update-benchmarks.mjs)
+│   ├── README.md           # Pipeline de lançamentos
+│   └── BENCHMARKS.md       # Pipeline de benchmarks + página "Qual modelo usar"
+├── .github/workflows/      # auto-update.yml (lançamentos) · update-benchmarks.yml (benchmarks)
 ├── .nojekyll               # Desabilita o Jekyll no GitHub Pages
-├── ARQUITETURA.md          # Como o sistema inteiro funciona (comece por aqui)
+├── ARQUITETURA.md          # Como o sistema de lançamentos funciona (comece por aqui)
 ├── README.md               # Este arquivo
 └── LICENSE                 # CC BY 4.0
 ```

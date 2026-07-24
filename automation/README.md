@@ -1,5 +1,10 @@
 # Automação — busca semanal de lançamentos
 
+> Este documento cobre **só** o pipeline de **lançamentos** (LLM pesquisa a web → aba
+> `Pendentes` → você aprova). O outro cron — o de **benchmarks** (Artificial Analysis →
+> `benchmarks.json` → página "Qual modelo usar"), que **auto-publica sem trava** — está
+> documentado em **[BENCHMARKS.md](BENCHMARKS.md)**.
+
 Pipeline que, toda semana, **pesquisa lançamentos relevantes de IA generativa**, filtra por relevância, e grava os candidatos numa aba de **staging** da planilha como rascunho — você aprova com um **checkbox** e só então eles vão ao ar no site.
 
 ## Como funciona
