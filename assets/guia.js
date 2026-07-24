@@ -72,17 +72,17 @@
   const SORTS = {
     best: {
       key: 'best', label: 'Mais capaz',
-      hint: 'Ordenado pela pontuação da categoria. A barra mostra a pontuação relativa ao líder.',
+      hint: 'Os modelos estão na ordem da pontuação nesta categoria. A barra mostra o quão perto cada um está do líder.',
       bar: 'pontos',
     },
     value: {
       key: 'value', label: 'Custo-benefício',
-      hint: 'Ordenado por pontuação por dólar — não o mais barato, o que entrega mais por real gasto. A barra mostra a eficiência relativa.',
+      hint: 'Ordenado pela melhor pontuação por dólar — não o mais barato, e sim o que entrega mais por cada real gasto. A barra mostra essa eficiência.',
       bar: 'pts/$',
     },
     fast: {
       key: 'fast', label: 'Mais rápido',
-      hint: 'Ordenado pela velocidade de geração (tokens por segundo). A barra mostra a velocidade relativa.',
+      hint: 'Ordenado pela velocidade de resposta, em tokens por segundo. A barra mostra a velocidade relativa.',
       bar: 'tok/s',
     },
   };
@@ -132,6 +132,18 @@
   function benchByKey(key) { return bmData.benchmarks.find(b => b.key === key); }
   function primaryBench(cat) { return benchByKey(cat.primary); }
   function hasData(cat) { const b = primaryBench(cat); return !!(b && b.top && b.top.length); }
+
+  // Mapa idKey -> { score, rank, is_fraction } de TODAS as famílias avaliadas num
+  // benchmark. Usa `full` (lista completa) quando existe; senão cai no `top`
+  // (JSONs antigos, pré-`full`). Serve para a comparação e para os "outros
+  // testes": devolve a nota e o posto de qualquer modelo, mesmo fora do top-20.
+  function rankMap(bench) {
+    const m = new Map();
+    (bench.full || bench.top || []).forEach((x, i) => {
+      m.set(idKey(x.model), { score: x.score, rank: i + 1, is_fraction: bench.is_fraction });
+    });
+    return m;
+  }
 
   // ─── Marca da empresa (mesma fonte da régua: data.js) ───
   function companyMark(company, size) {
@@ -195,7 +207,7 @@
   }
 
   // ─── Uma linha da lista ───
-  function listRow(entry, bench, maxMetric, i) {
+  function listRow(entry, bench, maxMetric, i, supportMaps) {
     const m = entry.m;
     const color = (typeof companyColor === 'function') ? companyColor(m.creator) : '#6b6860';
     const canonical = (typeof canonicalCompany === 'function') ? canonicalCompany(m.creator) : m.creator;
@@ -205,6 +217,19 @@
     const key = idKey(m.model);
     const inCompare = compare.includes(key);
     const moved = sortMode !== 'best' && entry.baseRank !== i + 1;
+
+    // "Outros testes" desta categoria: a nota do modelo em cada benchmark de
+    // apoio (referência cruzada). Ocultos por padrão; visíveis quando o painel
+    // ganha a classe is-show-extras (botão "ver outros testes").
+    const extras = (supportMaps && supportMaps.length) ? `
+        <div class="qm-row-extras">
+          <span class="qm-extras-label">outros testes</span>
+          ${supportMaps.map(({ bench: sb, map }) => {
+            const s = map.get(key);
+            const val = s ? fmtScore(sb.is_fraction, s.score) : '—';
+            return `<span class="qm-extra"><span class="qm-extra-name">${escapeHtml(sb.label)}</span><span class="qm-extra-val${s ? '' : ' is-na'}">${val}</span></span>`;
+          }).join('')}
+        </div>` : '';
 
     return `
       <li class="qm-row${i === 0 ? ' is-first' : ''}">
@@ -228,6 +253,7 @@
           aria-pressed="${inCompare ? 'true' : 'false'}" aria-label="${inCompare ? 'Remover' : 'Comparar'} ${escapeHtml(m.model)}">
           ${inCompare ? '✓' : '+'}
         </button>
+        ${extras}
       </li>`;
   }
 
@@ -255,23 +281,35 @@
       `<button class="qm-sort${s.key === sortMode ? ' is-active' : ''}" data-sort="${s.key}">${s.label}</button>`
     ).join('');
 
-    // "Como medimos" — composição de benchmarks da categoria (principal + apoio).
-    const support = cat.support.map(k => benchByKey(k)).filter(Boolean);
+    // Benchmarks de apoio da categoria — só os que trouxeram dados. `supportMaps`
+    // alimenta tanto a explicação do "como medimos" quanto a linha "outros
+    // testes" de cada modelo (nota dele em cada teste de apoio).
+    const support = cat.support.map(k => benchByKey(k)).filter(b => b && b.top && b.top.length);
+    const supportMaps = support.map(b => ({ bench: b, map: rankMap(b) }));
     const cov = coverage(bench);
+
+    // "Como medimos" — o que é o número, de onde vem, e o papel do apoio.
     const method = `
       <details class="qm-method-cat">
         <summary><span class="qm-info-i" aria-hidden="true">i</span> como medimos esta categoria</summary>
         <div class="qm-method-body">
+          <p><span class="qm-mtag qm-mtag-main">o número</span>
+            A pontuação de cada modelo é a sua nota no <b>${escapeHtml(bench.label)}</b> —
+            ${escapeHtml(bench.description)}. Escala: <b>${escapeHtml(bench.unit)}</b>.
+            ${bench.is_fraction
+              ? 'É a porcentagem de acerto — quanto mais alta, melhor.'
+              : 'É um índice composto (0–100) montado pela Artificial Analysis — quanto mais alto, melhor.'}</p>
           <p><span class="qm-mtag qm-mtag-main">principal</span>
-            <b>${escapeHtml(bench.label)}</b> — ${escapeHtml(bench.description)}.
-            <span class="qm-mnote">O ranking é ordenado por este teste.</span></p>
-          ${support.length ? support.map(b => `
-            <p><span class="qm-mtag">apoio</span>
-              <b>${escapeHtml(b.label)}</b> — ${escapeHtml(b.description)}.</p>`).join('') : ''}
+            <b>${escapeHtml(bench.label)}</b> é o teste que ordena este ranking.</p>
+          ${support.length ? `
+          <p><span class="qm-mtag">apoio</span>
+            ${support.map(b => `<b>${escapeHtml(b.label)}</b>`).join(', ')} — medem a mesma área
+            de outras formas. Não entram na posição do ranking: servem como referência cruzada.
+            Toque em <em>ver outros testes desta categoria</em> para ver a nota de cada modelo neles.</p>` : ''}
           <p class="qm-method-foot">
-            ${bench.models_evaluated} avaliações independentes da Artificial Analysis${support.length ? ' no teste principal' : ''}${
-              cov ? ` · <b>${cov.on} de ${cov.total}</b> deste ranking estão na régua` : ''}.
-            Os testes de apoio são contexto — não entram no cálculo da posição.
+            Dados da <b>Artificial Analysis</b> — testes independentes e padronizados.
+            ${bench.models_evaluated} modelos avaliados no teste principal${
+              cov ? ` · <b>${cov.on} de ${cov.total}</b> deste ranking também estão na régua` : ''}.
           </p>
         </div>
       </details>`;
@@ -282,9 +320,10 @@
       </div>
       <div class="qm-toolbar">
         <div class="qm-sortgroup" role="group" aria-label="Ordenar por">
-          <span class="qm-sortlabel">Ordenar</span>
+          <span class="qm-sortlabel">Ordenar por</span>
           ${sortBtns}
         </div>
+        ${support.length ? `<button class="qm-extras-toggle" data-toggle-extras="1" aria-pressed="false">▸ ver outros testes desta categoria</button>` : ''}
       </div>
       <p class="qm-sorthint">${escapeHtml(sort.hint)}</p>
       ${method}
@@ -298,7 +337,7 @@
           <span class="qm-barwrap qm-barhead">${escapeHtml(sort.bar)}</span>
           <span class="qm-add-head" title="Comparar">⇄</span>
         </li>
-        ${list.map((e, i) => listRow(e, bench, maxMetric, i)).join('')}
+        ${list.map((e, i) => listRow(e, bench, maxMetric, i, supportMaps)).join('')}
       </ol>`;
   }
 
@@ -306,31 +345,45 @@
   function renderTabs() {
     const el = document.getElementById('qm-tabs');
     if (!el) return;
-    el.innerHTML = CATEGORIES.map(c => {
-      const off = hasData(c) ? '' : ' is-off';
-      const active = c.id === activeCat ? ' is-active' : '';
-      return `<button class="qm-tab${active}${off}" data-cat="${c.id}"${c.id === activeCat ? ' aria-current="true"' : ''}>${escapeHtml(c.label)}</button>`;
-    }).join('');
+    const cat = catById(activeCat);
+    el.innerHTML = `
+      <div class="qm-tabs-label">Selecione o tipo de tarefa</div>
+      <div class="qm-tabs" role="tablist" aria-label="Categorias">
+        ${CATEGORIES.map(c => {
+          const off = hasData(c) ? '' : ' is-off';
+          const active = c.id === activeCat ? ' is-active' : '';
+          return `<button class="qm-tab${active}${off}" data-cat="${c.id}"${c.id === activeCat ? ' aria-current="true"' : ''}>${escapeHtml(c.label)}</button>`;
+        }).join('')}
+      </div>
+      <p class="qm-tabs-caption">${escapeHtml(cat ? cat.question : '')}</p>`;
   }
 
   /* ─── Índice de modelos entre categorias ───
      Para a busca e a comparação: cada modelo distinto que aparece em ALGUMA das
-     5 categorias, com sua pontuação e posição em cada uma. Preço/velocidade são
-     o primeiro valor disponível entre as aparições (o mesmo modelo pode ser
-     colhido em configurações diferentes por benchmark). */
+     5 categorias, com sua pontuação e posição em cada uma. As notas/postos vêm
+     do `full` (lista completa) quando existe — assim a comparação mostra um
+     modelo em todas as categorias onde ele foi avaliado, mesmo se não estiver no
+     top-20 exibido. Preço/velocidade só vivem no `top` (linhas ricas); por isso
+     o enriquecimento é feito separadamente, a partir do `top`. */
   function buildModelIndex() {
     const idx = new Map();
+    const ensure = (key, name, creator) => {
+      let p = idx.get(key);
+      if (!p) { p = { key, name, creator, cats: {}, price: null, speed: 0 }; idx.set(key, p); }
+      return p;
+    };
     for (const cat of CATEGORIES) {
       const bench = primaryBench(cat);
-      if (!bench || !bench.top.length) continue;
-      bench.top.forEach((m, i) => {
-        const key = idKey(m.model);
-        let p = idx.get(key);
-        if (!p) {
-          p = { key, name: m.model, creator: m.creator, cats: {}, price: null, speed: 0 };
-          idx.set(key, p);
-        }
+      if (!bench) continue;
+      // Notas e postos: do ranking completo (fallback top em JSONs antigos).
+      const source = bench.full || bench.top || [];
+      source.forEach((m, i) => {
+        const p = ensure(idKey(m.model), m.model, m.creator);
         p.cats[cat.id] = { score: m.score, rank: i + 1, is_fraction: bench.is_fraction };
+      });
+      // Preço/velocidade: só existem nas linhas ricas do `top`.
+      (bench.top || []).forEach(m => {
+        const p = ensure(idKey(m.model), m.model, m.creator);
         if (p.price == null && m.price_1m_blended > 0) p.price = m.price_1m_blended;
         if (!p.speed && m.tok_per_sec > 0) p.speed = m.tok_per_sec;
       });
@@ -368,8 +421,12 @@
   }
 
   // ─── Bandeja de comparação ───
+  // O conteúdo vive dentro de <details class="qm-compare"> (o acordeão "Quer
+  // comparar modelos?"). Aqui só preenchemos #qm-cmp-content — o elemento
+  // <details>/<summary> é montado uma vez em init(), para não resetar o estado
+  // aberto/fechado a cada toggle de modelo.
   function renderCompare() {
-    const el = document.getElementById('qm-compare');
+    const el = document.getElementById('qm-cmp-content');
     if (!el) return;
     const chips = compare.map(k => {
       const p = modelIndex.get(k);
@@ -409,7 +466,7 @@
             </tbody>
           </table>
         </div>
-        <p class="qm-cmp-note">Pontuação e posição dentro de cada categoria (top ${bmData.benchmarks[0] ? bmData.benchmarks[0].top.length : 20}). “—” = fora do ranking daquela categoria. <span class="qm-cmp-lead-key">#1</span> = líder.</p>`;
+        <p class="qm-cmp-note">Pontuação e posição de cada modelo em cada categoria. “—” = o modelo não foi avaliado naquele teste. <span class="qm-cmp-lead-key">#1</span> = líder da categoria.</p>`;
     } else {
       table = `<p class="qm-cmp-hint">Busque um modelo acima ou toque no <b>+</b> de uma linha para comparar até ${MAX_COMPARE} modelos, lado a lado, em todas as categorias.</p>`;
     }
@@ -467,6 +524,10 @@
       if (compare.length >= MAX_COMPARE) return;
       compare.push(key);
       if (window.gtag) gtag('event', 'compara_modelos', { n: compare.length });
+      // Abre o acordeão de comparação ao adicionar via lista, para o usuário
+      // ver imediatamente a tabela montada.
+      const det = document.getElementById('qm-compare');
+      if (det) det.open = true;
     }
     renderPanel();      // atualiza o estado dos botões + na lista
     renderCompare();
@@ -489,6 +550,16 @@
       if (tab && !tab.classList.contains('is-off')) { setCat(tab.dataset.cat); return; }
       const sort = ev.target.closest('.qm-sort');
       if (sort) { setSort(sort.dataset.sort); return; }
+      const tog = ev.target.closest('[data-toggle-extras]');
+      if (tog) {
+        const panel = document.getElementById('qm-panel');
+        if (panel) {
+          const on = panel.classList.toggle('is-show-extras');
+          tog.setAttribute('aria-pressed', on ? 'true' : 'false');
+          tog.textContent = on ? '▾ ocultar outros testes' : '▸ ver outros testes desta categoria';
+        }
+        return;
+      }
       const add = ev.target.closest('[data-add]');
       if (add) { toggleCompare(add.dataset.add); return; }
       const clr = ev.target.closest('[data-clear]');
@@ -580,8 +651,16 @@
 
     renderMeta();
     root.innerHTML = `
-      <div class="qm-compare" id="qm-compare"></div>
-      <div class="qm-tabs" id="qm-tabs" role="tablist" aria-label="Categorias"></div>
+      <details class="qm-compare" id="qm-compare">
+        <summary class="qm-cmp-toggle">
+          <span class="qm-cmp-toggle-ico" aria-hidden="true">⇄</span>
+          <span class="qm-cmp-toggle-text">Quer comparar modelos?</span>
+          <span class="qm-cmp-toggle-hint">Busque um modelo ou toque no <b>+</b> de uma linha — até ${MAX_COMPARE} lado a lado, em todas as categorias.</span>
+          <span class="qm-cmp-toggle-chev" aria-hidden="true">›</span>
+        </summary>
+        <div class="qm-cmp-content" id="qm-cmp-content"></div>
+      </details>
+      <div id="qm-tabs"></div>
       <div class="qm-panel" id="qm-panel"></div>`;
 
     renderTabs();

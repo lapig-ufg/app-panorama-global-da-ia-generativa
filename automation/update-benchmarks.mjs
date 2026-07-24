@@ -195,10 +195,16 @@ async function main() {
       }
     }
 
-    const top = [...byFamily.values()]
-      .sort((a, b) => b.score - a.score)
-      .slice(0, TOP_N)
-      .map(x => {
+    // Ranking completo de famílias, ordenado por pontuação. O `top` alimenta o
+    // ranking EXIBIDO (campos ricos: preço, velocidade, variante). O `full`
+    // guarda TODAS as famílias avaliadas, em campos mínimos, só para lookup —
+    // assim a comparação mostra a nota e o posto de um modelo mesmo quando ele
+    // não está no top-N de uma categoria (ex.: GLM 5.1 fora dos 20 em coding).
+    // Sem custo extra de API: os dados já vieram nesta mesma resposta; antes
+    // eram descartados pelo slice. O posto é implícito pela posição no array.
+    const ranked = [...byFamily.values()].sort((a, b) => b.score - a.score);
+
+    const top = ranked.slice(0, TOP_N).map(x => {
         const ow = openWeights(x.m);
         if (ow != null) openWeightsSeen++;
         return {
@@ -213,6 +219,15 @@ async function main() {
         };
       });
 
+    // Lista completa para lookup da comparação — só o essencial (sem preço/
+    // velocidade/variant, que só importam no top exibido). Mantém o arquivo
+    // enxuto: ~12 benchmarks × ~150-300 famílias ≈ 25-35 KB gzip a mais.
+    const full = ranked.map(x => ({
+      model: x.family,
+      creator: x.creator,
+      score: x.score,
+    }));
+
     return {
       key: b.key,
       label: b.label,
@@ -223,6 +238,7 @@ async function main() {
       models_evaluated: evaluated.length,   // entradas cruas avaliadas pela AA
       families_evaluated: byFamily.size,    // modelos distintos após colapsar
       top,
+      full,
     };
   });
 
