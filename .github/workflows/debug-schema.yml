@@ -15,7 +15,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Imprimir schema
+      - name: Dry-run do pipeline corrigido (NÃO escreve/commita)
         env:
           AA_API_KEY: ${{ secrets.AA_API_KEY }}
-        run: node automation/_debug-schema.mjs
+          DRY_RUN: 'true'
+        run: node automation/update-benchmarks.mjs

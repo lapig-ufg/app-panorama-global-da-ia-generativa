@@ -68,21 +68,29 @@ function getValue(obj, keys) {
 }
 
 function priceBlended(model) {
-  // Prefer blended; fallback to média de input/output em $/1M tokens
-  const blended = getValue(model, ['price_1m_blended', 'price_blended_usd', 'price_usd_per_1m_tokens']);
+  // Schema v2 da AA (jul/2026): os preços passaram a viver em model.pricing.*
+  // (blended agora é "3_to_1"). Mantemos os nomes antigos como fallback caso
+  // a AA volte atrás. Prefer blended; senão média de input/output em $/1M tokens.
+  const p = (model && model.pricing && typeof model.pricing === 'object') ? model.pricing : model;
+  const blended = getValue(p, ['price_1m_blended_3_to_1', 'price_1m_blended', 'price_blended_usd', 'price_usd_per_1m_tokens']);
   if (blended != null) return Number(blended);
-  const inp = getValue(model, ['price_1m_input', 'price_input_usd_per_1m_tokens', 'input_price_usd_per_1m_tokens']);
-  const out = getValue(model, ['price_1m_output', 'price_output_usd_per_1m_tokens', 'output_price_usd_per_1m_tokens']);
+  const inp = getValue(p, ['price_1m_input_tokens', 'price_1m_input', 'price_input_usd_per_1m_tokens', 'input_price_usd_per_1m_tokens']);
+  const out = getValue(p, ['price_1m_output_tokens', 'price_1m_output', 'price_output_usd_per_1m_tokens', 'output_price_usd_per_1m_tokens']);
   if (inp != null && out != null) return (Number(inp) + Number(out)) / 2;
   if (inp != null) return Number(inp);
   return null;
 }
 
 function tokenSpeed(model) {
-  return getValue(model, ['tok_per_sec', 'tokens_per_second', 'output_tokens_per_second', 'throughput_tokens_per_second']);
+  // Schema v2 da AA: median_output_tokens_per_second (antes tok_per_sec).
+  return getValue(model, ['median_output_tokens_per_second', 'tok_per_sec', 'tokens_per_second', 'output_tokens_per_second', 'throughput_tokens_per_second']);
 }
 
 function creatorName(model) {
+  // Schema v2 da AA: o criador virou um objeto { id, name, slug }.
+  const mc = model && model.model_creator;
+  if (mc && typeof mc === 'object' && mc.name) return String(mc.name);
+  // Fallback: schema antigo (campo string) e variações.
   return getValue(model, ['creator', 'organization', 'provider', 'developer']) || 'Desconhecido';
 }
 
@@ -131,6 +139,16 @@ function benchmarkScore(model, key) {
   return null;
 }
 
+// Schema v2 da AA passou a devolver os benchmarks percentuais em fração (0–1),
+// enquanto os índices (Intelligence/Coding) seguem em 0–100. O site espera tudo
+// em 0–100 (is_fraction controla só o sufixo "%"). Então, para os percentuais,
+// convertemos 0–1 → 0–100. O guard `<= 1` deixa passar dados já em 0–100 caso a
+// AA volte atrás, evitando multiplicar duas vezes.
+function normalizeScore(v, isFraction) {
+  if (v == null || Number.isNaN(v)) return v;
+  return (isFraction && v <= 1) ? v * 100 : v;
+}
+
 async function main() {
   const apiKey = process.env.AA_API_KEY;
   if (!apiKey) {
@@ -160,7 +178,7 @@ async function main() {
 
   const benchmarks = BENCHMARKS.map(b => {
     const evaluated = models
-      .map(m => ({ m, score: benchmarkScore(m, b.key) }))
+      .map(m => ({ m, score: normalizeScore(benchmarkScore(m, b.key), b.is_fraction) }))
       .filter(x => x.score != null && !Number.isNaN(x.score));
 
     // Colapsa variantes: mantém a melhor pontuação de cada família de modelo.
@@ -223,6 +241,27 @@ async function main() {
     process.exit(1);
   }
 
+  /* Guarda de SCHEMA (jul/2026): quando a AA renomeia/reestrutura campos, os
+     scores continuam vindo mas criador/preço/velocidade viram lixo — e o site
+     publica "Desconhecido"/sem preço em silêncio (foi o que aconteceu quando o
+     criador virou objeto e o preço foi para model.pricing). Aborta se a maioria
+     das linhas vier sem criador reconhecido, ou se NENHUMA vier com preço. */
+  const allTop = benchmarks.flatMap(b => b.top);
+  const nTop = allTop.length;
+  const semCreator = allTop.filter(m => !m.creator || m.creator === 'Desconhecido').length;
+  const comPreco = allTop.filter(m => m.price_1m_blended != null).length;
+  if (nTop > 0 && semCreator > nTop * 0.5) {
+    console.error(`::error::${semCreator}/${nTop} linhas sem criador reconhecido — a AA ` +
+      'provavelmente mudou o schema do campo de criador. Nada foi escrito; ' +
+      'confira creatorName() em automation/update-benchmarks.mjs.');
+    process.exit(1);
+  }
+  if (nTop > 0 && comPreco === 0) {
+    console.error(`::error::Nenhuma das ${nTop} linhas veio com preço — a AA provavelmente ` +
+      'mudou o schema de pricing. Nada foi escrito; confira priceBlended().');
+    process.exit(1);
+  }
+
   /* Um benchmark isolado vazio provavelmente é chave renomeada na AA
      (ex.: terminalbench_v2_1 -> v3). O arquivo é gravado do mesmo jeito, para
      não travar os benchmarks saudáveis, mas o aviso aparece na aba Actions —
@@ -278,14 +317,24 @@ async function main() {
     benchmarks,
   };
 
-  await writeFile(OUT_PATH, JSON.stringify(out, null, 2), 'utf8');
-
-  console.log(`\nSalvo: ${OUT_PATH}`);
+  // DRY_RUN=true valida e imprime o resumo SEM escrever o arquivo — usado para
+  // conferir uma correção de schema antes de deixá-la publicar de verdade.
+  const dry = process.env.DRY_RUN === 'true';
+  if (dry) {
+    console.log('\n[DRY_RUN] Validou sem escrever o arquivo.');
+  } else {
+    await writeFile(OUT_PATH, JSON.stringify(out, null, 2), 'utf8');
+    console.log(`\nSalvo: ${OUT_PATH}`);
+  }
   console.log(`Modelos: ${models.length} · Benchmarks: ${benchmarks.length} · Data: ${fetchedAt.slice(0, 10)}`);
   console.log(`Campo open_weights: ${openWeightsSeen > 0 ? `presente (${openWeightsSeen} linhas)` : 'AUSENTE na API — selo "aberto" fica oculto'}`);
   benchmarks.forEach(b => {
     const first = b.top[0];
-    console.log(`  ${b.label.padEnd(24)} ${String(b.families_evaluated).padStart(4)} modelos  #1 ${first ? `${first.model} (${first.score})` : '—'}`);
+    const info = first
+      ? `${first.model} · ${first.creator} · ${first.score}${b.is_fraction ? '%' : ''} · ` +
+        `${first.price_1m_blended != null ? '$' + first.price_1m_blended : 'sem preço'} · ${first.tok_per_sec || 0} tok/s`
+      : '—';
+    console.log(`  ${b.label.padEnd(24)} ${String(b.families_evaluated).padStart(4)} mod  #1 ${info}`);
   });
 }
 
