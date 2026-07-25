@@ -8,6 +8,11 @@ dados), a automação semanal de pesquisa, o Apps Script e a PWA de curadoria.
 > subsistema de **benchmarks** (cron da Artificial Analysis → `benchmarks.json` → página
 > "Qual modelo usar") é independente e **auto-publica sem trava** — está documentado em
 > **[automation/BENCHMARKS.md](automation/BENCHMARKS.md)**.
+>
+> O subsistema de **IAs gratuitas** (página `gratuitos.html`, catálogo de free tiers)
+> usa o **The AI Rankings** como fonte de dados e tem um stub de coleta automatizada
+> (`automation/update-gratuitos.mjs`, ainda sem cron ativo) — documentado em
+> **[automation/GRATUITOS.md](automation/GRATUITOS.md)**.
 
 > **Identidades** (importante p/ não se perder):
 > - Conta Google (planilha + Apps Script + clasp): **victoramaral.lapig@gmail.com**
@@ -383,6 +388,7 @@ gere um novo e atualize nos três lugares (e cole o novo na PWA).
 | Quero mudar… | Faço… |
 |---|---|
 | **Site** (visual, empresas, cores) | Editar `index.html`/`assets/*` → commit na `main` → Pages publica (~1 min). **Subir o `?v=`** dos scripts no `index.html` (cache-bust). |
+| **Página "IAs gratuitas"** (`gratuitos.html`) | Editar `assets/gratuitos-data.js` (catálogo, schema v2 — fonte: The AI Rankings) + subir o `?v=` no `gratuitos.html`. Coleta ainda manual; ver `automation/GRATUITOS.md`. |
 | **PWA** (`admin/`) | Editar `admin/*` → commit na `main` → Pages publica. |
 | **Apps Script** (`Codigo.gs`) | Editar em `automation/apps-script/` → `clasp push --force` → `clasp create-deployment -i <deploymentId>` (mantém a MESMA URL). |
 | **Rubrica de relevância** | Editar `automation/policy.md` (versionado) — é literalmente a "personalidade" do curador, e recalibrá-la é um commit com diff revisável, não um retreinamento. |
@@ -502,6 +508,9 @@ O que este pipeline ensina sobre construir com LLMs em produção:
 ```
 panorama-llms/
 ├── index.html, assets/{app,render,data}.js, styles.css   # o site (timeline)
+├── guia.html, assets/{guia.js,benchmarks.json,guia.css}  # "Qual modelo usar" (benchmarks AA)
+├── gratuitos.html, assets/{gratuitos.js,gratuitos-data.js,gratuitos.css}  # "IAs gratuitas"
+│                                                          #   catálogo v2; fonte: The AI Rankings
 ├── admin/                         # PWA de curadoria
 │   ├── index.html                 #   app (shell + lógica): lê via fetch CORS (?action=listar),
 │   │                              #   aprova/rejeita (POST + reconcile via listar), botão 🔍 (rodar)
@@ -511,9 +520,11 @@ panorama-llms/
 ├── automation/
 │   ├── prepare.mjs                # passo 1: monta o prompt
 │   ├── publish.mjs                # passo 3: valida/dedup/POST
+│   ├── update-benchmarks.mjs      # cron AA → benchmarks.json (ver BENCHMARKS.md)
+│   ├── update-gratuitos.mjs       # STUB: scraper do The AI Rankings → gratuitos-data.js (ver GRATUITOS.md; sem cron)
 │   ├── policy.md                  # rubrica de relevância (editável)
 │   ├── schema.json                # forma esperada do candidates.json
-│   ├── README.md                  # setup da automação
+│   ├── README.md, BENCHMARKS.md, GRATUITOS.md  # docs dos pipelines
 │   └── apps-script/               # projeto clasp (bound à planilha)
 │       ├── Codigo.gs              #   o Apps Script
 │       ├── appsscript.json        #   manifest (timezone + acesso do web app)
