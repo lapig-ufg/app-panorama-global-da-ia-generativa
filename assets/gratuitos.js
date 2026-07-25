@@ -85,9 +85,10 @@
       const inHighlight = item.highlight.toLowerCase().includes(searchQuery);
       const inQuota = item.freeQuota.toLowerCase().includes(searchQuery);
       const inBest = item.bestFor.toLowerCase().includes(searchQuery);
-      const inTags = item.tags.some(t => t.toLowerCase().includes(searchQuery));
+      const inModel = (item.freeModel || '').toLowerCase().includes(searchQuery);
+      const inTags = (item.tags || []).some(t => t.toLowerCase().includes(searchQuery));
 
-      return inName || inCompany || inHighlight || inQuota || inBest || inTags;
+      return inName || inCompany || inHighlight || inQuota || inBest || inModel || inTags;
     });
   }
 
@@ -121,6 +122,7 @@
           <div class="g-card-brand">
             <span class="g-company">${escapeHtml(item.company)}</span>
             <h3 class="g-title">${escapeHtml(item.name)}</h3>
+            ${item.freeModel ? `<span class="g-model">${escapeHtml(item.freeModel)}</span>` : ''}
           </div>
           <span class="g-badge">${escapeHtml(item.badge)}</span>
         </header>
@@ -151,11 +153,29 @@
             </div>
             <div class="g-detail-val">${escapeHtml(item.bestFor)}</div>
           </div>
+
+          ${item.paidStepUp ? `
+          <div class="g-detail-item">
+            <div class="g-detail-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <span>Plano Pago</span>
+            </div>
+            <div class="g-detail-val">${escapeHtml(item.paidStepUp)}</div>
+          </div>` : ''}
+
+          ${item.theCatch ? `
+          <div class="g-detail-item g-catch-item">
+            <div class="g-detail-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>O porém</span>
+            </div>
+            <div class="g-detail-val">${escapeHtml(item.theCatch)}</div>
+          </div>` : ''}
         </div>
 
         <footer class="g-card-footer">
           <div class="g-tags">
-            ${item.tags.map(t => `<span class="g-tag">${escapeHtml(t)}</span>`).join('')}
+            ${(item.tags || []).map(t => `<span class="g-tag">${escapeHtml(t)}</span>`).join('')}
           </div>
           <a class="g-link-btn" href="${escapeHtml(item.link)}" target="_blank" rel="noopener">
             <span>Acessar gratuitamente</span>
