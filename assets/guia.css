@@ -698,17 +698,17 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
 .qm-mark-initial { color: #fff; font-size: 12px; font-weight: 700; }
 .qm-mark-sm .qm-mark-initial { font-size: 10px; }
 
-.qm-id-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-.qm-row-model-wrap { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.qm-id-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.qm-row-model-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; min-width: 0; }
 
 .qm-row-model {
   font-size: 13px;
   font-weight: 600;
   color: var(--ink);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 4ch;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.25;
 }
 .qm-row.is-first .qm-row-model { font-weight: 700; }
 
@@ -733,10 +733,8 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
   background: var(--paper-tint);
   padding: 1px 5px;
   border-radius: 4px;
-  max-width: 13ch;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
   cursor: help;
 }
 
@@ -820,7 +818,7 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
 
 /* ─── Responsivo ─── */
 @media (max-width: 720px) {
-  .qm-main { padding: 20px 14px 32px; }
+  .qm-main { padding: 20px 14px 32px; width: 100%; overflow-x: hidden; }
   .qm-lede { font-size: 14px; }
   .qm-cat-hd h2 { font-size: 16px; }
   .qm-tabs { gap: 4px; padding: 4px; }
@@ -833,8 +831,9 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
   .qm-c-price, .qm-c-speed { display: none; }
   .qm-head .qm-c-price, .qm-head .qm-c-speed { display: none; }
   .qm-row-company { display: none; }
-  .page-switch { width: 100%; }
-  .ps-link { flex: 1; justify-content: center; padding-top: 12px; padding-bottom: 12px; }
+  .page-switch { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 3px; }
+  .ps-link { flex: 1 1 0px; min-width: 0; justify-content: center; padding: 8px 4px; font-size: 11px; }
+  .ps-link span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .qm-cmp-hd { gap: 10px; }
   .qm-search { max-width: none; }
 

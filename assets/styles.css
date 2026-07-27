@@ -38,6 +38,8 @@
 
 html {
   scroll-behavior: smooth;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -54,6 +56,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* ─── TOP RIBBON (regional accents) ─── */
@@ -985,17 +989,25 @@ kbd {
   color: var(--ink);
 }
 
-/* ─── RESPONSIVIDADE ─── */
+/* ─── RESPONSIVIDADE (TABLET & MOBILE) ─── */
 @media (max-width: 900px) {
   .app-header {
-    padding: 16px 24px;
+    padding: 16px 20px;
     flex-direction: column;
     align-items: flex-start;
     gap: 14px;
   }
 
+  .header-brand {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+  }
+
   .header-meta {
     text-align: left;
+    width: 100%;
   }
 
   .header-meta .meta-row {
@@ -1003,94 +1015,111 @@ kbd {
   }
 
   .controls {
-    padding: 12px 24px;
+    padding: 12px 16px;
     gap: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
   }
 
   .control-cluster {
     padding-right: 0;
     border-right: none;
-    width: auto;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .export-cluster {
+    display: flex;
+    gap: 6px;
+  }
+
+  .export-cluster .icon-btn {
+    flex: 1;
+    justify-content: center;
   }
 
   .zoom-cluster {
     order: 3;
     width: 100%;
     justify-content: space-between;
+    gap: 8px;
   }
 
   .zoom-slider {
     flex: 1;
-    min-width: 80px;
+    min-width: 60px;
     touch-action: none;
   }
 
-  .help-btn {
-    margin-left: auto;
-  }
-
-  .help-popover {
-    right: 24px;
-    left: 24px;
-    width: auto;
-  }
-
-  .main {
-    padding: 14px 24px 32px;
-  }
-
-  .app-footer {
-    padding: 16px 24px;
-    flex-direction: column;
-    align-items: flex-start;
+  .actions-cluster {
+    width: 100%;
+    margin-left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 8px;
   }
-}
 
-@media (max-width: 520px) {
-  .header-logo {
-    height: 40px;
-  }
-
-  .app-header h1 {
-    font-size: 20px;
-  }
-
-  .header-kicker {
-    font-size: 8.5px;
-    letter-spacing: 0.14em;
-  }
-
-  .header-kicker::before {
-    width: 12px;
-  }
-
-  .controls {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .control-cluster {
+  .novidades-btn {
+    flex: 1;
     justify-content: center;
   }
 
-  .zoom-cluster {
-    flex-wrap: wrap;
-    gap: 8px;
+  .help-btn {
+    margin-left: 0;
+    flex-shrink: 0;
   }
 
-  .zoom-slider {
-    order: 2;
+  .page-switch {
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3px;
+    padding: 3px;
+    background: var(--paper-tint);
+    border: 1px solid var(--hair);
+    border-radius: 10px;
   }
 
-  .zoom-label {
-    order: 3;
+  .ps-link {
+    flex: 1 1 0px;
+    min-width: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 8px 6px;
+    border-radius: 7px;
+    font-size: 11.5px;
     text-align: center;
   }
 
-  .tooltip {
-    width: calc(100vw - 24px);
+  .ps-link span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .help-popover {
+    right: 16px;
+    left: 16px;
+    width: auto;
+    max-width: none;
+  }
+
+  .main {
+    padding: 14px 16px 32px;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .app-footer {
+    padding: 16px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 }
 
@@ -1198,54 +1227,69 @@ kbd {
   }
 }
 
-/* ─── RESPONSIVE ─── */
-@media (max-width: 720px) {
+@media (max-width: 520px) {
   .app-header {
-    padding: 16px 20px;
-    flex-wrap: wrap;
+    padding: 14px 14px;
   }
 
   .header-logo.logo-lapig img {
-    height: 40px;
+    height: 38px;
   }
 
   .header-logo.logo-ufg img {
-    height: 30px;
+    height: 28px;
   }
 
   .logo-sep {
-    height: 24px;
+    height: 22px;
   }
 
   .app-header h1 {
-    font-size: 18px;
+    font-size: 17px;
+    line-height: 1.25;
   }
 
-  .header-meta {
-    text-align: left;
+  .header-kicker {
+    font-size: 8px;
+    letter-spacing: 0.12em;
   }
 
-  .header-meta .meta-row {
-    justify-content: flex-start;
+  .header-kicker::before {
+    width: 10px;
   }
 
-  .controls,
-  .app-footer {
-    padding: 12px 20px;
+  .back-to-observatory {
+    font-size: 10px;
+    padding: 3px 7px;
   }
 
-  .main {
-    padding: 12px 20px 24px;
+  .ps-link {
+    font-size: 10.5px;
+    padding: 7px 4px;
+    gap: 3px;
   }
 
-  .controls-info {
-    display: none;
+  .ps-link svg {
+    width: 12px;
+    height: 12px;
   }
 
-  /* Bottom-sheet: left:0 + right:0 + width:auto preenche exatamente a
-     viewport. NÃO usar width:100vw — em mobile 100vw inclui o gutter da
-     scrollbar/URL bar e ultrapassa a largura visível, causando scroll
-     horizontal (espaço branco à direita) mesmo com o tooltip oculto. */
+  .zoom-cluster {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .zoom-slider {
+    order: 2;
+    width: 100%;
+  }
+
+  .zoom-label {
+    order: 3;
+    text-align: center;
+    font-size: 9px;
+  }
+
   .tooltip {
     width: auto;
     max-width: none;
