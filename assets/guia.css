@@ -303,6 +303,7 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
   left: 0;
   background: var(--paper);
   z-index: 1;
+  box-shadow: 6px 0 10px -4px rgba(0,0,0,0.08);
 }
 
 .qm-cmp-corner {
@@ -827,12 +828,13 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
 
   /* rank | modelo | pontos-ativo | barra | + — some com preço/veloc. exatos,
      que continuam na comparação; a barra do critério ativo permanece. */
-  .qm-row { grid-template-columns: 22px minmax(0, 1fr) 52px minmax(48px, 84px) 30px; gap: 8px; }
+  .qm-row { grid-template-columns: 22px minmax(0, 1fr) 52px minmax(48px, 84px) 44px; gap: 8px; }
+  .qm-add { width: 44px; height: 44px; font-size: 18px; }
   .qm-c-price, .qm-c-speed { display: none; }
   .qm-head .qm-c-price, .qm-head .qm-c-speed { display: none; }
   .qm-row-company { display: none; }
   .page-switch { width: 100%; }
-  .ps-link { flex: 1; justify-content: center; }
+  .ps-link { flex: 1; justify-content: center; padding-top: 12px; padding-bottom: 12px; }
   .qm-cmp-hd { gap: 10px; }
   .qm-search { max-width: none; }
 
