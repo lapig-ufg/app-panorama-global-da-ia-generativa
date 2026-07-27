@@ -3,7 +3,7 @@
   "source_url": "https://artificialanalysis.ai/",
   "attribution": "Dados: Artificial Analysis — artificialanalysis.ai",
   "models_total": 586,
-  "fetched_at": "2026-07-24T21:05:30.999Z",
+  "fetched_at": "2026-07-27T12:14:41.074Z",
   "has_open_weights": false,
   "benchmarks": [
     {
@@ -173,7 +173,7 @@
           "score": 50.1,
           "release_date": "2026-07-21",
           "price_1m_blended": 3,
-          "tok_per_sec": 243.869,
+          "tok_per_sec": 219.364,
           "open_weights": null
         },
         {
@@ -2337,7 +2337,7 @@
           "score": 93.7,
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
-          "tok_per_sec": 63.84,
+          "tok_per_sec": 50.124,
           "open_weights": null
         },
         {
@@ -2387,7 +2387,7 @@
           "score": 92.8,
           "release_date": "2026-07-21",
           "price_1m_blended": 3,
-          "tok_per_sec": 243.869,
+          "tok_per_sec": 219.364,
           "open_weights": null
         },
         {
@@ -4686,7 +4686,7 @@
           "score": 38.3,
           "release_date": "2026-07-21",
           "price_1m_blended": 3,
-          "tok_per_sec": 243.869,
+          "tok_per_sec": 219.364,
           "open_weights": null
         },
         {
@@ -6835,7 +6835,7 @@
           "score": 69.2,
           "release_date": "2026-07-21",
           "price_1m_blended": 3,
-          "tok_per_sec": 243.869,
+          "tok_per_sec": 219.364,
           "open_weights": null
         },
         {
@@ -7874,7 +7874,7 @@
           "score": 52.7,
           "release_date": "2026-07-21",
           "price_1m_blended": 3,
-          "tok_per_sec": 243.869,
+          "tok_per_sec": 219.364,
           "open_weights": null
         },
         {
@@ -12781,7 +12781,7 @@
           "score": 77.5281,
           "release_date": "2026-07-21",
           "price_1m_blended": 3,
-          "tok_per_sec": 243.869,
+          "tok_per_sec": 219.364,
           "open_weights": null
         },
         {
@@ -13639,7 +13639,7 @@
           "creator": "Zhipu AI",
           "score": 97.6608,
           "release_date": "2026-04-07",
-          "price_1m_blended": 2.15,
+          "price_1m_blended": 2.143,
           "tok_per_sec": 0,
           "open_weights": null
         },
@@ -17067,7 +17067,7 @@
           "creator": "Zhipu AI",
           "score": 76.2585,
           "release_date": "2026-04-07",
-          "price_1m_blended": 2.15,
+          "price_1m_blended": 2.143,
           "tok_per_sec": 0,
           "open_weights": null
         }
