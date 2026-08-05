@@ -315,7 +315,9 @@ const LAYOUT_GROUPS = [
       { name: 'Mistral · França', filter: r => r.emp && r.emp.trim().toUpperCase() === 'MISTRAL' },
       // Trilha própria porque a empresa entrou em COMPANY_COLORS: empresa "conhecida"
       // sem trilha não casa com nenhum filtro e sumiria da régua (ver KNOWN_COMPANIES).
-      { name: 'Motif · Coreia do Sul', filter: r => r.emp && r.emp.trim().toUpperCase() === 'MOTIF TECHNOLOGIES' },
+      // hideIfEmpty: a identidade da empresa já está cadastrada, mas a linha só
+      // existe na planilha depois de aprovada — até lá, não desenha faixa vazia.
+      { name: 'Motif · Coreia do Sul', hideIfEmpty: true, filter: r => r.emp && r.emp.trim().toUpperCase() === 'MOTIF TECHNOLOGIES' },
       // Catch-all: empresa desconhecida sem grupo (ou com grupo "OUTROS PAÍSES").
       // hideIfEmpty: a régua só é desenhada quando há pelo menos um evento nela.
       { name: 'Outros', hideIfEmpty: true, filter: r => desconhecida(r) && grupoDe(r) !== 'ECOSSISTEMA NORTE-AMERICANO' && grupoDe(r) !== 'ECOSSISTEMA CHINÊS' }
