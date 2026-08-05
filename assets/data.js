@@ -500,6 +500,41 @@ function buildExpandedGroups(rows) {
     const coberta = r => nomeadas.some(t => t.filter(r));
     const doGrupo = rows.filter(r => grupoDaLinha(r) === base.title);
 
+    // No grupo OUTROS PAÍSES, agrupamos por PAÍS (não por empresa): todos os
+    // modelos coreanos — Motif, LG AI Research, Upstage, Naver etc. — caem numa
+    // trilha só "Coreia do Sul", em vez de se espalharem por faixas separadas
+    // "· Coreia do Sul" (uma por empresa promovida). EUA e China continuam por
+    // empresa: são ecossistemas densos de laboratórios com nome próprio.
+    if (base.title === GRUPO_PADRAO) {
+      const porPais = new Map();
+      doGrupo.forEach(r => {
+        const pais = companyCountry(r.emp);
+        if (!pais) return;
+        porPais.set(pais, (porPais.get(pais) || 0) + 1);
+      });
+      const paises = [...porPais.entries()]
+        .filter(([, n]) => n >= MIN_MODELOS_TRACK)
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .map(([p]) => p);
+      const paisesSet = new Set(paises);
+      const doPais = p => r =>
+        grupoDaLinha(r) === base.title && companyCountry(r.emp) === p;
+      return {
+        ...base,
+        subtitle: SUBTITULO_AMPLIADA[base.title] || base.subtitle,
+        tracks: [
+          ...paises.map(p => ({ name: p, auto: true, filter: doPais(p) })),
+          {
+            name: 'Outros',
+            hideIfEmpty: true,
+            auto: true,
+            filter: r => grupoDaLinha(r) === base.title &&
+                         (!companyCountry(r.emp) || !paisesSet.has(companyCountry(r.emp)))
+          }
+        ]
+      };
+    }
+
     const contagem = new Map();
     doGrupo.forEach(r => {
       if (coberta(r)) return;
