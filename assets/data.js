@@ -404,6 +404,7 @@ const CREATOR_COUNTRY = {
   'Databricks': 'Estados Unidos',
   'ServiceNow': 'Estados Unidos',
   'Inception': 'Estados Unidos',
+  'Deep Cogito': 'Estados Unidos',   // San Francisco, CA (fundada em 2024)
   // — Canadá (fica no ecossistema norte-americano; o rótulo da trilha marca o país) —
   'Cohere': 'Canadá',
   // — China —
