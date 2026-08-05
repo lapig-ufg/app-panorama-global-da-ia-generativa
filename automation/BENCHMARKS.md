@@ -79,6 +79,52 @@ Cada modelo (campos que usamos):
 O preço não degrada no free: o blend 3:1 é reproduzível por aritmética, conferido
 contra o arquivo em produção (Opus 5 5/25 → 10,00; GPT-5.6 Sol 5/30 → 11,25).
 
+**Limite de requisições: 100/dia no free** (500 no Pro), resetando 00:00 UTC. Uma coleta
+custa 3 (uma por página) + 1 da tentativa Pro que dá 403 = **4**. Sobra folga enorme para
+o cron semanal, mas convém lembrar antes de criar qualquer job que chame a API em laço.
+Toda resposta traz `X-RateLimit-Limit`, `X-RateLimit-Remaining` e `X-AA-Tier`.
+
+### 2.1 Os seis índices da AA — e os três que não temos
+
+A AA publica **seis** índices compostos para modelos de linguagem. O free serve metade:
+
+| Índice | Free? | O que mede |
+|---|---|---|
+| `artificial_analysis_intelligence_index` | ✅ | capacidade geral (composite de 9 avaliações) |
+| `artificial_analysis_coding_index` | ✅ | código (subconjunto das mesmas avaliações) |
+| `artificial_analysis_agentic_index` | ✅ | uso autônomo de ferramentas e terminal |
+| `artificial_analysis_multilingual_index` | ❌ Pro | desempenho fora do inglês |
+| `aa_omniscience_index` | ❌ Pro | conhecimento e **taxa de não-alucinação** |
+| `artificial_analysis_openness_index` | ❌ Pro | abertura de pesos/licença |
+
+> Os dois primeiros bloqueados são os mais relevantes para este site, e por motivos que
+> não têm a ver com o guia atual: **multilingual** importa para um público que trabalha em
+> português, e **omniscience** traz `aa_omniscience_non_hallucination_rate` — alucinação é
+> provavelmente a métrica que mais pesa em uso acadêmico. Se o desconto acadêmico sair,
+> considerar esses dois **antes** de repor as categorias que saíram.
+
+Cuidado ao ler a doc da AA aqui: ela descreve o corpo do free como *"composite Artificial
+Analysis indices"*, o que sugere os seis. A sonda inventariou as chaves reais nos 591
+modelos e achou **três**. Quando a doc e a medição divergirem, vale a medição.
+
+### 2.2 Campos do free que ainda não usamos
+
+Levantados pela sonda de ago/2026 (percentual = quantos dos 591 modelos têm o campo
+preenchido). Nenhum exige Pro; são oportunidades paradas:
+
+| Campo | Preenchido | Para que serviria |
+|---|---|---|
+| `slug` | **100%** | link direto para a ficha do modelo em artificialanalysis.ai |
+| `performance.median_time_to_first_token_seconds` | 51% | latência — a outra metade da "velocidade", hoje só tok/s |
+| `performance.median_end_to_end_response_time_seconds` | 51% | tempo total de espera, o número que o usuário sente |
+| `artificial_analysis_intelligence_index_cost.cost_per_task.total_cost` | 23% | **custo real por tarefa** — captura o modelo de token barato que queima raciocínio, coisa que $/1M esconde |
+| `..._index_cost.total_cost` | 23% | custo de rodar o Intelligence Index inteiro |
+| `pricing.price_1m_cache_hit_tokens` | 35% | custo com cache de prompt |
+
+O `cost_per_task` é o mais promissor: viraria um quarto modo de ordenação, ao lado de
+"mais capaz / custo-benefício / mais rápido", respondendo "quanto custa de verdade usar
+este modelo" melhor que preço por token.
+
 O `benchmarks.json` guarda tudo em **0–100** (`is_fraction` controla só o sufixo `%` na
 exibição). Como o schema v2 devolve os percentuais em fração, `normalizeScore()` converte
 `0–1 → 0–100` (com guard `<= 1` para não multiplicar de novo se a AA voltar ao 0–100).
@@ -201,6 +247,17 @@ Pro-only, e os renomes `gpqa`→`gpqa_diamond`, `lcr`→`aa_lcr`, `tau2`→`tau2
 
 **Descoberta útil.** O blend 3:1 é Pro-only mas **reproduzível**: `(3·input + output)/4`,
 conferido contra o arquivo em produção. O free não degrada o preço.
+
+**Fonte externa avaliada e descartada.** O Epoch AI publica benchmarks de raciocínio em
+CSV sob **CC BY** (`https://epoch.ai/data/benchmark_data.zip`, sem chave, sem rate limit).
+O cruzamento com a AA funciona: normalizando os dois lados para a família do modelo
+(remove o sufixo de esforço — `_max`/`-xhigh` — e reduz a `[a-z0-9]`, porque o Epoch
+escreve `gpt-5.6-sol` e a AA `gpt-5-6-sol`), a cobertura do nosso top-20 fica em
+CritPt 18/20, SciCode 18/20, ECI 17/20, GPQA 15/20 — todos frescos. **Mas o HLE não**:
+2/20, parado em abr/2026. Como o GPQA não serve por saturação e redundância (§7), a
+integração não se pagava — uma segunda fonte, com metodologia diferente, camada de alias
+para manter e atribuição CC BY obrigatória, para uma categoria que ordenaria por ruído.
+Se o cenário mudar, o caminho está medido e é viável.
 
 **Método.** Duas sondas descartáveis (`probe-aa-api.mjs`, `probe-epoch-join.mjs`) rodadas
 por `workflow_dispatch` antes de escrever qualquer código de produção — a chave vive no
