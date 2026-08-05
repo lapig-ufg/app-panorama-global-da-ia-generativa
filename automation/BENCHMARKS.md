@@ -19,7 +19,8 @@ interativos por tipo de tarefa.
 GitHub Actions  (cron: segunda 09:00 UTC / 06:00 BRT — ou disparo manual)
   .github/workflows/update-benchmarks.yml
      └─ node automation/update-benchmarks.mjs
-          1. GET https://artificialanalysis.ai/api/v2/data/llms/models  (x-api-key: AA_API_KEY)
+          1. GET /api/v2/language/models       → 403 numa chave free
+             GET /api/v2/language/models/free  → 3 páginas de 200  (x-api-key: AA_API_KEY)
           2. normaliza empresa (assets/data.js), colapsa variantes de esforço,
              corta top-20 por FAMÍLIA de modelo, normaliza escala dos scores
           3. GUARDAS de sanidade  ── falhou? aborta e mantém o arquivo anterior
@@ -36,26 +37,47 @@ não no pipeline: ajustá-la não exige chave de API nem nova coleta.
 
 ---
 
-## 2. A API da Artificial Analysis (schema **v2**, jul/2026)
+## 2. A API da Artificial Analysis (contrato **v2**, ago/2026)
 
-Endpoint: `GET /api/v2/data/llms/models`, header `x-api-key: <AA_API_KEY>`.
-Resposta: `{ status, prompt_options, data: [ …modelos… ] }` (~580 modelos).
+O endpoint legado `/api/v2/data/llms/models` foi desligado em **4/nov/2026**.
+Migramos em 5/ago/2026 para o contrato documentado, que tem **duas rotas por tier**:
+
+| Rota | Tier | O que devolve |
+|---|---|---|
+| `/api/v2/language/models/free` | qualquer chave | só os **3 índices compostos** |
+| `/api/v2/language/models` | Pro+ (US$ 417/mês) | os benchmarks individuais também |
+
+Nossa chave é **free**. O pipeline tenta o Pro primeiro e cai para o free no `403`,
+escolhendo a tabela de benchmarks pelo campo `tier` da resposta — se a assinatura
+mudar, os benchmarks individuais voltam **sem tocar no código**.
+
+Resposta: `{ tier, intelligence_index_version, pagination, data: [ …modelos… ] }`.
+**Paginado**: `page_size` 200, ~591 modelos em 3 páginas — o free devolve o catálogo
+inteiro, a restrição é de *campos*, não de modelos.
 
 Cada modelo (campos que usamos):
 
-| Dado | Caminho no JSON (schema v2) | Observação |
+| Dado | Caminho no JSON (contrato v2) | Observação |
 |---|---|---|
 | Nome | `name` | ex.: `GPT-5.6 Sol (max)` — o sufixo `(…)` é a variante de esforço |
-| Empresa | `model_creator.name` | **objeto** `{id,name,slug}` (era string no schema antigo) |
-| Preço | `pricing.price_1m_blended_3_to_1` | US$/1M tokens, blend 3:1 in/out (aninhado em `pricing`) |
-| Velocidade | `median_output_tokens_per_second` | tokens/s |
+| Empresa | `model_creator.name` | objeto `{id,name,country}` |
+| Preço | `pricing.price_1m_blended_3_to_1` | **Pro-only** — no free calculamos `(3·input + output)/4` |
+| Velocidade | `performance.median_output_tokens_per_second` | agora **aninhado em `performance`** |
 | Data | `release_date` | ISO |
-| Scores | `evaluations.<key>` | **percentuais vêm em fração 0–1**; índices (Intelligence/Coding) em 0–100 |
+| Pesos abertos | `licensing.is_open_weights` | **Pro-only** — no free o selo fica oculto |
+| Scores | `evaluations.<key>` | percentuais em fração 0–1; índices compostos em 0–100 |
 
-**Chaves de benchmark** consumidas (em `evaluations`): `artificial_analysis_intelligence_index`,
-`artificial_analysis_coding_index`, `gpqa`, `hle`, `mmlu_pro`, `scicode`, `livecodebench`,
-`aime_25`, `terminalbench_v2_1`, `tau2`, `ifbench`, `lcr`. A definição completa (rótulo,
-categoria, descrição, `is_fraction`) está no array `BENCHMARKS` de `update-benchmarks.mjs`.
+**Chaves consumidas no free** (`BENCHMARKS_FREE`): `artificial_analysis_intelligence_index`,
+`artificial_analysis_coding_index`, `artificial_analysis_agentic_index`.
+
+**Chaves adicionais no Pro** (`BENCHMARKS_PRO`): `gpqa_diamond`, `hle`, `scicode`,
+`terminalbench_v2_1`, `tau2_telecom`, `ifbench`, `aa_lcr`, `critpt`. Note os
+**renomes** em relação ao legado: `gpqa`→`gpqa_diamond`, `lcr`→`aa_lcr`,
+`tau2`→`tau2_telecom`. E `mmlu_pro`, `aime_25` e `livecodebench` foram
+**aposentados pela AA** — não existem em nenhum tier.
+
+O preço não degrada no free: o blend 3:1 é reproduzível por aritmética, conferido
+contra o arquivo em produção (Opus 5 5/25 → 10,00; GPT-5.6 Sol 5/30 → 11,25).
 
 O `benchmarks.json` guarda tudo em **0–100** (`is_fraction` controla só o sufixo `%` na
 exibição). Como o schema v2 devolve os percentuais em fração, `normalizeScore()` converte
@@ -75,10 +97,17 @@ o arquivo anterior continua no ar.
 | Metade vazia | `> 50%` dos benchmarks sem nenhum modelo | chave global renomeada |
 | **Sem criador** | maioria das linhas com `creator = "Desconhecido"` | schema do criador mudou |
 | **Sem preço** | **nenhuma** linha com preço | schema de pricing mudou |
+| **Paginação aberta** | última página ainda com `has_more: true` | catálogo parcial |
+| **Sem velocidade** | **nenhuma** linha com `tok_per_sec > 0` | `performance.*` mudou de lugar |
 
-As duas últimas foram adicionadas depois do incidente de jul/2026 (§6): um benchmark
-isolado vazio **não** aborta (grava com aviso; o guia mostra a categoria como
-"sem dados nesta rodada").
+As duas últimas nasceram da migração de ago/2026 (§6), e existem porque falhariam
+**em silêncio**: sem seguir a paginação publicaríamos 200 dos 591 modelos — número
+alto o bastante para passar pela guarda de volume, e o ranking sairia plausível e
+incompleto. Sem velocidade, o ordenador "mais rápido" viraria uma lista aleatória,
+porque o guia trata ausência como zero.
+
+Um benchmark isolado vazio **não** aborta (grava com aviso; o guia mostra a
+categoria como "sem dados nesta rodada").
 
 ---
 
@@ -152,6 +181,35 @@ guardas de criador/preço (§3). Validado por DRY_RUN (§4) antes de publicar os
 O cron ficou pausado durante o conserto e foi reativado depois. Lição: **este pipeline
 auto-publica** — toda mudança de schema da AA precisa passar por DRY_RUN antes de ir ao ar.
 
+### 6.1 Desligamento do endpoint legado (5/ago/2026)
+
+**Aviso:** a AA deu 3 meses para sair de `/api/v2/data/*` (desliga em 4/nov/2026).
+Diferente de §6, aqui não houve quebra — foi migração planejada.
+
+**O que quase passou batido.** A troca de rota é o menor dos problemas. Duas mudanças
+do contrato v2 falhariam **em silêncio**, sem disparar nenhuma guarda existente:
+
+1. **Paginação.** O legado devolvia 591 modelos numa tacada; o v2 pagina de 200 em 200.
+   Ler só a primeira página publicaria um terço do catálogo — e 200 passa folgado pela
+   guarda de `< 50`. O ranking sairia plausível e errado.
+2. **`performance.*` aninhado.** `median_output_tokens_per_second` saiu da raiz. Todo
+   `tok_per_sec` viraria 0, e como o guia trata ausência como zero, o ordenador
+   "mais rápido" viraria lista aleatória sem nenhum sinal de erro.
+
+Ambas ganharam guarda (§3). Também mudaram: `licensing.is_open_weights` aninhado e
+Pro-only, e os renomes `gpqa`→`gpqa_diamond`, `lcr`→`aa_lcr`, `tau2`→`tau2_telecom`.
+
+**Descoberta útil.** O blend 3:1 é Pro-only mas **reproduzível**: `(3·input + output)/4`,
+conferido contra o arquivo em produção. O free não degrada o preço.
+
+**Método.** Duas sondas descartáveis (`probe-aa-api.mjs`, `probe-epoch-join.mjs`) rodadas
+por `workflow_dispatch` antes de escrever qualquer código de produção — a chave vive no
+secret do Actions, então o diagnóstico tinha que rodar lá. Elas mediram o tier real, a
+cobertura por campo e a viabilidade de uma fonte externa, e foram removidas depois.
+Custo: ~10 das 100 requisições/dia do tier free. Lição: **medir antes de migrar** — a
+suposição de que o free entregaria menos *modelos* estava errada (entrega os mesmos 591);
+o que ele corta são *campos*.
+
 ---
 
 ## 7. Front-end — `guia.html` + `assets/guia.js` + `assets/guia.css`
@@ -159,18 +217,42 @@ auto-publica** — toda mudança de schema da AA precisa passar por DRY_RUN ante
 Página **interativa** (reformulada em jul/2026). Tudo é renderizado por `guia.js` a partir
 do `benchmarks.json`; a régua (planilha) é complementar (linka nomes e mostra cobertura).
 
-**Categorias (abas).** 5 categorias, cada uma = UMA pergunta respondida por UM benchmark
+**Categorias (abas).** 3 categorias, cada uma = UMA pergunta respondida por UM benchmark
 **principal** (definidas em `CATEGORIES`), mais benchmarks de **apoio** (só contexto, no
 "como medimos" e na linha "outros testes"). Não há categoria de matemática de propósito —
 os testes disponíveis estão saturados (>99%) e não separam os modelos.
 
-| Categoria | Principal | Apoio |
+| Categoria | Principal | Apoio (só com chave Pro) |
 |---|---|---|
-| Uso geral | `artificial_analysis_intelligence_index` | `gpqa` |
+| Uso geral | `artificial_analysis_intelligence_index` | `gpqa_diamond`, `hle` |
 | Programação | `artificial_analysis_coding_index` | `scicode` |
-| Agentes e automação | `terminalbench_v2_1` | `tau2` |
-| Pesquisa e raciocínio | `hle` | `gpqa` |
-| Instruções e dados | `ifbench` | `lcr` |
+| Agentes e automação | `artificial_analysis_agentic_index` | `terminalbench_v2_1`, `tau2_telecom` |
+
+Os apoios ficam listados mesmo sem existirem no tier free: `benchByKey` devolve
+`undefined`, o filtro os descarta e o bloco "outros testes" some. Assim eles
+**voltam sozinhos** se a chave virar Pro.
+
+> **De 5 para 3 categorias (5/ago/2026).** Com o fim do endpoint legado, os benchmarks
+> individuais viraram Pro-only e duas categorias perderam a base:
+>
+> - **Pesquisa e raciocínio** (era `hle`). O substituto gratuito seria o GPQA Diamond,
+>   mas ele **correlaciona 0,95** com o Intelligence Index sobre 399 modelos — seria uma
+>   segunda aba repetindo a ordem da primeira. E está **saturado**: spread de 3,0 pontos
+>   no top-15 contra erro-padrão de 1,59, ou seja, as posições do topo são ruído.
+>   O HLE era justamente o mais independente (rho 0,84, spread 24,8) e **não tem fonte
+>   gratuita**: o leaderboard do Scale parou em abr/2026 (o `hle_external.csv` do Epoch AI
+>   é um espelho dele, com 2/20 de cobertura do nosso top-20), e os agregadores que cobrem
+>   a fronteira publicam número **auto-reportado** pelos fabricantes — 64,7% onde a AA,
+>   medindo por conta própria, apura 53,3%.
+> - **Instruções e dados** (era `ifbench` + `lcr`). Sem equivalente no free.
+>
+> A alta correlação virou conteúdo: o campo `note` da categoria Uso geral diz ao leitor
+> que, para trabalho de pesquisa, **o mesmo ranking vale** — não há lista separada a
+> consultar. Melhor que uma aba ordenando modelos por ruído.
+>
+> **Agentes** trocou `terminalbench_v2_1` pelo `artificial_analysis_agentic_index`: o
+> composto da própria AA para a mesma pergunta, com cobertura maior (138 famílias contra
+> 143 do benchmark único, mas sem depender de um teste só).
 
 > **Apoios estagnados foram removidos (24/jul/2026).** MMLU-Pro, LiveCodeBench e AIME 2025
 > não avaliaram os modelos atuais do topo (casavam 0/20 com o ranking principal) e só
