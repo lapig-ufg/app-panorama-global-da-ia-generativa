@@ -300,8 +300,9 @@ const LAYOUT_GROUPS = [
       { name: 'DeepSeek', filter: r => r.emp && r.emp.trim().toUpperCase() === 'DEEPSEEK' },
       { name: 'Qwen / Alibaba', filter: r => r.emp && r.emp.trim().toUpperCase() === 'ALIBABA' },
       { name: 'Zhipu AI', filter: r => r.emp && r.emp.trim().toUpperCase() === 'ZHIPU AI' },
+      { name: 'Moonshot AI', filter: r => r.emp && r.emp.trim().toUpperCase() === 'MOONSHOT AI' },
       { name: 'MiniMax', filter: r => r.emp && r.emp.trim().toUpperCase() === 'MINIMAX' },
-      { name: 'Outros', filter: r => ['BAIDU', 'MOONSHOT AI', 'XIAOMI'].includes(empDe(r)) || (desconhecida(r) && grupoDe(r) === 'ECOSSISTEMA CHINÊS') }
+      { name: 'Outros', filter: r => ['BAIDU', 'XIAOMI'].includes(empDe(r)) || (desconhecida(r) && grupoDe(r) === 'ECOSSISTEMA CHINÊS') }
     ]
   },
   {
