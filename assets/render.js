@@ -27,27 +27,43 @@ function fmtFull(dStr) {
   return `${d.getDate().toString().padStart(2, '0')} ${MESES[d.getMonth()]} ${d.getFullYear()}`;
 }
 
+// Uma linha é "marco" (nível 1) ou subordinada (níveis 2 e 3). É o único
+// predicado que separa os dois desenhos de pílula — o resto do layout é igual.
+function ehMarco(ev) {
+  return !ev.nivel || ev.nivel === 1;
+}
+
+// Geometria das pílulas. A compacta perde o logo, a linha de data e a sombra:
+// sobra o nome do modelo. Cabe ~40% mais por lane, que é exatamente a pressão
+// do modo ampliado (420 modelos disputando o mesmo eixo de tempo).
+const PILL = {
+  marco:    { h: 32, r: 16, iconR: 11, textPad: 32, charW: 7.4, endPad: 16, min: 90, font: 11.5 },
+  compacta: { h: 20, r: 10, iconR: 4,  textPad: 18, charW: 5.9, endPad: 12, min: 56, font: 10 }
+};
+
+function pillSpec(ev) {
+  return ehMarco(ev) ? PILL.marco : PILL.compacta;
+}
+
 // Largura estimada de texto da pílula. Usa medidas aproximadas por caractere,
 // dando folga para evitar que o colchete de lanes encoste no vizinho.
 function estimatePillWidth(ev) {
-  const textPad = 34;           // espaço entre ícone e início do texto
-  const textEndPad = 16;        // folga direita interna
-  const charW = 7.4;            // média Inter 11.5px com peso bold
+  const s = pillSpec(ev);
   // Adiciona uma pequena folga proporcional ao tamanho do nome
-  return Math.max(90, Math.round(textPad + ev.mod.length * charW + textEndPad));
+  return Math.max(s.min, Math.round(s.textPad + ev.mod.length * s.charW + s.endPad));
 }
 
 // ─── PRÉ-CÁLCULO DO LAYOUT VERTICAL ───
 // Retorna, para cada track, o número máximo de lanes usadas e o topo de cada pílula.
 function computeTrackLayout(maxDias, pxPerDay) {
   const xOf = (dias) => CONFIG.PAD_L + Math.round(dias * pxPerDay);
-  const PILL_H = 32;
+  const PILL_H = PILL.marco.h;  // piso da altura da faixa: a pílula mais alta
   const LANE_STEP = 40;        // distância vertical entre centros das lanes
   const GAP_BETWEEN_PILLS = 10; // espaço horizontal mínimo entre pílulas na mesma lane
 
   const layout = [];
 
-  LAYOUT_GROUPS.forEach((group, gIdx) => {
+  ACTIVE_GROUPS.forEach((group, gIdx) => {
     const groupLayout = { tracks: [] };
 
     group.tracks.forEach(track => {
@@ -58,6 +74,15 @@ function computeTrackLayout(maxDias, pxPerDay) {
       const events = [];
       let maxLane = 0;
 
+      /* O teto de lanes é maior no modo ampliado porque o problema é outro: a
+         régua padrão tem ~15 lançamentos por empresa em 3 anos, a ampliada tem
+         até 68 (Alibaba), concentrados nos meses recentes. Com o teto de 24, um
+         punhado de pílulas não achava lane e era empilhado — sobreposição
+         silenciosa, o pior desfecho possível numa figura acadêmica. */
+      const maxLanes = MODO === 'ampliada'
+        ? (CONFIG.MAX_LANES_AMPLIADA || CONFIG.MAX_LANES)
+        : CONFIG.MAX_LANES;
+
       // Ordena eventos por dia para processar da esquerda para a direita
       const sorted = [...(track.events || [])].sort((a, b) => a.dias - b.dias);
 
@@ -66,12 +91,19 @@ function computeTrackLayout(maxDias, pxPerDay) {
         const w = estimatePillWidth(ev);
 
         // Encontra uma lane onde a pílula caiba sem encostar na anterior
-        let lane = 0;
-        for (let l = 0; l < CONFIG.MAX_LANES; l++) {
+        let lane = -1;
+        for (let l = 0; l < maxLanes; l++) {
           if (!lanes[l] || x >= lanes[l] + GAP_BETWEEN_PILLS) {
             lane = l;
             break;
           }
+        }
+        /* Nenhuma lane livre (só acontece em zoom bem fechado): usa a que
+           termina mais à esquerda — a sobreposição fica mínima e previsível,
+           em vez de cair na lane 0 e colidir bem em cima do eixo. */
+        if (lane === -1) {
+          lane = 0;
+          for (let l = 1; l < maxLanes; l++) if (lanes[l] < lanes[lane]) lane = l;
         }
         lanes[lane] = x + w;
         if (lane > maxLane) maxLane = lane;
@@ -117,8 +149,6 @@ function rebuildV2(customMaxDias, pxPerDay) {
   const HEADER_H = 48;
   const GROUP_TITLE_H = 76;
   const GROUP_GAP = 10;
-  const PILL_H = 32;
-  const ICON_R = 11;
 
   // Pré-calcula alturas dinâmicas de cada track
   const layout = computeTrackLayout(maxDias, scale);
@@ -131,7 +161,7 @@ function rebuildV2(customMaxDias, pxPerDay) {
       <feComponentTransfer><feFuncA type="linear" slope="0.18"/></feComponentTransfer>
       <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>`;
-  LAYOUT_GROUPS.forEach((g, i) => {
+  ACTIVE_GROUPS.forEach((g, i) => {
     defsSvg += `<linearGradient id="bg-grad-${i}" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="${g.bg}" stop-opacity="1"/>
       <stop offset="100%" stop-color="${g.bg}" stop-opacity="0.55"/>
@@ -141,7 +171,7 @@ function rebuildV2(customMaxDias, pxPerDay) {
 
   // ─── PASS 1: Backgrounds dos grupos ───
   let currentY = HEADER_H;
-  LAYOUT_GROUPS.forEach((g, gIdx) => {
+  ACTIVE_GROUPS.forEach((g, gIdx) => {
     const groupH = GROUP_TITLE_H + layout[gIdx].tracks.reduce((acc, t) => acc + t.trackHeight, 0) + 16;
     bgSvg += `<rect x="0" y="${currentY}" width="${SVG_W}" height="${groupH}" fill="url(#bg-grad-${gIdx})"/>`;
     currentY += groupH + GROUP_GAP;
@@ -151,6 +181,22 @@ function rebuildV2(customMaxDias, pxPerDay) {
   // ─── PASS 2: Grade temporal refinada ───
   gridSvg += `<g aria-hidden="true">`;
   gridSvg += `<rect x="0" y="0" width="${SVG_W}" height="${HEADER_H}" fill="#fff"/>`;
+
+  /* Legenda dos dois tipos de pílula — só no modo ampliado. Vai no rodapé, na
+     calha à esquerda do eixo (x < PAD_L, onde os rótulos de ano não chegam); o
+     topo é ocupado pelo selo do marco zero. Fica DENTRO do SVG de propósito:
+     quem exporta PNG/SVG para um artigo leva a distinção editorial junto com a
+     figura. Uma régua acadêmica não pode misturar dado curado com censo
+     automático sem dizer qual é qual. */
+  if (MODO === 'ampliada') {
+    const yLeg = SVG_H - 34;
+    gridSvg += `<g font-family="Inter,sans-serif" font-size="8.5" fill="#6b6860">
+      <rect x="20" y="${yLeg}" width="15" height="9" rx="4.5" fill="#0c0c0c" fill-opacity="0.10" stroke="#0c0c0c" stroke-opacity="0.45" stroke-width="1"/>
+      <text x="40" y="${yLeg + 7.5}" font-weight="600">marco curado</text>
+      <rect x="20" y="${yLeg + 16}" width="15" height="9" rx="4.5" fill="#0c0c0c" fill-opacity="0.05" stroke="#0c0c0c" stroke-opacity="0.45" stroke-width="1" stroke-dasharray="3,2.5"/>
+      <text x="40" y="${yLeg + 23.5}">catálogo / secundário</text>
+    </g>`;
+  }
 
   const startYear = CONFIG.MARCO.getFullYear();
   const endYear = new Date(CONFIG.MARCO.getTime() + maxDias * 86400000).getFullYear() + 1;
@@ -235,7 +281,7 @@ function rebuildV2(customMaxDias, pxPerDay) {
 
   // ─── PASS 3: Conteúdo (grupos + tracks + pílulas) ───
   currentY = HEADER_H;
-  LAYOUT_GROUPS.forEach((group, gIdx) => {
+  ACTIVE_GROUPS.forEach((group, gIdx) => {
     const groupLayout = layout[gIdx];
     const groupHeight = GROUP_TITLE_H + groupLayout.tracks.reduce((acc, t) => acc + t.trackHeight, 0) + 16;
 
@@ -262,7 +308,7 @@ function rebuildV2(customMaxDias, pxPerDay) {
       const track = trackLayout.track;
       const trackHeight = trackLayout.trackHeight;
       const axisY = trackY + trackHeight / 2;
-      const trackColor = COMPANY_COLORS[track.events[0]?.emp] || '#a5a297';
+      const trackColor = track.events[0] ? companyColor(track.events[0].emp) : '#a5a297';
 
       // Fundo sutil alternado para facilitar leitura horizontal
       if (tIdx % 2 === 1) {
@@ -278,45 +324,58 @@ function rebuildV2(customMaxDias, pxPerDay) {
 
       // Pílulas já pré-computadas
       trackLayout.events.forEach(({ ev, idx, x, w, lane, laneOffset }) => {
-        const color = COMPANY_COLORS[ev.emp] || '#999';
-        const logoKey = LOGO_MAP[ev.emp];
-        const textPad = 32;
-        const pillY = axisY - PILL_H / 2 + laneOffset;
-        const pillCy = pillY + PILL_H / 2;
+        const color = companyColor(ev.emp);
+        const marco = ehMarco(ev);
+        const s = pillSpec(ev);
+        const iconCx = x + s.iconR + 2;
+        const pillY = axisY - s.h / 2 + laneOffset;
+        const pillCy = pillY + s.h / 2;
 
         const globalId = `${gIdx}-${idx}-${ev.emp.replace(/\s+/g, '_')}`;
         window.tooltipData[globalId] = { ...ev, color };
 
-        const ariaLabel = `${ev.mod} — ${ev.emp}, ${fmtFull(ev.date)}`;
-        elementsSvg += `<g class="pill-group" data-pill-id="${globalId}" role="button" tabindex="0" aria-label="${escapeXml(ariaLabel)}" style="cursor:pointer">`;
+        const nivelAria = marco ? '' : ev.nivel === 2 ? ' (lançamento secundário)' : ' (catálogo Artificial Analysis)';
+        const ariaLabel = `${ev.mod} — ${ev.emp}, ${fmtFull(ev.date)}${nivelAria}`;
+        elementsSvg += `<g class="pill-group${marco ? '' : ' pill-compacta'}" data-pill-id="${globalId}" role="button" tabindex="0" aria-label="${escapeXml(ariaLabel)}" style="cursor:pointer">`;
 
         // Marcador no eixo
-        elementsSvg += `<circle cx="${x + ICON_R + 2}" cy="${axisY}" r="2.5" fill="${color}" opacity="0.55"/>`;
+        elementsSvg += `<circle cx="${iconCx}" cy="${axisY}" r="${marco ? 2.5 : 1.8}" fill="${color}" opacity="0.55"/>`;
 
         // Conector se a pílula estiver fora do eixo
         if (lane !== 0) {
-          elementsSvg += `<line x1="${x + ICON_R + 2}" y1="${axisY}" x2="${x + ICON_R + 2}" y2="${pillCy + (laneOffset > 0 ? -PILL_H / 2 : PILL_H / 2)}" stroke="${color}" stroke-width="1.25" opacity="0.40" stroke-dasharray="2,2"/>`;
+          elementsSvg += `<line x1="${iconCx}" y1="${axisY}" x2="${iconCx}" y2="${pillCy + (laneOffset > 0 ? -s.h / 2 : s.h / 2)}" stroke="${color}" stroke-width="${marco ? 1.25 : 1}" opacity="${marco ? 0.40 : 0.28}" stroke-dasharray="2,2"/>`;
         }
 
-        // Pílula com sombra
-        elementsSvg += `<g filter="url(#pillShadow)">`;
-        elementsSvg += `<rect x="${x}" y="${pillY}" width="${w}" height="${PILL_H}" rx="16" fill="#fff"/>`;
-        elementsSvg += `<rect x="${x}" y="${pillY}" width="${w}" height="${PILL_H}" rx="16" fill="${color}" opacity="0.09" stroke="${color}" stroke-width="1.25" class="pill-bg"/>`;
-        elementsSvg += `</g>`;
+        if (marco) {
+          // ── Nível 1: pílula cheia, com sombra, logo e data ──
+          elementsSvg += `<g filter="url(#pillShadow)">`;
+          elementsSvg += `<rect x="${x}" y="${pillY}" width="${w}" height="${s.h}" rx="${s.r}" fill="#fff"/>`;
+          elementsSvg += `<rect x="${x}" y="${pillY}" width="${w}" height="${s.h}" rx="${s.r}" fill="${color}" opacity="0.09" stroke="${color}" stroke-width="1.25" class="pill-bg"/>`;
+          elementsSvg += `</g>`;
 
-        // Ícone (logo SVG ou inicial)
-        elementsSvg += `<circle cx="${x + ICON_R + 2}" cy="${pillCy}" r="${ICON_R}" fill="${color}"/>`;
-        if (logoKey && LOGO_PATHS[logoKey]) {
-          const s = ICON_R * 1.1;
-          elementsSvg += `<g transform="translate(${x + ICON_R + 2 - s / 2},${pillCy - s / 2}) scale(${s / 24})" fill="#fff">${LOGO_PATHS[logoKey]}</g>`;
+          // Ícone (logo SVG ou inicial)
+          const logoKey = LOGO_MAP[ev.emp];
+          elementsSvg += `<circle cx="${iconCx}" cy="${pillCy}" r="${s.iconR}" fill="${color}"/>`;
+          if (logoKey && LOGO_PATHS[logoKey]) {
+            const sz = s.iconR * 1.1;
+            elementsSvg += `<g transform="translate(${iconCx - sz / 2},${pillCy - sz / 2}) scale(${sz / 24})" fill="#fff">${LOGO_PATHS[logoKey]}</g>`;
+          } else {
+            const initial = ev.emp === 'DeepSeek' ? 'DS' : ev.emp === 'OpenClaw' ? 'OC' : ev.emp[0];
+            elementsSvg += `<text x="${iconCx}" y="${pillCy + 1}" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="${initial.length > 1 ? 9 : 13}" font-weight="800" fill="#fff">${escapeXml(initial)}</text>`;
+          }
+
+          // Nome do modelo + data
+          elementsSvg += `<text x="${x + s.textPad}" y="${pillY + 14}" font-family="Inter,sans-serif" font-size="${s.font}" font-weight="700" fill="#0c0c0c" letter-spacing="-0.01em">${escapeXml(ev.mod)}</text>`;
+          elementsSvg += `<text x="${x + s.textPad}" y="${pillY + 26}" font-family="DM Mono,monospace" font-size="9" font-weight="500" fill="#807d75" letter-spacing="0.04em">${escapeXml(fmtPill(ev.date))}</text>`;
         } else {
-          const initial = ev.emp === 'DeepSeek' ? 'DS' : ev.emp === 'OpenClaw' ? 'OC' : ev.emp[0];
-          elementsSvg += `<text x="${x + ICON_R + 2}" y="${pillCy + 1}" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="${initial.length > 1 ? 9 : 13}" font-weight="800" fill="#fff">${escapeXml(initial)}</text>`;
+          // ── Níveis 2 e 3: pílula compacta, tracejada, sem sombra ──
+          // O tracejado não é decoração: é a marca visual de "não passou pela
+          // curadoria de marco". Quem exporta a figura leva essa distinção junto.
+          elementsSvg += `<rect x="${x}" y="${pillY}" width="${w}" height="${s.h}" rx="${s.r}" fill="#fff"/>`;
+          elementsSvg += `<rect x="${x}" y="${pillY}" width="${w}" height="${s.h}" rx="${s.r}" fill="${color}" fill-opacity="0.06" stroke="${color}" stroke-opacity="0.55" stroke-width="1" stroke-dasharray="3,2.5" class="pill-bg"/>`;
+          elementsSvg += `<circle cx="${iconCx}" cy="${pillCy}" r="${s.iconR}" fill="${color}" opacity="0.75"/>`;
+          elementsSvg += `<text x="${x + s.textPad}" y="${pillCy + 3.5}" font-family="Inter,sans-serif" font-size="${s.font}" font-weight="600" fill="#43403a" letter-spacing="-0.01em">${escapeXml(ev.mod)}</text>`;
         }
-
-        // Nome do modelo + data
-        elementsSvg += `<text x="${x + textPad}" y="${pillY + 14}" font-family="Inter,sans-serif" font-size="11.5" font-weight="700" fill="#0c0c0c" letter-spacing="-0.01em">${escapeXml(ev.mod)}</text>`;
-        elementsSvg += `<text x="${x + textPad}" y="${pillY + 26}" font-family="DM Mono,monospace" font-size="9" font-weight="500" fill="#807d75" letter-spacing="0.04em">${escapeXml(fmtPill(ev.date))}</text>`;
 
         // Pontinho âmbar: adicionado recentemente à régua (vale também p/ exportações)
         if (ev.isNew) {
@@ -332,8 +391,9 @@ function rebuildV2(customMaxDias, pxPerDay) {
     currentY += groupHeight + GROUP_GAP;
   });
 
-  const finalSvg = `<svg id="global-svg" class="global-svg" viewBox="0 0 ${SVG_W} ${SVG_H}" xmlns="http://www.w3.org/2000/svg" width="${SVG_W}" height="${SVG_H}" role="img" aria-label="Linha do tempo dos lançamentos de modelos de IA generativa">
-    <title>Panorama Global da IA Generativa — Linha do Tempo</title>
+  const sufixoModo = MODO === 'ampliada' ? ' — régua ampliada' : '';
+  const finalSvg = `<svg id="global-svg" class="global-svg" viewBox="0 0 ${SVG_W} ${SVG_H}" xmlns="http://www.w3.org/2000/svg" width="${SVG_W}" height="${SVG_H}" role="img" aria-label="Linha do tempo dos lançamentos de modelos de IA generativa${sufixoModo}">
+    <title>Panorama Global da IA Generativa — Linha do Tempo${sufixoModo}</title>
     ${defsSvg}
     <rect width="100%" height="100%" fill="#fff"/>
     ${bgSvg}

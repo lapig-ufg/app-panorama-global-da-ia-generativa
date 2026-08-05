@@ -2,12 +2,15 @@
 
 Documento de arquitetura e operação do sistema completo: o site, a planilha (banco de
 dados), a automação semanal de pesquisa, o Apps Script e a PWA de curadoria.
-Última atualização: **02/jul/2026**.
+Última atualização: **05/ago/2026**.
 
 > Este documento é sobre o **sistema de lançamentos** (timeline + curadoria). O
 > subsistema de **benchmarks** (cron da Artificial Analysis → `benchmarks.json` → página
 > "Qual modelo usar") é independente e **auto-publica sem trava** — está documentado em
 > **[automation/BENCHMARKS.md](automation/BENCHMARKS.md)**.
+>
+> Os dois se encontram na **régua ampliada** (seção 15): o mesmo cron da AA grava
+> `catalogo.json`, que vira o nível 3 da timeline ao lado dos níveis curados.
 >
 > O subsistema de **IAs gratuitas** (página `gratuitos.html`, catálogo de free tiers)
 > usa o **The AI Rankings** como fonte de dados e tem um stub de coleta automatizada
@@ -68,6 +71,7 @@ segunda-feira.
                        │   1RsaiSCZBTUB4XTSj_mVbNgsLSHpky7wsjKltZboDaPA             │
                        │                                                            │
                        │   aba LANCAMENTOS  →  status=publicado  →  aparece no site │
+                       │                    →  status=secundario →  só na ampliada  │
                        │   aba PENDENTES    →  status=pendente   →  fila de revisão │
                        └───────▲───────────────────▲───────────────────┬───────────┘
                                │ (escreve)         │ (move/apaga)       │ (lê via gviz)
@@ -99,8 +103,8 @@ a isso na seção 5.
 
 | Componente | Onde vive | Papel |
 |---|---|---|
-| **Site (timeline)** | `index.html` + `assets/` → GitHub Pages | Mostra a régua. Lê **só** `LANCAMENTOS` (status `publicado`) via gviz/JSONP. |
-| **Planilha** | Google Sheets `1Rsai…DaPA` | Banco de dados. Abas `Lancamentos` (publicado) e `Pendentes` (rascunho). |
+| **Site (timeline)** | `index.html` + `assets/` → GitHub Pages | Mostra a régua. Lê `LANCAMENTOS` via gviz/JSONP: `publicado` sempre, `secundario` só na régua ampliada (seção 15). |
+| **Planilha** | Google Sheets `1Rsai…DaPA` | Banco de dados. Abas `Lancamentos` (`publicado`/`secundario`) e `Pendentes` (rascunho). |
 | **Automação** | `automation/` + `.github/workflows/auto-update.yml` | Toda semana pesquisa lançamentos e propõe candidatos em `Pendentes`. |
 | **Apps Script** | `automation/apps-script/Codigo.gs`, bound à planilha | Recebe candidatos, move/apaga linhas, manda e-mail. Publicado como web app. |
 | **PWA de curadoria** | `admin/` → GitHub Pages (`/admin/`) | Tela p/ aprovar/rejeitar pendentes e disparar a pesquisa manual. Lê `Pendentes` ao vivo via `fetch` CORS ao Apps Script (`?action=listar`); escrita via POST (token). Instalável no celular. |
@@ -115,13 +119,35 @@ Cabeçalho (mesmo nas duas abas; `Pendentes` tem `Aprovar?` a mais):
 data | empresa | modelo | impacto | referencia | status | tipo | dias | origem | timestamp | data_atualizacao   [ | Aprovar? ]
 ```
 
-- **`Lancamentos`** — o que o site lê. Só linhas com `status = publicado` aparecem.
+- **`Lancamentos`** — o que o site lê. Dois status entram na régua:
+  - `publicado` → **nível 1 (marco)**: aparece sempre, nos dois modos de leitura.
+  - `secundario` → **nível 2**: lançamento real, curado e aprovado, mas que não é marco.
+    Só aparece quando o leitor liga a **régua ampliada** (ver seção 15).
 - **`Pendentes`** — staging. A automação grava aqui com `status = pendente`. A coluna
-  `Aprovar?` é um checkbox (criado pelo `setup()`); marcar promove a linha (caminho alternativo à PWA).
+  `Aprovar?` é um checkbox (criado pelo `setup()`); marcar promove a linha como `publicado`
+  (caminho alternativo à PWA; para `secundario`, use a PWA).
 
 A chave de identidade de uma linha em todo o sistema é **`data | empresa | modelo`** — o "RG"
 de um lançamento. É por ela que se detecta duplicata (`prepare.mjs`/`publish.mjs`) e é por
 ela que o Apps Script localiza a linha certa ao aprovar/rejeitar.
+
+### Convenção: uma linha = um modelo
+
+A coluna `modelo` guarda **um** nome de modelo. Nada de `"o3 / o4-mini"` ou
+`"GPT-5.6 (Sol, Terra e Luna)"` — cada linha vira uma pílula, e nome composto desenha dois
+lançamentos empilhados numa pílula só. Vários modelos no mesmo anúncio viram várias linhas,
+com a **mesma data e a mesma `referencia`** (foi um anúncio só) e um `impacto` por modelo.
+
+Corrigido em **ago/2026**: 11 linhas agrupadas foram divididas em 24. Além do problema visual,
+o agrupamento obrigava apelidos em `MODEL_ALIASES` para religar o que já tinha nome próprio, e
+quebrava o cruzamento com o catálogo da AA — que lista cada modelo separadamente. Depois da
+divisão, os 13 modelos que a AA cataloga casam **exatamente**, sem apelido nenhum.
+A regra está em [`automation/policy.md`](automation/policy.md), então o curador automático
+já propõe assim.
+
+**Variante de esforço não é modelo novo.** `(max)`, `(high)`, `-instruct`, `-FP8` são
+configurações da mesma família e continuam numa linha só — é o que `splitVariant()` faz do
+lado do pipeline da AA.
 
 ---
 
@@ -313,13 +339,16 @@ O LLM faz **só** a pesquisa → JSON. Validação, dedup, escrita e e-mail são
 
 Todos terminam no Apps Script, que faz a mesma coisa:
 
-- **Aprovar** → copia a linha p/ `Lancamentos` com `status=publicado` e remove de `Pendentes`
-  → aparece no site (cache do site é de algumas horas).
+- **Aprovar como marco** → copia a linha p/ `Lancamentos` com `status=publicado` e remove de
+  `Pendentes` → aparece no site (cache do site é de algumas horas).
+- **Aprovar como secundário** → idem, mas com `status=secundario`: entra em `Lancamentos` e
+  só é desenhado na **régua ampliada** (seção 15). É o destino do lançamento que existe, tem
+  fonte e foi conferido — mas não muda o panorama.
 - **Rejeitar** → remove a linha de `Pendentes` (nunca toca em `Lancamentos`).
 
 | Caminho | Como |
 |---|---|
-| **PWA** (recomendado) | `https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/admin/` — botões Aprovar/Rejeitar. |
+| **PWA** (recomendado) | `https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/admin/` — botões **Marco** / **Ampliada** / **Rejeitar**. |
 | **Checkbox** | Na aba `Pendentes`, marcar `Aprovar?` (gatilho `onEdit` promove). |
 | **E-mail** | O e-mail lista os candidatos e aponta p/ a PWA/planilha (não aprova sozinho). |
 
@@ -342,7 +371,7 @@ título "Panorama LLMs"). Gerenciado por **clasp** a partir de `automation/apps-
 | `_listarData_` | Devolve os `Pendentes` (`status=pendente`) como `{candidatos:[…]}`. Lê a aba de uma vez (batch) e pula linhas vazias (checkboxes sem dados). |
 | `_pingData_` | Devolve `{ok, serverTime, pendentesRows, execMs, ghToken}` — diagnóstico de latência do web app (botão ⏱ da PWA). |
 | `_handleIngestao_` | Recebe `rows[]` do `publish.mjs`, grava em `Pendentes` (dedup), manda e-mail. |
-| `_handleAdmin_` | Aprovar/rejeitar uma linha (casa pela chave `data\|empresa\|modelo`). Lê a aba de uma vez (batch), tem **idempotência** (se já em `Lancamentos`, só remove) e `SpreadsheetApp.flush()`. |
+| `_handleAdmin_` | Aprovar/rejeitar uma linha (casa pela chave `data\|empresa\|modelo`). Lê a aba de uma vez (batch), tem **idempotência** (se já em `Lancamentos`, só remove) e `SpreadsheetApp.flush()`. `nivel:'secundario'` no corpo publica com `status=secundario` em vez de `publicado`. |
 | `_rodarWorkflow_` | Dispara `auto-update.yml` via API do GitHub (POST `/actions/workflows/.../dispatch`). Requer `GH_TOKEN` em Script Properties. |
 | `onEdit(e)` | Checkbox `Aprovar?` → promove a linha. |
 | `_promoverLinha_` | Helper: copia p/ `Lancamentos` como `publicado`. |
@@ -508,6 +537,8 @@ O que este pipeline ensina sobre construir com LLMs em produção:
 ```
 panorama-llms/
 ├── index.html, assets/{app,render,data}.js, styles.css   # o site (timeline)
+│   └─ assets/catalogo.json        # censo da AA p/ a régua ampliada (seção 15);
+│                                  #   gerado pelo cron de benchmarks, baixado sob demanda
 ├── guia.html, assets/{guia.js,benchmarks.json,guia.css}  # "Qual modelo usar" (benchmarks AA)
 ├── gratuitos.html, assets/{gratuitos.js,gratuitos-data.js,gratuitos.css}  # "IAs gratuitas"
 │                                                          #   catálogo v2; fonte: The AI Rankings
@@ -536,3 +567,81 @@ panorama-llms/
 ```
 
 (Fora do repo, na pasta `Regua/`: `CURADORIA-token.txt` com o token — não publicar.)
+
+---
+
+## 15. A régua ampliada — três níveis de curadoria
+
+### 15.1 O problema
+
+A régua padrão tem ~110 lançamentos escolhidos um a um. Ela responde bem "**o que mudou o
+setor**" — e não responde "**quantos modelos existem**". Pior: como a seleção é manual, a
+ausência é invisível. Um GPT-5.2 que ninguém cadastrou não deixa buraco na figura; ele
+simplesmente não existe para quem lê. Numa régua acadêmica, silêncio por omissão é um
+problema de cobertura que ninguém percebe.
+
+Do outro lado, a API da Artificial Analysis — que este projeto **já consulta toda semana**
+para o guia — cataloga 420+ famílias de modelos com data de estreia. Esses dados chegavam e
+eram descartados pelo corte do top-20.
+
+### 15.2 A solução: níveis explícitos, não uma régua "completa"
+
+Um botão **Régua ampliada** (`index.html`) alterna entre dois modos de leitura da MESMA
+linha do tempo. O modo padrão não mudou de nome nem de conteúdo — quem nunca clicar no botão
+vê exatamente a régua de sempre.
+
+| Nível | Origem | Status na planilha | Aparece na régua padrão? | Desenho |
+|---|---|---|---|---|
+| **1 · marco** | curadoria humana | `publicado` | sim | pílula cheia: logo, nome e data |
+| **2 · secundário** | curadoria humana | `secundario` | não | pílula compacta tracejada |
+| **3 · catálogo** | `assets/catalogo.json` (AA) | — | não | pílula compacta tracejada |
+
+A distinção entre curado e automático é **visual e permanente**: a pílula tracejada, a
+legenda dentro do SVG (logo, sobrevive à exportação PNG/SVG), a linha de proveniência no
+tooltip e as colunas `Nível`/`Fonte` no CSV. A ampliada nunca empresta a credibilidade da
+curadoria para dados que não passaram por ela.
+
+**Por que o nível 2 existe.** A AA só cataloga **LLM de texto servido por API**. Ela nunca
+verá Sora, FLUX, Lyria, Seedance — nem Cursor, Antigravity ou Claude Code. Sem um nível
+curado para modalidades e ferramentas, a "ampliação" teria um buraco exatamente onde a fila
+de pendentes está mais cheia. O nível 2 também dá destino ao pendente que é real e bem
+documentado, mas não é marco: hoje ele fica na fila para sempre ou é rejeitado.
+
+### 15.3 Como funciona por dentro
+
+- **Dados (nível 3):** `automation/update-benchmarks.mjs` grava `assets/catalogo.json` na
+  mesma execução do cron de benchmarks — zero chamada extra de API (ver
+  [BENCHMARKS.md §2.3](automation/BENCHMARKS.md)).
+- **Carga sob demanda:** `assets/app.js` só baixa o catálogo quando o usuário liga o modo.
+  A primeira pintura da página não espera por um arquivo que a maioria das visitas não usa.
+  Falhou o download? A ampliada mostra só os níveis 1 e 2 e avisa na tela.
+- **Deduplicação:** um modelo curado não pode reaparecer como pílula do catálogo ao lado de
+  si mesmo. `chavesCuradas()` desmonta os nomes agrupados da régua (`Gemini 3.6 Flash / 3.5
+  Flash-Lite`, `Claude 4 (Opus/Sonnet)`, `o3 / o4-mini`) em pedaços e compara cada um,
+  aplicando `MODEL_ALIASES`. Na prática ~62 das 420 famílias são suprimidas por já estarem
+  na régua.
+- **Identidade de modelo:** `chaveModelo()` (só da ampliada) converte `+` em palavra antes de
+  normalizar. `normModel()` apaga toda pontuação, e para o resto do sistema isso está certo —
+  mas achataria **Command-R+ e Command-R no mesmo modelo**, sumindo com um dos dois em
+  silêncio. Foi um bug real, pego na simulação de layout.
+- **Trilhas:** `buildExpandedGroups()` (`assets/data.js`) mantém as trilhas nomeadas da régua
+  padrão (OpenAI continua na mesma altura nos dois modos), promove a trilha própria toda
+  empresa com **≥ 3 modelos**, e joga a cauda longa no "Outros" do grupo. Resultado típico:
+  34 trilhas contra 15.
+- **Geografia:** `CREATOR_COUNTRY` (`assets/data.js`) mapeia empresa → país, e o país decide o
+  grupo. É a tabela que faz a ampliada revelar Coreia do Sul, Israel, Índia, Emirados e Suíça
+  — que a régua padrão, restrita a marcos, não alcança. **Empresa fora da tabela não tem país
+  chutado:** cai em "Outros" de OUTROS PAÍSES e o pipeline emite `::warning::`.
+
+### 15.4 O contraintuitivo do zoom
+
+Na ampliada, **aproximar o zoom encurta a régua**. Mais px/dia espalha as pílulas no eixo do
+tempo, elas param de colidir, precisam de menos lanes e as faixas ficam mais baixas. Afastar
+comprime tudo horizontalmente e força a pilha vertical. Medido: 5.100 px de altura a
+3,0 px/dia contra 10.200 px a 0,6 px/dia — o dobro. Por isso o botão "Tela" (ajustar à
+largura), que é o reflexo natural de quem se perde, é justamente o pior caso vertical. O
+popover de explicação avisa.
+
+`CONFIG.MAX_LANES_AMPLIADA` (48, contra 24 do padrão) existe pelo mesmo motivo: no teto
+antigo, um punhado de pílulas não achava lane e era empilhado em cima do eixo — sobreposição
+silenciosa.

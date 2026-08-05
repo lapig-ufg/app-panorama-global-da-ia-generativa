@@ -89,7 +89,7 @@ A planilha do Google Sheets deve conter uma aba chamada **`Lancamentos`** com as
 | C      | `modelo`          | Texto     | Nome do modelo/produto lançado                                             |
 | D      | `impacto`         | Texto     | Breve descrição do impacto (exibida no tooltip)                            |
 | E      | `referencia`      | URL       | Link para a fonte oficial ou cobertura de imprensa                         |
-| F      | `status`          | Texto     | Use **`publicado`** para que a linha apareça (qualquer outro valor: oculta)|
+| F      | `status`          | Texto     | **`publicado`** = marco, aparece sempre. **`secundario`** = só na *régua ampliada*. Qualquer outro valor: oculta. |
 | G      | `tipo`            | Texto     | Categoria (ex.: `modelo`). Informativo — não afeta a renderização.         |
 | H      | `dias`            | Número    | Deixe **vazia** — o JS calcula sozinho a partir de 30/nov/2022.            |
 | I      | `origem`          | Texto     | `manual` ou `auto` (preenchido pela automação). Informativo.               |
@@ -108,6 +108,16 @@ Para adicionar uma nova empresa com identidade própria, edite `assets/data.js`:
 - Adicione cor em `COMPANY_COLORS`
 - Adicione mapeamento de logo em `LOGO_MAP` e o path SVG em `LOGO_PATHS`
 - Inclua a empresa em uma das tracks de `LAYOUT_GROUPS`
+- Cadastre o país em `CREATOR_COUNTRY` (é o que posiciona a empresa na **régua ampliada**)
+
+### Régua ampliada
+
+O botão **"Régua ampliada"** troca o recorte da timeline sem sair da página. Além dos
+marcos, ela desenha — em pílulas compactas tracejadas — os lançamentos `secundario` da
+planilha e o catálogo completo da Artificial Analysis (`assets/catalogo.json`, ~420 modelos
+com data de estreia, gerado pelo cron de benchmarks). A distinção entre curadoria humana e
+censo automático aparece na pílula, na legenda do SVG, no tooltip e nas colunas
+`Nível`/`Fonte` do CSV. Detalhes em [ARQUITETURA.md §15](ARQUITETURA.md).
 
 ---
 

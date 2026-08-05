@@ -31,6 +31,7 @@ const ROTA_FREE = '/language/models/free';
 const ROTA_PRO = '/language/models';
 const MAX_PAGINAS = 20;   // trava contra loop se a paginação vier maluca
 const OUT_PATH = join(ROOT, 'assets', 'benchmarks.json');
+const CATALOGO_PATH = join(ROOT, 'assets', 'catalogo.json');
 
 // Nº de modelos DISTINTOS (famílias) guardados por benchmark. Como as variantes
 // de esforço são colapsadas antes do corte, 20 famílias ≈ 40-50 linhas cruas.
@@ -176,6 +177,65 @@ function normalizeScore(v, isFraction) {
   return (isFraction && v <= 1) ? Math.round(v * 1e6) / 1e4 : v;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   CATÁLOGO DA RÉGUA AMPLIADA (assets/catalogo.json)
+   ═══════════════════════════════════════════════════════════════
+   O guia "Qual modelo usar" só precisa dos melhores de cada índice — por isso
+   benchmarks.json guarda top-20 (+ o `full` para lookup, sem data). A régua
+   ampliada precisa do oposto: TODOS os modelos, cada um com a data em que
+   apareceu, para virar pílula na linha do tempo.
+
+   As duas coisas saem da MESMA resposta da API, na mesma execução do cron:
+   o catálogo não custa nenhuma chamada extra — só deixa de jogar fora dados
+   que já chegaram.
+
+   Uma família = um modelo na régua. A AA lista cada nível de esforço como
+   modelo próprio ("GPT-5.6 Sol (max)", "(high)"…), e três pílulas idênticas
+   empilhadas no mesmo dia não informam nada. Colapsamos por família e ficamos
+   com a data de ESTREIA (a mais antiga entre as variantes): é o dia em que
+   aquele modelo passou a existir, que é o que uma linha do tempo mede. */
+function construirCatalogo(models, canonicalCompany, marcoMs) {
+  const familias = new Map();
+  let semData = 0, antesDoMarco = 0;
+
+  for (const m of models) {
+    const { family } = splitVariant(modelName(m));
+    const creator = canonicalCompany(creatorName(m));
+    if (!family || !creator || creator === 'Desconhecido') continue;
+
+    const d = releaseDate(m);
+    const ts = d ? Date.parse(`${d}T00:00:00Z`) : NaN;
+    if (Number.isNaN(ts)) { semData++; continue; }
+    // A régua começa no marco zero (30/nov/2022). Modelo anterior a isso não
+    // tem onde ser desenhado — cairia sobre a calha de rótulos.
+    if (ts < marcoMs) { antesDoMarco++; continue; }
+
+    const score = normalizeScore(benchmarkScore(m, 'artificial_analysis_intelligence_index'), false);
+    const ow = openWeights(m);
+    const id = `${creator}|${family}`;
+    const prev = familias.get(id);
+
+    if (!prev) {
+      familias.set(id, {
+        mod: family,
+        emp: creator,
+        date: d,
+        score: (score != null && !Number.isNaN(score)) ? score : null,
+        open_weights: ow,
+      });
+    } else {
+      if (d < prev.date) prev.date = d;
+      if (score != null && !Number.isNaN(score) && (prev.score == null || score > prev.score)) prev.score = score;
+      if (prev.open_weights == null && ow != null) prev.open_weights = ow;
+    }
+  }
+
+  const modelos = [...familias.values()]
+    .sort((a, b) => a.date.localeCompare(b.date) || a.emp.localeCompare(b.emp) || a.mod.localeCompare(b.mod));
+
+  return { modelos, semData, antesDoMarco };
+}
+
 /* Busca uma rota inteira, seguindo a paginação (page_size = 200 hoje).
    Devolve também o tier e se a paginação fechou — sem isso o pipeline
    publicaria a primeira página e jogaria o resto fora em silêncio. */
@@ -210,8 +270,9 @@ async function main() {
     process.exit(1);
   }
 
-  const { canonicalCompany, COMPANY_COLORS, BENCH_ONLY_COLORS, MODEL_ALIASES } =
-    await loadDataJs(['canonicalCompany', 'COMPANY_COLORS', 'BENCH_ONLY_COLORS', 'MODEL_ALIASES']);
+  const { canonicalCompany, COMPANY_COLORS, BENCH_ONLY_COLORS, MODEL_ALIASES, CREATOR_COUNTRY, CONFIG } =
+    await loadDataJs(['canonicalCompany', 'COMPANY_COLORS', 'BENCH_ONLY_COLORS', 'MODEL_ALIASES',
+                      'CREATOR_COUNTRY', 'CONFIG']);
 
   /* Tenta o Pro primeiro: se a assinatura existir, o guia ganha os benchmarks
      individuais de volta sozinho. 403 é a resposta esperada numa chave free —
@@ -414,6 +475,33 @@ async function main() {
     benchmarks,
   };
 
+  /* ─── Catálogo da régua ampliada ─── */
+  const cat = construirCatalogo(models, canonicalCompany, CONFIG.MARCO.getTime());
+
+  /* Empresa sem país cadastrado cai em "Outros" de OUTROS PAÍSES na régua
+     ampliada — visível, mas geograficamente errada. Este aviso é o gatilho
+     para alguém pesquisar a sede e cadastrar em CREATOR_COUNTRY. Chutar o país
+     em código seria pior: um erro de origem numa régua acadêmica passa
+     despercebido justamente por parecer plausível. */
+  const semPais = [...new Set(cat.modelos.map(m => m.emp))]
+    .filter(e => !CREATOR_COUNTRY[e])
+    .sort();
+  if (semPais.length) {
+    console.log(`::warning::${semPais.length} empresa(s) do catálogo sem país em CREATOR_COUNTRY ` +
+      `(assets/data.js) — vão para "Outros" de OUTROS PAÍSES na régua ampliada: ${semPais.join(', ')}`);
+  }
+
+  const catalogoOut = {
+    source: out.source,
+    source_url: out.source_url,
+    attribution: out.attribution,
+    api_tier: r.tier,
+    fetched_at: fetchedAt,
+    familias_total: cat.modelos.length,
+    descartados: { entradas_sem_data: cat.semData, anteriores_ao_marco: cat.antesDoMarco },
+    modelos: cat.modelos,
+  };
+
   // DRY_RUN=true valida e imprime o resumo SEM escrever o arquivo — usado para
   // conferir uma correção de schema antes de deixá-la publicar de verdade.
   const dry = process.env.DRY_RUN === 'true';
@@ -423,6 +511,20 @@ async function main() {
     await writeFile(OUT_PATH, JSON.stringify(out, null, 2), 'utf8');
     console.log(`\nSalvo: ${OUT_PATH}`);
   }
+
+  /* O catálogo tem guarda própria e mais frouxa que a do benchmarks.json: se
+     ele vier pequeno demais, o certo é manter o anterior e deixar o guia
+     publicar normalmente — a régua ampliada continua no ar com o catálogo da
+     semana passada, que é bem melhor do que ficar sem nenhum. */
+  if (cat.modelos.length < 100) {
+    console.log(`::warning::O catálogo saiu com só ${cat.modelos.length} famílias (esperado: centenas). ` +
+      'assets/catalogo.json NÃO foi reescrito — o anterior continua valendo.');
+  } else if (!dry) {
+    await writeFile(CATALOGO_PATH, JSON.stringify(catalogoOut, null, 2), 'utf8');
+    console.log(`Salvo: ${CATALOGO_PATH}`);
+  }
+  console.log(`Catálogo: ${cat.modelos.length} famílias com data · ` +
+    `descartadas ${cat.semData} entradas sem data e ${cat.antesDoMarco} anteriores ao marco zero`);
   console.log(`Modelos: ${models.length} · Benchmarks: ${benchmarks.length} · Tier: ${r.tier} · Data: ${fetchedAt.slice(0, 10)}`);
   console.log(`Preço: ${comPreco}/${nTop} linhas · Velocidade: ${comVeloc}/${nTop} linhas`);
   console.log(`Campo open_weights: ${openWeightsSeen > 0 ? `presente (${openWeightsSeen} linhas)` : 'AUSENTE na API — selo "aberto" fica oculto'}`);

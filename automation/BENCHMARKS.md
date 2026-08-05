@@ -1,10 +1,15 @@
-# Sistema de benchmarks — Artificial Analysis → guia "Qual modelo usar"
+# Sistema de benchmarks — Artificial Analysis → guia "Qual modelo usar" + régua ampliada
 
 Subsistema **independente** do pipeline de lançamentos (aquele está em
 [automation/README.md](README.md) e [ARQUITETURA.md](../ARQUITETURA.md)). Aqui um
 cron busca os benchmarks da **Artificial Analysis**, grava `assets/benchmarks.json`,
 e a página `guia.html` (**"Qual modelo usar"**) transforma isso em rankings
 interativos por tipo de tarefa.
+
+> **Duas saídas, uma chamada.** Desde ago/2026 a mesma execução grava também
+> `assets/catalogo.json` — o censo de **todos** os modelos com data de estreia, que
+> alimenta a **régua ampliada** do `index.html`. Não é uma segunda coleta: são dados que
+> já vinham na mesma resposta e eram descartados pelo corte do top-20. Ver §2.3.
 
 > ⚠️ **Diferença crucial:** este pipeline **auto-publica em produção sem trava
 > humana** — diferente do de lançamentos, que passa pela aba `Pendentes`. Quem
@@ -24,11 +29,14 @@ GitHub Actions  (cron: segunda 09:00 UTC / 06:00 BRT — ou disparo manual)
           2. normaliza empresa (assets/data.js), colapsa variantes de esforço,
              corta top-20 por FAMÍLIA de modelo, normaliza escala dos scores
           3. GUARDAS de sanidade  ── falhou? aborta e mantém o arquivo anterior
-          4. escreve assets/benchmarks.json
-     └─ git commit + push  (só se o arquivo mudou)
+          4. escreve assets/benchmarks.json   (top-20 por índice → guia)
+          5. escreve assets/catalogo.json     (TODAS as famílias + data → régua ampliada)
+     └─ git commit + push  (só se algum dos dois mudou)
   → GitHub Pages republica
 guia.html + assets/guia.js
      └─ fetch('assets/benchmarks.json', {cache:'no-store'})  → página interativa
+index.html + assets/app.js   (só quando o usuário liga a "Régua ampliada")
+     └─ fetch('assets/catalogo.json')  → pílulas compactas na timeline
 ```
 
 O LLM **não participa** deste pipeline — é só API → arquivo → site. A "política"
@@ -149,6 +157,46 @@ este modelo" melhor que preço por token.
 O `benchmarks.json` guarda tudo em **0–100** (`is_fraction` controla só o sufixo `%` na
 exibição). Como o schema v2 devolve os percentuais em fração, `normalizeScore()` converte
 `0–1 → 0–100` (com guard `<= 1` para não multiplicar de novo se a AA voltar ao 0–100).
+
+### 2.3 `assets/catalogo.json` — o censo que alimenta a régua ampliada
+
+O guia precisa dos **melhores** de cada índice; a régua ampliada precisa de **todos**, com
+a data em que apareceram. As duas coisas saem da mesma resposta, então `construirCatalogo()`
+roda no mesmo `main()` e grava um segundo arquivo:
+
+```json
+{
+  "source": "Artificial Analysis Data API v2",
+  "fetched_at": "2026-08-05T14:15:08.273Z",
+  "familias_total": 420,
+  "descartados": { "entradas_sem_data": 31, "anteriores_ao_marco": 12 },
+  "modelos": [
+    { "mod": "Qwen3.6 Plus", "emp": "Alibaba", "date": "2026-05-12", "score": 39.6, "open_weights": null }
+  ]
+}
+```
+
+Três decisões que valem registro:
+
+- **Uma família = uma pílula.** A AA lista cada nível de esforço como modelo próprio
+  (`GPT-5.6 Sol (max)`, `(high)`…). Três pílulas idênticas no mesmo dia não informam nada,
+  então `splitVariant()` colapsa por família — a mesma função que o `benchmarks.json` já usa.
+- **Data de estreia, não a da melhor variante.** Colapsando, guardamos a **menor** data
+  entre as variantes: é o dia em que aquele modelo passou a existir, que é o que uma linha
+  do tempo mede.
+- **Corte no marco zero.** Modelo anterior a 30/nov/2022 é descartado (`anteriores_ao_marco`):
+  a régua começa ali, e um `dias` negativo seria desenhado por cima da calha de rótulos.
+
+**Guarda própria, mais frouxa que a do `benchmarks.json`.** Se o catálogo sair com menos de
+100 famílias, o arquivo **não é reescrito** (`::warning::`) e o resto do run segue normal —
+a régua ampliada continua no ar com o catálogo da semana anterior, que é muito melhor do que
+ficar sem nenhum.
+
+**Aviso de país.** Empresa do catálogo que não está em `CREATOR_COUNTRY` (`assets/data.js`)
+vira `::warning::` no log e cai em "Outros" de OUTROS PAÍSES na régua. O pipeline **não
+chuta** a sede: errar o país de um laboratório numa régua acadêmica é o tipo de erro que
+passa despercebido justamente por parecer plausível. O aviso é o gatilho para pesquisar e
+cadastrar à mão.
 
 ---
 
@@ -452,6 +500,20 @@ Categoria sem dados → aparece como "sem dados nesta rodada" (não some). Abert
 ---
 
 ## 9. Changelog
+
+### 2026-08-05 — `catalogo.json`: o censo da régua ampliada
+Segunda saída do mesmo pipeline, sem nenhuma chamada extra de API. O corte do top-20
+jogava fora 400 famílias que já tinham chegado na resposta; agora elas viram
+`assets/catalogo.json` (nome, empresa canônica, **data de estreia**, score, pesos abertos) e
+alimentam o modo "Régua ampliada" do `index.html`. (§2.3)
+
+- `construirCatalogo()` colapsa variantes de esforço por família e guarda a **menor** data
+  entre elas (estreia), descartando o que não tem data ou é anterior ao marco zero.
+- Guarda própria: < 100 famílias → não reescreve o arquivo, mantém o anterior, e o
+  `benchmarks.json` publica normalmente.
+- `::warning::` para empresa sem país em `CREATOR_COUNTRY` — o pipeline nunca chuta a sede.
+- O workflow passou a commitar os **dois** arquivos juntos (saem da mesma resposta; separá-los
+  os deixaria dessincronizados).
 
 ### 2026-08-05 — honestidade do "Uso geral" + referência da fonte
 Revisão de conteúdo depois do corte de 5→3 categorias. O gatilho foi a pergunta "'uso geral'

@@ -4,9 +4,12 @@
  * Faz três coisas:
  *  1) doPost(e) ingestão: recebe os candidatos do GitHub Actions (publish.mjs), grava na
  *     aba "Pendentes" como rascunho (status = "pendente") e envia um e-mail-resumo.
- *  2) doPost(e) admin: ações { action:'aprovar'|'rejeitar', token, data, empresa, modelo }
- *     vindas da PWA de curadoria — aprovar promove p/ "Lancamentos" (publicado) e remove de
+ *  2) doPost(e) admin: ações { action:'aprovar'|'rejeitar', token, data, empresa, modelo,
+ *     nivel? } vindas da PWA de curadoria — aprovar promove p/ "Lancamentos" e remove de
  *     "Pendentes"; rejeitar remove de "Pendentes".
+ *     nivel:'secundario' publica com status "secundario" em vez de "publicado": a linha
+ *     entra em Lancamentos mas o site só a desenha no modo "régua ampliada". Serve para o
+ *     lançamento real que não é marco (point-release, variante, ferramenta menor).
  *  3) onEdit(e): marcar "Aprovar?" numa linha de "Pendentes" também promove p/ "Lancamentos".
  *
  * SETUP (uma vez, nesta ordem):
@@ -207,12 +210,17 @@ function _handleAdmin_(body, action) {
       if (key !== alvo) continue;
 
       var sheetRow = r + 2;
-      if (action === 'aprovar' && !jaNoLanc) _promoverLinha_(ss, pend, headers, sheetRow);
+      // nivel=2 (body.nivel === 'secundario') publica com status "secundario":
+      // a linha vai para Lancamentos como qualquer outra, mas o site só a desenha
+      // no modo "regua ampliada". Sem nivel, continua sendo aprovacao normal.
+      var statusAlvo = (body.nivel === 'secundario' || body.nivel === 2) ? 'secundario' : 'publicado';
+      if (action === 'aprovar' && !jaNoLanc) _promoverLinha_(ss, pend, headers, sheetRow, statusAlvo);
       pend.deleteRow(sheetRow);
       SpreadsheetApp.flush(); // propaga imediatamente p/ abas abertas e PWA
-      console.log('[admin] ' + action + ' ' + alvo + (jaNoLanc ? ' (ja publicado, so removeu)' : '') +
+      console.log('[admin] ' + action + ' ' + alvo + (action === 'aprovar' ? ' status=' + statusAlvo : '') +
+                  (jaNoLanc ? ' (ja publicado, so removeu)' : '') +
                   ' commit=' + (Date.now() - t0) + 'ms');
-      return _json({ ok: true, action: action, empresa: empV, modelo: modV, jaNoLanc: jaNoLanc });
+      return _json({ ok: true, action: action, status: statusAlvo, empresa: empV, modelo: modV, jaNoLanc: jaNoLanc });
     }
   }
   return _json({ ok: false, error: 'linha pendente nao encontrada (ja processada?)' });
@@ -271,15 +279,18 @@ function onEdit(e) {
   sh.getRange(row, aprovarCol).setNote('Aprovado e publicado em ' + new Date());
 }
 
-// ── helper compartilhado: copia a linha de Pendentes p/ Lancamentos como publicado ──
-function _promoverLinha_(ss, pend, pendHeaders, rowIndex) {
+// ── helper compartilhado: copia a linha de Pendentes p/ Lancamentos ──
+// status: 'publicado' (marco, aparece sempre) | 'secundario' (nivel 2, so na
+// regua ampliada). O gate humano vale igual para os dois: nada chega em
+// Lancamentos sem alguem aprovar.
+function _promoverLinha_(ss, pend, pendHeaders, rowIndex, status) {
   var lanc = ss.getSheetByName(TAB_LANC);
   if (!lanc) throw new Error('aba "' + TAB_LANC + '" nao existe');
   var lancHeaders = _headers(lanc);
   var vals = pend.getRange(rowIndex, 1, 1, pend.getLastColumn()).getValues()[0];
   var obj = {};
   pendHeaders.forEach(function (h, i) { obj[h] = vals[i]; });
-  obj.status = 'publicado';
+  obj.status = (status === 'secundario') ? 'secundario' : 'publicado';
   obj.data_atualizacao = new Date();
   lanc.appendRow(_rowFromObj(lancHeaders, obj));
 }

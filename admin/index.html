@@ -131,8 +131,17 @@
   }
   .ref a:hover { color:var(--accent-strong); text-decoration:underline; }
 
-  .actions { display:flex; gap:10px; margin-top:14px; }
-  .actions .btn-ok, .actions .btn-no { flex:1; }
+  .actions { display:flex; gap:8px; margin-top:14px; }
+  .actions .btn-ok, .actions .btn-sec, .actions .btn-no { flex:1; }
+  /* Três destinos possíveis para um pendente: marco (régua padrão), secundário
+     (só na régua ampliada) e rejeitado. O peso visual segue a hierarquia. */
+  .btn-sec {
+    background:var(--white); color:var(--ink); border:1px dashed var(--accent);
+    border-radius:10px; padding:11px 10px; font-weight:700; font-size:13px;
+    transition:transform .15s, background .15s;
+  }
+  .btn-sec:hover { background:var(--accent-soft, #eaf7f2); }
+  .btn-sec:active { transform:translateY(1px); }
   .btn-ok {
     background:var(--accent); color:#fff; border:1px solid var(--accent);
     border-radius:10px; padding:11px 16px; font-weight:700; font-size:13.5px;
@@ -331,7 +340,8 @@
         (it.ref ? '<div class="ref"><a href="' + esc(it.ref) + '" target="_blank" rel="noopener">fonte ↗</a></div>' : "") +
         (nova ? '<p class="impacto" style="color:#f59e0b">⚠ Aplique o snippet em <b>data.js</b> (logo/cor/grupo) e suba o <b>?v=</b> antes de aprovar, senão a pílula sai sem logo.</p>' : "") +
         '<div class="actions">' +
-          '<button class="btn-ok">✓ Aprovar</button>' +
+          '<button class="btn-ok">✓ Marco</button>' +
+          '<button class="btn-sec" title="Publica só na régua ampliada (status secundario)">≡ Ampliada</button>' +
           '<button class="btn-no">✕ Rejeitar</button>' +
         "</div>" +
       "</div>";
@@ -351,17 +361,21 @@
     ]);
   }
 
-  async function act(action, it, cardEl) {
+  // nivel: "marco" (padrão, status publicado) ou "secundario" (só na régua ampliada)
+  async function act(action, it, cardEl, nivel) {
     if (busy) return;
     busy = true;
+    var secundario = nivel === "secundario";
     var btns = cardEl.querySelectorAll("button");
-    var clicked = cardEl.querySelector(action === "aprovar" ? ".btn-ok" : ".btn-no");
+    var seletor = action !== "aprovar" ? ".btn-no" : (secundario ? ".btn-sec" : ".btn-ok");
+    var clicked = cardEl.querySelector(seletor);
     var label = clicked.innerHTML; // guarda p/ restaurar se não confirmar
     btns.forEach(function (b) { b.disabled = true; });
     cardEl.classList.add("busy");
     clicked.innerHTML = '<span class="spinner"></span>Enviando…';
 
     var payload = { action: action, token: getToken(), data: it.date, empresa: it.emp, modelo: it.mod };
+    if (secundario) payload.nivel = "secundario";
 
     // Dispara o POST. A resposta do Apps Script costuma ser ilegível (redirect do Google),
     // então NÃO dependemos dela — confirmamos pelo estado real (listar, ao vivo).
@@ -393,9 +407,11 @@
 
     busy = false;
     if (confirmou) {
-      clicked.innerHTML = action === "aprovar" ? "✓ Aprovado" : "✓ Rejeitado";
+      clicked.innerHTML = action !== "aprovar" ? "✓ Rejeitado" : (secundario ? "✓ Na ampliada" : "✓ Publicado");
       cardEl.style.opacity = ".4";
-      toast(action === "aprovar" ? "✓ Aprovado e publicado" : "✓ Rejeitado");
+      toast(action !== "aprovar" ? "✓ Rejeitado"
+            : secundario ? "✓ Publicado como secundário (só na régua ampliada)"
+                         : "✓ Aprovado e publicado como marco");
       setTimeout(function () {
         if (cardEl.parentNode) cardEl.parentNode.removeChild(cardEl);
         var n = listEl.querySelectorAll(".card").length;
@@ -437,7 +453,8 @@
     var mod = cardEl.querySelector(".mod").textContent;
     var date = cardEl.querySelector(".date").textContent;
     var item = { emp: emp, mod: mod, date: date };
-    if (b.classList.contains("btn-ok")) act("aprovar", item, cardEl);
+    if (b.classList.contains("btn-ok")) act("aprovar", item, cardEl, "marco");
+    else if (b.classList.contains("btn-sec")) act("aprovar", item, cardEl, "secundario");
     else if (b.classList.contains("btn-no")) {
       if (confirm("Rejeitar e remover este pendente?\n\n" + emp + " · " + mod)) act("rejeitar", item, cardEl);
     }

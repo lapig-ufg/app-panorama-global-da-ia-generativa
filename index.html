@@ -38,7 +38,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/styles.css?v=19">
   <link rel="stylesheet" href="assets/guia.css?v=17">
 
   <!-- Google Analytics (GA4) -->
@@ -137,6 +137,27 @@
       </button>
     </div>
 
+    <div class="control-cluster modo-cluster">
+      <button class="icon-btn modo-btn" id="modo-btn" type="button" aria-pressed="false"
+              title="Mostrar também os lançamentos secundários e o catálogo completo da Artificial Analysis">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2L2 7l10 5 10-5-10-5z" />
+          <path d="M2 17l10 5 10-5" />
+          <path d="M2 12l10 5 10-5" />
+        </svg>
+        <span class="btn-text">Régua ampliada</span>
+        <span class="modo-count" id="modo-count" hidden></span>
+      </button>
+      <button class="modo-info" id="modo-info" type="button"
+              aria-label="O que é a régua ampliada" aria-haspopup="true" aria-expanded="false">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </svg>
+      </button>
+    </div>
+
     <div class="control-cluster actions-cluster">
       <button class="icon-btn novidades-btn" id="novidades-btn" type="button"
               title="Últimos modelos adicionados à régua" aria-haspopup="true" aria-expanded="false" hidden>
@@ -183,6 +204,32 @@
     </div>
   </div>
 
+  <div class="modo-aviso" id="modo-aviso" role="status" hidden></div>
+
+  <div class="help-popover modo-popover" id="modo-popover" hidden>
+    <button class="help-close" id="modo-close" type="button" aria-label="Fechar explicação">×</button>
+    <div class="novidades-title">Régua ampliada</div>
+    <p class="modo-intro">
+      A régua padrão mostra <strong>marcos</strong>: os lançamentos que mudaram o setor,
+      escolhidos um a um. A régua ampliada acrescenta tudo o mais que se sabe, em
+      <strong>pílulas compactas e tracejadas</strong> — mesma linha do tempo, curadoria diferente.
+    </p>
+    <ul>
+      <li><strong>Marco:</strong> pílula cheia, com logo e data. Curadoria completa, com fonte primária.</li>
+      <li><strong>Secundário:</strong> lançamento real, curado e aprovado, mas que não muda o panorama —
+          inclui imagem, vídeo, áudio e ferramentas.</li>
+      <li><strong>Catálogo:</strong> censo automático da Artificial Analysis, <strong>sem curadoria
+          editorial</strong>. Cobre só modelos de texto servidos por API.</li>
+    </ul>
+    <p class="modo-fonte" id="modo-fonte"></p>
+    <div class="novidades-hint">
+      A ampliada é ~3× mais alta. Contraintuitivo, mas: <strong>aproximar</strong> o zoom
+      (<kbd>+</kbd>) espalha as pílulas no tempo e <em>encurta</em> a régua — afastar
+      comprime e alonga. Dados:
+      <a href="https://artificialanalysis.ai/" target="_blank" rel="noopener">Artificial Analysis</a>.
+    </div>
+  </div>
+
   <div class="help-popover novidades-popover" id="novidades-popover" hidden>
     <button class="help-close" id="novidades-close" type="button" aria-label="Fechar novidades">×</button>
     <div class="novidades-title">Últimas adições à régua</div>
@@ -199,6 +246,8 @@
       <li><strong>Zoom:</strong> botões, slider, <kbd>Ctrl/⌘ + scroll</kbd> ou teclas <kbd>+</kbd> / <kbd>−</kbd>.</li>
       <li><strong>Ajustar:</strong> botão <kbd>Tela</kbd> ou tecla <kbd>0</kbd> encaixa toda a timeline na largura.</li>
       <li><strong>Detalhes:</strong> clique numa pílula para abrir a referência no rodapé.</li>
+      <li><strong>Régua ampliada:</strong> mostra também lançamentos secundários e o catálogo
+          completo da Artificial Analysis, em pílulas compactas tracejadas.</li>
     </ul>
   </div>
 
@@ -223,6 +272,7 @@
     <div class="tt-model" id="tt-model"></div>
     <div class="tt-company" id="tt-company"></div>
     <div class="tt-impact" id="tt-impact"></div>
+    <div class="tt-fonte" id="tt-fonte" hidden></div>
   </div>
 
   <footer class="app-footer">
@@ -236,9 +286,9 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="assets/data.js?v=18"></script>
-  <script src="assets/render.js?v=15"></script>
-  <script src="assets/app.js?v=17"></script>
+  <script src="assets/data.js?v=19"></script>
+  <script src="assets/render.js?v=16"></script>
+  <script src="assets/app.js?v=18"></script>
 </body>
 
 </html>

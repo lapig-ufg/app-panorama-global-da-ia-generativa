@@ -112,7 +112,12 @@ const COMPANY_COLORS = {
   Xiaomi: '#FF6700',
   Microsoft: '#00A4EF',
   'Sakana AI': '#E8636F',
-  Mistral: '#FA520F'
+  Mistral: '#FA520F',
+  // Cor provisória: a Motif não publica uma cor de marca. Escolhida só para dar
+  // identidade à trilha — trocar assim que houver referência oficial. Sem logo em
+  // LOGO_MAP, a pílula cai no fallback da inicial ("M"), que é o comportamento
+  // documentado para empresa sem vetor.
+  'Motif Technologies': '#4F5D95'
 };
 
 // ─── CORES DE EMPRESAS SÓ-BENCHMARK ───
@@ -176,25 +181,23 @@ function companyColor(name) {
 // "Qual modelo usar" deixa de linkar modelos que estão na régua, e a automação
 // pode repor lançamento já cadastrado sob outro nome.
 //
-// Três famílias de caso (todas versão no git — nunca fuzzy automático):
-//   1. Variantes agrupadas numa linha só da régua
-//      (AA lista "GPT-5.6 Sol/Terra/Luna" separadas; a régua tem uma linha
-//      "GPT-5.6 (SOL, TERRA E LUNA)").
+// Duas famílias de caso (todas versão no git — nunca fuzzy automático):
 //   2. Nome comercial diferente
 //      (AA: "GPT-5.5", régua: "ChatGPT 5.5"; AA: "Claude Opus 4.8", régua: "Opus 4.8").
-//   3. Sufixo "Preview"/"Beta"/configuração que a régua não repete
+//   3. Sufixo "Preview"/"Beta"/configuração/tamanho que a régua não repete
 //      (AA: "Gemini 3.1 Pro Preview", régua: "Gemini 3.1 Pro").
+//
+// Havia uma família 1 — "variantes agrupadas numa linha só da régua" — que sumiu
+// em ago/2026: as linhas que citavam vários modelos numa célula ("GPT-5.6 (Sol,
+// Terra e Luna)", "Claude 4 (Opus/Sonnet)") foram divididas em uma linha por
+// modelo na planilha. Agrupar era ruim por si só (dois lançamentos numa pílula
+// só, encavalados), e ainda forçava apelido para o que já tinha nome próprio.
+// A convenção agora é: UMA linha da planilha = UM modelo.
 //
 // A chave é o normModel do nome COMO VEM da fonte externa; o valor é o
 // normModel do nome COMO ESTÁ NA RÉGUA. Consumida por assets/guia.js (link),
 // assets/app.js (deep-link) e automation/prepare.mjs/publish.mjs (dedup).
 const MODEL_ALIASES = {
-  // 1 — variantes agrupadas numa linha da régua:
-  'gpt56sol':           'gpt56solterraeluna',   // GPT-5.6 Sol       → GPT-5.6 (SOL, TERRA E LUNA)
-  'gpt56terra':         'gpt56solterraeluna',
-  'gpt56luna':          'gpt56solterraeluna',
-  'claude4opus':        'claude4opussonnet',    // Claude 4 Opus     → Claude 4 (Opus/Sonnet)
-  'claude4sonnet':      'claude4opussonnet',
   // 2 — nome comercial diferente:
   'gpt55':              'chatgpt55',            // GPT-5.5           → ChatGPT 5.5
   'claudeopus48':       'opus48',               // Claude Opus 4.8   → Opus 4.8
@@ -206,6 +209,17 @@ const MODEL_ALIASES = {
   'musespark11':        'musespark',            // Muse Spark 1.1    → Muse Spark
   'nemotron3ultra550ba55b': 'nemotron3ultra',   // Nemotron 3 Ultra 550B A55B → Nemotron 3 Ultra
   'deepseekv32speciale': 'deepseekv32',         // DeepSeek V3.2 Speciale → DeepSeek-V3.2
+  // A AA inverte a ordem tier/versão de uma geração para outra: escreve
+  // "Claude 4.5 Sonnet" mas "Claude Sonnet 4.6". normModel só tira pontuação —
+  // não reordena palavras —, então a grafia invertida não casa sozinha.
+  'claude45sonnet':     'claudesonnet45',       // Claude 4.5 Sonnet → Claude Sonnet 4.5
+  'claude41opus':       'claudeopus41',         // Claude 4.1 Opus   → Claude Opus 4.1
+  'claude45haiku':      'claudehaiku45',        // Claude 4.5 Haiku  → Claude Haiku 4.5
+  'phi4multimodalinstruct': 'phi4multimodal',   // Phi-4 Multimodal Instruct → Phi-4-multimodal
+  'phi4miniinstruct':   'phi4mini',             // Phi-4 Mini Instruct → Phi-4-mini
+  'ministral33b':       'ministral3',           // Ministral 3 3B/8B/14B → Ministral 3
+  'ministral38b':       'ministral3',           //   (a régua registra a família, a AA cada tamanho)
+  'ministral314b':      'ministral3',
 };
 
 // Normaliza nome de modelo para comparação entre a planilha e os benchmarks.
@@ -299,6 +313,9 @@ const LAYOUT_GROUPS = [
     tracks: [
       { name: 'Sakana AI · Japão', filter: r => r.emp && r.emp.trim().toUpperCase() === 'SAKANA AI' },
       { name: 'Mistral · França', filter: r => r.emp && r.emp.trim().toUpperCase() === 'MISTRAL' },
+      // Trilha própria porque a empresa entrou em COMPANY_COLORS: empresa "conhecida"
+      // sem trilha não casa com nenhum filtro e sumiria da régua (ver KNOWN_COMPANIES).
+      { name: 'Motif · Coreia do Sul', filter: r => r.emp && r.emp.trim().toUpperCase() === 'MOTIF TECHNOLOGIES' },
       // Catch-all: empresa desconhecida sem grupo (ou com grupo "OUTROS PAÍSES").
       // hideIfEmpty: a régua só é desenhada quando há pelo menos um evento nela.
       { name: 'Outros', hideIfEmpty: true, filter: r => desconhecida(r) && grupoDe(r) !== 'ECOSSISTEMA NORTE-AMERICANO' && grupoDe(r) !== 'ECOSSISTEMA CHINÊS' }
@@ -317,10 +334,211 @@ const CONFIG = {
   ZOOM_STEP: 0.2,
   MIN_TRACK_H: 72,
   MAX_LANES: 24,
+  MAX_LANES_AMPLIADA: 48,          // ver computeTrackLayout: a ampliada é bem mais densa
   PAD_L: 170,
   PAD_R: 200,
-  CACHE_KEY: 'panorama-llms-cache-v3',
-  CACHE_TTL_MS: 6 * 60 * 60 * 1000                                // 6 horas
+  CACHE_KEY: 'panorama-llms-cache-v4',   // v4: linhas passaram a carregar `nivel`
+  CACHE_TTL_MS: 6 * 60 * 60 * 1000,                               // 6 horas
+  // Catálogo da régua ampliada (nível 3). Só é baixado quando o usuário liga o
+  // modo — a régua padrão continua carregando exatamente o que carregava antes.
+  CATALOGO_URL: 'assets/catalogo.json?v=1',
+  MODO_KEY: 'panorama-llms-modo-v1'
 };
 
 const MESES = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+
+/* ═══════════════════════════════════════════════════════════════
+   RÉGUA AMPLIADA — o segundo modo de leitura da timeline
+   ═══════════════════════════════════════════════════════════════
+   A régua padrão é uma seleção editorial: ~110 marcos curados um a um. Ela
+   responde "o que mudou o setor". Não responde "quantos modelos existem" — e,
+   como a seleção é manual, sempre há risco de lacuna (um GPT-5.2 que ninguém
+   cadastrou some da história sem deixar rastro).
+
+   A régua ampliada responde a segunda pergunta, com três níveis de curadoria
+   explícitos — e é ESSA explicitação que a torna defensável academicamente:
+
+     nível 1 · marco       status `publicado`  na planilha — curadoria completa
+     nível 2 · secundário  status `secundario` na planilha — curado, mas não é marco
+     nível 3 · catálogo    assets/catalogo.json — censo automático da Artificial
+                           Analysis, SEM curadoria editorial
+
+   O nível 3 cobre só LLM de texto servido por API (é o escopo da AA): nada de
+   imagem, vídeo, áudio ou ferramentas. O nível 2 existe exatamente para cobrir
+   esse buraco — Sora, FLUX, Cursor e afins nunca virão da AA.
+   ═══════════════════════════════════════════════════════════════ */
+
+// ─── PAÍS DE ORIGEM (empresa → país) ───
+// Fonte da verdade para o agrupamento geográfico da régua ampliada. A régua
+// padrão não precisa dela: lá as empresas já estão escritas à mão em
+// LAYOUT_GROUPS. Aqui não dá — o catálogo da AA traz dezenas de laboratórios
+// que ninguém cadastrou, e "de onde vem" é justamente o que a ampliada revela.
+//
+// REGRA: só entra empresa cuja sede eu consigo afirmar. Empresa fora da tabela
+// não é chutada para lugar nenhum — cai em "Outros" de OUTROS PAÍSES e o
+// pipeline avisa (::warning::) para alguém pesquisar e cadastrar aqui.
+// Errar o país de um laboratório é o tipo de erro que uma régua acadêmica não
+// pode cometer em silêncio.
+const CREATOR_COUNTRY = {
+  // — Estados Unidos —
+  'OpenAI': 'Estados Unidos',
+  'Anthropic': 'Estados Unidos',
+  'Google': 'Estados Unidos',
+  'Meta': 'Estados Unidos',
+  'Microsoft': 'Estados Unidos',
+  'xAI': 'Estados Unidos',
+  'NVIDIA': 'Estados Unidos',
+  'IBM': 'Estados Unidos',
+  'Amazon': 'Estados Unidos',
+  'Cursor': 'Estados Unidos',
+  'OpenClaw': 'Estados Unidos',
+  'Allen Institute for AI': 'Estados Unidos',
+  'Liquid AI': 'Estados Unidos',
+  'Nous Research': 'Estados Unidos',
+  'Perplexity': 'Estados Unidos',
+  'Thinking Machines': 'Estados Unidos',
+  'Reka AI': 'Estados Unidos',
+  'Arcee AI': 'Estados Unidos',
+  'Prime Intellect': 'Estados Unidos',
+  'Snowflake': 'Estados Unidos',
+  'Databricks': 'Estados Unidos',
+  'ServiceNow': 'Estados Unidos',
+  'Inception': 'Estados Unidos',
+  // — Canadá (fica no ecossistema norte-americano; o rótulo da trilha marca o país) —
+  'Cohere': 'Canadá',
+  // — China —
+  'Alibaba': 'China',
+  'DeepSeek': 'China',
+  'Zhipu AI': 'China',
+  'MiniMax': 'China',
+  'Moonshot AI': 'China',
+  'Baidu': 'China',
+  'Xiaomi': 'China',
+  'Tencent': 'China',
+  'ByteDance Seed': 'China',
+  'Kuaishou': 'China',
+  'StepFun': 'China',
+  'China Mobile': 'China',
+  'InclusionAI': 'China',
+  'LongCat': 'China',
+  'OpenBMB': 'China',
+  'Nanbeige': 'China',
+  // — Resto do mundo —
+  'Mistral': 'França',
+  'Sakana AI': 'Japão',
+  'AI21 Labs': 'Israel',
+  'LG AI Research': 'Coreia do Sul',
+  'Upstage': 'Coreia do Sul',
+  'Naver': 'Coreia do Sul',
+  'Korea Telecom': 'Coreia do Sul',
+  'Trillion Labs': 'Coreia do Sul',
+  'Motif Technologies': 'Coreia do Sul',
+  'Sarvam': 'Índia',
+  'TII UAE': 'Emirados Árabes',
+  'MBZUAI Institute of Foundation Models': 'Emirados Árabes',
+  'Swiss AI Initiative': 'Suíça',
+  'Multiverse Computing': 'Espanha'
+};
+
+// País → grupo da régua. Canadá entra no ecossistema norte-americano (é o que
+// o nome do grupo diz); o subtítulo do grupo é ajustado no modo ampliado para
+// não contradizer isso. Qualquer outro país cai em OUTROS PAÍSES.
+const GRUPO_DO_PAIS = {
+  'Estados Unidos': 'ECOSSISTEMA NORTE-AMERICANO',
+  'Canadá': 'ECOSSISTEMA NORTE-AMERICANO',
+  'China': 'ECOSSISTEMA CHINÊS'
+};
+const GRUPO_PADRAO = 'OUTROS PAÍSES';
+
+function companyCountry(name) {
+  return CREATOR_COUNTRY[canonicalCompany(name)] || '';
+}
+
+// Grupo de uma LINHA (não de uma empresa): o país manda; sem país cadastrado,
+// vale a coluna `grupo` da planilha (preenchida pela automação de lançamentos);
+// sem nenhum dos dois, OUTROS PAÍSES — o mesmo destino da régua padrão.
+function grupoDaLinha(r) {
+  const pais = companyCountry(r.emp);
+  if (pais) return GRUPO_DO_PAIS[pais] || GRUPO_PADRAO;
+  const g = grupoDe(r);
+  if (g === 'ECOSSISTEMA NORTE-AMERICANO' || g === 'ECOSSISTEMA CHINÊS') return g;
+  return GRUPO_PADRAO;
+}
+
+// Mínimo de modelos para uma empresa ganhar trilha própria no modo ampliado.
+// Abaixo disso ela divide o "Outros" do grupo: com 56 laboratórios no catálogo,
+// dar trilha a quem tem 1 modelo geraria 25 faixas quase vazias.
+const MIN_MODELOS_TRACK = 3;
+
+// Subtítulos que só valem no modo ampliado (o recorte muda, o texto acompanha).
+const SUBTITULO_AMPLIADA = {
+  'ECOSSISTEMA NORTE-AMERICANO': 'Estados Unidos e Canadá. Inclui laboratórios que não aparecem na régua padrão por não terem lançamento considerado marco.',
+  'ECOSSISTEMA CHINÊS': 'Crescimento acelerado com forte aposta em código aberto. A ampliação revela a cauda longa: universidades, teles e braços de IA de grandes plataformas.',
+  'OUTROS PAÍSES': 'Coreia do Sul, Israel, Índia, Emirados, Europa e Japão — a diversidade geográfica que a régua padrão, restrita a marcos, não alcança.'
+};
+
+/* Monta os grupos/trilhas do modo ampliado a partir das linhas carregadas.
+   Não toca em LAYOUT_GROUPS: devolve uma estrutura nova com o mesmo contrato
+   ({ title, subtitle, bg, flag, accent, tracks:[{name, filter}] }), para que
+   render.js não precise saber em que modo está.
+
+   Três camadas, nesta ordem:
+     1. as trilhas nomeadas da régua padrão, com o MESMO filtro (OpenAI continua
+        na mesma altura nos dois modos — trocar de modo não deve reembaralhar a
+        página inteira);
+     2. uma trilha nova por empresa com >= MIN_MODELOS_TRACK modelos;
+     3. um "Outros" por grupo para a cauda longa.
+   O "Outros" estático da régua padrão é descartado de propósito: no ampliado,
+   Meta e Cursor têm volume para trilha própria. */
+function buildExpandedGroups(rows) {
+  return LAYOUT_GROUPS.map(base => {
+    const nomeadas = base.tracks.filter(t => t.name !== 'Outros');
+    const coberta = r => nomeadas.some(t => t.filter(r));
+    const doGrupo = rows.filter(r => grupoDaLinha(r) === base.title);
+
+    const contagem = new Map();
+    doGrupo.forEach(r => {
+      if (coberta(r)) return;
+      const c = canonicalCompany(r.emp);
+      if (c) contagem.set(c, (contagem.get(c) || 0) + 1);
+    });
+
+    const promovidas = [...contagem.entries()]
+      .filter(([, n]) => n >= MIN_MODELOS_TRACK)
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([c]) => c);
+    const promovidasUC = new Set(promovidas.map(c => c.toUpperCase()));
+
+    const daEmpresa = c => r =>
+      grupoDaLinha(r) === base.title &&
+      canonicalCompany(r.emp).toUpperCase() === c.toUpperCase();
+
+    // Em OUTROS PAÍSES o país faz parte do rótulo, como já é na régua padrão
+    // ("Sakana AI · Japão"): num grupo que mistura seis países, o nome da
+    // empresa sozinho não diz de onde ela é.
+    const rotulo = c => {
+      const pais = companyCountry(c);
+      return (base.title === GRUPO_PADRAO && pais) ? `${c} · ${pais}` : c;
+    };
+
+    const tracks = [
+      ...nomeadas,
+      ...promovidas.map(c => ({ name: rotulo(c), auto: true, filter: daEmpresa(c) })),
+      {
+        name: 'Outros',
+        hideIfEmpty: true,
+        auto: true,
+        filter: r => grupoDaLinha(r) === base.title && !coberta(r) &&
+                     !promovidasUC.has(canonicalCompany(r.emp).toUpperCase())
+      }
+    ];
+
+    return { ...base, subtitle: SUBTITULO_AMPLIADA[base.title] || base.subtitle, tracks };
+  });
+}
+
+// Estado do modo de leitura. render.js lê os grupos SEMPRE de ACTIVE_GROUPS —
+// nunca de LAYOUT_GROUPS direto — para que os dois modos passem pelo mesmo
+// código de desenho. app.js troca as duas variáveis juntas.
+let MODO = 'padrao';                  // 'padrao' | 'ampliada'
+let ACTIVE_GROUPS = LAYOUT_GROUPS;

@@ -40,15 +40,18 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run == true && 'true' || 'false' }}
         run: node automation/update-benchmarks.mjs
 
+      # Os dois arquivos saem da MESMA resposta da API (ver update-benchmarks.mjs):
+      # benchmarks.json alimenta o guia "Qual modelo usar" e catalogo.json alimenta
+      # a régua ampliada. Commitados juntos para não dessincronizarem.
       - name: Commit e push (se houver mudança)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- assets/benchmarks.json; then
-            echo "Nenhuma mudança em assets/benchmarks.json"
+          if git diff --quiet -- assets/benchmarks.json assets/catalogo.json; then
+            echo "Nenhuma mudança em assets/benchmarks.json nem em assets/catalogo.json"
           else
-            git add assets/benchmarks.json
-            git commit -m "chore: atualiza benchmarks.json da Artificial Analysis"
+            git add assets/benchmarks.json assets/catalogo.json
+            git commit -m "chore: atualiza dados da Artificial Analysis (benchmarks + catalogo)"
             git push
             echo "Commit e push realizado"
           fi

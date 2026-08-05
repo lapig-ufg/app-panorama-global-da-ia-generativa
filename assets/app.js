@@ -87,6 +87,24 @@ function getZoomLabel() {
   return `${currentPxPerDay.toFixed(1)} px/dia`;
 }
 
+/* ─── AS DUAS FONTES DA RÉGUA ───
+   SHEET_ROWS  planilha: nível 1 (status `publicado`) e nível 2 (`secundario`)
+   CATALOGO_ROWS  assets/catalogo.json: nível 3 (censo da Artificial Analysis),
+                  já sem o que a planilha cobre (ver deduplicarCatalogo)
+   RAW continua sendo "o que está desenhado agora" — o resto do código (tooltip,
+   novidades, exportações) não precisa saber que existem duas fontes. */
+let SHEET_ROWS = [];
+let CATALOGO_ROWS = [];
+let catalogoEstado = 'ausente';   // 'ausente' | 'carregando' | 'ok' | 'erro'
+
+// Linhas visíveis no modo atual. A régua padrão mostra exatamente o que sempre
+// mostrou — só os marcos —, então ligar o modo ampliado nunca "some" com nada.
+function rowsDoModo() {
+  return MODO === 'ampliada'
+    ? SHEET_ROWS.concat(CATALOGO_ROWS)
+    : SHEET_ROWS.filter(r => r.nivel === 1);
+}
+
 // ─── PIPELINE DE PROCESSAMENTO DAS LINHAS ───
 function processRows(allRows) {
   // Dedup por data|empresa|modelo
@@ -97,6 +115,10 @@ function processRows(allRows) {
     seen.add(key);
     return true;
   });
+
+  // As trilhas do modo ampliado dependem das linhas (empresa com >= 3 modelos
+  // ganha faixa própria), então são remontadas a cada carga.
+  ACTIVE_GROUPS = MODO === 'ampliada' ? buildExpandedGroups(RAW) : LAYOUT_GROUPS;
 
   RAW.forEach(r => {
     const parts = r.date.split('-');
@@ -121,7 +143,7 @@ function processRows(allRows) {
   }
 
   // Popula as tracks com os eventos filtrados
-  LAYOUT_GROUPS.forEach(g => {
+  ACTIVE_GROUPS.forEach(g => {
     g.tracks.forEach(t => {
       t.events = RAW.filter(t.filter).sort((a, b) => a.dias - b.dias);
     });
@@ -130,6 +152,7 @@ function processRows(allRows) {
   updateNovidades();
   rebuildV2(undefined, currentPxPerDay);
   updateZoomUI();
+  atualizarBotaoModo();
   // A régua já está no DOM: se viemos do guia, salta para a empresa pedida.
   setTimeout(focusCompanyFromHash, 120);
 }
@@ -274,6 +297,138 @@ function initNovidadesPopover() {
   });
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   TROCA DE MODO (régua padrão ↔ régua ampliada)
+   ═══════════════════════════════════════════════════════════════ */
+
+function modoSalvo() {
+  try {
+    if (/[#&]modo=ampliada/.test(location.hash || '')) return 'ampliada';
+    return sessionStorage.getItem(CONFIG.MODO_KEY) === 'ampliada' ? 'ampliada' : 'padrao';
+  } catch (e) {
+    return 'padrao';
+  }
+}
+
+function salvarModo(modo) {
+  try { sessionStorage.setItem(CONFIG.MODO_KEY, modo); } catch (e) { /* ignora */ }
+}
+
+async function setModo(modo, opts = {}) {
+  if (modo === MODO && !opts.forcar) return;
+  const btn = document.getElementById('modo-btn');
+
+  if (modo === 'ampliada' && catalogoEstado !== 'ok') {
+    if (btn) { btn.classList.add('is-loading'); btn.disabled = true; }
+    showLoading();
+    const ok = await carregarCatalogo();
+    if (btn) { btn.classList.remove('is-loading'); btn.disabled = false; }
+    hideLoading();
+    if (!ok) {
+      // Sem catálogo, a ampliada ainda tem o nível 2 (planilha) para mostrar —
+      // mas o usuário precisa saber que o censo automático não entrou.
+      mostrarAvisoModo('Não foi possível carregar o catálogo da Artificial Analysis. ' +
+        'A régua ampliada está mostrando só os lançamentos curados.');
+    }
+  }
+
+  MODO = modo;
+  salvarModo(modo);
+  atualizarBotaoModo();
+  processRows(rowsDoModo());
+
+  // Voltar para a padrão com a régua rolada lá embaixo deixaria o usuário
+  // olhando para o vazio: a ampliada é muito mais alta.
+  const area = document.getElementById('timeline-area');
+  if (area && modo === 'padrao') area.scrollTop = 0;
+
+  if (window.gtag) gtag('event', 'troca_modo_regua', { modo });
+}
+
+function atualizarBotaoModo() {
+  const btn = document.getElementById('modo-btn');
+  if (!btn) return;
+  const on = MODO === 'ampliada';
+  btn.classList.toggle('is-on', on);
+  btn.setAttribute('aria-pressed', String(on));
+  const cont = document.getElementById('modo-count');
+  if (cont) {
+    cont.textContent = on ? String(RAW.length) : '';
+    cont.hidden = !on;
+  }
+}
+
+function mostrarAvisoModo(msg) {
+  const el = document.getElementById('modo-aviso');
+  if (!el) return;
+  el.textContent = msg;
+  el.hidden = false;
+  setTimeout(() => { el.hidden = true; }, 8000);
+}
+
+function toggleModoPopover(show) {
+  const pop = document.getElementById('modo-popover');
+  const btn = document.getElementById('modo-info');
+  if (!pop) return;
+  pop.hidden = !show;
+  if (btn) btn.setAttribute('aria-expanded', String(show));
+  if (show) preencherModoPopover();
+}
+
+// A explicação cita números reais (quantos modelos, de quando é o catálogo) em
+// vez de só prometer "mais modelos" — é o que deixa o leitor calibrar confiança.
+function preencherModoPopover() {
+  const el = document.getElementById('modo-fonte');
+  if (!el) return;
+  if (catalogoEstado === 'ok') {
+    const data = CATALOGO_META.fetched_at ? fmtFull(CATALOGO_META.fetched_at.slice(0, 10)) : '—';
+    el.textContent = `Catálogo carregado: ${CATALOGO_META.total} modelos, coletados em ${data}.`;
+  } else {
+    el.textContent = 'O catálogo é baixado quando você liga o modo pela primeira vez.';
+  }
+}
+
+function initModoControls() {
+  const btn = document.getElementById('modo-btn');
+  const info = document.getElementById('modo-info');
+  const close = document.getElementById('modo-close');
+  const pop = document.getElementById('modo-popover');
+
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const indo = MODO === 'padrao' ? 'ampliada' : 'padrao';
+      setModo(indo);
+      // Primeira vez que liga: abre a explicação sozinha. Um botão que muda a
+      // régua inteira sem dizer o que mudou é uma armadilha.
+      if (indo === 'ampliada') {
+        try {
+          if (!localStorage.getItem('panorama-llms-modo-explicado')) {
+            localStorage.setItem('panorama-llms-modo-explicado', '1');
+            toggleModoPopover(true);
+          }
+        } catch (e) { /* localStorage indisponível */ }
+      }
+    });
+  }
+
+  if (info) {
+    info.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleModoPopover(pop && pop.hidden);
+    });
+  }
+  if (close) close.addEventListener('click', () => toggleModoPopover(false));
+
+  document.addEventListener('click', e => {
+    if (pop && !pop.hidden && !pop.contains(e.target) && e.target !== info) toggleModoPopover(false);
+  });
+  document.addEventListener('keydown', e => {
+    if (pop && !pop.hidden && e.key === 'Escape') toggleModoPopover(false);
+  });
+
+  atualizarBotaoModo();
+}
+
 // ─── ESTADOS DE ERRO E LOADING ───
 function showError(message) {
   hideLoading();
@@ -304,7 +459,8 @@ async function loadSheetData() {
   // Tenta usar cache primeiro (instantâneo)
   const cached = readCache();
   if (cached) {
-    processRows(cached.rows);
+    SHEET_ROWS = cached.rows;
+    processRows(rowsDoModo());
     hideLoading();
     // Mas continua atualizando em background
     fetchFresh(true).catch(() => { /* silencioso, já temos cache */ });
@@ -358,7 +514,14 @@ async function fetchFresh(silent) {
       const ref = c[4] ? String(c[4].v || '') : '';
       const status = c[5] ? String(c[5].v || '').toLowerCase() : '';
 
-      if (status !== 'publicado') continue;
+      /* Dois status entram na régua, com pesos diferentes:
+           publicado  → nível 1, marco, aparece nos dois modos
+           secundario → nível 2, curado mas não é marco, só na régua ampliada
+         Qualquer outro (pendente, rejeitado, vazio) continua fora. O gate
+         humano não muda: `secundario` também só existe depois de alguém
+         aprovar na PWA. */
+      const nivel = status === 'publicado' ? 1 : status === 'secundario' ? 2 : 0;
+      if (!nivel) continue;
       if (!emp || !mod) continue;
 
       const date = parseSheetDate(c[0].v);
@@ -368,13 +531,128 @@ async function fetchFresh(silent) {
       const addedAt = c[iTimestamp] && c[iTimestamp].v ? parseSheetTimestamp(c[iTimestamp].v) : 0;
       const updatedAt = c[iUpdated] && c[iUpdated].v ? parseSheetTimestamp(c[iUpdated].v) : 0;
 
-      allRows.push({ date, emp, mod, impact, ref, grupo, addedAt, updatedAt });
+      allRows.push({ date, emp, mod, impact, ref, grupo, addedAt, updatedAt, nivel });
     }
   }
 
   writeCache(allRows);
-  processRows(allRows);
+  SHEET_ROWS = allRows;
+  // O catálogo já em memória foi deduplicado contra a planilha ANTERIOR; com
+  // linhas novas, um modelo pode ter passado a existir dos dois lados.
+  if (catalogoEstado === 'ok') CATALOGO_ROWS = deduplicarCatalogo(CATALOGO_BRUTO);
+  processRows(rowsDoModo());
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   NÍVEL 3 — o catálogo da Artificial Analysis
+   ═══════════════════════════════════════════════════════════════ */
+
+let CATALOGO_BRUTO = [];   // como veio do arquivo, antes do dedup
+
+/* Um mesmo modelo pode ter nome diferente na planilha e na AA — MODEL_ALIASES
+   (aplicado dentro de normModel) resolve os casos conhecidos.
+
+   Esta função cuida do resto: nome de linha que cita mais de um modelo. A
+   convenção da planilha é UMA linha por modelo, mas nada impede alguém de
+   escrever "X / Y" de novo, e aí a pílula compacta do catálogo apareceria ao
+   lado do marco que já representa o mesmo lançamento. Quebrar por "/", "+" e
+   parênteses é a rede de segurança para isso. */
+/* normModel() apaga toda pontuação, e para o resto do sistema isso é o certo
+   ("GPT-4" e "GPT 4" são o mesmo modelo). Aqui não: "Command-R+" e "Command-R"
+   são modelos DIFERENTES da Cohere, e achatar os dois na mesma chave faria um
+   sumir do censo sem deixar rastro — exatamente o erro que a régua ampliada
+   existe para não cometer. Por isso o "+" vira palavra antes de normalizar.
+   Nenhuma chave de MODEL_ALIASES tem "+", então os apelidos continuam valendo. */
+function chaveModelo(nome) {
+  return normModel(String(nome == null ? '' : nome).replace(/\+/g, ' plus '));
+}
+
+function partesDoNome(mod) {
+  const bruto = String(mod == null ? '' : mod).trim();
+  if (!bruto) return [];
+  const candidatos = new Set([bruto]);
+  const semParenteses = bruto.replace(/\([^)]*\)/g, ' ').trim();
+  if (semParenteses) candidatos.add(semParenteses);
+  (bruto.match(/\(([^)]*)\)/g) || []).forEach(p => candidatos.add(p.slice(1, -1)));
+
+  const partes = new Set();
+  candidatos.forEach(c => {
+    partes.add(c.trim());
+    // "+" só separa quando está cercado de espaço ("Large 3 + Ministral 3");
+    // colado, faz parte do nome ("Command-R+") e não pode ser ponto de corte.
+    c.split(/\s*\/\s*|\s+\+\s+/).forEach(x => {
+      const t = x.trim();
+      if (t) partes.add(t);
+    });
+  });
+
+  return [...partes].filter(Boolean);
+}
+
+// Chaves "EMPRESA|modelo" de tudo que a curadoria já cobre (níveis 1 e 2).
+function chavesCuradas(rows) {
+  const set = new Set();
+  rows.forEach(r => {
+    const emp = canonicalCompany(r.emp).toUpperCase();
+    partesDoNome(r.mod).forEach(p => set.add(`${emp}|${chaveModelo(p)}`));
+  });
+  return set;
+}
+
+function deduplicarCatalogo(modelos) {
+  const curadas = chavesCuradas(SHEET_ROWS);
+  const marcoMs = CONFIG.MARCO.getTime();
+  const vistos = new Set();
+
+  return modelos.filter(m => {
+    const emp = canonicalCompany(m.emp).toUpperCase();
+    const chave = `${emp}|${chaveModelo(m.mod)}`;
+    if (curadas.has(chave) || vistos.has(chave)) return false;
+    vistos.add(chave);
+    // Nada antes do marco zero: a régua começa em 30/nov/2022 e uma pílula com
+    // "dias" negativo seria desenhada por cima da calha de rótulos.
+    return new Date(m.date + 'T00:00:00').getTime() >= marcoMs;
+  });
+}
+
+// Baixa o catálogo uma única vez, sob demanda. A régua padrão nunca paga por
+// isto: quem não liga o modo ampliado não baixa o arquivo.
+async function carregarCatalogo() {
+  if (catalogoEstado === 'ok' || catalogoEstado === 'carregando') return catalogoEstado === 'ok';
+  catalogoEstado = 'carregando';
+  try {
+    const res = await fetch(CONFIG.CATALOGO_URL, { cache: 'no-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    const lista = Array.isArray(json.modelos) ? json.modelos : [];
+    if (!lista.length) throw new Error('catálogo vazio');
+
+    CATALOGO_BRUTO = lista
+      .filter(m => m && m.mod && m.emp && /^\d{4}-\d{2}-\d{2}$/.test(String(m.date || '')))
+      .map(m => ({
+        date: String(m.date),
+        emp: canonicalCompany(m.emp),
+        mod: String(m.mod),
+        impact: '',
+        ref: json.source_url || '',
+        grupo: '',
+        addedAt: 0,
+        updatedAt: 0,
+        nivel: 3,
+        score: typeof m.score === 'number' ? m.score : null
+      }));
+    CATALOGO_ROWS = deduplicarCatalogo(CATALOGO_BRUTO);
+    CATALOGO_META = { fetched_at: json.fetched_at || '', total: CATALOGO_BRUTO.length };
+    catalogoEstado = 'ok';
+    return true;
+  } catch (e) {
+    console.error('Falha ao carregar o catálogo da régua ampliada:', e);
+    catalogoEstado = 'erro';
+    return false;
+  }
+}
+
+let CATALOGO_META = { fetched_at: '', total: 0 };
 
 // ─── TOOLTIP ───
 let hideTipTimeout;
@@ -398,6 +676,23 @@ function showTip(e, id) {
   document.getElementById('tt-model').style.color = ev.color;
   document.getElementById('tt-company').textContent = ev.emp;
   document.getElementById('tt-impact').textContent = ev.impact || '—';
+
+  /* Proveniência: quem lê a régua ampliada precisa saber, pílula a pílula, se
+     aquilo passou por curadoria humana ou veio do censo automático. Sem isso a
+     ampliada empresta a credibilidade da curadoria a dados que não a têm. */
+  const fonteEl = document.getElementById('tt-fonte');
+  if (fonteEl) {
+    if (ev.nivel === 3) {
+      const nota = ev.score != null ? ` · Intelligence Index ${ev.score}` : '';
+      fonteEl.textContent = `Catálogo Artificial Analysis — sem curadoria editorial${nota}`;
+      fonteEl.hidden = false;
+    } else if (ev.nivel === 2) {
+      fonteEl.textContent = 'Lançamento curado, classificado como secundário';
+      fonteEl.hidden = false;
+    } else {
+      fonteEl.hidden = true;
+    }
+  }
 
   // Mede posição da pílula alvo para posicionar a seta
   const target = e.target && e.target.closest ? e.target.closest('.pill-group') : null;
@@ -921,7 +1216,12 @@ function downloadCSV() {
   if (btn) { btn.innerHTML = 'Gerando…'; btn.disabled = true; }
 
   try {
-    const headers = ['Data', 'Empresa', 'Modelo', 'Impacto', 'Referência', 'Grupo', 'Dias desde o marco zero'];
+    // `nivel`/`fonte` viajam com o CSV: quem baixar os dados para uma análise
+    // consegue separar marco curado de censo automático sem voltar ao site.
+    const headers = ['Data', 'Empresa', 'Modelo', 'Impacto', 'Referência', 'Grupo',
+                     'Dias desde o marco zero', 'Nível', 'Fonte'];
+    const rotuloNivel = { 1: 'marco', 2: 'secundário', 3: 'catálogo' };
+    const rotuloFonte = { 1: 'curadoria', 2: 'curadoria', 3: 'Artificial Analysis' };
     const linhas = RAW.slice().sort((a, b) => a.dias - b.dias).map(r => [
       r.date,
       r.emp,
@@ -929,7 +1229,9 @@ function downloadCSV() {
       r.impact || '',
       r.ref || '',
       r.grupo || '',
-      r.dias
+      r.dias,
+      rotuloNivel[r.nivel || 1],
+      rotuloFonte[r.nivel || 1]
     ].map(csvEscape).join(','));
 
     const csv = [headers.map(csvEscape).join(','), ...linhas].join('\r\n');
@@ -954,5 +1256,11 @@ document.addEventListener('DOMContentLoaded', () => {
   loadZoom();
   initZoomControls();
   initDragPan();
-  loadSheetData();
+  initModoControls();
+  // A régua padrão é desenhada primeiro em qualquer caso; só depois o modo
+  // salvo (ou o #modo=ampliada do link) baixa o catálogo e redesenha. Assim o
+  // primeiro paint nunca espera por um arquivo que 90% das visitas não usa.
+  loadSheetData().then(() => {
+    if (modoSalvo() === 'ampliada') setModo('ampliada');
+  });
 });
