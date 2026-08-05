@@ -44,16 +44,29 @@ function parseCSV(txt) {
   return linhas.filter(l => l.length > 1).map(l => Object.fromEntries(cab.map((k, i) => [k, l[i] ?? ''])));
 }
 
-// "claude-opus-5_max" → { slug: "claude-opus-5", esforco: "max" }
+/* Chave de casamento. Os dois lados identificam o MESMO modelo de formas
+   diferentes, e a família é o que o guia exibe (o pipeline já colapsa os
+   níveis de esforço em uma linha só):
+
+     Epoch : "gpt-5.6-sol_max"   → esforço após "_",  pontos na versão
+     AA    : "gpt-5-6-sol-xhigh" → esforço após "-",  traços na versão
+
+   Então: tira o sufixo de esforço (separado por "_" ou "-") e reduz a
+   [a-z0-9]. Os dois viram "gpt56sol". */
 function separarEsforco(id) {
   const s = String(id).trim();
   for (const e of ESFORCOS) {
-    if (s.toLowerCase().endsWith('_' + e)) return { slug: s.slice(0, -(e.length + 1)), esforco: e };
+    for (const sep of ['_', '-']) {
+      if (s.toLowerCase().endsWith(sep + e)) return { slug: s.slice(0, -(e.length + 1)), esforco: e };
+    }
   }
   return { slug: s, esforco: null };
 }
 
 const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '');
+
+// Chave canônica de família, aplicada identicamente às duas fontes.
+const familia = id => norm(separarEsforco(id).slug);
 
 async function buscarAA() {
   const modelos = [];
@@ -80,21 +93,26 @@ async function main() {
   console.log('═'.repeat(78));
 
   const { modelos, gastas } = await buscarAA();
-  const slugsAA = new Set(modelos.map(m => m.slug).filter(Boolean));
-  const porSlug = new Map(modelos.map(m => [m.slug, m]));
-  console.log(`\nAA free: ${modelos.length} modelos, ${slugsAA.size} slugs distintos (${gastas} requisições)`);
+  const slugsAA = new Set(modelos.map(m => familia(m.slug)).filter(Boolean));
+  const porSlug = new Map();
+  for (const m of modelos) if (!porSlug.has(familia(m.slug))) porSlug.set(familia(m.slug), m);
+  console.log(`\nAA free: ${modelos.length} modelos → ${slugsAA.size} famílias distintas (${gastas} requisições)`);
 
-  // Top 20 da AA por Intelligence Index — é o que o guia realmente exibe.
+  /* Top 20 da AA por Intelligence Index, JÁ COLAPSADO por família — é isso que
+     o guia exibe. Sem colapsar, "Claude Opus 5" ocuparia 4 vagas (uma por nível
+     de esforço) e a cobertura mediria a coisa errada. */
   const top20 = modelos
     .filter(m => m.evaluations?.artificial_analysis_intelligence_index != null)
     .sort((a, b) => b.evaluations.artificial_analysis_intelligence_index - a.evaluations.artificial_analysis_intelligence_index);
   const famTop = [];
   const vistas = new Set();
   for (const m of top20) {
-    if (vistas.has(m.slug)) continue;
-    vistas.add(m.slug); famTop.push(m);
+    const f = familia(m.slug);
+    if (vistas.has(f)) continue;
+    vistas.add(f); famTop.push({ ...m, fam: f });
     if (famTop.length >= 20) break;
   }
+  console.log(`top-20 do guia (famílias): ${famTop.map(m => m.fam).join(', ')}`);
 
   const ARQUIVOS = [
     { arq: 'gpqa_diamond.csv', rot: 'GPQA Diamond', col: 'mean_score' },
@@ -115,21 +133,21 @@ async function main() {
     for (const l of linhas) {
       const v = parseFloat(l[col]);
       if (!Number.isFinite(v)) continue;
-      const { slug } = separarEsforco(l['Model version']);
-      const prev = porSlugEpoch.get(slug);
-      if (!prev || v > prev.v) porSlugEpoch.set(slug, { v, data: l['Release date'], org: l['Organization'] });
+      const f = familia(l['Model version']);
+      const prev = porSlugEpoch.get(f);
+      if (!prev || v > prev.v) porSlugEpoch.set(f, { v, data: l['Release date'], org: l['Organization'] });
     }
 
     const casaDireto = [...porSlugEpoch.keys()].filter(s => slugsAA.has(s)).length;
-    const top20Casa = famTop.filter(m => porSlugEpoch.has(m.slug));
+    const top20Casa = famTop.filter(m => porSlugEpoch.has(m.fam));
     const datas = [...porSlugEpoch.values()].map(x => x.data).filter(Boolean).sort();
 
     console.log(`\n── ${rot} ──`);
-    console.log(`   modelos no Epoch        : ${porSlugEpoch.size} (após colapsar esforço)`);
-    console.log(`   casam com slug da AA    : ${casaDireto} (${(casaDireto / porSlugEpoch.size * 100).toFixed(0)}% do Epoch)`);
+    console.log(`   famílias no Epoch       : ${porSlugEpoch.size}`);
+    console.log(`   casam com família da AA : ${casaDireto} (${(casaDireto / porSlugEpoch.size * 100).toFixed(0)}% do Epoch)`);
     console.log(`   COBERTURA DO TOP-20 DO GUIA: ${top20Casa.length}/20  ${'█'.repeat(top20Casa.length)}${'·'.repeat(20 - top20Casa.length)}`);
     console.log(`   dado mais recente       : ${datas.at(-1) ?? '—'}`);
-    const faltam = famTop.filter(m => !porSlugEpoch.has(m.slug)).map(m => m.slug);
+    const faltam = famTop.filter(m => !porSlugEpoch.has(m.fam)).map(m => m.fam);
     if (faltam.length) console.log(`   sem nota no top-20      : ${faltam.slice(0, 10).join(', ')}${faltam.length > 10 ? ` (+${faltam.length - 10})` : ''}`);
   }
 
@@ -140,18 +158,19 @@ async function main() {
   for (const l of gpqa) {
     const v = parseFloat(l['mean_score']);
     if (!Number.isFinite(v)) continue;
-    const { slug, esforco } = separarEsforco(l['Model version']);
-    const prev = melhor.get(slug);
-    if (!prev || v > prev.v) melhor.set(slug, { v, esforco, org: l['Organization'] });
+    const f = familia(l['Model version']);
+    const { esforco } = separarEsforco(l['Model version']);
+    const prev = melhor.get(f);
+    if (!prev || v > prev.v) melhor.set(f, { v, esforco, org: l['Organization'] });
   }
   const rank = [...melhor.entries()]
     .filter(([s]) => slugsAA.has(s))
     .sort((a, b) => b[1].v - a[1].v)
-    .slice(0, 12);
-  console.log(`   ${'modelo (nome da AA)'.padEnd(34)} ${'slug'.padEnd(22)} ${'GPQA'.padStart(6)}  esforço`);
-  for (const [slug, x] of rank) {
-    const nomeAA = porSlug.get(slug)?.name ?? '—';
-    console.log(`   ${String(nomeAA).slice(0, 34).padEnd(34)} ${slug.slice(0, 22).padEnd(22)} ${(x.v * 100).toFixed(1).padStart(6)}  ${x.esforco ?? '—'}`);
+    .slice(0, 15);
+  console.log(`   ${'modelo (nome da AA)'.padEnd(38)} ${'família'.padEnd(20)} ${'GPQA'.padStart(6)}  esforço`);
+  for (const [f, x] of rank) {
+    const nomeAA = porSlug.get(f)?.name ?? '—';
+    console.log(`   ${String(nomeAA).slice(0, 38).padEnd(38)} ${f.slice(0, 20).padEnd(20)} ${(x.v * 100).toFixed(1).padStart(6)}  ${x.esforco ?? '—'}`);
   }
 
   console.log(`\n${'═'.repeat(78)}`);
