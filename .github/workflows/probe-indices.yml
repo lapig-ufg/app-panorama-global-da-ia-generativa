@@ -1,0 +1,24 @@
+name: Sonda dos indices da AA
+
+# Diagnostico manual e temporario: confirma se multilingual/omniscience/openness
+# sao mesmo inacessiveis com chave free. NAO grava nada, NAO commita.
+# ~6 requisicoes (limite free: 100/dia).
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sondar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Sondar
+        env:
+          AA_API_KEY: ${{ secrets.AA_API_KEY }}
+        run: node automation/probe-indices.mjs
