@@ -24,19 +24,27 @@
   // Teto de modelos na bandeja de comparação — mais que isso polui a tabela.
   const MAX_COMPARE = 4;
 
+  // Metodologia da fonte — linkada no "como medimos" de toda categoria. O leitor
+  // precisa conseguir chegar na definição do índice em um clique; antes o único
+  // link era a home da AA.
+  const AA_METHOD_URL = 'https://artificialanalysis.ai/methodology/intelligence-benchmarking';
+
   /* ─── AS CATEGORIAS ───
      Cada categoria = UMA pergunta do usuário, respondida por UM benchmark
-     principal (alguns são compostos da própria AA). Os de apoio medem a mesma
-     área de outras formas: entram só como referência cruzada no "como medimos"
-     e na linha "outros testes" — nunca no cálculo da posição. Regra ao montar
-     a lista: só existe categoria onde o dado ainda separa os modelos. Por isso
-     não há categoria de Matemática — o AIME está saturado (>99%) e não
-     distingue os atuais.
+     principal (hoje os três são índices compostos da própria AA). Os de apoio
+     medem a mesma área de outras formas: entram só como referência cruzada no
+     "como medimos" e na linha "outros testes" — nunca no cálculo da posição.
+     Regra ao montar a lista: só existe categoria onde o dado ainda separa os
+     modelos. Por isso não há categoria de Matemática — o AIME está saturado
+     (>99%) e não distingue os atuais.
 
      Apoios estagnados foram removidos (24/jul/2026): MMLU-Pro, LiveCodeBench e
      AIME 2025 não avaliaram os modelos atuais do topo — casavam 0/20 e só
      geravam "—". Em runtime, apoios que casam com menos de 5 dos 20 modelos do
      ranking principal também são ocultados (rede contra envelhecimento futuro).
+     Com a chave free NENHUM apoio existe (são todos Pro-only): o bloco "apoio" e
+     o botão "ver outros testes" não renderizam. Ficam declarados de propósito —
+     voltam sozinhos se a chave virar Pro.
 
      ── Redução de 5 para 3 categorias (5/ago/2026) ──
      A AA desligou o endpoint legado e passou a servir os benchmarks individuais
@@ -44,36 +52,65 @@
      compostos, e duas categorias perderam a base:
 
        • "Pesquisa e raciocínio" (era HLE) — o substituto disponível seria o
-         GPQA Diamond, mas ele correlaciona 0,95 com o Intelligence Index sobre
-         399 modelos: seria uma segunda aba repetindo a ordem da primeira. Pior,
-         está saturado — spread de 3,0 pontos no top-15 contra erro-padrão de
-         1,59, ou seja, as posições do topo são ruído. O HLE era justamente o
-         mais independente (rho 0,84, spread 24,8) e não tem fonte gratuita:
-         o leaderboard do Scale parou em abr/2026 e os agregadores que cobrem a
-         fronteira publicam número auto-reportado pelos próprios fabricantes.
+         GPQA Diamond, mas ele está saturado (spread de 3,0 pontos no top-15
+         contra erro-padrão de 1,59: as posições do topo são ruído) e, pior, é
+         ingrediente do próprio Intelligence Index. O HLE era o mais independente
+         e não tem fonte gratuita: o leaderboard do Scale parou em abr/2026 e os
+         agregadores que cobrem a fronteira publicam número auto-reportado pelos
+         próprios fabricantes.
        • "Instruções e dados" (era IFBench + AA-LCR) — sem equivalente no free.
 
-     A alta correlação é, ela própria, informação útil para quem pesquisa: o
-     melhor modelo geral também é o melhor para trabalho de pesquisa, e por isso
-     não há ranking separado a consultar. Isso está dito no "como medimos".
-
-     "Agentes" trocou Terminal-Bench pelo Agentic Index — o composto da própria
-     AA para a mesma pergunta, com cobertura maior que o benchmark único.
      Se a chave virar Pro, o pipeline repõe os benchmarks individuais sozinho e
-     estas categorias podem voltar. */
+     estas categorias podem voltar.
+
+     ── ⚠ O QUE ESTES TRÊS ÍNDICES SÃO, DE VERDADE (5/ago/2026) ──
+     O Intelligence Index v4.1 é a média ponderada de QUATRO blocos:
+     Agentes 34% · Código 24% · Raciocínio científico 24% · Geral 18%.
+     E os outros dois índices que a chave free entrega SÃO dois desses blocos:
+     `coding_index` = bloco Código, `agentic_index` = bloco Agentes. Ou seja,
+     58% da nota da primeira aba é literalmente o conteúdo das outras duas.
+
+     Duas consequências para quem for mexer aqui:
+       1. A primeira aba NÃO mede conversa, escrita ou resumo — peso zero. Por
+          isso ela deixou de se chamar "Uso geral" (que prometia exatamente
+          isso) e virou "Capacidade geral", com `caveat` dizendo o que ficou de
+          fora. Não volte a descrevê-la como "o modelo do dia a dia".
+       2. As três listas ordenam quase igual (rho ~0,96; ver `spearman()`, que
+          calcula o número em runtime em vez de cravá-lo no texto). Isso está
+          declarado no "como medimos" de cada aba, via `overlapLine()`. As abas
+          continuam existindo porque respondem perguntas diferentes e as
+          MAGNITUDES diferem — não porque produzam ordens independentes.
+     Pesos conferidos na metodologia da AA (AA_METHOD_URL). */
   const CATEGORIES = [
     {
       id: 'geral',
-      label: 'Uso geral',
-      question: 'Conversar, escrever, resumir, tirar dúvidas do dia a dia.',
+      label: 'Capacidade geral',
+      question: 'Raciocínio, conhecimento e tarefas difíceis — o teto de capacidade do modelo.',
       primary: 'artificial_analysis_intelligence_index',
       support: ['gpqa_diamond', 'hle'],
+      // Os pesos moram aqui, e não no `description` do benchmarks.json, porque o
+      // JSON só traz a lista de siglas — e é o peso que muda a leitura da nota.
+      composition: {
+        intro: 'a versão <b>v4.1</b>, uma média ponderada de quatro blocos',
+        parts: [
+          { part: 'Agentes', weight: '34%', tests: 'GDPval-AA v2 (20%) — tarefas profissionais de 44 ocupações; τ³-Banking (14%) — atendimento com uso de ferramentas' },
+          { part: 'Código', weight: '24%', tests: 'Terminal-Bench v2.1 (16%) — engenharia de software real; SciCode (8%) — computação científica' },
+          { part: 'Raciocínio científico', weight: '24%', tests: 'Humanity’s Last Exam (12%); GPQA Diamond (6%) — nível doutorado; CritPt (6%) — física de pesquisa' },
+          { part: 'Geral', weight: '18%', tests: 'AA-Omniscience (12%) — conhecimento e taxa de alucinação; AA-LCR (6%) — leitura de documentos longos' },
+        ],
+      },
+      // O que o índice NÃO mede. Antes a página prometia justamente isto.
+      caveat: 'Nenhum dos nove testes mede qualidade de conversa, de escrita ou de resumo. ' +
+              'Esta pontuação é o teto do modelo em tarefas difíceis, não a utilidade dele no dia a dia — ' +
+              'para escrever um e-mail ou resumir um texto, praticamente qualquer modelo desta lista dá conta.',
       // Responde à pergunta que sumiu junto com a categoria "Pesquisa e
-      // raciocínio", em vez de deixar o leitor procurando por ela.
-      note: 'Para trabalho de pesquisa, este mesmo ranking vale: entre os 399 modelos ' +
-            'avaliados nos dois, a ordem do Intelligence Index e a do GPQA Diamond ' +
-            '(perguntas de nível doutorado) coincidem quase por completo — ' +
-            'correlação de postos de 0,95. Não há um ranking separado a consultar.',
+      // raciocínio". Versão honesta: o motivo não é uma correlação "externa"
+      // (o GPQA é ingrediente do índice — citá-lo como prova era circular),
+      // e sim que o bloco de pesquisa JÁ está embutido nesta nota.
+      note: 'Não há ranking separado de pesquisa porque ele já está dentro deste: ' +
+            'o bloco de raciocínio científico pesa 24% da nota — Humanity’s Last Exam (12%), ' +
+            'GPQA Diamond (6%) e CritPt (6%), todos de nível doutorado. ' +
+            'Para trabalho acadêmico, esta mesma lista serve.',
     },
     {
       id: 'codigo',
@@ -81,6 +118,18 @@
       question: 'Escrever, revisar e consertar código.',
       primary: 'artificial_analysis_coding_index',
       support: ['scicode'],
+      // Este índice é um dos quatro blocos do Intelligence Index — declarado
+      // aqui para o "como medimos" poder dizer isso ao leitor com o peso certo.
+      blockLabel: 'Código', blockWeight: '24%',
+      composition: {
+        intro: 'o bloco de <b>código</b> do Intelligence Index (24% da nota geral), visto de perto',
+        parts: [
+          { part: 'Terminal-Bench v2.1', weight: '2/3', tests: 'tarefas verificadas de engenharia de software e administração de sistemas' },
+          { part: 'SciCode', weight: '1/3', tests: 'problemas de computação científica em Python' },
+        ],
+      },
+      caveat: 'Os dois testes são de back-end e linha de comando. <b>A Artificial Analysis não avalia front-end</b> — ' +
+              'esta nota não diz nada sobre construir interface.',
     },
     {
       id: 'agentes',
@@ -88,6 +137,14 @@
       question: 'Executar tarefas sozinho, usando terminal, ferramentas e APIs.',
       primary: 'artificial_analysis_agentic_index',
       support: ['terminalbench_v2_1', 'tau2_telecom'],
+      blockLabel: 'Agentes', blockWeight: '34%',
+      composition: {
+        intro: 'o bloco de <b>agentes</b> do Intelligence Index (34% da nota geral, o maior dos quatro), visto de perto',
+        parts: [
+          { part: 'GDPval-AA v2', weight: '20/34', tests: 'tarefas de valor econômico real, cobrindo 44 ocupações' },
+          { part: 'τ³-Banking', weight: '14/34', tests: 'atendimento financeiro com busca de informação e uso de ferramentas em várias etapas' },
+        ],
+      },
     },
   ];
 
@@ -174,6 +231,72 @@
     let mx = 0;
     for (const x of (bench.full || bench.top || [])) if (x.score > mx) mx = x.score;
     return mx;
+  }
+
+  /* ─── Correlação de postos entre dois rankings ───
+     Serve para DECLARAR ao leitor o quanto duas abas repetem a mesma ordem —
+     necessário porque as três categorias são o mesmo índice e dois blocos dele.
+     Calculado em runtime, de propósito: se a AA mudar a composição dos índices,
+     o número no site acompanha em vez de virar uma afirmação velha cravada no
+     texto. Os postos são recalculados DENTRO da interseção (usar a posição na
+     lista original daria rho fora de [-1,1] quando as listas têm tamanhos
+     diferentes). Empates são raros aqui e tratados pela ordem de score. */
+  function spearman(benchA, benchB) {
+    if (!benchA || !benchB) return null;
+    const A = new Map((benchA.full || benchA.top || []).map(x => [idKey(x.model), x.score]));
+    const B = new Map((benchB.full || benchB.top || []).map(x => [idKey(x.model), x.score]));
+    const keys = [...A.keys()].filter(k => B.has(k));
+    const n = keys.length;
+    if (n < 10) return null; // interseção pequena demais para afirmar algo
+    const ranksOf = (M) => {
+      const r = new Map();
+      keys.slice().sort((a, b) => M.get(b) - M.get(a)).forEach((k, i) => r.set(k, i + 1));
+      return r;
+    };
+    const ra = ranksOf(A), rb = ranksOf(B);
+    let sd = 0;
+    for (const k of keys) { const d = ra.get(k) - rb.get(k); sd += d * d; }
+    return { rho: 1 - (6 * sd) / (n * (n * n - 1)), n };
+  }
+
+  // Quantos dos 20 primeiros de um ranking também estão nos 20 primeiros do outro.
+  function topOverlap(benchA, benchB) {
+    const a = (benchA.top || []).slice(0, 20).map(x => idKey(x.model));
+    const b = new Set((benchB.top || []).slice(0, 20).map(x => idKey(x.model)));
+    return { on: a.filter(k => b.has(k)).length, total: a.length };
+  }
+
+  /* Frase de sobreposição do "como medimos": contra qual(is) outra(s) categoria(s)
+     esta lista repete a ordem, com o número medido. A primeira aba (o índice
+     cheio) é comparada contra as duas outras; cada bloco é comparado contra o
+     índice cheio do qual faz parte. */
+  function overlapLine(cat) {
+    const mine = primaryBench(cat);
+    if (!mine) return '';
+    const others = CATEGORIES.filter(c => c.id !== cat.id && primaryBench(c));
+    const bits = others.map(o => {
+      const ob = primaryBench(o);
+      const s = spearman(mine, ob);
+      if (!s) return null;
+      const ov = topOverlap(mine, ob);
+      // Vírgula decimal: o resto da página é pt-BR.
+      const rho = s.rho.toFixed(2).replace('.', ',');
+      return `<b>${escapeHtml(o.label)}</b> ${rho} ` +
+             `<span class="qm-ov-detail">(${s.n} modelos em comum; ${ov.on} dos ${ov.total} primeiros se repetem)</span>`;
+    }).filter(Boolean);
+    if (!bits.length) return '';
+
+    const why = cat.id === 'geral'
+      ? 'As outras duas abas são blocos <em>deste mesmo</em> índice — Código vale 24% da nota e Agentes, 34%. Somados, 58% do que você vê aqui.'
+      : `Esta lista é o bloco <b>${escapeHtml(cat.blockLabel || cat.label)}</b> do índice de ` +
+        `<b>Capacidade geral</b> (${escapeHtml(cat.blockWeight || '')} da nota dele), isolado — ` +
+        'não é uma medida independente dele.';
+
+    return `<p><span class="qm-mtag qm-mtag-warn">sobreposição</span>
+      ${why} Por isso as listas ordenam quase igual — correlação de postos:
+      ${bits.join(' · ')}.
+      O que muda de aba para aba é menos a ordem e mais a <b>distância</b> entre os modelos:
+      um modelo pode liderar com folga num bloco e empatar no outro.</p>`;
   }
 
   // ─── Marca da empresa (mesma fonte da régua: data.js) ───
@@ -337,19 +460,31 @@
     const support = supportMaps.map(sm => sm.bench);
     const cov = coverage(bench);
 
-    // "Como medimos" — o que é o número, de onde vem, e o papel do apoio.
+    /* "Como medimos" — o que é o número, do que ele é feito (com os PESOS), o
+       que ele não mede, o quanto repete as outras abas, e o papel do apoio.
+       A composição vem do `cat.composition` (editorial, com pesos) e não do
+       `bench.description` do JSON, que é só um despejo de siglas sem peso. */
+    const comp = cat.composition;
     const method = `
       <details class="qm-method-cat">
         <summary><span class="qm-info-i" aria-hidden="true">i</span> como medimos esta categoria</summary>
         <div class="qm-method-body">
           <p><span class="qm-mtag qm-mtag-main">o número</span>
             A pontuação de cada modelo é a sua nota no <b>${escapeHtml(bench.label)}</b> —
-            ${escapeHtml(bench.description)}. Escala: <b>${escapeHtml(bench.unit)}</b>.
-            ${bench.is_fraction
-              ? 'É a porcentagem de acerto — quanto mais alta, melhor.'
-              : 'É um índice composto (0–100) montado pela Artificial Analysis — quanto mais alto, melhor.'}</p>
-          <p><span class="qm-mtag qm-mtag-main">principal</span>
-            <b>${escapeHtml(bench.label)}</b> é o teste que ordena este ranking.</p>
+            ${comp ? comp.intro : escapeHtml(bench.description)}.
+            Escala: <b>${escapeHtml(bench.unit)}</b> —
+            ${bench.is_fraction ? 'porcentagem de acerto' : 'índice composto, 0–100'}, quanto mais alto melhor.</p>
+          ${comp ? `
+          <p><span class="qm-mtag qm-mtag-main">composição</span>
+            De que a nota é feita, e quanto cada parte pesa:</p>
+          <ul class="qm-comp">
+            ${comp.parts.map(p => `
+              <li><span class="qm-comp-w">${escapeHtml(p.weight)}</span>
+                <span class="qm-comp-t"><b>${escapeHtml(p.part)}</b> — ${escapeHtml(p.tests)}</span></li>`).join('')}
+          </ul>` : ''}
+          ${cat.caveat ? `
+          <p><span class="qm-mtag qm-mtag-warn">não mede</span> ${cat.caveat}</p>` : ''}
+          ${overlapLine(cat)}
           ${support.length ? `
           <p><span class="qm-mtag">apoio</span>
             ${support.map(b => `<b>${escapeHtml(b.label)}</b>`).join(', ')} — medem a mesma área
@@ -358,9 +493,11 @@
           ${cat.note ? `
           <p><span class="qm-mtag">nota</span> ${escapeHtml(cat.note)}</p>` : ''}
           <p class="qm-method-foot">
-            Dados da <b>Artificial Analysis</b> — testes independentes e padronizados.
-            ${bench.models_evaluated} modelos avaliados no teste principal${
+            Quem mede é a <b>Artificial Analysis</b>, que <b>roda os testes por conta própria</b>,
+            com o mesmo protocolo para todos os modelos — não republica número informado pelo fabricante.
+            ${bench.models_evaluated} modelos avaliados neste índice${
               cov ? ` · <b>${cov.on} de ${cov.total}</b> deste ranking também estão na régua` : ''}.
+            <a href="${AA_METHOD_URL}" target="_blank" rel="noopener">Metodologia completa ↗</a>
           </p>
         </div>
       </details>`;
@@ -411,7 +548,7 @@
 
   /* ─── Índice de modelos entre categorias ───
      Para a busca e a comparação: cada modelo distinto que aparece em ALGUMA das
-     5 categorias, com sua pontuação e posição em cada uma. As notas/postos vêm
+     categorias, com sua pontuação e posição em cada uma. As notas/postos vêm
      do `full` (lista completa) quando existe — assim a comparação mostra um
      modelo em todas as categorias onde ele foi avaliado, mesmo se não estiver no
      top-20 exibido. Preço/velocidade só vivem no `top` (linhas ricas); por isso

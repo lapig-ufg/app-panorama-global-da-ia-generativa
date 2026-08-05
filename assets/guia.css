@@ -631,9 +631,46 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
   vertical-align: 1px;
 }
 .qm-mtag-main { background: var(--accent-soft); color: var(--accent); }
+/* Ressalvas ("não mede", "sobreposição"): âmbar, para separar do que é
+   descrição neutra. #7a4e0c dá ~7:1 sobre o paper — legível no tamanho 8.5px. */
+.qm-mtag-warn { background: rgba(160, 108, 20, 0.12); color: #7a4e0c; }
 .qm-mnote { color: var(--ink-muted); }
+
+/* Composição do índice: peso à esquerda, o que ele contém à direita. */
+.qm-comp {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0 0 0 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.qm-comp li {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 9px;
+  align-items: baseline;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-light);
+}
+.qm-comp-w {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-align: right;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+.qm-comp-t b { color: var(--ink); }
+.qm-ov-detail { color: var(--ink-muted); font-size: 11.5px; }
+
 .qm-method-foot { color: var(--ink-muted) !important; font-size: 11.5px !important; }
 .qm-method-foot b { color: var(--ink-light); }
+.qm-method-foot a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+.qm-method-foot a:hover { border-bottom-color: var(--accent); }
 
 /* ═══ Lista ordenável ═══ */
 .qm-list {
@@ -815,6 +852,8 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
 .qm-method ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 7px; }
 .qm-method li { font-size: 12px; line-height: 1.55; color: var(--ink-muted); }
 .qm-method strong { color: var(--ink-light); }
+.qm-method a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+.qm-method a:hover { border-bottom-color: var(--accent); }
 
 /* ─── Responsivo ─── */
 @media (max-width: 720px) {

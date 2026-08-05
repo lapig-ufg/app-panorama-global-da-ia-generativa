@@ -7,7 +7,7 @@
   <title>Qual modelo usar | Panorama Global da IA Generativa — LAPIG</title>
 
   <!-- SEO & Social -->
-  <meta name="description" content="Qual modelo de IA generativa usar para cada tarefa — programação, agentes, pesquisa, instruções estruturadas. Comparação por desempenho, custo e velocidade. LAPIG / IESA / UFG.">
+  <meta name="description" content="Qual modelo de IA generativa usar para cada tarefa — capacidade geral, programação, agentes e automação. Comparação por desempenho, custo e velocidade, com base nos índices da Artificial Analysis. LAPIG / IESA / UFG.">
   <meta name="author" content="LAPIG / IESA / UFG">
   <meta name="theme-color" content="#10a37f">
 
@@ -39,7 +39,7 @@
 
   <!-- Estilos -->
   <link rel="stylesheet" href="assets/styles.css">
-  <link rel="stylesheet" href="assets/guia.css?v=23">
+  <link rel="stylesheet" href="assets/guia.css?v=24">
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSBR3JMT2X"></script>
@@ -143,13 +143,15 @@
     <aside class="qm-method">
       <h3>Como ler estes números</h3>
       <ul>
-        <li><strong>Categorias e composição</strong> — cada categoria é medida por um teste principal (às vezes um índice composto da própria Artificial Analysis); os testes de apoio medem a mesma área de outras formas e não entram na posição do ranking. O botão <em>ver outros testes desta categoria</em> mostra a nota de cada modelo nos testes de apoio, como referência cruzada.</li>
+        <li><strong>De onde vem a pontuação</strong> — as três categorias usam índices compostos da <a href="https://artificialanalysis.ai/" target="_blank" rel="noopener">Artificial Analysis</a>, que roda os testes por conta própria, com o mesmo protocolo para todos os modelos — não republica número informado pelo fabricante. O botão <em>como medimos esta categoria</em> abre a composição de cada índice, com o peso de cada teste, e leva à <a href="https://artificialanalysis.ai/methodology/intelligence-benchmarking" target="_blank" rel="noopener">metodologia completa</a>.</li>
+        <li><strong>As três categorias não são independentes</strong> — <em>Capacidade geral</em> é o Intelligence Index inteiro; <em>Programação</em> e <em>Agentes e automação</em> são dois blocos dele (24% e 34% da nota), isolados. Somados, são 58% da nota geral. Por isso as três listas ordenam de forma parecida — o que muda entre elas é menos a ordem e mais a distância entre os modelos. Os números da correlação estão no <em>como medimos</em> de cada aba.</li>
+        <li><strong>O que “capacidade geral” quer dizer</strong> — é o teto do modelo em tarefas difíceis (trabalho profissional, uso de ferramentas, código, ciência de nível doutorado), <em>não</em> a qualidade dele para conversar, escrever ou resumir: nenhum dos nove testes mede isso. Para tarefas do dia a dia, praticamente qualquer modelo destas listas dá conta.</li>
         <li><strong>Ordenar</strong> — <em>mais capaz</em> usa a pontuação da categoria; <em>custo-benefício</em>, a maior pontuação por dólar (não o mais barato); <em>mais rápido</em>, os tokens por segundo. A barra de cada linha mostra o critério ativo.</li>
         <li><strong>Piso de qualidade</strong> — como a lista já é o corte dos mais capazes, custo-benefício e velocidade sempre comparam modelos que passam num piso: o barato ruim nunca lidera.</li>
         <li><strong>Comparar</strong> — busque um modelo ou toque no <em>+</em> de uma linha para pôr até quatro lado a lado. A tabela mostra a pontuação e a posição de cada um em todas as categorias; “—” significa que o modelo não foi avaliado naquele teste.</li>
         <li><strong>Nomes clicáveis</strong> — levam ao modelo na régua. Só linkamos quando o nome bate exatamente; modelo ainda não cadastrado aparece sem link.</li>
         <li><strong>Preço e velocidade</strong> — custo médio por 1 milhão de tokens (entrada e saída combinadas, em dólares) e a velocidade de geração. “—” quando a fonte não publica o dado.</li>
-        <li><strong>Ausências</strong> — não há categoria de matemática porque os testes disponíveis estão saturados (líderes acima de 99%, sem separação entre os modelos atuais).</li>
+        <li><strong>Ausências</strong> — não há categoria de <em>matemática</em> porque os testes disponíveis estão saturados (líderes acima de 99%, sem separação entre os modelos atuais). As categorias <em>pesquisa e raciocínio</em> e <em>instruções e dados</em> saíram em agosto de 2026, quando a Artificial Analysis passou a servir os testes individuais só no plano pago: sobraram os índices compostos. Pesquisa não ficou de fora da conta — o bloco de raciocínio científico pesa 24% da <em>Capacidade geral</em>. E a fonte não avalia <em>front-end</em>, então a nota de programação não fala sobre construir interface.</li>
       </ul>
     </aside>
   </main>
@@ -166,7 +168,7 @@
 
   <!-- Scripts -->
   <script src="assets/data.js?v=18"></script>
-  <script src="assets/guia.js?v=23"></script>
+  <script src="assets/guia.js?v=24"></script>
 </body>
 
 </html>

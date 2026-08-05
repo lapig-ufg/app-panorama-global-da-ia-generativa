@@ -302,7 +302,7 @@ os testes disponíveis estão saturados (>99%) e não separam os modelos.
 
 | Categoria | Principal | Apoio (só com chave Pro) |
 |---|---|---|
-| Uso geral | `artificial_analysis_intelligence_index` | `gpqa_diamond`, `hle` |
+| Capacidade geral | `artificial_analysis_intelligence_index` | `gpqa_diamond`, `hle` |
 | Programação | `artificial_analysis_coding_index` | `scicode` |
 | Agentes e automação | `artificial_analysis_agentic_index` | `terminalbench_v2_1`, `tau2_telecom` |
 
@@ -324,9 +324,12 @@ Os apoios ficam listados mesmo sem existirem no tier free: `benchByKey` devolve
 >   medindo por conta própria, apura 53,3%.
 > - **Instruções e dados** (era `ifbench` + `lcr`). Sem equivalente no free.
 >
-> A alta correlação virou conteúdo: o campo `note` da categoria Uso geral diz ao leitor
+> A ausência virou conteúdo: o campo `note` da categoria Capacidade geral diz ao leitor
 > que, para trabalho de pesquisa, **o mesmo ranking vale** — não há lista separada a
-> consultar. Melhor que uma aba ordenando modelos por ruído.
+> consultar. Melhor que uma aba ordenando modelos por ruído. **Atenção ao argumento:**
+> a versão original dessa nota citava a correlação de 0,95 com o GPQA como se fosse
+> evidência externa. Era circular — o GPQA é 6% do próprio índice. A nota atual usa o
+> motivo verdadeiro: o bloco de raciocínio científico **já pesa 24% da nota**.
 >
 > **Agentes** trocou `terminalbench_v2_1` pelo `artificial_analysis_agentic_index`: o
 > composto da própria AA para a mesma pergunta, com cobertura maior (138 famílias contra
@@ -338,19 +341,41 @@ Os apoios ficam listados mesmo sem existirem no tier free: `benchByKey` devolve
 > Em runtime, `renderPanel` ainda **oculta apoios que casam < 5/20** do principal — rede
 > contra envelhecimento futuro da fonte (se a AA parar de avaliar um teste, ele some sozinho).
 
-> **⚠️ Nuance de composição (importante pra mudar categoria).** O `artificial_analysis_intelligence_index`
-> **v4.1 é um composite** que JÁ inclui GPQA, HLE, SciCode, Terminal-Bench e LCR como
-> ingredientes. Consequências:
-> - **Pesquisa (HLE)** e **Agentes (Terminal-Bench)** são "vistas focadas" de peças que
->   também alimentam o Uso geral — não são categorias 100% independentes, mas produzem
->   rankings diferentes do composite amplo (útil mesmo assim).
-> - Um apoio que é ingrediente do primário (ex.: GPQA no Uso geral) **não é enganoso**: o
->   "como medimos" diz que o apoio "não entra na posição do ranking" — o ranking é pelo
->   primário, o apoio é só exibido. Válido mesmo quando é ingrediente do composite.
+> **⚠️ Composição real dos três índices — leia antes de mexer em categoria.**
+> Pela [metodologia da AA](https://artificialanalysis.ai/methodology/intelligence-benchmarking),
+> o `artificial_analysis_intelligence_index` **v4.1** é a média ponderada de quatro blocos:
+>
+> | Bloco | Peso | Componentes |
+> |---|---|---|
+> | Agentes | 34% | GDPval-AA v2 (20%), τ³-Banking (14%) |
+> | Código | 24% | Terminal-Bench v2.1 (16%), SciCode (8%) |
+> | Raciocínio científico | 24% | HLE (12%), GPQA Diamond (6%), CritPt (6%) |
+> | Geral | 18% | AA-Omniscience (12%), AA-LCR (6%) |
+>
+> E os outros dois índices do tier free **são dois desses blocos**: `coding_index` = bloco
+> Código, `agentic_index` = bloco Agentes. Ou seja, **58% da nota da primeira aba é o
+> conteúdo das outras duas**. Consequências:
+>
+> - **Peso zero em conversa, escrita e resumo.** Por isso a primeira aba deixou de se
+>   chamar "Uso geral" com a pergunta "conversar, escrever, resumir, tirar dúvidas do dia
+>   a dia" — prometia exatamente o que o índice não mede. Virou **"Capacidade geral"**,
+>   com o campo `caveat` dizendo o que ficou de fora. **Não volte a descrevê-la como "o
+>   modelo do dia a dia".**
+> - **As três abas ordenam quase igual** (rho medido no `benchmarks.json` de 5/ago/2026:
+>   geral×código 0,96 com 20/20 de sobreposição no top-20; geral×agentes 0,96 com 18/20;
+>   código×agentes 0,94). O mesmo critério que matou "Pesquisa e raciocínio" (rho 0,95 =
+>   "aba repetindo a ordem da primeira") vale aqui. As abas ficam porque respondem
+>   perguntas diferentes e as **magnitudes** diferem — não porque sejam independentes.
+>   Isso está **declarado no site**, via `overlapLine()`, com o número calculado em runtime
+>   (`spearman()`): se a AA mudar a composição, o texto acompanha em vez de envelhecer.
+> - Um apoio que é ingrediente do primário (ex.: GPQA na Capacidade geral) **não é
+>   enganoso**: o "como medimos" diz que o apoio "não entra na posição do ranking".
+>   Mas **não use essa correlação como argumento** — ver a nota sobre circularidade acima.
 >
 > Se um dia quiser categorias mais independentes, os únicos benchmarks **fora** do
 > Intelligence Index são: IFBench, TAU-bench, MMLU-Pro (estagnado), LiveCodeBench
-> (estagnado) e AIME (saturado).
+> (estagnado) e AIME (saturado). **A AA não avalia front-end** — declarado no `caveat`
+> da categoria Programação.
 
 **Ordenação (os "filtros").** Uma lista única por categoria, reordenável. Os três botões
 (`Mais capaz` / `Custo-benefício` / `Mais rápido`) formam um **controle segmentado** com
@@ -362,11 +387,21 @@ contorno, a ativa preenchida na cor de destaque — mesmo idioma visual das abas
 
 A barra de cada linha reflete o critério ativo; ao reordenar, mostra-se "Nº em capacidade".
 
-**"Como medimos" + "outros testes".** Botão por categoria que abre a **composição** (principal
-+ apoio, com o que cada teste mede + cobertura na régua). Um segundo botão, **"ver outros
-testes desta categoria"**, revela uma linha por modelo com a nota dele em cada benchmark de
-apoio + uma **barrinha** relativa ao líder daquele apoio (cor da empresa). Sem nota, a linha
-é **omitida** (não mostra "—"). O painel ganha a classe `is-show-extras` para alternar.
+**"Como medimos" + "outros testes".** Botão por categoria que abre, nesta ordem:
+`o número` (que índice é, escala) → `composição` (**os pesos**, via `cat.composition`) →
+`não mede` (`cat.caveat`, a ressalva) → `sobreposição` (`overlapLine()`, o rho medido) →
+`apoio` (só com chave Pro) → `nota` (`cat.note`) → rodapé com quem mede, cobertura na
+régua e **link para a metodologia da AA** (`AA_METHOD_URL`).
+
+Os pesos moram em `cat.composition` no `guia.js`, **não** no `description` do
+`benchmarks.json` — o JSON só traz a lista de siglas, e é o peso que muda a leitura da nota.
+Se a AA publicar um v4.2 com pesos novos, é aqui que se mexe.
+
+Um segundo botão, **"ver outros testes desta categoria"**, revela uma linha por modelo com a
+nota dele em cada benchmark de apoio + uma **barrinha** relativa ao líder daquele apoio (cor
+da empresa). Sem nota, a linha é **omitida** (não mostra "—"). O painel ganha a classe
+`is-show-extras` para alternar. **Com a chave free esse botão não aparece em nenhuma aba** —
+todos os apoios são Pro-only e o filtro os descarta. É esperado.
 
 **Busca + comparação.** Campo de busca com sugestões; até `MAX_COMPARE = 4` modelos num
 acordeão `<details>` ("Quer comparar modelos?") que abre sozinho ao adicionar o 1º. A tabela
@@ -376,7 +411,7 @@ mostra pontuação **e posição de cada modelo em todas as categorias**, mais p
 que **vence entre os comparados** ganha destaque (fundo accent-soft + negrito) — não só o
 `#1` global (`is-lead` virou secundário). O cabeçalho de cada modelo mostra o **placar**
 ("N vitórias") e uma **coroa ★** para quem vence em mais categorias. **Preço = menor vence;
-velocidade = maior vence.** O placar conta só as 5 categorias de capacidade (preço/velocidade
+velocidade = maior vence.** O placar conta só as categorias de capacidade (preço/velocidade
 só ganham destaque na própria linha). `bestScoreAmong()` decide o vencedor por nota (empate
 de nota = vitória para ambos); `wins`/`maxWins` montam o placar e a coroa.
 
@@ -408,6 +443,8 @@ Categoria sem dados → aparece como "sem dados nesta rodada" (não some). Abert
 | Trocar/incluir benchmark | `BENCHMARKS` em `automation/update-benchmarks.mjs` (chave = campo em `evaluations`) |
 | Nº de famílias por ranking | `TOP_N` (padrão 20) no mesmo arquivo |
 | Recategorizar / mudar principal-apoio | `CATEGORIES` em `assets/guia.js` |
+| Pesos/composição de um índice (v4.2 etc.) | `composition` da categoria em `assets/guia.js` |
+| Ressalva do "não mede" / link da metodologia | `caveat` da categoria / `AA_METHOD_URL` em `assets/guia.js` |
 | Piso de qualidade / máx. comparação | `FLOOR`, `MAX_COMPARE` em `assets/guia.js` |
 | Ligar nome AA → nome da régua | `MODEL_ALIASES` em `assets/data.js` |
 | Empresa nova sem cor/logo | `BENCH_ONLY_COLORS` / `COMPANY_ALIASES` / `LOGO_MAP` em `assets/data.js` |
@@ -415,6 +452,38 @@ Categoria sem dados → aparece como "sem dados nesta rodada" (não some). Abert
 ---
 
 ## 9. Changelog
+
+### 2026-08-05 — honestidade do "Uso geral" + referência da fonte
+Revisão de conteúdo depois do corte de 5→3 categorias. O gatilho foi a pergunta "'uso geral'
+é o melhor termo pra isso?" — não era, e a auditoria achou mais coisa junto.
+
+- **"Uso geral" → "Capacidade geral".** A pergunta de apoio dizia *"conversar, escrever,
+  resumir, tirar dúvidas do dia a dia"*, e **nenhum dos nove testes do Intelligence Index
+  mede isso** (Agentes 34% · Código 24% · Raciocínio científico 24% · Geral 18%). Agora:
+  *"Raciocínio, conhecimento e tarefas difíceis — o teto de capacidade do modelo"*, com um
+  bloco `não mede` explícito. (§7)
+- **Pesos no "como medimos".** Novo campo `composition` por categoria: o que compõe o índice
+  e **quanto cada parte pesa**. Antes o site despejava o `description` cru do JSON — nove
+  siglas, nenhum peso, nada explicado. (§7)
+- **Sobreposição declarada.** `spearman()` + `topOverlap()` + `overlapLine()` calculam **em
+  runtime** o quanto as três abas repetem a mesma ordem e mostram o número no "como
+  medimos" (geral×código 0,96, 20/20 no top-20; geral×agentes 0,96, 18/20; código×agentes
+  0,94). O site passa a dizer que Programação e Agentes **são blocos** do índice geral
+  (24% e 34% — 58% somados), em vez de sugerir que são medidas independentes. (§7)
+- **Nota circular corrigida.** A categoria geral justificava a ausência de uma aba de
+  pesquisa citando a correlação de 0,95 com o GPQA — que é **6% do próprio índice**.
+  Trocado pelo motivo real: o bloco de raciocínio científico já pesa 24% da nota. (§7)
+- **Referência da fonte.** Link para a metodologia da AA no rodapé de todo "como medimos"
+  (`AA_METHOD_URL`) e no bloco "Como ler estes números", que agora também diz que **a AA
+  roda os testes por conta própria** — o diferencial contra número auto-reportado pelo
+  fabricante estava só nesta documentação, nunca no site. (§7)
+- **Ressalva de front-end.** `caveat` da categoria Programação declara que a AA não avalia
+  front-end. Antes isso também só existia aqui. (§7)
+- **Textos órfãos do corte 5→3 limpos** no `guia.html`: o bloco "Como ler estes números"
+  citava um botão *"ver outros testes"* que não renderiza mais (todo apoio é Pro-only),
+  dizia "às vezes um índice composto" (são os três, sempre) e omitia o motivo da saída de
+  *Pesquisa* e *Instruções*; a `meta description` ainda vendia as categorias mortas.
+- `?v=` → 24.
 
 ### 2026-07-24 — schema v2 + refactor interativo
 - **Pipeline:** corrigido para o **schema v2** da Artificial Analysis (criador em
