@@ -18,7 +18,18 @@ import vm from 'node:vm';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 
-const API_URL = 'https://artificialanalysis.ai/api/v2/data/llms/models';
+/* Contrato v2 documentado. O endpoint legado (/api/v2/data/llms/models) foi
+   desligado em 4/nov/2026 — ele não tinha paginação, devolvia todos os
+   benchmarks para qualquer chave e usava outros nomes de campo.
+
+   Duas rotas, escolhidas pelo tier da chave:
+     • free → só os 3 índices compostos, sem os benchmarks individuais
+     • pro  → o conjunto completo
+   O tier vem no corpo da resposta, então detectamos em vez de configurar. */
+const API_BASE = 'https://artificialanalysis.ai/api/v2';
+const ROTA_FREE = '/language/models/free';
+const ROTA_PRO = '/language/models';
+const MAX_PAGINAS = 20;   // trava contra loop se a paginação vier maluca
 const OUT_PATH = join(ROOT, 'assets', 'benchmarks.json');
 
 // Nº de modelos DISTINTOS (famílias) guardados por benchmark. Como as variantes
@@ -34,31 +45,36 @@ async function loadDataJs(fields) {
   return ctx.__X;
 }
 
-const BENCHMARKS = [
-  // Inteligência geral
-  { key: 'artificial_analysis_intelligence_index', label: 'Intelligence Index', category: 'Inteligência', description: 'Composite AA de raciocínio geral (v4.1)', unit: 'índice (0–100)', is_fraction: false },
-  { key: 'gpqa', label: 'GPQA Diamond', category: 'Inteligência', description: 'Perguntas de nível PhD — raciocínio profundo', unit: '%', is_fraction: true },
+/* Os 3 índices compostos da AA — tudo que a chave free entrega. Todos em
+   escala 0–100 (só os benchmarks individuais vêm em fração). */
+const BENCHMARKS_FREE = [
+  { key: 'artificial_analysis_intelligence_index', label: 'Intelligence Index', category: 'Inteligência', description: 'Composite AA de raciocínio geral (v4.1: GDPval-AA, τ³-Banking, Terminal-Bench, SciCode, AA-LCR, AA-Omniscience, HLE, GPQA Diamond, CritPt)', unit: 'índice (0–100)', is_fraction: false },
+  { key: 'artificial_analysis_coding_index', label: 'Coding Index', category: 'Coding', description: 'Composite AA de código, derivado de um subconjunto das avaliações do Intelligence Index', unit: 'índice (0–100)', is_fraction: false },
+  { key: 'artificial_analysis_agentic_index', label: 'Agentic Index', category: 'Agents', description: 'Composite AA de uso autônomo de ferramentas e terminal', unit: 'índice (0–100)', is_fraction: false },
+];
+
+/* Benchmarks individuais — só com chave Pro. Mantidos aqui para que a migração
+   de tier seja automática: se a assinatura mudar, a tabela volta inteira sem
+   tocar no código. Os nomes seguem o contrato v2, que difere do legado:
+   gpqa→gpqa_diamond, lcr→aa_lcr, tau2→tau2_telecom. E mmlu_pro, aime_25 e
+   livecodebench não existem mais em nenhum tier — a AA os aposentou. */
+const BENCHMARKS_PRO = [
+  ...BENCHMARKS_FREE,
+  { key: 'gpqa_diamond', label: 'GPQA Diamond', category: 'Inteligência', description: 'Perguntas de nível PhD — raciocínio profundo', unit: '%', is_fraction: true },
   { key: 'hle', label: "Humanity's Last Exam", category: 'Inteligência', description: 'Perguntas de especialistas — fronteira do conhecimento', unit: '%', is_fraction: true },
-  // Coding
-  { key: 'artificial_analysis_coding_index', label: 'Coding Index', category: 'Coding', description: 'Composite AA de agentes de código (DeepSWE, Terminal-Bench, SWE-Atlas)', unit: 'índice (0–100)', is_fraction: false },
   { key: 'scicode', label: 'SciCode', category: 'Coding', description: 'Geração de código científico', unit: '%', is_fraction: true },
-  { key: 'livecodebench', label: 'LiveCodeBench', category: 'Coding', description: 'Problemas de programação inéditos', unit: '%', is_fraction: true },
-  // Math — mantido só como sinal de apoio; ver nota sobre saturação abaixo.
-  { key: 'aime_25', label: 'AIME 2025', category: 'Math', description: 'Olimpíada de matemática', unit: '%', is_fraction: true },
-  // Agents
   { key: 'terminalbench_v2_1', label: 'Terminal-Bench v2.1', category: 'Agents', description: 'Agentes em terminal (tarefas reais)', unit: '%', is_fraction: true },
-  { key: 'tau2', label: 'TAU-bench', category: 'Agents', description: 'Agentes com ferramentas de atendimento', unit: '%', is_fraction: true },
-  // Conhecimento
-  { key: 'mmlu_pro', label: 'MMLU-Pro', category: 'Conhecimento', description: 'Conhecimento acadêmico multi-domínio', unit: '%', is_fraction: true },
-  // Instruções
+  { key: 'tau2_telecom', label: 'TAU-bench', category: 'Agents', description: 'Agentes com ferramentas de atendimento', unit: '%', is_fraction: true },
   { key: 'ifbench', label: 'IFBench', category: 'Instruções', description: 'Seguimento complexo de instruções', unit: '%', is_fraction: true },
-  { key: 'lcr', label: 'LCR', category: 'Instruções', description: 'Leitura crítica e raciocínio longo', unit: '%', is_fraction: true },
+  { key: 'aa_lcr', label: 'AA-LCR', category: 'Instruções', description: 'Leitura crítica e raciocínio longo', unit: '%', is_fraction: true },
+  { key: 'critpt', label: 'CritPt', category: 'Inteligência', description: 'Raciocínio de física em nível de doutorado', unit: '%', is_fraction: true },
 ];
 
 /* Removidos de propósito:
    • artificial_analysis_math_index — top-15 byte a byte idêntico ao aime_25.
    • math_500 — saturado: teto 99,4% e spread de 1,3 ponto no top-15, com o #1
-     de ago/2025. Não separa mais os modelos, então só ocupava espaço. */
+     de ago/2025. Não separa mais os modelos, então só ocupava espaço.
+   • mmlu_pro, aime_25, livecodebench — aposentados pela AA no contrato v2. */
 
 function getValue(obj, keys) {
   for (const k of keys) {
@@ -68,22 +84,29 @@ function getValue(obj, keys) {
 }
 
 function priceBlended(model) {
-  // Schema v2 da AA (jul/2026): os preços passaram a viver em model.pricing.*
-  // (blended agora é "3_to_1"). Mantemos os nomes antigos como fallback caso
-  // a AA volte atrás. Prefer blended; senão média de input/output em $/1M tokens.
+  /* O preço exibido é o "blended 3:1" — 3 tokens de entrada para cada 1 de
+     saída, a proporção típica de uso real. A AA entrega esse campo pronto só
+     no tier Pro, mas ele é reproduzível: blended = (3·input + 1·output) / 4.
+     Conferido contra o benchmarks.json gerado pelo endpoint legado — Opus 5
+     (5/25) → 10,00 e GPT-5.6 Sol (5/30) → 11,25, batendo exato.
+
+     Ou seja: o free não degrada o preço, só exige a conta. */
   const p = (model && model.pricing && typeof model.pricing === 'object') ? model.pricing : model;
   const blended = getValue(p, ['price_1m_blended_3_to_1', 'price_1m_blended', 'price_blended_usd', 'price_usd_per_1m_tokens']);
   if (blended != null) return Number(blended);
   const inp = getValue(p, ['price_1m_input_tokens', 'price_1m_input', 'price_input_usd_per_1m_tokens', 'input_price_usd_per_1m_tokens']);
   const out = getValue(p, ['price_1m_output_tokens', 'price_1m_output', 'price_output_usd_per_1m_tokens', 'output_price_usd_per_1m_tokens']);
-  if (inp != null && out != null) return (Number(inp) + Number(out)) / 2;
+  if (inp != null && out != null) return (3 * Number(inp) + Number(out)) / 4;
   if (inp != null) return Number(inp);
   return null;
 }
 
 function tokenSpeed(model) {
-  // Schema v2 da AA: median_output_tokens_per_second (antes tok_per_sec).
-  return getValue(model, ['median_output_tokens_per_second', 'tok_per_sec', 'tokens_per_second', 'output_tokens_per_second', 'throughput_tokens_per_second']);
+  // Contrato v2: as métricas de performance vivem em model.performance.*.
+  // Sem este aninhamento a velocidade viraria 0 em TODA linha, em silêncio —
+  // por isso a guarda de velocidade lá embaixo.
+  const perf = (model && model.performance && typeof model.performance === 'object') ? model.performance : model;
+  return getValue(perf, ['median_output_tokens_per_second', 'tok_per_sec', 'tokens_per_second', 'output_tokens_per_second', 'throughput_tokens_per_second']);
 }
 
 function creatorName(model) {
@@ -98,11 +121,13 @@ function modelName(model) {
   return getValue(model, ['name', 'model', 'model_name', 'id']) || 'Modelo';
 }
 
-// Pesos abertos: a AA não documenta um nome único para o campo, então tentamos
-// os mais prováveis. Se nenhum existir, devolve null e o guia simplesmente não
-// mostra o selo "aberto" — nunca chuta.
+// Pesos abertos: no contrato v2 é licensing.is_open_weights, e o campo inteiro
+// só existe no tier Pro. No free devolve null e o guia simplesmente não mostra
+// o selo "aberto" — nunca chuta. (Já era o caso com o endpoint legado, que
+// também não trazia o campo: has_open_weights vinha false.)
 function openWeights(model) {
-  const v = getValue(model, ['open_weights', 'openWeights', 'is_open_weights', 'open_source', 'is_open_source']);
+  const lic = (model && model.licensing && typeof model.licensing === 'object') ? model.licensing : model;
+  const v = getValue(lic, ['is_open_weights', 'open_weights', 'openWeights', 'open_source', 'is_open_source']);
   if (v == null) return null;
   if (typeof v === 'boolean') return v;
   const s = String(v).trim().toLowerCase();
@@ -151,6 +176,33 @@ function normalizeScore(v, isFraction) {
   return (isFraction && v <= 1) ? Math.round(v * 1e6) / 1e4 : v;
 }
 
+/* Busca uma rota inteira, seguindo a paginação (page_size = 200 hoje).
+   Devolve também o tier e se a paginação fechou — sem isso o pipeline
+   publicaria a primeira página e jogaria o resto fora em silêncio. */
+async function buscarRota(rota, apiKey) {
+  const models = [];
+  let pagina = 1, totalPaginas = 1, tier = null, completa = false;
+
+  while (pagina <= totalPaginas && pagina <= MAX_PAGINAS) {
+    const url = `${API_BASE}${rota}?page=${pagina}`;
+    const res = await fetch(url, { headers: { 'x-api-key': apiKey } });
+    if (!res.ok) return { erro: res.status, rota, models, tier };
+
+    const payload = await res.json();
+    const lote = Array.isArray(payload) ? payload : (payload.data || payload.models || []);
+    models.push(...lote);
+
+    if (pagina === 1) {
+      tier = payload.tier ?? res.headers.get('x-aa-tier') ?? null;
+      totalPaginas = payload.pagination?.total_pages ?? 1;
+      console.log(`  tier=${tier} · ${totalPaginas} página(s) · ${payload.pagination?.page_size ?? '?'} por página`);
+    }
+    completa = payload.pagination ? payload.pagination.has_more === false : true;
+    pagina++;
+  }
+  return { models, tier, totalPaginas, completa };
+}
+
 async function main() {
   const apiKey = process.env.AA_API_KEY;
   if (!apiKey) {
@@ -161,19 +213,35 @@ async function main() {
   const { canonicalCompany, COMPANY_COLORS, BENCH_ONLY_COLORS, MODEL_ALIASES } =
     await loadDataJs(['canonicalCompany', 'COMPANY_COLORS', 'BENCH_ONLY_COLORS', 'MODEL_ALIASES']);
 
-  console.log(`Buscando ${API_URL}…`);
-  const res = await fetch(API_URL, {
-    headers: { 'x-api-key': apiKey },
-  });
-  if (!res.ok) {
-    console.error(`Erro na API: HTTP ${res.status}`);
+  /* Tenta o Pro primeiro: se a assinatura existir, o guia ganha os benchmarks
+     individuais de volta sozinho. 403 é a resposta esperada numa chave free —
+     não é erro, é a detecção funcionando. */
+  console.log(`Buscando ${API_BASE}${ROTA_PRO}…`);
+  let r = await buscarRota(ROTA_PRO, apiKey);
+  if (r.erro === 403) {
+    console.log('  403 — a chave não cobre o tier Pro. Usando a rota free.');
+    console.log(`Buscando ${API_BASE}${ROTA_FREE}…`);
+    r = await buscarRota(ROTA_FREE, apiKey);
+  }
+  if (r.erro) {
+    console.error(`::error::Erro na API: HTTP ${r.erro} em ${r.rota}. ` +
+      'Nada foi escrito — o benchmarks.json anterior continua valendo.');
     process.exit(1);
   }
 
-  const payload = await res.json();
-  // A API pode retornar { models: [...] } ou diretamente um array
-  const models = Array.isArray(payload) ? payload : (payload.models || payload.data || []);
-  console.log(`Modelos recebidos: ${models.length}`);
+  const models = r.models;
+  const ehPro = r.tier === 'pro' || r.tier === 'commercial';
+  const BENCHMARKS = ehPro ? BENCHMARKS_PRO : BENCHMARKS_FREE;
+  console.log(`Modelos recebidos: ${models.length} · tier ${r.tier} · ${BENCHMARKS.length} benchmarks`);
+
+  /* Guarda de PAGINAÇÃO: se a última página disse has_more=true, veio só um
+     pedaço do catálogo. O ranking sairia plausível mas incompleto — o pior
+     tipo de erro, porque nenhuma outra guarda pega. */
+  if (!r.completa) {
+    console.error(`::error::A paginação não fechou (${r.totalPaginas} páginas, has_more ainda true). ` +
+      'Recebemos um catálogo parcial. Nada foi escrito — o benchmarks.json anterior continua valendo.');
+    process.exit(1);
+  }
 
   const fetchedAt = new Date().toISOString();
   let openWeightsSeen = 0;
@@ -268,6 +336,7 @@ async function main() {
   const nTop = allTop.length;
   const semCreator = allTop.filter(m => !m.creator || m.creator === 'Desconhecido').length;
   const comPreco = allTop.filter(m => m.price_1m_blended != null).length;
+  const comVeloc = allTop.filter(m => m.tok_per_sec > 0).length;
   if (nTop > 0 && semCreator > nTop * 0.5) {
     console.error(`::error::${semCreator}/${nTop} linhas sem criador reconhecido — a AA ` +
       'provavelmente mudou o schema do campo de criador. Nada foi escrito; ' +
@@ -277,6 +346,15 @@ async function main() {
   if (nTop > 0 && comPreco === 0) {
     console.error(`::error::Nenhuma das ${nTop} linhas veio com preço — a AA provavelmente ` +
       'mudou o schema de pricing. Nada foi escrito; confira priceBlended().');
+    process.exit(1);
+  }
+  /* Velocidade: só ~51% dos modelos têm medição, então não dá para exigir
+     maioria. Mas ZERO linhas com velocidade significa que performance.* mudou
+     de lugar — e como o guia trata ausência como 0, o ordenador "mais rápido"
+     viraria uma lista aleatória sem nenhum sinal de erro. */
+  if (nTop > 0 && comVeloc === 0) {
+    console.error(`::error::Nenhuma das ${nTop} linhas veio com velocidade — a AA provavelmente ` +
+      'mudou o schema de performance. Nada foi escrito; confira tokenSpeed().');
     process.exit(1);
   }
 
@@ -326,9 +404,10 @@ async function main() {
   }
 
   const out = {
-    source: 'Artificial Analysis Data API',
+    source: 'Artificial Analysis Data API v2',
     source_url: 'https://artificialanalysis.ai/',
     attribution: 'Dados: Artificial Analysis — artificialanalysis.ai',
+    api_tier: r.tier,          // 'free' | 'pro' — o guia usa para explicar a cobertura
     models_total: models.length,
     fetched_at: fetchedAt,
     has_open_weights: openWeightsSeen > 0,
@@ -344,7 +423,8 @@ async function main() {
     await writeFile(OUT_PATH, JSON.stringify(out, null, 2), 'utf8');
     console.log(`\nSalvo: ${OUT_PATH}`);
   }
-  console.log(`Modelos: ${models.length} · Benchmarks: ${benchmarks.length} · Data: ${fetchedAt.slice(0, 10)}`);
+  console.log(`Modelos: ${models.length} · Benchmarks: ${benchmarks.length} · Tier: ${r.tier} · Data: ${fetchedAt.slice(0, 10)}`);
+  console.log(`Preço: ${comPreco}/${nTop} linhas · Velocidade: ${comVeloc}/${nTop} linhas`);
   console.log(`Campo open_weights: ${openWeightsSeen > 0 ? `presente (${openWeightsSeen} linhas)` : 'AUSENTE na API — selo "aberto" fica oculto'}`);
   benchmarks.forEach(b => {
     const first = b.top[0];

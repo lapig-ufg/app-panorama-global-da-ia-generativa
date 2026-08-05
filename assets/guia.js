@@ -36,14 +36,44 @@
      Apoios estagnados foram removidos (24/jul/2026): MMLU-Pro, LiveCodeBench e
      AIME 2025 não avaliaram os modelos atuais do topo — casavam 0/20 e só
      geravam "—". Em runtime, apoios que casam com menos de 5 dos 20 modelos do
-     ranking principal também são ocultados (rede contra envelhecimento futuro). */
+     ranking principal também são ocultados (rede contra envelhecimento futuro).
+
+     ── Redução de 5 para 3 categorias (5/ago/2026) ──
+     A AA desligou o endpoint legado e passou a servir os benchmarks individuais
+     só no tier Pro (US$ 417/mês). Com a chave free sobram os 3 índices
+     compostos, e duas categorias perderam a base:
+
+       • "Pesquisa e raciocínio" (era HLE) — o substituto disponível seria o
+         GPQA Diamond, mas ele correlaciona 0,95 com o Intelligence Index sobre
+         399 modelos: seria uma segunda aba repetindo a ordem da primeira. Pior,
+         está saturado — spread de 3,0 pontos no top-15 contra erro-padrão de
+         1,59, ou seja, as posições do topo são ruído. O HLE era justamente o
+         mais independente (rho 0,84, spread 24,8) e não tem fonte gratuita:
+         o leaderboard do Scale parou em abr/2026 e os agregadores que cobrem a
+         fronteira publicam número auto-reportado pelos próprios fabricantes.
+       • "Instruções e dados" (era IFBench + AA-LCR) — sem equivalente no free.
+
+     A alta correlação é, ela própria, informação útil para quem pesquisa: o
+     melhor modelo geral também é o melhor para trabalho de pesquisa, e por isso
+     não há ranking separado a consultar. Isso está dito no "como medimos".
+
+     "Agentes" trocou Terminal-Bench pelo Agentic Index — o composto da própria
+     AA para a mesma pergunta, com cobertura maior que o benchmark único.
+     Se a chave virar Pro, o pipeline repõe os benchmarks individuais sozinho e
+     estas categorias podem voltar. */
   const CATEGORIES = [
     {
       id: 'geral',
       label: 'Uso geral',
       question: 'Conversar, escrever, resumir, tirar dúvidas do dia a dia.',
       primary: 'artificial_analysis_intelligence_index',
-      support: ['gpqa'],
+      support: ['gpqa_diamond', 'hle'],
+      // Responde à pergunta que sumiu junto com a categoria "Pesquisa e
+      // raciocínio", em vez de deixar o leitor procurando por ela.
+      note: 'Para trabalho de pesquisa, este mesmo ranking vale: entre os 399 modelos ' +
+            'avaliados nos dois, a ordem do Intelligence Index e a do GPQA Diamond ' +
+            '(perguntas de nível doutorado) coincidem quase por completo — ' +
+            'correlação de postos de 0,95. Não há um ranking separado a consultar.',
     },
     {
       id: 'codigo',
@@ -56,22 +86,8 @@
       id: 'agentes',
       label: 'Agentes e automação',
       question: 'Executar tarefas sozinho, usando terminal, ferramentas e APIs.',
-      primary: 'terminalbench_v2_1',
-      support: ['tau2'],
-    },
-    {
-      id: 'pesquisa',
-      label: 'Pesquisa e raciocínio',
-      question: 'Problemas difíceis, análise profunda, apoio à pesquisa científica.',
-      primary: 'hle',
-      support: ['gpqa'],
-    },
-    {
-      id: 'instrucoes',
-      label: 'Instruções e dados',
-      question: 'Seguir regras à risca, extrair campos, devolver formato fixo.',
-      primary: 'ifbench',
-      support: ['lcr'],
+      primary: 'artificial_analysis_agentic_index',
+      support: ['terminalbench_v2_1', 'tau2_telecom'],
     },
   ];
 
@@ -339,6 +355,8 @@
             ${support.map(b => `<b>${escapeHtml(b.label)}</b>`).join(', ')} — medem a mesma área
             de outras formas. Não entram na posição do ranking: servem como referência cruzada.
             Toque em <em>ver outros testes desta categoria</em> para ver a nota de cada modelo neles.</p>` : ''}
+          ${cat.note ? `
+          <p><span class="qm-mtag">nota</span> ${escapeHtml(cat.note)}</p>` : ''}
           <p class="qm-method-foot">
             Dados da <b>Artificial Analysis</b> — testes independentes e padronizados.
             ${bench.models_evaluated} modelos avaliados no teste principal${
