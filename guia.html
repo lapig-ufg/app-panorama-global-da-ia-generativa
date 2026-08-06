@@ -38,8 +38,8 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="assets/styles.css?v=23">
-  <link rel="stylesheet" href="assets/guia.css?v=26">
+  <link rel="stylesheet" href="assets/styles.css?v=25">
+  <link rel="stylesheet" href="assets/guia.css?v=27">
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSBR3JMT2X"></script>
@@ -75,70 +75,100 @@
   </div>
 
   <header class="app-header">
-    <div class="header-brand">
-      <div class="header-logos">
-        <a href="https://lapig.iesa.ufg.br/" target="_blank" rel="noopener"
-           class="header-logo logo-lapig"
-           title="Laboratório de Processamento de Imagens e Geoinformação — LAPIG / UFG"
-           aria-label="LAPIG">
-          <img src="assets/logo-lapig.png" alt="Logo LAPIG">
-        </a>
-        <span class="logo-sep" aria-hidden="true"></span>
-        <a href="https://www.ufg.br/" target="_blank" rel="noopener"
-           class="header-logo logo-ufg"
-           title="Universidade Federal de Goiás — UFG"
-           aria-label="UFG">
-          <img src="assets/logo-ufg.png" alt="Logo UFG">
-        </a>
-      </div>
-      <div class="header-titlewrap">
-        <div class="header-breadcrumb">
-          <a class="back-to-observatory" href="https://lapig-ufg.github.io/observatorio-ia/" target="_blank" rel="noopener" title="Retornar para o Observatório UFG-IA">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
-            </svg>
-            <span>Retornar para o Observatório UFG-IA</span>
+    <div class="header-top">
+      <div class="header-brand">
+        <div class="header-logos">
+          <a href="https://lapig.iesa.ufg.br/" target="_blank" rel="noopener"
+             class="header-logo logo-lapig"
+             title="Laboratório de Processamento de Imagens e Geoinformação — LAPIG / UFG"
+             aria-label="LAPIG">
+            <img src="assets/logo-lapig.png" alt="Logo LAPIG">
           </a>
-          <span class="bc-sep" aria-hidden="true">/</span>
-          <span class="header-kicker">Guia · Escolha por tipo de tarefa</span>
+          <span class="logo-sep" aria-hidden="true"></span>
+          <a href="https://www.ufg.br/" target="_blank" rel="noopener"
+             class="header-logo logo-ufg"
+             title="Universidade Federal de Goiás — UFG"
+             aria-label="UFG">
+            <img src="assets/logo-ufg.png" alt="Logo UFG">
+          </a>
         </div>
-        <h1>Qual modelo usar <span class="yr-suffix">(hoje)</span></h1>
+        <div class="header-titlewrap">
+          <div class="header-breadcrumb">
+            <a class="back-to-observatory" href="https://lapig-ufg.github.io/observatorio-ia/" target="_blank" rel="noopener" title="Retornar para o Observatório UFG-IA">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              <span>Retornar para o Observatório UFG-IA</span>
+            </a>
+          </div>
+          <h1>Qual modelo usar <span class="yr-suffix">(hoje)</span></h1>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="meta-row"><span class="meta-label">Fonte</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-value">Artificial Analysis</span></div>
+        <div class="meta-row"><span class="meta-label">Atualizado</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-value" id="qm-updated">…</span></div>
       </div>
     </div>
-    <div class="header-meta">
-      <div class="meta-row"><span class="meta-label">Fonte</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-value">Artificial Analysis</span></div>
-      <div class="meta-row"><span class="meta-label">Atualizado</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-value" id="qm-updated">…</span></div>
-    </div>
-  </header>
 
-  <!-- As abas ficam numa barra própria, no mesmo canto nas três páginas. -->
-  <div class="page-nav-bar">
+    <!-- Cada seção é uma pergunta que ela responde, não um nome: "Régua" era
+         jargão de quem construiu o site. Os três itens dividem a largura em
+         terços iguais e a seção corrente encosta no filete preto. -->
     <nav class="page-switch" aria-label="Seções do painel">
-      <a class="ps-link" href="index.html" title="Linha do tempo dos lançamentos de modelos de IA generativa">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M3 12h18M7 8v8M13 6v12M19 9v6" />
+      <a class="ps-link" href="index.html"
+         title="Linha do tempo dos lançamentos de modelos de IA generativa, empresa por empresa">
+        <span class="ps-icon" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12h18M7 8v8M13 6v12M19 9v6" />
+          </svg>
+        </span>
+        <span class="ps-text">
+          <span class="ps-q">Quem lançou o quê, e quando?</span>
+          <span class="ps-short">Lançamentos</span>
+          <span class="ps-gloss">A linha do tempo desde o ChatGPT</span>
+        </span>
+        <svg class="ps-go" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
         </svg>
-        <span>Régua</span>
       </a>
-      <a class="ps-link is-active" href="guia.html" aria-current="page">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M3 3v18h18" />
-          <path d="M7 15l4-5 3 3 5-7" />
+      <a class="ps-link is-active" href="guia.html" aria-current="page"
+         title="Qual modelo de IA usar para cada tipo de tarefa">
+        <span class="ps-icon" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3v18h18" />
+            <path d="M7 15l4-5 3 3 5-7" />
+          </svg>
+        </span>
+        <span class="ps-text">
+          <span class="ps-q">Qual modelo usar?</span>
+          <span class="ps-short">Qual usar</span>
+          <span class="ps-gloss">O ranking por tarefa, custo e velocidade</span>
+        </span>
+        <svg class="ps-go" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
         </svg>
-        <span>Qual modelo usar</span>
       </a>
-      <a class="ps-link" href="gratuitos.html" title="Ferramentas e modelos de IA que você pode usar gratuitamente">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M20 12v10H4V12"/>
-          <path d="M2 7h20v5H2z"/>
-          <path d="M12 22V7"/>
-          <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
-          <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+      <a class="ps-link" href="gratuitos.html"
+         title="Ferramentas e modelos de IA que você pode usar gratuitamente">
+        <span class="ps-icon" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12v10H4V12"/>
+            <path d="M2 7h20v5H2z"/>
+            <path d="M12 22V7"/>
+            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+          </svg>
+        </span>
+        <span class="ps-text">
+          <span class="ps-q">O que dá pra usar de graça?</span>
+          <span class="ps-short">De graça</span>
+          <span class="ps-gloss">Os planos gratuitos e seus limites</span>
+        </span>
+        <svg class="ps-go" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
         </svg>
-        <span>IAs Gratuitas</span>
       </a>
     </nav>
-  </div>
+  </header>
 
   <main class="main qm-main">
     <div class="qm-intro">

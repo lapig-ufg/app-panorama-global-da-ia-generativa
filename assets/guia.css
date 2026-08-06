@@ -1,50 +1,12 @@
 /* ═══════════════════════════════════════════════════════════════
    Panorama Global da IA Generativa — Guia "Qual modelo usar"
-   Carregado pelas DUAS páginas: o alternador (.page-switch) aparece
-   tanto na timeline quanto no guia. Reusa as variáveis de styles.css.
+   Carregado pelas TRÊS páginas (régua, guia e gratuitas).
+   Reusa as variáveis de styles.css.
+
+   A navegação de seções (.page-switch) morava aqui e agora vive só em
+   styles.css: como este arquivo carrega depois, ter as abas nos dois
+   lugares fazia a versão antiga vencer a nova.
    ═══════════════════════════════════════════════════════════════ */
-
-/* ─── Alternador de páginas (Régua ↔ Qual modelo usar ↔ IAs Gratuitas) ───
-   Trocar de seção é a decisão mais importante da barra superior, então a aba
-   corrente é preenchida em tinta cheia — antes era uma pastilha branca sobre
-   fundo bege, e a diferença entre "estou aqui" e "posso ir ali" quase não
-   aparecia. O cartucho branco sobre a faixa de papel dá contorno ao grupo,
-   que antes flutuava solto na faixa. */
-.page-switch {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  padding: 3px;
-  background: var(--white);
-  border: 1px solid var(--hair);
-  border-radius: 11px;
-  box-shadow: var(--shadow-xs);
-}
-
-.ps-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--ink-muted);
-  text-decoration: none;
-  white-space: nowrap;
-  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
-}
-
-.ps-link svg { opacity: 0.7; transition: opacity 0.15s; }
-.ps-link:hover { color: var(--ink); background: var(--paper-tint); }
-.ps-link:hover svg { opacity: 1; }
-.ps-link.is-active {
-  background: var(--ink);
-  color: var(--white);
-  box-shadow: var(--shadow-sm);
-}
-.ps-link.is-active svg { color: var(--accent-bright); opacity: 1; }
-.ps-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* ─── Layout da página do guia ─── */
 .qm-main {
@@ -882,9 +844,6 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
   .qm-c-price, .qm-c-speed { display: none; }
   .qm-head .qm-c-price, .qm-head .qm-c-speed { display: none; }
   .qm-row-company { display: none; }
-  .page-switch { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 3px; }
-  .ps-link { flex: 1 1 0px; min-width: 0; justify-content: center; padding: 8px 4px; font-size: 11px; }
-  .ps-link span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .qm-cmp-hd { gap: 10px; }
   .qm-search { max-width: none; }
 
@@ -900,7 +859,8 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ps-link, .qm-tab, .qm-sort, .qm-add, .qm-bar, .qm-modellink,
+  .ps-link, .ps-q, .ps-short, .ps-icon, .ps-go,
+  .qm-tab, .qm-sort, .qm-add, .qm-bar, .qm-modellink,
   .qm-search, .qm-method-cat > summary, .qm-cmp-toggle, .qm-cmp-toggle-chev,
   .qm-extras-toggle { transition: none; }
 }

@@ -845,7 +845,47 @@ document.addEventListener('DOMContentLoaded', () => {
   if (closeBtn) closeBtn.addEventListener('click', () => hideTip(true));
   initHelpPopover();
   initNovidadesPopover();
+  initExportMenu();
 });
+
+/* Menu de exportação. Mesma mecânica dos outros painéis: clique fora e Esc
+   fecham. O menu NÃO fecha ao escolher um formato — o próprio botão vira
+   "Gerando HD…" enquanto o PNG é rasterizado, e sumir com ele levaria junto o
+   único sinal de que alguma coisa está acontecendo. */
+function initExportMenu() {
+  const btn = document.getElementById('export-btn');
+  const popover = document.getElementById('export-popover');
+  const close = document.getElementById('export-close');
+  if (!btn || !popover) return;
+
+  function toggle(show) {
+    popover.hidden = !show;
+    btn.setAttribute('aria-expanded', String(show));
+  }
+
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    toggle(popover.hidden);
+  });
+
+  if (close) close.addEventListener('click', () => {
+    toggle(false);
+    btn.focus();
+  });
+
+  document.addEventListener('click', e => {
+    if (!popover.hidden && !popover.contains(e.target) && !btn.contains(e.target)) {
+      toggle(false);
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!popover.hidden && e.key === 'Escape') {
+      toggle(false);
+      btn.focus();
+    }
+  });
+}
 
 // ─── DRAG-TO-PAN (com threshold para não atrapalhar clicks) ───
 let isDragging = false;
@@ -1121,12 +1161,12 @@ function initScrollAffordance() {
   refreshScrollAffordance();
 }
 
-/* Altura real do cromo (cabeçalho + abas + controles). Os painéis flutuantes
-   usavam um chute fixo de 160px e, no mobile, abriam por cima da própria
-   navegação de abas que deveriam respeitar. */
+/* Altura real do cromo (cabeçalho, que já contém as abas, + controles). Os
+   painéis flutuantes usavam um chute fixo de 160px e, no mobile, onde o cromo
+   passa de 300px, abriam por cima da navegação que deveriam respeitar. */
 function syncChromeHeight() {
   let h = 0;
-  ['.app-header', '.page-nav-bar', '.controls'].forEach(sel => {
+  ['.app-header', '.controls'].forEach(sel => {
     const el = document.querySelector(sel);
     if (el) h += el.getBoundingClientRect().height;
   });
@@ -1151,7 +1191,7 @@ function initLayoutSync() {
   // observer pega isso sem depender de um evento de resize da janela.
   if (typeof ResizeObserver === 'function') {
     const ro = new ResizeObserver(() => syncChromeHeight());
-    ['.app-header', '.page-nav-bar', '.controls'].forEach(sel => {
+    ['.app-header', '.controls'].forEach(sel => {
       const el = document.querySelector(sel);
       if (el) ro.observe(el);
     });
