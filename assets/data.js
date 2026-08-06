@@ -312,16 +312,21 @@ const LAYOUT_GROUPS = [
     flag: 'WORLD',
     accent: '#5B53A8',
     tracks: [
-      { name: 'Sakana AI · Japão', filter: r => r.emp && r.emp.trim().toUpperCase() === 'SAKANA AI' },
-      { name: 'Mistral · França', filter: r => r.emp && r.emp.trim().toUpperCase() === 'MISTRAL' },
-      // Trilha própria porque a empresa entrou em COMPANY_COLORS: empresa "conhecida"
-      // sem trilha não casa com nenhum filtro e sumiria da régua (ver KNOWN_COMPANIES).
-      // hideIfEmpty: a identidade da empresa já está cadastrada, mas a linha só
-      // existe na planilha depois de aprovada — até lá, não desenha faixa vazia.
-      { name: 'Motif · Coreia do Sul', hideIfEmpty: true, filter: r => r.emp && r.emp.trim().toUpperCase() === 'MOTIF TECHNOLOGIES' },
-      // Catch-all: empresa desconhecida sem grupo (ou com grupo "OUTROS PAÍSES").
-      // hideIfEmpty: a régua só é desenhada quando há pelo menos um evento nela.
-      { name: 'Outros', hideIfEmpty: true, filter: r => desconhecida(r) && grupoDe(r) !== 'ECOSSISTEMA NORTE-AMERICANO' && grupoDe(r) !== 'ECOSSISTEMA CHINÊS' }
+      // Agrupado por PAÍS, não por empresa: a trilha é "Japão", não "Sakana AI · Japão".
+      // Duas empresas do mesmo país caem na mesma faixa. Japão e França são sempre
+      // desenhados (são os âncoras com marcos curados); os demais só aparecem se
+      // tiverem lançamento publicado (hideIfEmpty).
+      { name: 'Japão', filter: r => companyCountry(r.emp) === 'Japão' },
+      { name: 'França', filter: r => companyCountry(r.emp) === 'França' },
+      { name: 'Coreia do Sul', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Coreia do Sul' },
+      { name: 'Israel', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Israel' },
+      { name: 'Índia', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Índia' },
+      { name: 'Emirados Árabes', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Emirados Árabes' },
+      { name: 'Suíça', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Suíça' },
+      { name: 'Espanha', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Espanha' },
+      // Catch-all: linha do grupo cujo país não tem trilha própria (empresa sem
+      // país cadastrado, ou país não listado acima). hideIfEmpty: só desenha com evento.
+      { name: 'Outros', hideIfEmpty: true, filter: r => grupoDaLinha(r) === 'OUTROS PAÍSES' && !PAIS_COM_TRILHA.has(companyCountry(r.emp)) }
     ]
   }
 ];
@@ -454,6 +459,13 @@ const GRUPO_DO_PAIS = {
 };
 const GRUPO_PADRAO = 'OUTROS PAÍSES';
 
+// Países de OUTROS PAÍSES com trilha própria na régua padrão (um por país).
+// Usado pelo catch-all "Outros": tudo que não casa aqui cai na faixa genérica.
+const PAIS_COM_TRILHA = new Set([
+  'Japão', 'França', 'Coreia do Sul', 'Israel', 'Índia',
+  'Emirados Árabes', 'Suíça', 'Espanha'
+]);
+
 function companyCountry(name) {
   return CREATOR_COUNTRY[canonicalCompany(name)] || '';
 }
@@ -506,15 +518,23 @@ function buildExpandedGroups(rows) {
     // "· Coreia do Sul" (uma por empresa promovida). EUA e China continuam por
     // empresa: são ecossistemas densos de laboratórios com nome próprio.
     if (base.title === GRUPO_PADRAO) {
+      // Conta, por país, quantos vêm da curadoria (planilha, níveis 1 e 2) e
+      // quantos vêm do catálogo automático (nível 3). Um país ganha trilha própria
+      // se tem >=1 modelo curado OU >=MIN_MODELOS_TRACK do catálogo. Sem isso, o
+      // limiar cego de 3 derrubava o Japão (só a Sakana, ausente do catálogo) no
+      // "Outros" — exatamente o país que tem trilha na régua padrão.
       const porPais = new Map();
       doGrupo.forEach(r => {
         const pais = companyCountry(r.emp);
         if (!pais) return;
-        porPais.set(pais, (porPais.get(pais) || 0) + 1);
+        const cont = porPais.get(pais) || { curados: 0, catalogo: 0 };
+        if (r.nivel === 3) cont.catalogo++; else cont.curados++;
+        porPais.set(pais, cont);
       });
+      const total = c => c.curados + c.catalogo;
       const paises = [...porPais.entries()]
-        .filter(([, n]) => n >= MIN_MODELOS_TRACK)
-        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .filter(([, c]) => c.curados >= 1 || c.catalogo >= MIN_MODELOS_TRACK)
+        .sort((a, b) => total(b[1]) - total(a[1]) || a[0].localeCompare(b[0]))
         .map(([p]) => p);
       const paisesSet = new Set(paises);
       const doPais = p => r =>
