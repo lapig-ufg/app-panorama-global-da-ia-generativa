@@ -38,8 +38,8 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="assets/styles.css?v=22">
-  <link rel="stylesheet" href="assets/guia.css?v=25">
+  <link rel="stylesheet" href="assets/styles.css?v=23">
+  <link rel="stylesheet" href="assets/guia.css?v=26">
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSBR3JMT2X"></script>
@@ -100,7 +100,7 @@
             <span>Retornar para o Observatório UFG-IA</span>
           </a>
           <span class="bc-sep" aria-hidden="true">/</span>
-          <span class="header-kicker">Timeline · Modelos de IA Generativa</span>
+          <span class="header-kicker">Régua · Modelos de IA Generativa</span>
         </div>
         <h1>Panorama Global da IA Generativa <span class="yr-suffix">(desde 2023)</span></h1>
       </div>
@@ -114,11 +114,11 @@
   <!-- As abas ficam numa barra própria, no mesmo canto nas três páginas. -->
   <div class="page-nav-bar">
     <nav class="page-switch" aria-label="Seções do painel">
-      <a class="ps-link is-active" href="index.html" aria-current="page">
+      <a class="ps-link is-active" href="index.html" aria-current="page" title="Linha do tempo dos lançamentos de modelos de IA generativa">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M3 12h18M7 8v8M13 6v12M19 9v6" />
         </svg>
-        <span>Timeline</span>
+        <span>Régua</span>
       </a>
       <a class="ps-link" href="guia.html" title="Qual modelo usar para cada tipo de tarefa">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -319,15 +319,9 @@
     <div class="tt-fonte" id="tt-fonte" hidden></div>
   </div>
 
-  <footer class="app-footer">
-    <div class="footer-credits">
-      Desenvolvido por Victor Amaral, <a href="https://lapig.iesa.ufg.br/" target="_blank" rel="noopener">LAPIG</a>
-    </div>
-    <div class="footer-meta">
-      <span>Marco zero: 30 Nov 2022 (lançamento do ChatGPT)</span>
-      <span>Dados: Google Sheets · Atualização contínua</span>
-    </div>
-  </footer>
+  <!-- Sem rodapé nesta página: os dados dele ("marco zero", "atualizado") já
+       estão no cabeçalho, e ~50px de altura valem mais para a régua. Os
+       créditos e a fonte seguem no rodapé do guia e das IAs gratuitas. -->
 
   <!-- Scripts -->
   <script src="assets/data.js?v=23"></script>

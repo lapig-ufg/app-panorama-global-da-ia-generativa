@@ -37,6 +37,11 @@
   /* Type */
   --mono: 'DM Mono', 'Courier New', monospace;
   --sans: 'Inter', sans-serif;
+  /* Goteira (margem lateral) — uma só medida para cabeçalho, abas, barra de
+     ferramentas e conteúdo. Antes cada faixa tinha a sua (40px no cabeçalho,
+     24px nos controles) e as bordas esquerdas não se alinhavam: era isso que
+     fazia os botões parecerem "jogados" na tela. */
+  --gutter: 40px;
   /* Shadows */
   --shadow-xs: 0 1px 2px rgba(15, 12, 4, 0.04);
   --shadow-sm: 0 2px 8px rgba(15, 12, 4, 0.05);
@@ -94,7 +99,7 @@ body {
 /* ─── HEADER ─── */
 .app-header {
   background: var(--white);
-  padding: 20px 40px;
+  padding: 20px var(--gutter);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -238,11 +243,15 @@ body {
    As abas ficavam em lugares diferentes em cada página (à direita da barra de
    ferramentas na timeline, no canto superior esquerdo no guia). Agora têm uma
    barra própria, sempre logo abaixo do cabeçalho e sempre no mesmo canto — a
-   navegação para de "andar" quando o leitor troca de seção. */
+   navegação para de "andar" quando o leitor troca de seção.
+
+   O fundo é o papel (não o branco): trocar de seção e operar a régua são
+   funções diferentes, e a faixa em tom levemente distinto do cabeçalho branco
+   e da barra de ferramentas branca diz isso sem precisar de rótulo. */
 .page-nav-bar {
-  background: var(--white);
+  background: var(--off-white);
   border-bottom: 1px solid var(--hair);
-  padding: 8px 40px;
+  padding: 7px var(--gutter);
   display: flex;
   align-items: center;
   gap: 12px;
@@ -257,18 +266,18 @@ body {
 .controls {
   background: var(--white);
   border-bottom: 1px solid var(--hair);
-  padding: 10px 24px;
+  padding: 7px var(--gutter);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .control-cluster {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding-right: 10px;
+  gap: 5px;
+  padding-right: 9px;
   border-right: 1px solid var(--hair);
 }
 
@@ -277,19 +286,23 @@ body {
   padding-right: 0;
 }
 
+/* Altura única (30px) para TODO controle da barra — botão de texto, botão
+   quadrado de zoom, botão redondo de ajuda. Antes conviviam três alturas
+   (34/34/30) e a fileira ficava serrilhada. No toque, o bloco
+   `pointer: coarse` lá embaixo devolve os 44px. */
 .icon-btn,
 .download-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 7px 11px;
-  min-height: 34px;
+  gap: 5px;
+  padding: 5px 10px;
+  min-height: 30px;
   border-radius: 8px;
   border: 1px solid var(--ink);
   background: var(--white);
   cursor: pointer;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.01em;
   color: var(--ink);
@@ -334,13 +347,13 @@ body {
 .zoom-cluster {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .zoom-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
   border: 1px solid var(--ink);
   background: var(--white);
   color: var(--ink);
@@ -370,7 +383,7 @@ body {
 }
 
 .zoom-slider {
-  width: 140px;
+  width: 118px;
   height: 4px;
   -webkit-appearance: none;
   appearance: none;
@@ -405,13 +418,13 @@ body {
   font-family: var(--mono);
   font-size: 10.5px;
   color: var(--ink-muted);
-  min-width: 70px;
+  min-width: 58px;
   letter-spacing: 0.02em;
 }
 
 .zoom-fit-btn {
-  padding: 7px 11px;
-  font-size: 11.5px;
+  padding: 5px 10px;
+  font-size: 11px;
 }
 
 /* Enquanto a escala é a automática (a régua inteira cabendo na tela), o botão
@@ -426,15 +439,15 @@ body {
 .actions-cluster {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   margin-left: auto;
   border-right: none;
   padding-right: 0;
 }
 
 .help-btn {
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   padding: 0;
   border-radius: 50%;
 }
@@ -446,7 +459,7 @@ body {
 .help-popover {
   position: fixed;
   top: calc(var(--chrome-h, 160px) + 8px);
-  right: 40px;
+  right: var(--gutter);
   width: 340px;
   max-width: calc(100vw - 32px);
   max-height: calc(100vh - var(--chrome-h, 160px) - 24px);
@@ -579,7 +592,7 @@ body {
 .modo-aviso {
   position: fixed;
   top: calc(var(--chrome-h, 160px) + 8px);
-  right: 40px;
+  right: var(--gutter);
   z-index: 101;
   max-width: 380px;
   padding: 10px 14px;
@@ -772,7 +785,7 @@ body {
 /* ─── MAIN ─── */
 .main {
   flex: 1;
-  padding: 18px 40px 40px;
+  padding: 14px var(--gutter) 32px;
   overflow: hidden;
 }
 
@@ -783,9 +796,13 @@ body {
    página inteira rolava: header, barra de ferramentas e régua de anos subiam
    junto e o leitor ficava com pílulas soltas, sem saber de que ano eram.
 
-   Aqui o documento não rola: header, abas, controles e rodapé são molduras
-   fixas e QUEM rola é a área da timeline. Isso deixa a régua de anos ancorável
+   Aqui o documento não rola: header, abas e controles são molduras fixas e
+   QUEM rola é a área da régua. Isso deixa a régua de anos ancorável
    (ver .tl-ruler) e mantém o zoom sempre ao alcance.
+
+   Esta página não tem rodapé: numa tela em que a altura é o recurso escasso,
+   ele custava ~50px para repetir dados que já estão no cabeçalho. Os créditos
+   e a fonte seguem no rodapé das outras duas páginas, que rolam.
 
    O @media (min-height) é a válvula de segurança: em janelas muito baixas o
    cromo comeria a área útil inteira, então voltamos ao fluxo normal.
@@ -804,7 +821,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 0;
-    padding-bottom: 18px;
+    padding-bottom: 14px;
   }
 
   body.page-timeline .timeline-shell {
@@ -1253,10 +1270,11 @@ svg.global-svg {
 }
 
 /* ─── FOOTER ─── */
+/* Só nas páginas que rolam (guia e gratuitas): a régua não tem rodapé. */
 .app-footer {
   border-top: 1px solid var(--hair);
   background: var(--white);
-  padding: 16px 40px;
+  padding: 16px var(--gutter);
   font-family: var(--mono);
   font-size: 10.5px;
   color: var(--ink-muted);
@@ -1353,8 +1371,12 @@ kbd {
 }
 
 @media (max-width: 900px) {
+  :root {
+    --gutter: 16px;
+  }
+
   .app-header {
-    padding: 16px 20px;
+    padding: 16px var(--gutter);
     flex-direction: column;
     align-items: flex-start;
     gap: 14px;
@@ -1387,7 +1409,7 @@ kbd {
      clusters embrulham lado a lado e só o zoom — que precisa de curso para o
      slider — fica com uma linha só para ele. Dá duas fileiras. */
   .controls {
-    padding: 10px 16px;
+    padding: 8px var(--gutter);
     gap: 8px 10px;
     flex-flow: row wrap;
     align-items: center;
@@ -1451,7 +1473,7 @@ kbd {
   }
 
   .page-nav-bar {
-    padding: 8px 16px;
+    padding: 7px var(--gutter);
   }
 
   .page-switch {
@@ -1461,9 +1483,9 @@ kbd {
     justify-content: space-between;
     gap: 3px;
     padding: 3px;
-    background: var(--paper-tint);
+    background: var(--white);
     border: 1px solid var(--hair);
-    border-radius: 10px;
+    border-radius: 11px;
   }
 
   .ps-link {
@@ -1508,22 +1530,16 @@ kbd {
   }
 
   .main {
-    padding: 12px 12px 16px;
+    padding: 12px var(--gutter) 16px;
     width: 100%;
     overflow-x: hidden;
   }
 
   .app-footer {
-    padding: 12px 16px;
+    padding: 12px var(--gutter);
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
-  }
-
-  /* "Marco zero" e "Atualizado" já estão no cabeçalho; repetir no rodapé só
-     custa altura numa tela em que altura é o recurso escasso. */
-  body.page-timeline .app-footer .footer-meta {
-    display: none;
   }
 
   .tl-arrow {
@@ -1640,8 +1656,12 @@ kbd {
 }
 
 @media (max-width: 520px) {
+  :root {
+    --gutter: 13px;
+  }
+
   .app-header {
-    padding: 12px 14px;
+    padding: 12px var(--gutter);
     gap: 10px;
   }
 
@@ -1832,7 +1852,7 @@ kbd {
 }
 
 .is-embed .app-header {
-  padding: 14px 24px;
+  padding: 14px var(--gutter);
 }
 
 /* O site anfitriao ja anuncia o painel no proprio cabecalho da pagina;

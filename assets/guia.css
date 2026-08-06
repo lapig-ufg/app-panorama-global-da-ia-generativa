@@ -4,34 +4,46 @@
    tanto na timeline quanto no guia. Reusa as variáveis de styles.css.
    ═══════════════════════════════════════════════════════════════ */
 
-/* ─── Alternador de páginas (Timeline ↔ Qual modelo usar) ─── */
+/* ─── Alternador de páginas (Régua ↔ Qual modelo usar ↔ IAs Gratuitas) ───
+   Trocar de seção é a decisão mais importante da barra superior, então a aba
+   corrente é preenchida em tinta cheia — antes era uma pastilha branca sobre
+   fundo bege, e a diferença entre "estou aqui" e "posso ir ali" quase não
+   aparecia. O cartucho branco sobre a faixa de papel dá contorno ao grupo,
+   que antes flutuava solto na faixa. */
 .page-switch {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 3px;
   padding: 3px;
-  background: var(--paper-tint);
+  background: var(--white);
   border: 1px solid var(--hair);
-  border-radius: 10px;
+  border-radius: 11px;
+  box-shadow: var(--shadow-xs);
 }
 
 .ps-link {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 7px;
-  font-size: 12px;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12.5px;
   font-weight: 600;
   color: var(--ink-muted);
   text-decoration: none;
   white-space: nowrap;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
 }
 
-.ps-link:hover { color: var(--ink); background: rgba(255, 255, 255, 0.6); }
-.ps-link.is-active { background: var(--white); color: var(--ink); box-shadow: var(--shadow-xs); }
-.ps-link.is-active svg { color: var(--accent); }
+.ps-link svg { opacity: 0.7; transition: opacity 0.15s; }
+.ps-link:hover { color: var(--ink); background: var(--paper-tint); }
+.ps-link:hover svg { opacity: 1; }
+.ps-link.is-active {
+  background: var(--ink);
+  color: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+.ps-link.is-active svg { color: var(--accent-bright); opacity: 1; }
 .ps-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* ─── Layout da página do guia ─── */
