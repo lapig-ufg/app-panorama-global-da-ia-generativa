@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página não encontrada | Panorama Global da IA Generativa — LAPIG</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0a7359">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2310a37f'/><text x='50' y='66' font-size='52' font-weight='800' text-anchor='middle' fill='white' font-family='system-ui,sans-serif'>L</text></svg>">
+
+  <!--
+    O 404 do GitHub Pages é servido para QUALQUER caminho inexistente, inclusive
+    caminhos fundos (/repo/a/b/c). Um <link> relativo para assets/styles.css
+    resolveria a partir de /repo/a/b/ e viria vazio — por isso esta página é
+    autocontida: estilo embutido, nenhum arquivo externo, e os links de volta
+    são absolutos.
+  -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0c0c0c;
+      --ink-muted: #6b6860;
+      --accent: #0a7359;
+      --accent-soft: rgba(10, 115, 89, 0.10);
+      --hair: #ebe7dc;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      --mono: 'DM Mono', 'Courier New', monospace;
+    }
+
+    body {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      background: #f5f3ec;
+      background-image:
+        radial-gradient(ellipse 70% 50% at 0% 0%, rgba(16, 163, 127, 0.06), transparent 60%),
+        radial-gradient(ellipse 70% 50% at 100% 0%, rgba(60, 59, 110, 0.05), transparent 60%);
+      font-family: var(--sans);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .top-ribbon { display: flex; height: 3px; }
+    .top-ribbon span { flex: 1; }
+    .r-west { background: linear-gradient(90deg, #3C3B6E, #5b59a6); }
+    .r-east { background: linear-gradient(90deg, #DE2910, #f45142); }
+    .r-world { background: linear-gradient(90deg, #5B53A8, #7a71c9); }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 560px;
+      background: #fff;
+      border: 1px solid var(--hair);
+      border-radius: 16px;
+      padding: 40px 36px;
+      box-shadow: 0 18px 56px rgba(15, 12, 4, 0.10);
+    }
+
+    .kicker {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #2E7D32;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .kicker::before {
+      content: '';
+      width: 18px;
+      height: 1.5px;
+      background: #2E7D32;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    h1 .code {
+      font-family: var(--mono);
+      font-size: 0.6em;
+      font-weight: 500;
+      color: var(--ink-muted);
+      letter-spacing: 0.06em;
+      vertical-align: 0.28em;
+      margin-left: 8px;
+    }
+
+    p {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: #3a3833;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 12px;
+    }
+
+    ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+    a.dest {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 48px;
+      padding: 12px 14px;
+      border: 1px solid var(--hair);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 600;
+      transition: border-color 0.15s, background 0.15s, transform 0.15s;
+    }
+
+    a.dest:hover,
+    a.dest:focus-visible {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    a.dest:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    a.dest svg { flex-shrink: 0; color: var(--accent); }
+
+    a.dest .sub {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 400;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    footer {
+      padding: 18px 24px;
+      border-top: 1px solid var(--hair);
+      background: #fff;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+      text-align: center;
+    }
+
+    footer a { color: var(--ink); }
+
+    @media (max-width: 520px) {
+      main { padding: 24px 14px; }
+      .card { padding: 28px 20px; }
+      h1 { font-size: 22px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="top-ribbon" aria-hidden="true">
+    <span class="r-west"></span>
+    <span class="r-east"></span>
+    <span class="r-world"></span>
+  </div>
+
+  <main>
+    <div class="card">
+      <span class="kicker">LAPIG / IESA / UFG</span>
+      <h1>Esta página não existe<span class="code">404</span></h1>
+      <p>
+        O endereço que você abriu não corresponde a nenhuma seção do painel. Pode ser um link
+        antigo, um endereço digitado com erro ou uma página que mudou de lugar.
+      </p>
+
+      <h2>Ir para</h2>
+      <ul>
+        <li>
+          <a class="dest" href="https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12h18M7 8v8M13 6v12M19 9v6" />
+            </svg>
+            <span>Timeline
+              <span class="sub">Os lançamentos de IA generativa desde o ChatGPT</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="dest" href="https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/guia.html">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 3v18h18" />
+              <path d="M7 15l4-5 3 3 5-7" />
+            </svg>
+            <span>Qual modelo usar
+              <span class="sub">Recomendação por tipo de tarefa, com base em benchmarks</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="dest" href="https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/gratuitos.html">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 12v10H4V12" />
+              <path d="M2 7h20v5H2z" />
+              <path d="M12 22V7" />
+              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+            </svg>
+            <span>IAs Gratuitas
+              <span class="sub">O que dá para usar sem pagar, com as cotas de cada plano</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="dest" href="https://lapig-ufg.github.io/observatorio-ia/">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            <span>Observatório UFG-IA
+              <span class="sub">O portal onde este painel fica hospedado</span>
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    Desenvolvido por Victor Amaral, <a href="https://lapig.iesa.ufg.br/" target="_blank" rel="noopener">LAPIG</a> / UFG
+  </footer>
+
+</body>
+
+</html>

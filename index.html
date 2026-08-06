@@ -38,8 +38,8 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="assets/styles.css?v=21">
-  <link rel="stylesheet" href="assets/guia.css?v=17">
+  <link rel="stylesheet" href="assets/styles.css?v=22">
+  <link rel="stylesheet" href="assets/guia.css?v=25">
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSBR3JMT2X"></script>
@@ -66,7 +66,7 @@
   </script>
 </head>
 
-<body>
+<body class="page-timeline">
 
   <div class="top-ribbon" aria-hidden="true">
     <span class="r-west"></span>
@@ -111,6 +111,35 @@
     </div>
   </header>
 
+  <!-- As abas ficam numa barra própria, no mesmo canto nas três páginas. -->
+  <div class="page-nav-bar">
+    <nav class="page-switch" aria-label="Seções do painel">
+      <a class="ps-link is-active" href="index.html" aria-current="page">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 12h18M7 8v8M13 6v12M19 9v6" />
+        </svg>
+        <span>Timeline</span>
+      </a>
+      <a class="ps-link" href="guia.html" title="Qual modelo usar para cada tipo de tarefa">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 3v18h18" />
+          <path d="M7 15l4-5 3 3 5-7" />
+        </svg>
+        <span>Qual modelo usar</span>
+      </a>
+      <a class="ps-link" href="gratuitos.html" title="Ferramentas e modelos de IA que você pode usar gratuitamente">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 12v10H4V12"/>
+          <path d="M2 7h20v5H2z"/>
+          <path d="M12 22V7"/>
+          <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+          <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+        </svg>
+        <span>IAs Gratuitas</span>
+      </a>
+    </nav>
+  </div>
+
   <div class="controls">
     <div class="control-cluster export-cluster">
       <button class="icon-btn" id="btnExport" onclick="downloadPNG()" type="button" title="Exportar PNG (HD)">
@@ -143,8 +172,9 @@
       <button class="zoom-btn" id="zoom-out" type="button" aria-label="Diminuir zoom" title="Diminuir zoom (−)">−</button>
       <input type="range" id="zoom-slider" class="zoom-slider" aria-label="Escala temporal">
       <button class="zoom-btn" id="zoom-in" type="button" aria-label="Aumentar zoom" title="Aumentar zoom (+)">+</button>
-      <span class="zoom-label" id="zoom-label">1.5 px/dia</span>
-      <button class="icon-btn zoom-fit-btn" id="zoom-fit" type="button" title="Ajustar timeline à largura da tela (atalho: 0)">
+      <span class="zoom-label" id="zoom-label">…</span>
+      <button class="icon-btn zoom-fit-btn is-on" id="zoom-fit" type="button" aria-pressed="true"
+              title="Ajustar timeline à largura da tela (atalho: 0)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
         </svg>
@@ -182,32 +212,6 @@
         <span class="btn-text">Novidades</span>
         <span class="novidades-dot" hidden aria-hidden="true"></span>
       </button>
-
-      <nav class="page-switch" aria-label="Seções do painel">
-        <a class="ps-link is-active" href="index.html" aria-current="page">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3 12h18M7 8v8M13 6v12M19 9v6" />
-          </svg>
-          <span>Timeline</span>
-        </a>
-        <a class="ps-link" href="guia.html" title="Qual modelo usar para cada tipo de tarefa">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3 3v18h18" />
-            <path d="M7 15l4-5 3 3 5-7" />
-          </svg>
-          <span>Qual modelo usar</span>
-        </a>
-        <a class="ps-link" href="gratuitos.html" title="Ferramentas e modelos de IA que você pode usar gratuitamente">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M20 12v10H4V12"/>
-            <path d="M2 7h20v5H2z"/>
-            <path d="M12 22V7"/>
-            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
-            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
-          </svg>
-          <span>IAs Gratuitas</span>
-        </a>
-      </nav>
 
       <button class="icon-btn help-btn" id="help-btn" type="button" title="Como usar" aria-label="Como usar">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -256,23 +260,48 @@
     <button class="help-close" id="help-close" type="button" aria-label="Fechar ajuda">×</button>
     <ul>
       <li><strong>Swimlanes:</strong> cada faixa é uma empresa/região.</li>
-      <li><strong>Escala:</strong> proporcional ao tempo desde 30 Nov 2022.</li>
-      <li><strong>Navegar:</strong> arraste horizontalmente ou use a barra de rolagem.</li>
+      <li><strong>Escala:</strong> proporcional ao tempo desde 30 Nov 2022. A régua abre
+          com tudo cabendo na tela; o botão <kbd>Tela</kbd> fica marcado enquanto for assim.</li>
+      <li><strong>Navegar:</strong> setas nas bordas, teclas <kbd>←</kbd> / <kbd>→</kbd>
+          (<kbd>Home</kbd> / <kbd>End</kbd> para os extremos) ou arraste. A etiqueta no canto
+          diz que período está na tela.</li>
       <li><strong>Zoom:</strong> botões, slider, <kbd>Ctrl/⌘ + scroll</kbd> ou teclas <kbd>+</kbd> / <kbd>−</kbd>.</li>
-      <li><strong>Ajustar:</strong> botão <kbd>Tela</kbd> ou tecla <kbd>0</kbd> encaixa toda a timeline na largura.</li>
-      <li><strong>Detalhes:</strong> clique numa pílula para abrir a referência no rodapé.</li>
+      <li><strong>Detalhes:</strong> clique numa pílula para abrir o cartão do modelo.</li>
       <li><strong>Régua ampliada:</strong> mostra também lançamentos secundários e o catálogo
           completo da Artificial Analysis, em pílulas compactas tracejadas.</li>
     </ul>
   </div>
 
   <main class="main" id="main">
-    <div class="timeline-area" id="timeline-area">
-      <div class="timeline-loading" id="timeline-loading">
-        <div class="loading-spinner" aria-hidden="true"></div>
-        <p>Carregando dados da planilha…</p>
+    <!-- A moldura carrega as pistas de rolagem: borda esfumaçada, setas e a
+         etiqueta com o trecho de tempo visível. Tudo some sozinho quando não
+         há nada fora da tela. -->
+    <div class="timeline-shell" id="timeline-shell">
+      <div class="timeline-area" id="timeline-area">
+        <div class="timeline-loading" id="timeline-loading">
+          <div class="loading-spinner" aria-hidden="true"></div>
+          <p>Carregando dados da planilha…</p>
+        </div>
+        <div class="timeline-svg-wrap" id="svg-wrap" style="position:relative"></div>
       </div>
-      <div class="timeline-svg-wrap" id="svg-wrap" style="position:relative"></div>
+
+      <span class="tl-edge tl-edge-left" aria-hidden="true"></span>
+      <span class="tl-edge tl-edge-right" aria-hidden="true"></span>
+
+      <button class="tl-arrow tl-arrow-left" type="button" data-dir="left"
+              aria-label="Rolar a linha do tempo para trás no tempo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+      <button class="tl-arrow tl-arrow-right" type="button" data-dir="right"
+              aria-label="Rolar a linha do tempo para frente no tempo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+
+      <span class="tl-pos" id="tl-pos" role="status" aria-live="off"></span>
     </div>
   </main>
 
@@ -301,9 +330,9 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="assets/data.js?v=22"></script>
-  <script src="assets/render.js?v=16"></script>
-  <script src="assets/app.js?v=18"></script>
+  <script src="assets/data.js?v=23"></script>
+  <script src="assets/render.js?v=17"></script>
+  <script src="assets/app.js?v=19"></script>
 </body>
 
 </html>

@@ -22,9 +22,9 @@ function fmtPill(dStr) {
   return `${MESES[d.getMonth()]} '${d.getFullYear().toString().slice(2)}`;
 }
 
+// Delega para o formatador único (data.js) — ver fmtDataBR.
 function fmtFull(dStr) {
-  const d = new Date(dStr + 'T00:00:00');
-  return `${d.getDate().toString().padStart(2, '0')} ${MESES[d.getMonth()]} ${d.getFullYear()}`;
+  return fmtDataBR(dStr) || String(dStr == null ? '' : dStr);
 }
 
 // Uma linha é "marco" (nível 1) ou subordinada (níveis 2 e 3). É o único
@@ -145,6 +145,10 @@ function rebuildV2(customMaxDias, pxPerDay) {
 
   window.tooltipData = {};
   let bgSvg = '', gridSvg = '', elementsSvg = '';
+  /* Cópia da faixa de anos que vai virar a régua fixa no topo da área de
+     rolagem (ver .tl-ruler em styles.css). É montada aqui, no mesmo laço que
+     desenha os anos, para nunca sair de sincronia com o eixo real. */
+  let rulerSvg = '';
 
   const HEADER_H = 48;
   const GROUP_TITLE_H = 76;
@@ -190,7 +194,7 @@ function rebuildV2(customMaxDias, pxPerDay) {
      automático sem dizer qual é qual. */
   if (MODO === 'ampliada') {
     const yLeg = SVG_H - 34;
-    gridSvg += `<g font-family="Inter,sans-serif" font-size="8.5" fill="#6b6860">
+    gridSvg += `<g font-family="Inter,sans-serif" font-size="9.5" fill="#5e5b54">
       <rect x="20" y="${yLeg}" width="15" height="9" rx="4.5" fill="#0c0c0c" fill-opacity="0.10" stroke="#0c0c0c" stroke-opacity="0.45" stroke-width="1"/>
       <text x="40" y="${yLeg + 7.5}" font-weight="600">marco curado</text>
       <rect x="20" y="${yLeg + 16}" width="15" height="9" rx="4.5" fill="#0c0c0c" fill-opacity="0.05" stroke="#0c0c0c" stroke-opacity="0.45" stroke-width="1" stroke-dasharray="3,2.5"/>
@@ -211,11 +215,13 @@ function rebuildV2(customMaxDias, pxPerDay) {
       // Linha de ano sólida e mais suave
       gridSvg += `<line x1="${x}" y1="${HEADER_H}" x2="${x}" y2="${SVG_H - 30}" stroke="#d6d2c6" stroke-width="1"/>`;
       // Label do ano com destaque
-      gridSvg += `<g transform="translate(${x}, 20)">
+      const seloAno = `<g transform="translate(${x}, 20)">
         <rect x="-22" y="-14" width="44" height="22" rx="11" fill="#f4f2ec"/>
         <text font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0c0c0c" text-anchor="middle" letter-spacing="-0.3">${y}</text>
       </g>`;
-      gridSvg += `<text x="${x}" y="${SVG_H - 12}" font-family="DM Mono,monospace" font-size="10" font-weight="500" fill="#9b9890" text-anchor="middle" letter-spacing="0.08em">${y}</text>`;
+      gridSvg += seloAno;
+      rulerSvg += `<line x1="${x}" y1="34" x2="${x}" y2="${HEADER_H}" stroke="#d6d2c6" stroke-width="1"/>` + seloAno;
+      gridSvg += `<text x="${x}" y="${SVG_H - 12}" font-family="DM Mono,monospace" font-size="10.5" font-weight="500" fill="#8b887f" text-anchor="middle" letter-spacing="0.08em">${y}</text>`;
 
       // Ticks trimestrais sutis
       for (let q = 1; q <= 3; q++) {
@@ -264,11 +270,11 @@ function rebuildV2(customMaxDias, pxPerDay) {
 
     if (clearance >= 26) {
       // Espaço suficiente: selo cheio, encostado no poste como uma bandeira
-      gridSvg += `<g ${marcoAttrs}>
-        <rect x="${xMarco - gap - pillW}" y="6" width="${pillW}" height="22" rx="11" fill="#0c7a5c"/>
+      const seloMarco = `<rect x="${xMarco - gap - pillW}" y="6" width="${pillW}" height="22" rx="11" fill="#0c7a5c"/>
         <text x="${xMarco - gap - pillW / 2}" y="${tickY + 4}" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="0.03em">${label}</text>
-        <circle cx="${xMarco}" cy="${tickY}" r="3" fill="#10a37f" stroke="#fff" stroke-width="1.5"/>
-      </g>`;
+        <circle cx="${xMarco}" cy="${tickY}" r="3" fill="#10a37f" stroke="#fff" stroke-width="1.5"/>`;
+      gridSvg += `<g ${marcoAttrs}>${seloMarco}</g>`;
+      rulerSvg += seloMarco;
     } else {
       // Zoom extremo: o selo do primeiro ano já cobre esse ponto — evita sobrepor, mantém a área clicável
       gridSvg += `<g ${marcoAttrs}><rect x="${xMarco - 6}" y="6" width="12" height="22" fill="transparent"/></g>`;
@@ -278,6 +284,7 @@ function rebuildV2(customMaxDias, pxPerDay) {
   // Sublinha do header
   gridSvg += `<line x1="0" y1="${HEADER_H}" x2="${SVG_W}" y2="${HEADER_H}" stroke="#0c0c0c" stroke-width="1"/>`;
   gridSvg += `</g>`;
+  rulerSvg += `<line x1="0" y1="${HEADER_H - 0.5}" x2="${SVG_W}" y2="${HEADER_H - 0.5}" stroke="#0c0c0c" stroke-width="1"/>`;
 
   // ─── PASS 3: Conteúdo (grupos + tracks + pílulas) ───
   currentY = HEADER_H;
@@ -338,6 +345,13 @@ function rebuildV2(customMaxDias, pxPerDay) {
         const ariaLabel = `${ev.mod} — ${ev.emp}, ${fmtFull(ev.date)}${nivelAria}`;
         elementsSvg += `<g class="pill-group${marco ? '' : ' pill-compacta'}" data-pill-id="${globalId}" role="button" tabindex="0" aria-label="${escapeXml(ariaLabel)}" style="cursor:pointer">`;
 
+        /* Área de toque invisível maior que a pílula. A pílula cheia tem 32px
+           de altura e a compacta só 20 — abaixo do alvo mínimo para o dedo. A
+           folga é calculada para caber na distância entre lanes (40px), então
+           nenhuma área invade a da pílula vizinha. */
+        const hitPad = marco ? 4 : 8;
+        elementsSvg += `<rect x="${x - 2}" y="${pillY - hitPad}" width="${w + 4}" height="${s.h + hitPad * 2}" fill="transparent"/>`;
+
         // Marcador no eixo
         elementsSvg += `<circle cx="${iconCx}" cy="${axisY}" r="${marco ? 2.5 : 1.8}" fill="${color}" opacity="0.55"/>`;
 
@@ -366,7 +380,7 @@ function rebuildV2(customMaxDias, pxPerDay) {
 
           // Nome do modelo + data
           elementsSvg += `<text x="${x + s.textPad}" y="${pillY + 14}" font-family="Inter,sans-serif" font-size="${s.font}" font-weight="700" fill="#0c0c0c" letter-spacing="-0.01em">${escapeXml(ev.mod)}</text>`;
-          elementsSvg += `<text x="${x + s.textPad}" y="${pillY + 26}" font-family="DM Mono,monospace" font-size="9" font-weight="500" fill="#807d75" letter-spacing="0.04em">${escapeXml(fmtPill(ev.date))}</text>`;
+          elementsSvg += `<text x="${x + s.textPad}" y="${pillY + 26}" font-family="DM Mono,monospace" font-size="9.5" font-weight="500" fill="#6b6860" letter-spacing="0.04em">${escapeXml(fmtPill(ev.date))}</text>`;
         } else {
           // ── Níveis 2 e 3: pílula compacta, tracejada, sem sombra ──
           // O tracejado não é decoração: é a marca visual de "não passou pela
@@ -401,8 +415,45 @@ function rebuildV2(customMaxDias, pxPerDay) {
     ${elementsSvg}
   </svg>`;
 
-  document.getElementById('svg-wrap').innerHTML = finalSvg;
+  /* A régua fixa: mesma faixa de 48px do SVG, num elemento próprio que gruda
+     no topo da área de rolagem. margin-bottom negativo (no CSS) faz ela cair
+     exatamente sobre a faixa original, então em repouso não há duplicação
+     visível. aria-hidden porque é cópia — o original continua no SVG. */
+  const rulerHtml = `<div class="tl-ruler" id="tl-ruler" style="width:${SVG_W}px" aria-hidden="true">
+    <svg width="${SVG_W}" height="${HEADER_H}" viewBox="0 0 ${SVG_W} ${HEADER_H}" xmlns="http://www.w3.org/2000/svg" focusable="false">
+      <rect width="100%" height="100%" fill="#fff"/>
+      ${rulerSvg}
+    </svg>
+  </div>`;
+
+  document.getElementById('svg-wrap').innerHTML = rulerHtml + finalSvg + buildOutline(layout);
 
   // Reinstala os listeners das pílulas (delegação não é trivial em SVG)
   attachPillHandlers();
+
+  // A affordance de rolagem depende da nova largura; app.js reavalia.
+  if (typeof window.refreshScrollAffordance === 'function') {
+    window.refreshScrollAffordance();
+  }
+}
+
+/* ─── SUMÁRIO ESTRUTURAL (só para leitor de tela) ───
+   A página inteira tinha um único heading: os títulos de seção da timeline são
+   <text> dentro do SVG, invisíveis para a árvore de acessibilidade como
+   estrutura. Este bloco devolve a hierarquia — h2 por região, lista de faixas
+   com a contagem — sem mudar um pixel do desenho. */
+function buildOutline(layout) {
+  let html = '<div class="sr-only" id="tl-outline"><h2>Sumário da linha do tempo</h2>';
+  ACTIVE_GROUPS.forEach((group, gIdx) => {
+    const tracks = (layout[gIdx] && layout[gIdx].tracks) || [];
+    const total = tracks.reduce((acc, t) => acc + ((t.track.events || []).length), 0);
+    html += `<h3>${escapeXml(group.title)} — ${total} lançamento${total === 1 ? '' : 's'}</h3>`;
+    html += '<ul>';
+    tracks.forEach(t => {
+      const n = (t.track.events || []).length;
+      html += `<li>${escapeXml(t.track.name)}: ${n} lançamento${n === 1 ? '' : 's'}</li>`;
+    });
+    html += '</ul>';
+  });
+  return html + '</div>';
 }

@@ -59,23 +59,40 @@ function parseSheetTimestamp(val) {
   return isNaN(t) ? 0 : t;
 }
 
-// ─── ESTADO DE ZOOM ───
+/* ─── ESTADO DE ZOOM ───
+   A escala PADRÃO é a automática: a régua inteira cabendo na largura da
+   janela. Abrir em 1,5 px/dia ancorado à esquerda mostrava 2022–2024, que é a
+   parte mais vazia do acervo — faixas inteiras (IBM, MiniMax, Sakana AI)
+   apareciam em branco com um contador ao lado, o que se lê como defeito, e
+   metade do desenho ficava fora da tela. Encaixado, a aceleração de 2023 para
+   2026 aparece sozinha, sem precisar de texto explicando.
+
+   zoomIsAuto guarda se a escala atual ainda é a calculada ou se o usuário
+   assumiu o controle. Enquanto for automática, ela se recalcula quando os
+   dados crescem ou a janela muda de tamanho — e NÃO é gravada na sessão, para
+   que a próxima visita refaça a conta com a largura daquela tela. Qualquer
+   ação de zoom do usuário desliga o automático e passa a ser gravada. */
 const ZOOM_CACHE_KEY = 'panorama-llms-zoom-v1';
 let currentPxPerDay = CONFIG.PX_PER_DAY;
+let zoomIsAuto = true;
 
 function loadZoom() {
   try {
     const raw = sessionStorage.getItem(ZOOM_CACHE_KEY);
     if (raw) {
       const v = parseFloat(raw);
-      if (!isNaN(v)) currentPxPerDay = clampZoom(v);
+      if (!isNaN(v)) {
+        currentPxPerDay = clampZoom(v);
+        zoomIsAuto = false;
+      }
     }
   } catch (e) { /* sessionStorage indisponível */ }
 }
 
 function saveZoom() {
   try {
-    sessionStorage.setItem(ZOOM_CACHE_KEY, String(currentPxPerDay));
+    if (zoomIsAuto) sessionStorage.removeItem(ZOOM_CACHE_KEY);
+    else sessionStorage.setItem(ZOOM_CACHE_KEY, String(currentPxPerDay));
   } catch (e) { /* ignora */ }
 }
 
@@ -137,8 +154,12 @@ function processRows(allRows) {
     }
     const dateEl = document.getElementById('last-update-date');
     if (dateEl) {
-      const fmtUpdate = `${String(finalUpdateDate.getDate()).padStart(2, '0')} ${MESES[finalUpdateDate.getMonth()]} ${finalUpdateDate.getFullYear()}`;
-      dateEl.innerText = fmtUpdate;
+      // A data vem de um Date local, então o ISO é montado com os getters
+      // locais antes de passar pelo formatador único (fmtDataBR, em data.js).
+      const iso = `${finalUpdateDate.getFullYear()}-` +
+        `${String(finalUpdateDate.getMonth() + 1).padStart(2, '0')}-` +
+        `${String(finalUpdateDate.getDate()).padStart(2, '0')}`;
+      dateEl.innerText = fmtDataBR(iso);
     }
   }
 
@@ -150,9 +171,23 @@ function processRows(allRows) {
   });
 
   updateNovidades();
+
+  /* Só agora GLOBAL_MAX_DIAS existe, então é aqui que a escala automática é
+     resolvida — antes do desenho, para não redesenhar duas vezes. Se o usuário
+     já mexeu no zoom, zoomIsAuto é falso e nada disto acontece. */
+  const encaixe = zoomIsAuto ? escalaDeEncaixe() : null;
+  if (encaixe !== null) currentPxPerDay = encaixe;
+
   rebuildV2(undefined, currentPxPerDay);
   updateZoomUI();
   atualizarBotaoModo();
+
+  if (encaixe !== null) {
+    const area = document.getElementById('timeline-area');
+    if (area) area.scrollLeft = 0;
+  }
+  refreshScrollAffordance();
+
   // A régua já está no DOM: se viemos do guia, salta para a empresa pedida.
   setTimeout(focusCompanyFromHash, 120);
 }
@@ -867,16 +902,25 @@ function initDragPan() {
 function updateZoomUI() {
   const label = document.getElementById('zoom-label');
   const slider = document.getElementById('zoom-slider');
+  const fit = document.getElementById('zoom-fit');
   if (label) label.textContent = getZoomLabel();
   if (slider) slider.value = currentPxPerDay;
+  // "Tela" é estado, não só ação: marcado enquanto a escala for a automática.
+  if (fit) {
+    fit.classList.toggle('is-on', zoomIsAuto);
+    fit.setAttribute('aria-pressed', String(zoomIsAuto));
+  }
 }
 
 function setZoom(v, opts = {}) {
   const next = clampZoom(v);
-  if (next === currentPxPerDay) return;
+  const mesmaEscala = next === currentPxPerDay;
+
+  zoomIsAuto = !!opts.auto;
   currentPxPerDay = next;
   saveZoom();
   updateZoomUI();
+  if (mesmaEscala) return;
 
   // Memoriza a posição proporcional do scroll para tentar manter o ponto de vista
   const slider = document.getElementById('timeline-area');
@@ -894,6 +938,7 @@ function setZoom(v, opts = {}) {
       if (maxScroll > 0) {
         slider.scrollLeft = relativeScroll * maxScroll;
       }
+      refreshScrollAffordance();
     });
   }
 }
@@ -906,15 +951,29 @@ function zoomOut() {
   setZoom(currentPxPerDay - CONFIG.ZOOM_STEP);
 }
 
+/* Escala em que a régua inteira cabe na largura visível. Devolve só o número:
+   quem chama decide se redesenha agora (fitToScreen) ou se aproveita o
+   redesenho que já vai acontecer de qualquer jeito (processRows). */
+function escalaDeEncaixe() {
+  const slider = document.getElementById('timeline-area');
+  if (!slider || !GLOBAL_MAX_DIAS) return null;
+  const padding = CONFIG.PAD_L + CONFIG.PAD_R + 40;
+  /* O piso de 240px (era 400) só importa em tela estreita: ali a conta dá uma
+     escala menor que MIN_PX_PER_DAY e o clamp assume. Sem isso, o cálculo
+     fingia ter 400px de espaço que não existiam e a régua saía mais larga do
+     que o necessário justamente onde cada pixel conta. */
+  const available = Math.max(240, slider.clientWidth - padding);
+  return clampZoom(available / GLOBAL_MAX_DIAS);
+}
+
 function fitToScreen() {
   const slider = document.getElementById('timeline-area');
-  if (!slider) return;
-  const padding = CONFIG.PAD_L + CONFIG.PAD_R + 40;
-  const available = Math.max(400, slider.clientWidth - padding);
-  const target = available / GLOBAL_MAX_DIAS;
-  setZoom(target, { skipScroll: true });
+  const alvo = escalaDeEncaixe();
+  if (!slider || alvo === null) return;
+  setZoom(alvo, { skipScroll: true, auto: true });
   requestAnimationFrame(() => {
     slider.scrollLeft = 0;
+    refreshScrollAffordance();
   });
 }
 
@@ -961,6 +1020,142 @@ function initZoomControls() {
       fitToScreen();
     }
   });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   AFFORDANCE DE ROLAGEM
+   ═══════════════════════════════════════════════════════════════
+   O painel de ajuda ensinava "arraste horizontalmente ou use a barra de
+   rolagem". Affordance que precisa de manual não é affordance. Aqui ela passa
+   a ser visível: a borda esfumaça onde há conteúdo cortado, aparecem setas
+   clicáveis (e focalizáveis pelo teclado) e uma etiqueta diz QUAL trecho de
+   tempo está na tela — numa linha do tempo, "onde estou" é uma data, não uma
+   porcentagem de barra de rolagem.
+   ═══════════════════════════════════════════════════════════════ */
+
+// Data correspondente a uma coordenada x do SVG (inverso de xOf, em render.js)
+function dataNoX(x) {
+  const dias = (x - CONFIG.PAD_L) / currentPxPerDay;
+  const ms = CONFIG.MARCO.getTime() + dias * 86400000;
+  return new Date(ms);
+}
+
+function rotuloMesAno(d) {
+  return `${MESES[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
+
+let affordanceRaf = 0;
+
+function refreshScrollAffordance() {
+  const shell = document.getElementById('timeline-shell');
+  const area = document.getElementById('timeline-area');
+  if (!shell || !area) return;
+
+  const maxX = area.scrollWidth - area.clientWidth;
+  const x = area.scrollLeft;
+  const temEsquerda = x > 4;
+  const temDireita = x < maxX - 4;
+
+  shell.classList.toggle('can-left', temEsquerda);
+  shell.classList.toggle('can-right', temDireita);
+
+  const pos = document.getElementById('tl-pos');
+  if (pos) {
+    if (maxX > 4 && GLOBAL_MAX_DIAS) {
+      const fim = CONFIG.MARCO.getTime() + GLOBAL_MAX_DIAS * 86400000;
+      const de = new Date(Math.max(CONFIG.MARCO.getTime(), dataNoX(x).getTime()));
+      const ate = new Date(Math.min(fim, dataNoX(x + area.clientWidth).getTime()));
+      pos.textContent = `${rotuloMesAno(de)} — ${rotuloMesAno(ate)}`;
+    } else {
+      pos.textContent = '';
+    }
+  }
+
+  // Sombra na régua fixa só depois que ela realmente descola do topo
+  const ruler = document.getElementById('tl-ruler');
+  if (ruler) ruler.classList.toggle('is-stuck', area.scrollTop > 2);
+}
+window.refreshScrollAffordance = refreshScrollAffordance;
+
+function agendarAffordance() {
+  if (affordanceRaf) return;
+  affordanceRaf = requestAnimationFrame(() => {
+    affordanceRaf = 0;
+    refreshScrollAffordance();
+  });
+}
+
+function initScrollAffordance() {
+  const shell = document.getElementById('timeline-shell');
+  const area = document.getElementById('timeline-area');
+  if (!shell || !area) return;
+
+  area.addEventListener('scroll', agendarAffordance, { passive: true });
+
+  shell.querySelectorAll('.tl-arrow').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const dir = btn.dataset.dir === 'left' ? -1 : 1;
+      area.scrollBy({ left: dir * Math.round(area.clientWidth * 0.82), behavior: 'smooth' });
+    });
+  });
+
+  // Setas do teclado: navegação sem mouse e sem barra de rolagem.
+  document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.target.matches && e.target.matches('input, textarea, select')) return;
+    const passo = Math.round(area.clientWidth * 0.82);
+    if (e.key === 'ArrowRight') {
+      area.scrollBy({ left: passo, behavior: 'smooth' });
+    } else if (e.key === 'ArrowLeft') {
+      area.scrollBy({ left: -passo, behavior: 'smooth' });
+    } else if (e.key === 'Home') {
+      area.scrollTo({ left: 0, behavior: 'smooth' });
+    } else if (e.key === 'End') {
+      area.scrollTo({ left: area.scrollWidth, behavior: 'smooth' });
+    } else {
+      return;
+    }
+    e.preventDefault();
+  });
+
+  refreshScrollAffordance();
+}
+
+/* Altura real do cromo (cabeçalho + abas + controles). Os painéis flutuantes
+   usavam um chute fixo de 160px e, no mobile, abriam por cima da própria
+   navegação de abas que deveriam respeitar. */
+function syncChromeHeight() {
+  let h = 0;
+  ['.app-header', '.page-nav-bar', '.controls'].forEach(sel => {
+    const el = document.querySelector(sel);
+    if (el) h += el.getBoundingClientRect().height;
+  });
+  if (h > 0) document.documentElement.style.setProperty('--chrome-h', Math.round(h) + 'px');
+}
+
+function initLayoutSync() {
+  syncChromeHeight();
+
+  let t;
+  window.addEventListener('resize', () => {
+    clearTimeout(t);
+    t = setTimeout(() => {
+      syncChromeHeight();
+      // Enquanto a escala for a automática, ela acompanha a largura da janela.
+      if (zoomIsAuto) fitToScreen();
+      else refreshScrollAffordance();
+    }, 180);
+  });
+
+  // A barra de controles muda de altura quando os clusters embrulham; o
+  // observer pega isso sem depender de um evento de resize da janela.
+  if (typeof ResizeObserver === 'function') {
+    const ro = new ResizeObserver(() => syncChromeHeight());
+    ['.app-header', '.page-nav-bar', '.controls'].forEach(sel => {
+      const el = document.querySelector(sel);
+      if (el) ro.observe(el);
+    });
+  }
 }
 
 function initHelpPopover() {
@@ -1256,6 +1451,8 @@ document.addEventListener('DOMContentLoaded', () => {
   loadZoom();
   initZoomControls();
   initDragPan();
+  initScrollAffordance();
+  initLayoutSync();
   initModoControls();
   // A régua padrão é desenhada primeiro em qualquer caso; só depois o modo
   // salvo (ou o #modo=ampliada do link) baixa o catálogo e redesenha. Assim o

@@ -23,9 +23,17 @@
   --ink-muted: #6b6860; /* Ajustado para AA: contraste 4.6:1 sobre paper */
   --ink-faint: #e6e3d9;
   --hair: #ebe7dc;
-  /* Accent */
-  --accent: #10a37f;
-  --accent-soft: rgba(16, 163, 127, 0.10);
+  /* Accent
+     --accent é COR DE TEXTO E DE INTERFACE: #0a7359 dá 5,8:1 sobre branco e
+     5,2:1 sobre o próprio --accent-soft, então passa o AA (4,5:1) mesmo nos
+     rótulos de 10-11px em que o verde antigo (#10a37f, 3,2:1) reprovava — e
+     também no sentido inverso, texto branco sobre botão verde preenchido.
+     --accent-bright guarda o verde original só para o que é decorativo
+     (gradientes, brilho, traço sobre fundo escuro), onde não há leitura. */
+  --accent: #0a7359;
+  --accent-bright: #10a37f;
+  --accent-soft: rgba(10, 115, 89, 0.10);
+  --accent-glow: rgba(10, 115, 89, 0.28);
   /* Type */
   --mono: 'DM Mono', 'Courier New', monospace;
   --sans: 'Inter', sans-serif;
@@ -158,13 +166,15 @@ body {
   gap: 6px;
 }
 
+/* O verde institucional claro (#429B4D) dava 3,5:1 — reprovado para um texto
+   de 10px. #2E7D32 mantém o mesmo matiz e chega a 5,1:1 sobre branco. */
 .header-kicker {
   font-family: var(--mono);
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 500;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #429B4D;
+  color: #2E7D32;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -174,7 +184,7 @@ body {
   content: '';
   width: 18px;
   height: 1.5px;
-  background: #429B4D;
+  background: #2E7D32;
   display: inline-block;
 }
 
@@ -195,7 +205,7 @@ body {
 
 .header-meta {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 10.5px;
   color: var(--ink-muted);
   letter-spacing: 0.08em;
   text-align: right;
@@ -222,6 +232,25 @@ body {
 .header-meta .meta-value {
   color: var(--ink);
   font-weight: 500;
+}
+
+/* ─── BARRA DE ABAS ───
+   As abas ficavam em lugares diferentes em cada página (à direita da barra de
+   ferramentas na timeline, no canto superior esquerdo no guia). Agora têm uma
+   barra própria, sempre logo abaixo do cabeçalho e sempre no mesmo canto — a
+   navegação para de "andar" quando o leitor troca de seção. */
+.page-nav-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--hair);
+  padding: 8px 40px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.page-nav-bar .page-switch {
+  flex: 0 1 auto;
 }
 
 /* ─── CONTROLS ─── */
@@ -254,12 +283,13 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 6px 10px;
+  padding: 7px 11px;
+  min-height: 34px;
   border-radius: 8px;
   border: 1px solid var(--ink);
   background: var(--white);
   cursor: pointer;
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.01em;
   color: var(--ink);
@@ -308,8 +338,8 @@ body {
 }
 
 .zoom-btn {
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
   border-radius: 6px;
   border: 1px solid var(--ink);
   background: var(--white);
@@ -373,15 +403,23 @@ body {
 
 .zoom-label {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 10.5px;
   color: var(--ink-muted);
-  min-width: 68px;
+  min-width: 70px;
   letter-spacing: 0.02em;
 }
 
 .zoom-fit-btn {
-  padding: 6px 10px;
-  font-size: 11px;
+  padding: 7px 11px;
+  font-size: 11.5px;
+}
+
+/* Enquanto a escala é a automática (a régua inteira cabendo na tela), o botão
+   "Tela" fica marcado: é o estado padrão, não uma ação pendente. */
+.zoom-fit-btn.is-on {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 /* ─── HELP POPOVER ─── */
@@ -395,18 +433,26 @@ body {
 }
 
 .help-btn {
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   padding: 0;
   border-radius: 50%;
 }
 
+/* --chrome-h é medido em runtime (app.js) e vale a altura real de header +
+   barra de abas + controles. Antes o topo era um chute fixo de 160px: no
+   mobile, onde o cromo passa de 300px, o painel abria POR CIMA das abas que
+   ele deveria respeitar. */
 .help-popover {
-  position: absolute;
-  top: calc(var(--header-height, 110px) + 50px);
+  position: fixed;
+  top: calc(var(--chrome-h, 160px) + 8px);
   right: 40px;
   width: 340px;
   max-width: calc(100vw - 32px);
+  max-height: calc(100vh - var(--chrome-h, 160px) - 24px);
+  max-height: calc(100dvh - var(--chrome-h, 160px) - 24px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--white);
   border: 1px solid var(--hair);
   border-radius: 12px;
@@ -461,8 +507,11 @@ body {
   color: #fff;
 }
 
+/* Hover escurece em vez de clarear: com texto branco por cima, clarear o verde
+   derrubaria o contraste abaixo do AA justamente no estado ativo. */
 .modo-btn.is-on:hover {
-  background: #0d8f6f;
+  background: #086048;
+  border-color: #086048;
 }
 
 .modo-btn.is-loading {
@@ -472,7 +521,7 @@ body {
 
 .modo-count {
   font-family: var(--mono);
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 500;
   padding: 1px 5px;
   border-radius: 6px;
@@ -487,8 +536,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   padding: 0;
   border-radius: 50%;
   border: 1px solid var(--hair);
@@ -519,7 +568,7 @@ body {
 .modo-fonte {
   margin-top: 10px;
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--ink-muted);
 }
 
@@ -528,8 +577,8 @@ body {
 }
 
 .modo-aviso {
-  position: absolute;
-  top: calc(var(--header-height, 110px) + 50px);
+  position: fixed;
+  top: calc(var(--chrome-h, 160px) + 8px);
   right: 40px;
   z-index: 101;
   max-width: 380px;
@@ -552,9 +601,9 @@ body {
   padding-top: 8px;
   border-top: 1px solid rgba(255, 255, 255, 0.16);
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 11px;
   line-height: 1.45;
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .tt-fonte[hidden] {
@@ -651,7 +700,7 @@ body {
 .nv-meta {
   display: block;
   font-family: 'DM Mono', monospace;
-  font-size: 10px;
+  font-size: 10.5px;
   color: var(--ink-muted);
   margin-top: 1px;
 }
@@ -664,7 +713,7 @@ body {
 
 .nv-fonte {
   flex-shrink: 0;
-  font-size: 10px;
+  font-size: 11px;
   margin-top: 7px;
   color: var(--accent);
   text-decoration: none;
@@ -677,7 +726,7 @@ body {
 
 .novidades-hint {
   margin-top: 10px;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--ink-muted);
 }
 
@@ -727,15 +776,202 @@ body {
   overflow: hidden;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   APP SHELL DA TIMELINE  (só em index.html — body.page-timeline)
+   ═══════════════════════════════════════════════════════════════
+   Numa linha do tempo, perder o eixo de tempo é perder a legenda. Antes a
+   página inteira rolava: header, barra de ferramentas e régua de anos subiam
+   junto e o leitor ficava com pílulas soltas, sem saber de que ano eram.
+
+   Aqui o documento não rola: header, abas, controles e rodapé são molduras
+   fixas e QUEM rola é a área da timeline. Isso deixa a régua de anos ancorável
+   (ver .tl-ruler) e mantém o zoom sempre ao alcance.
+
+   O @media (min-height) é a válvula de segurança: em janelas muito baixas o
+   cromo comeria a área útil inteira, então voltamos ao fluxo normal.
+   ═══════════════════════════════════════════════════════════════ */
+@media (min-height: 560px) {
+  /* vh primeiro, dvh depois: em navegador sem dvh a declaração seguinte é
+     descartada e sobra o 100vh. Sem esse par, o `height` cairia sozinho e o
+     `overflow: hidden` recortaria a página inteira sem deixar rolar. */
+  body.page-timeline {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  body.page-timeline .main {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding-bottom: 18px;
+  }
+
+  body.page-timeline .timeline-shell {
+    flex: 1;
+    min-height: 240px;
+  }
+}
+
+/* Fora do app shell (janela baixa) a área ganha um teto para nunca empurrar
+   o rodapé para longe demais. */
+.timeline-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: calc(100vh - 72px);
+  max-height: calc(100dvh - 72px);
+}
+
 .timeline-area {
   width: 100%;
+  flex: 1;
+  min-height: 0;
   overflow-x: auto;
   overflow-y: auto;
+  overscroll-behavior-x: contain;
   background: #fff;
   border: 1px solid var(--hair);
   border-radius: 12px;
   box-shadow: var(--shadow-md);
   cursor: grab;
+}
+
+/* ─── AFFORDANCE DE ROLAGEM HORIZONTAL ───
+   "Arraste horizontalmente" estava escrito no painel de ajuda — e affordance
+   que precisa de manual não existe. As bordas em gradiente mostram que há
+   conteúdo além do corte, e os botões de seta dão um caminho clicável (e
+   focalizável por teclado) para quem não descobre o arrastar.
+   As duas coisas só aparecem quando há mesmo conteúdo para aquele lado. */
+.tl-edge {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  width: 56px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  z-index: 4;
+  border-radius: 12px;
+}
+
+.tl-edge-left {
+  left: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.98) 12%, rgba(255, 255, 255, 0));
+}
+
+.tl-edge-right {
+  right: 1px;
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0.98) 12%, rgba(255, 255, 255, 0));
+}
+
+.timeline-shell.can-left .tl-edge-left,
+.timeline-shell.can-right .tl-edge-right {
+  opacity: 1;
+}
+
+.tl-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--hair);
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--ink);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  z-index: 5;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.22s ease, transform 0.16s ease, background 0.16s ease;
+}
+
+.tl-arrow-left { left: 10px; }
+.tl-arrow-right { right: 10px; }
+
+.timeline-shell.can-left .tl-arrow-left,
+.timeline-shell.can-right .tl-arrow-right {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tl-arrow:hover {
+  background: var(--white);
+  transform: translateY(-50%) scale(1.06);
+}
+
+.tl-arrow:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Contador de posição: diz quanto da régua está fora da tela sem exigir que o
+   leitor deduza isso da barra de rolagem. */
+.tl-pos {
+  position: absolute;
+  right: 14px;
+  bottom: 20px;
+  z-index: 5;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background: rgba(12, 12, 12, 0.82);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.timeline-shell.can-left .tl-pos,
+.timeline-shell.can-right .tl-pos {
+  opacity: 1;
+}
+
+/* ─── RÉGUA DE ANOS FIXA ───
+   Clone só da faixa superior do SVG (48px: selos de ano + marco zero),
+   grudado no topo da área de rolagem. A margem negativa faz ele repousar
+   exatamente sobre a faixa original quando scrollTop = 0, então em repouso
+   nada muda visualmente; ao rolar, é ele que fica.
+   pointer-events: none preserva o clique no selo do marco zero real. */
+.tl-ruler {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  height: 48px;
+  margin-bottom: -48px;
+  pointer-events: none;
+  background: #fff;
+}
+
+.tl-ruler.is-stuck {
+  box-shadow: 0 6px 14px -8px rgba(15, 12, 4, 0.45);
+}
+
+.tl-ruler svg {
+  display: block;
+}
+
+/* Conteúdo só para leitor de tela (sumário de grupos/faixas da timeline) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .timeline-area.is-dragging {
@@ -858,15 +1094,15 @@ svg.global-svg {
 
 .tt-date {
   font-family: var(--mono);
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.55);
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.72);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .tt-day {
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 500;
   color: #14c896;
   background: rgba(16, 163, 127, 0.18);
@@ -914,8 +1150,8 @@ svg.global-svg {
 
 .tt-company {
   font-family: var(--mono);
-  font-size: 9.5px;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.7);
   margin-bottom: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -1020,9 +1256,9 @@ svg.global-svg {
 .app-footer {
   border-top: 1px solid var(--hair);
   background: var(--white);
-  padding: 18px 40px;
+  padding: 16px 40px;
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 10.5px;
   color: var(--ink-muted);
   letter-spacing: 0.06em;
   display: flex;
@@ -1131,33 +1367,42 @@ kbd {
     width: 100%;
   }
 
+  /* Duas linhas empilhadas de metadados viravam ~34px de cromo por nada:
+     lado a lado ocupam uma. */
   .header-meta {
     text-align: left;
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    line-height: 1.4;
   }
 
   .header-meta .meta-row {
     justify-content: flex-start;
   }
 
+  /* Antes cada cluster ocupava uma linha inteira: seis fileiras de controles,
+     ~500px de cromo antes do primeiro dado num aparelho de 390px. Agora os
+     clusters embrulham lado a lado e só o zoom — que precisa de curso para o
+     slider — fica com uma linha só para ele. Dá duas fileiras. */
   .controls {
-    padding: 12px 16px;
-    gap: 12px;
-    flex-direction: column;
-    align-items: stretch;
+    padding: 10px 16px;
+    gap: 8px 10px;
+    flex-flow: row wrap;
+    align-items: center;
     width: 100%;
   }
 
   .control-cluster {
     padding-right: 0;
     border-right: none;
-    width: 100%;
-    justify-content: space-between;
   }
 
   .export-cluster {
     display: flex;
     gap: 6px;
+    flex: 1 1 auto;
   }
 
   .export-cluster .icon-btn {
@@ -1166,7 +1411,7 @@ kbd {
   }
 
   .zoom-cluster {
-    order: 3;
+    order: -1;
     width: 100%;
     justify-content: space-between;
     gap: 8px;
@@ -1178,11 +1423,19 @@ kbd {
     touch-action: none;
   }
 
+  .modo-cluster {
+    flex: 1 1 auto;
+  }
+
+  .modo-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
   .actions-cluster {
-    width: 100%;
     margin-left: 0;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     gap: 8px;
   }
@@ -1195,6 +1448,10 @@ kbd {
   .help-btn {
     margin-left: 0;
     flex-shrink: 0;
+  }
+
+  .page-nav-bar {
+    padding: 8px 16px;
   }
 
   .page-switch {
@@ -1228,25 +1485,54 @@ kbd {
     text-overflow: ellipsis;
   }
 
+  /* Em tela estreita não há canto livre abaixo do cromo: o painel vira folha
+     inferior, que é o gesto que o aparelho já ensina. */
   .help-popover {
-    right: 16px;
-    left: 16px;
+    right: 8px;
+    left: 8px;
+    top: auto;
+    bottom: 8px;
     width: auto;
+    max-width: none;
+    max-height: min(70vh, 520px);
+    max-height: min(70dvh, 520px);
+    border-radius: 16px;
+  }
+
+  .modo-aviso {
+    right: 8px;
+    left: 8px;
+    top: auto;
+    bottom: 8px;
     max-width: none;
   }
 
   .main {
-    padding: 14px 16px 32px;
+    padding: 12px 12px 16px;
     width: 100%;
     overflow-x: hidden;
   }
 
   .app-footer {
-    padding: 16px 20px;
+    padding: 12px 16px;
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 6px;
   }
+
+  /* "Marco zero" e "Atualizado" já estão no cabeçalho; repetir no rodapé só
+     custa altura numa tela em que altura é o recurso escasso. */
+  body.page-timeline .app-footer .footer-meta {
+    display: none;
+  }
+
+  .tl-arrow {
+    width: 44px;
+    height: 44px;
+  }
+
+  .tl-arrow-left { left: 6px; }
+  .tl-arrow-right { right: 6px; }
 }
 
 /* ─── BREADCRUMB / BACK TO OBSERVATORY ─── */
@@ -1274,14 +1560,14 @@ kbd {
   padding: 3px 9px 3px 7px;
   border-radius: 6px;
   background: var(--accent-soft);
-  border: 1px solid rgba(16, 163, 127, 0.28);
+  border: 1px solid var(--accent-glow);
   color: var(--accent);
   font-family: var(--sans);
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.01em;
   text-decoration: none;
-  box-shadow: 0 1px 6px rgba(16, 163, 127, 0.15);
+  box-shadow: 0 1px 6px rgba(10, 115, 89, 0.15);
   transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -1319,7 +1605,7 @@ kbd {
   color: var(--white);
   border-color: var(--accent);
   transform: translateY(-1px);
-  box-shadow: 0 3px 12px rgba(16, 163, 127, 0.32);
+  box-shadow: 0 3px 12px rgba(10, 115, 89, 0.32);
   outline: none;
 }
 
@@ -1355,7 +1641,16 @@ kbd {
 
 @media (max-width: 520px) {
   .app-header {
-    padding: 14px 14px;
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .header-brand {
+    gap: 8px;
+  }
+
+  .header-titlewrap {
+    gap: 4px;
   }
 
   .header-logo.logo-lapig img {
@@ -1376,8 +1671,8 @@ kbd {
   }
 
   .header-kicker {
-    font-size: 8px;
-    letter-spacing: 0.12em;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
   }
 
   .header-kicker::before {
@@ -1385,14 +1680,14 @@ kbd {
   }
 
   .back-to-observatory {
-    font-size: 10px;
-    padding: 3px 7px;
+    font-size: 11px;
+    padding: 5px 8px;
   }
 
   .ps-link {
-    font-size: 10.5px;
-    padding: 7px 4px;
-    gap: 3px;
+    font-size: 11.5px;
+    padding: 10px 4px;
+    gap: 4px;
   }
 
   .ps-link svg {
@@ -1400,20 +1695,23 @@ kbd {
     height: 12px;
   }
 
+  /* Ordem natural: [−] [curso] [+] [Tela]. Antes o slider era jogado para
+     depois dos botões e sobravam um "−" e um "+" colados, sem o curso entre
+     eles — o controle parecia outro. */
   .zoom-cluster {
-    flex-wrap: wrap;
-    gap: 6px;
+    flex-wrap: nowrap;
+    gap: 8px;
   }
 
   .zoom-slider {
-    order: 2;
-    width: 100%;
+    flex: 1 1 auto;
+    min-width: 48px;
   }
 
-  .zoom-label {
-    order: 3;
-    text-align: center;
-    font-size: 9px;
+  /* O título já quebra em duas linhas nessa largura; o sufixo levava uma
+     terceira, empurrando o primeiro dado para ainda mais longe. */
+  .app-header h1 .yr-suffix {
+    display: none;
   }
 
   .tooltip {
@@ -1437,6 +1735,87 @@ kbd {
   }
 }
 
+
+/* ═══════════════════════════════════════════════════════════════
+   ALVOS DE TOQUE
+   ═══════════════════════════════════════════════════════════════
+   Só em pointer:coarse — no mouse, 44px em toda parte engorda a barra de
+   ferramentas sem ganho nenhum. A regra vale para o dedo, que é onde o alvo
+   pequeno vira erro de clique. */
+@media (pointer: coarse) {
+  .icon-btn,
+  .download-btn,
+  .zoom-fit-btn {
+    min-height: 44px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .zoom-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+
+  .help-btn,
+  .modo-info {
+    width: 44px;
+    height: 44px;
+  }
+
+  .help-close,
+  .tt-close {
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+  }
+
+  .ps-link {
+    min-height: 44px;
+  }
+
+  .nv-item {
+    padding: 10px;
+    margin: -10px;
+    min-height: 44px;
+  }
+
+  .nv-fonte {
+    padding: 12px 6px;
+    margin: -12px -6px;
+    font-size: 11.5px;
+  }
+
+  .app-footer a {
+    display: inline-block;
+    padding: 4px 0;
+  }
+
+  /* O slider é fino demais para o dedo: engrossa a pista e o polegar. */
+  .zoom-slider {
+    height: 8px;
+  }
+
+  .zoom-slider::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  .zoom-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Janela baixa demais para o app shell: o documento volta a rolar, e aí a
+   barra de ferramentas precisa grudar sozinha para não sumir com o eixo. */
+@media (max-height: 559px) {
+  body.page-timeline .controls {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+}
 
 /* ============================================================
    MODO INCORPORADO (?embed=1)

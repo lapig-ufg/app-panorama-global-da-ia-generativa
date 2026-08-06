@@ -715,7 +715,8 @@
 
   // ─── Meta / rodapé ───
   function renderMeta() {
-    const d = bmData.fetched_at ? bmData.fetched_at.slice(0, 10).split('-').reverse().join('/') : '';
+    // Mesmo formato do cabeçalho da timeline e das gratuitas — ver fmtDataBR.
+    const d = bmData.fetched_at ? fmtDataBR(bmData.fetched_at) : '';
     const el = document.getElementById('qm-meta');
     if (el) {
       el.textContent = `${bmData.models_total} modelos rastreados · ${bmData.benchmarks.length} benchmarks` +

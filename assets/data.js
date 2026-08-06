@@ -355,6 +355,19 @@ const CONFIG = {
 
 const MESES = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
+/* Formato ÚNICO de data em toda a interface: "05 Ago 2026".
+   Cada página vinha inventando o seu — a timeline mostrava "05 AGO 2026", o
+   guia "05/08/2026" e as gratuitas "24 de Julho de 2026". Três grafias para o
+   mesmo tipo de informação, no mesmo cabeçalho, em abas vizinhas.
+   Recebe ISO (AAAA-MM-DD, com ou sem hora) e nunca passa por new Date(): o
+   parse de string curta é interpretado como UTC e, no fuso do Brasil,
+   devolvia o dia anterior. */
+function fmtDataBR(iso) {
+  const m = String(iso == null ? '' : iso).slice(0, 10).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return '';
+  return `${m[3]} ${MESES[+m[2] - 1]} ${m[1]}`;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    RÉGUA AMPLIADA — o segundo modo de leitura da timeline
    ═══════════════════════════════════════════════════════════════

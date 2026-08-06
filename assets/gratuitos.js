@@ -18,16 +18,30 @@
       .replace(/"/g, '&quot;');
   }
 
+  /* Cópia local do fmtDataBR de data.js: esta página não carrega data.js
+     (são ~50 KB de logos e tabelas que ela não usa) e não vale importar o
+     arquivo inteiro por uma linha de data. Se mudar o formato lá, mude aqui. */
+  const MESES_BR = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+
+  function fmtDataCurta(iso) {
+    const m = String(iso == null ? '' : iso).slice(0, 10).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return '';
+    return `${m[3]} ${MESES_BR[+m[2] - 1]} ${m[1]}`;
+  }
+
   function initPage() {
     if (typeof GRATUITOS_DATA === 'undefined') {
       console.error('GRATUITOS_DATA não foi carregado.');
       return;
     }
 
-    // Exibir data da última atualização
+    // Exibir data da última atualização, no mesmo formato das outras abas
+    // ("05 Ago 2026"). Derivada de updatedAt: updatedText é escrito à mão e
+    // já divergiu ("24 de Julho de 2026"), então só entra como reserva.
     const updatedEl = document.getElementById('gratuitos-updated');
-    if (updatedEl && GRATUITOS_DATA.updatedText) {
-      updatedEl.textContent = GRATUITOS_DATA.updatedText;
+    if (updatedEl) {
+      updatedEl.textContent = fmtDataCurta(GRATUITOS_DATA.updatedAt) ||
+        GRATUITOS_DATA.updatedText || '—';
     }
 
     renderCategoryNav();
