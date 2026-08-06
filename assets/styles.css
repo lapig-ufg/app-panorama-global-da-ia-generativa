@@ -1456,6 +1456,13 @@ kbd {
   padding: 14px 24px;
 }
 
+/* O site anfitriao ja anuncia o painel no proprio cabecalho da pagina;
+   repetir o titulo aqui dentro duplicaria a informacao. A linha-guia
+   (kicker) e as abas seguem indicando a secao aberta. */
+.is-embed .header-titlewrap h1 {
+  display: none;
+}
+
 .is-embed .header-brand {
   gap: 0;
 }
