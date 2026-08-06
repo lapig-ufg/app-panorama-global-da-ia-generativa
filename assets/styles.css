@@ -1437,3 +1437,25 @@ kbd {
   }
 }
 
+
+/* ============================================================
+   MODO INCORPORADO (?embed=1)
+   Ativado quando a página roda dentro do iframe do Observatório
+   UFG-IA. Some a moldura própria (faixa, logos e link de volta)
+   para não duplicar o cabeçalho do site anfitrião. A navegação
+   entre seções e os créditos continuam visíveis.
+   ============================================================ */
+.is-embed .top-ribbon,
+.is-embed .header-logos,
+.is-embed .back-to-observatory,
+.is-embed .bc-sep {
+  display: none;
+}
+
+.is-embed .app-header {
+  padding: 14px 24px;
+}
+
+.is-embed .header-brand {
+  gap: 0;
+}
