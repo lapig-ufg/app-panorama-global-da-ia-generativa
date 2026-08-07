@@ -859,7 +859,7 @@ details.qm-compare[open] .qm-cmp-toggle-chev { transform: rotate(90deg); color: 
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ps-link, .ps-q, .ps-short, .ps-icon, .ps-go,
+  .ps-link, .ps-link::after, .ps-q, .ps-short, .ps-icon, .ps-go,
   .qm-tab, .qm-sort, .qm-add, .qm-bar, .qm-modellink,
   .qm-search, .qm-method-cat > summary, .qm-cmp-toggle, .qm-cmp-toggle-chev,
   .qm-extras-toggle { transition: none; }

@@ -70,7 +70,15 @@ body {
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  overflow-x: hidden;
+  /* `clip`, não `hidden`. Um valor de ROLAGEM em overflow-x força overflow-y a
+     virar `auto`, e o body passa a ser um contêiner de rolagem próprio — dentro
+     do que o html já é. No topo isso não aparece, mas dentro do iframe do
+     Observatório (1351×560) as páginas que rolam ganhavam DUAS barras lado a
+     lado, e as faixas de largura total paravam 16px antes da borda visível: a
+     barra da aba ativa não encostava no canto direito.
+     `clip` corta igual e não cria contêiner de rolagem. Onde não houver suporte
+     a declaração cai fora e o corte continua valendo pelo html acima. */
+  overflow-x: clip;
 }
 
 /* ─── TOP RIBBON (regional accents) ─── */
@@ -243,11 +251,18 @@ body {
    Os rótulos são perguntas porque as três seções são destinos diferentes, não
    filtros do mesmo dado: "Régua" era jargão interno que não dizia nada a quem
    chegava de fora. */
+/* SEM recuo lateral aqui: as três colunas vão de canto a canto da página. A
+   goteira vira padding INTERNO do primeiro e do último item, então o texto
+   continua no prumo dos logos, mas a célula (e a barra verde que marca a seção
+   aberta) alcança a borda.
+
+   Com recuo no contêiner, a barra da primeira aba parava a 40px do canto
+   enquanto o filete preto seguia até a ponta — e o mesmo do lado direito na
+   última aba. Ficavam dois cotocos verdes com uma quebra visível no canto. */
 .page-switch {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   border-top: 1px solid var(--hair);
-  padding: 0 var(--gutter);
 }
 
 /* min-width: 0 é o que mantém os terços realmente iguais: sem ele um item de
@@ -259,33 +274,51 @@ body {
   position: relative;
   display: flex;
   align-items: flex-start;
-  gap: 11px;
+  gap: 12px;
   min-width: 0;
-  padding: 11px 16px 12px 0;
+  padding: 14px 16px 15px;
   text-decoration: none;
   color: inherit;
   transition: background 0.16s ease;
 }
 
-/* Os filetes verticais caem exatamente em 1/3 e 2/3 da medida útil: é a pista
-   de que as três colunas foram dimensionadas, não sobraram. */
+/* A goteira mora nas pontas da fileira, não no contêiner. `:first-child` e
+   `:last-child` têm especificidade maior que `.ps-link`, então continuam
+   valendo mesmo quando os media queries reescrevem o atalho `padding`. */
+.ps-link:first-child {
+  padding-left: var(--gutter);
+}
+
+.ps-link:last-child {
+  padding-right: var(--gutter);
+}
+
+/* Os filetes verticais caem exatamente em 1/3 e 2/3 da largura da página: é a
+   pista de que as três colunas foram dimensionadas, não sobraram. */
 .ps-link + .ps-link {
-  padding-left: 16px;
   border-left: 1px solid var(--hair);
 }
 
+/* Os três ícones ficam em verde, não só o da seção aberta. Antes os dois
+   inativos eram cinza sobre bege e a fileira parecia meio apagada — como se
+   duas das três respostas estivessem desligadas. */
 .ps-icon {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
   margin-top: 1px;
-  border-radius: 8px;
-  background: var(--paper-tint);
-  color: var(--ink-muted);
-  transition: background 0.16s ease, color 0.16s ease;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  transition: background 0.16s ease, color 0.16s ease, transform 0.18s ease;
+}
+
+.ps-icon svg {
+  width: 17px;
+  height: 17px;
 }
 
 .ps-text {
@@ -300,19 +333,26 @@ body {
    degraus acima existem para que a reticência nunca chegue a aparecer — ela é
    só a rede embaixo do trapézio. */
 .ps-q {
-  font-size: 13.5px;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.014em;
   line-height: 1.25;
-  color: var(--ink-light);
+  color: var(--ink);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   transition: color 0.16s ease;
 }
 
+/* O ponto de interrogação em verde: um sinal pequeno, repetido três vezes, de
+   que a fileira é feita de perguntas — e não de nomes de seção. */
+.ps-mark {
+  color: var(--accent);
+  font-weight: 800;
+}
+
 .ps-gloss {
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 400;
   line-height: 1.3;
   color: var(--ink-muted);
@@ -337,17 +377,39 @@ body {
   transition: opacity 0.18s ease, transform 0.18s ease, color 0.18s ease;
 }
 
+/* A MESMA barra marca duas coisas: no hover ela varre da esquerda, meio
+   translúcida; na seção aberta está inteira e mais grossa. Passar o mouse
+   mostra, em miniatura, a marca que vai ficar quando o leitor chegar lá — é
+   assim que a fileira ensina sozinha que clicar leva à resposta, sem precisar
+   escrever "ver a resposta" três vezes. */
+.ps-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 3px;
+  background: var(--accent-bright);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.24s ease, opacity 0.24s ease;
+}
+
 .ps-link:hover {
   background: var(--paper);
 }
 
-.ps-link:hover .ps-q {
-  color: var(--ink);
+.ps-link:hover::after {
+  transform: scaleX(1);
+  opacity: 0.5;
 }
 
+/* O hover intensifica o ícone mas NÃO o preenche: o verde sólido fica
+   reservado à seção aberta, senão passar o mouse faria a aba inativa parecer
+   a atual. */
 .ps-link:hover .ps-icon {
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: rgba(10, 115, 89, 0.18);
+  transform: translateY(-1px);
 }
 
 .ps-link:hover .ps-go {
@@ -356,31 +418,22 @@ body {
   transform: translateX(3px);
 }
 
-/* Ativa: soldada ao filete preto do cabeçalho por uma barra verde de 3px, que
-   substitui o filete naquele terço. É o gesto da aba de verdade — a seção
-   corrente encosta na moldura em vez de flutuar sobre ela. */
 .ps-link.is-active {
-  background: linear-gradient(to bottom, transparent 45%, rgba(10, 115, 89, 0.055));
+  background: linear-gradient(to bottom, transparent 45%, rgba(10, 115, 89, 0.07));
   cursor: default;
 }
 
+/* Mesma espessura da barra de hover (3px, não 4px): o degrau contra o filete
+   preto de 1px é inerente a um marcador em sublinhado, mas quanto mais fina a
+   barra, menos ele salta aos olhos. */
 .ps-link.is-active::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 3px;
-  background: var(--accent-bright);
-}
-
-.ps-link.is-active .ps-q {
-  color: var(--ink);
+  transform: scaleX(1);
+  opacity: 1;
 }
 
 .ps-link.is-active .ps-icon {
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: var(--accent);
+  color: var(--white);
 }
 
 .ps-link.is-active .ps-go {
@@ -1595,22 +1648,23 @@ kbd {
 
   .ps-link {
     align-items: center;
-    gap: 9px;
-    padding: 10px 10px 11px 0;
-  }
-
-  .ps-link + .ps-link {
-    padding-left: 10px;
+    gap: 10px;
+    padding: 11px 10px 12px;
   }
 
   .ps-icon {
-    width: 26px;
-    height: 26px;
+    width: 30px;
+    height: 30px;
     margin-top: 0;
   }
 
+  .ps-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
   .ps-q {
-    font-size: 12.5px;
+    font-size: 13.5px;
   }
 
   .ps-go {
@@ -1643,11 +1697,7 @@ kbd {
 
   .ps-link {
     gap: 8px;
-    padding: 9px 6px 10px 0;
-  }
-
-  .ps-link + .ps-link {
-    padding-left: 6px;
+    padding: 9px 6px 10px;
   }
 }
 
@@ -1806,8 +1856,6 @@ kbd {
 }
 
 .back-to-observatory {
-  position: relative;
-  overflow: hidden;
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -1823,34 +1871,6 @@ kbd {
   text-decoration: none;
   box-shadow: 0 1px 6px rgba(10, 115, 89, 0.15);
   transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
-}
-
-/* Brilho reluzente discreto (sheen/shimmer) que passa suavemente a cada 5 segundos */
-.back-to-observatory::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 70%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.55) 50%,
-    transparent 100%
-  );
-  transform: skewX(-20deg);
-  animation: obs-shimmer 5s infinite ease-in-out;
-  pointer-events: none;
-}
-
-@keyframes obs-shimmer {
-  0%, 75% {
-    left: -120%;
-  }
-  100% {
-    left: 220%;
-  }
 }
 
 .back-to-observatory:hover,
@@ -1898,7 +1918,10 @@ kbd {
     --gutter: 13px;
   }
 
-  .app-header {
+  /* No .header-top, não no .app-header: recuar o cabeçalho inteiro empurraria
+     junto a fileira de abas, que precisa ir de canto a canto para a barra da
+     seção ativa encostar na borda da página. */
+  .header-top {
     padding: 12px var(--gutter);
     gap: 10px;
   }
@@ -1934,14 +1957,14 @@ kbd {
   }
 
   .ps-link {
-    gap: 7px;
-    padding: 8px 4px 9px 0;
+    gap: 6px;
+    padding: 8px 4px 9px;
   }
 
-  .ps-link + .ps-link {
-    padding-left: 4px;
-  }
-
+  /* Com a fileira indo de canto a canto, a goteira virou padding interno das
+     células das pontas — a primeira, que tem o rótulo mais longo
+     ("Lançamentos"), perdeu 4px úteis. Ícone e vão menores devolvem a folga:
+     numa tela de 360px sobram 4px em vez de 1. */
   .ps-icon {
     width: 24px;
     height: 24px;
