@@ -3,8 +3,8 @@
   "source_url": "https://artificialanalysis.ai/",
   "attribution": "Dados: Artificial Analysis — artificialanalysis.ai",
   "api_tier": "free",
-  "fetched_at": "2026-08-05T19:37:25.314Z",
-  "familias_total": 427,
+  "fetched_at": "2026-08-10T10:10:48.967Z",
+  "familias_total": 431,
   "descartados": {
     "entradas_sem_data": 0,
     "anteriores_ao_marco": 0
@@ -14,175 +14,175 @@
       "mod": "GPT-3.5 Turbo",
       "emp": "OpenAI",
       "date": "2022-11-30",
-      "score": 3.6,
+      "score": 3.2,
       "open_weights": null
     },
     {
       "mod": "Llama 65B",
       "emp": "Meta",
       "date": "2023-02-24",
-      "score": 2.1,
+      "score": 1.7,
       "open_weights": null
     },
     {
       "mod": "Claude Instant",
       "emp": "Anthropic",
       "date": "2023-03-14",
-      "score": 2.1,
+      "score": 1.7,
       "open_weights": null
     },
     {
       "mod": "GPT-4",
       "emp": "OpenAI",
       "date": "2023-03-14",
-      "score": 7,
+      "score": 6.8,
       "open_weights": null
     },
     {
       "mod": "PALM-2",
       "emp": "Google",
       "date": "2023-05-10",
-      "score": 3.2,
+      "score": 2.8,
       "open_weights": null
     },
     {
       "mod": "Claude 2.0",
       "emp": "Anthropic",
       "date": "2023-07-11",
-      "score": 3.6,
+      "score": 3.3,
       "open_weights": null
     },
     {
       "mod": "Llama 2 Chat 13B",
       "emp": "Meta",
       "date": "2023-07-18",
-      "score": 3,
+      "score": 2.6,
       "open_weights": null
     },
     {
       "mod": "Llama 2 Chat 70B",
       "emp": "Meta",
       "date": "2023-07-18",
-      "score": 3,
+      "score": 2.6,
       "open_weights": null
     },
     {
       "mod": "Llama 2 Chat 7B",
       "emp": "Meta",
       "date": "2023-07-18",
-      "score": 4.3,
+      "score": 3.9,
       "open_weights": null
     },
     {
       "mod": "Qwen Chat 14B",
       "emp": "Alibaba",
       "date": "2023-09-25",
-      "score": 2.1,
+      "score": 1.7,
       "open_weights": null
     },
     {
       "mod": "Mistral 7B Instruct",
       "emp": "Mistral",
       "date": "2023-09-27",
-      "score": 2.1,
+      "score": 1.7,
       "open_weights": null
     },
     {
       "mod": "GPT-4 Turbo",
       "emp": "OpenAI",
       "date": "2023-11-06",
-      "score": 7.9,
+      "score": 7.7,
       "open_weights": null
     },
     {
       "mod": "Claude 2.1",
       "emp": "Anthropic",
       "date": "2023-11-21",
-      "score": 3.9,
+      "score": 3.5,
       "open_weights": null
     },
     {
       "mod": "DeepSeek LLM 67B Chat",
       "emp": "DeepSeek",
       "date": "2023-11-29",
-      "score": 3,
+      "score": 2.6,
       "open_weights": null
     },
     {
       "mod": "Qwen Chat 72B",
       "emp": "Alibaba",
       "date": "2023-11-30",
-      "score": 3.4,
+      "score": 3,
       "open_weights": null
     },
     {
       "mod": "Gemini 1.0 Pro",
       "emp": "Google",
       "date": "2023-12-06",
-      "score": 3.1,
+      "score": 2.7,
       "open_weights": null
     },
     {
       "mod": "Gemini 1.0 Ultra",
       "emp": "Google",
       "date": "2023-12-06",
-      "score": 4.6,
+      "score": 4.3,
       "open_weights": null
     },
     {
       "mod": "Mistral Medium",
       "emp": "Mistral",
       "date": "2023-12-11",
-      "score": 3.6,
+      "score": 3.2,
       "open_weights": null
     },
     {
       "mod": "Mixtral 8x7B Instruct",
       "emp": "Mistral",
       "date": "2023-12-11",
-      "score": 2.4,
+      "score": 2,
       "open_weights": null
     },
     {
       "mod": "OpenChat 3.5",
       "emp": "OpenChat",
       "date": "2023-12-18",
-      "score": 3,
+      "score": 2.6,
       "open_weights": null
     },
     {
       "mod": "Solar Mini",
       "emp": "Upstage",
       "date": "2024-01-25",
-      "score": 6.2,
+      "score": 6,
       "open_weights": null
     },
     {
       "mod": "Phi-4 Mini Instruct",
       "emp": "Microsoft",
       "date": "2024-02-26",
-      "score": 6,
+      "score": 6.2,
       "open_weights": null
     },
     {
       "mod": "Mistral Large",
       "emp": "Mistral",
       "date": "2024-02-26",
-      "score": 4.4,
+      "score": 4.1,
       "open_weights": null
     },
     {
       "mod": "Mistral Small",
       "emp": "Mistral",
       "date": "2024-02-26",
-      "score": 4.7,
+      "score": 4.3,
       "open_weights": null
     },
     {
       "mod": "Claude 3 Haiku",
       "emp": "Anthropic",
       "date": "2024-03-04",
-      "score": 3.9,
+      "score": 3.5,
       "open_weights": null
     },
     {
@@ -196,84 +196,84 @@
       "mod": "Claude 3 Sonnet",
       "emp": "Anthropic",
       "date": "2024-03-04",
-      "score": 4.7,
+      "score": 4.4,
       "open_weights": null
     },
     {
       "mod": "Command-R",
       "emp": "Cohere",
       "date": "2024-03-12",
-      "score": 2.1,
+      "score": 1.7,
       "open_weights": null
     },
     {
       "mod": "Grok-1",
       "emp": "xAI",
       "date": "2024-03-17",
-      "score": 6,
+      "score": 5.8,
       "open_weights": null
     },
     {
       "mod": "DBRX Instruct",
       "emp": "Databricks",
       "date": "2024-03-27",
-      "score": 3,
+      "score": 2.6,
       "open_weights": null
     },
     {
       "mod": "Command-R+",
       "emp": "Cohere",
       "date": "2024-04-04",
-      "score": 3,
+      "score": 2.6,
       "open_weights": null
     },
     {
       "mod": "Mixtral 8x22B Instruct",
       "emp": "Mistral",
       "date": "2024-04-17",
-      "score": 4.4,
+      "score": 4,
       "open_weights": null
     },
     {
       "mod": "Llama 3 Instruct 70B",
       "emp": "Meta",
       "date": "2024-04-18",
-      "score": 3.5,
+      "score": 3.1,
       "open_weights": null
     },
     {
       "mod": "Llama 3 Instruct 8B",
       "emp": "Meta",
       "date": "2024-04-18",
-      "score": 1.2,
+      "score": 1,
       "open_weights": null
     },
     {
       "mod": "Phi-3 Mini Instruct 3.8B",
       "emp": "Microsoft",
       "date": "2024-04-23",
-      "score": 4.6,
+      "score": 4.3,
       "open_weights": null
     },
     {
       "mod": "Arctic Instruct",
       "emp": "Snowflake",
       "date": "2024-04-24",
-      "score": 3.4,
+      "score": 3,
       "open_weights": null
     },
     {
       "mod": "Qwen1.5 Chat 110B",
       "emp": "Alibaba",
       "date": "2024-04-25",
-      "score": 4.1,
+      "score": 3.7,
       "open_weights": null
     },
     {
       "mod": "DeepSeek-V2-Chat",
       "emp": "DeepSeek",
       "date": "2024-05-06",
-      "score": 3.6,
+      "score": 3.3,
       "open_weights": null
     },
     {
@@ -287,112 +287,112 @@
       "mod": "Gemini 1.5 Flash",
       "emp": "Google",
       "date": "2024-05-14",
-      "score": 8,
+      "score": 7.8,
       "open_weights": null
     },
     {
       "mod": "Gemini 1.5 Pro",
       "emp": "Google",
       "date": "2024-05-15",
-      "score": 10,
+      "score": 9.9,
       "open_weights": null
     },
     {
       "mod": "Qwen2 Instruct 72B",
       "emp": "Alibaba",
       "date": "2024-06-07",
-      "score": 6,
+      "score": 5.7,
       "open_weights": null
     },
     {
       "mod": "DeepSeek Coder V2 Lite Instruct",
       "emp": "DeepSeek",
       "date": "2024-06-17",
-      "score": 3.1,
+      "score": 2.7,
       "open_weights": null
     },
     {
       "mod": "DeepSeek-Coder-V2",
       "emp": "DeepSeek",
       "date": "2024-06-17",
-      "score": 5.1,
+      "score": 4.7,
       "open_weights": null
     },
     {
       "mod": "Claude 3.5 Sonnet",
       "emp": "Anthropic",
       "date": "2024-06-21",
-      "score": 9.9,
+      "score": 9.8,
       "open_weights": null
     },
     {
       "mod": "GPT-4o mini",
       "emp": "OpenAI",
       "date": "2024-07-18",
-      "score": 6.9,
+      "score": 6.7,
       "open_weights": null
     },
     {
       "mod": "Llama 3.1 Instruct 405B",
       "emp": "Meta",
       "date": "2024-07-23",
-      "score": 8.5,
+      "score": 8.3,
       "open_weights": null
     },
     {
       "mod": "Llama 3.1 Instruct 70B",
       "emp": "Meta",
       "date": "2024-07-23",
-      "score": 6.8,
+      "score": 6.5,
       "open_weights": null
     },
     {
       "mod": "Llama 3.1 Instruct 8B",
       "emp": "Meta",
       "date": "2024-07-23",
-      "score": 7.6,
+      "score": 7.8,
       "open_weights": null
     },
     {
       "mod": "Mistral Large 2",
       "emp": "Mistral",
       "date": "2024-07-24",
-      "score": 9.1,
+      "score": 9,
       "open_weights": null
     },
     {
       "mod": "Grok Beta",
       "emp": "xAI",
       "date": "2024-08-13",
-      "score": 7.5,
+      "score": 7.3,
       "open_weights": null
     },
     {
       "mod": "Hermes 3 - Llama-3.1 70B",
       "emp": "Nous Research",
       "date": "2024-08-15",
-      "score": 5.1,
+      "score": 4.8,
       "open_weights": null
     },
     {
       "mod": "Jamba 1.5 Large",
       "emp": "AI21 Labs",
       "date": "2024-08-22",
-      "score": 5.1,
+      "score": 4.8,
       "open_weights": null
     },
     {
       "mod": "Jamba 1.5 Mini",
       "emp": "AI21 Labs",
       "date": "2024-08-22",
-      "score": 2.7,
+      "score": 2.3,
       "open_weights": null
     },
     {
       "mod": "DeepSeek-V2.5",
       "emp": "DeepSeek",
       "date": "2024-09-06",
-      "score": 6.8,
+      "score": 6.5,
       "open_weights": null
     },
     {
@@ -406,189 +406,189 @@
       "mod": "o1-preview",
       "emp": "OpenAI",
       "date": "2024-09-12",
-      "score": 17,
+      "score": 17.2,
       "open_weights": null
     },
     {
       "mod": "Qwen2.5 Coder Instruct 7B",
       "emp": "Alibaba",
       "date": "2024-09-19",
-      "score": 4.5,
+      "score": 4.1,
       "open_weights": null
     },
     {
       "mod": "Qwen2.5 Instruct 32B",
       "emp": "Alibaba",
       "date": "2024-09-19",
-      "score": 7.5,
+      "score": 7.2,
       "open_weights": null
     },
     {
       "mod": "Qwen2.5 Instruct 72B",
       "emp": "Alibaba",
       "date": "2024-09-19",
-      "score": 9.6,
+      "score": 9.4,
       "open_weights": null
     },
     {
       "mod": "Molmo 7B-D",
       "emp": "Allen Institute for AI",
       "date": "2024-09-25",
-      "score": 3.8,
+      "score": 3.4,
       "open_weights": null
     },
     {
       "mod": "Llama 3.2 Instruct 11B",
       "emp": "Meta",
       "date": "2024-09-25",
-      "score": 3.3,
+      "score": 3,
       "open_weights": null
     },
     {
       "mod": "Llama 3.2 Instruct 1B",
       "emp": "Meta",
       "date": "2024-09-25",
-      "score": 1.1,
+      "score": 1,
       "open_weights": null
     },
     {
       "mod": "Llama 3.2 Instruct 3B",
       "emp": "Meta",
       "date": "2024-09-25",
-      "score": 4.2,
+      "score": 3.9,
       "open_weights": null
     },
     {
       "mod": "Llama 3.2 Instruct 90B",
       "emp": "Meta",
       "date": "2024-09-25",
-      "score": 6.2,
+      "score": 6,
       "open_weights": null
     },
     {
       "mod": "LFM 40B",
       "emp": "Liquid AI",
       "date": "2024-09-30",
-      "score": 3.4,
+      "score": 3,
       "open_weights": null
     },
     {
       "mod": "Gemini 1.5 Flash-8B",
       "emp": "Google",
       "date": "2024-10-03",
-      "score": 5.5,
+      "score": 5.2,
       "open_weights": null
     },
     {
       "mod": "Reka Flash",
       "emp": "Reka AI",
       "date": "2024-10-04",
-      "score": 6.3,
+      "score": 6,
       "open_weights": null
     },
     {
       "mod": "Llama 3.1 Nemotron Instruct 70B",
       "emp": "NVIDIA",
       "date": "2024-10-15",
-      "score": 7.6,
+      "score": 7.4,
       "open_weights": null
     },
     {
       "mod": "Claude 3.5 Haiku",
       "emp": "Anthropic",
       "date": "2024-10-22",
-      "score": 12.3,
+      "score": 12.4,
       "open_weights": null
     },
     {
       "mod": "Qwen2.5 Coder Instruct 32B",
       "emp": "Alibaba",
       "date": "2024-11-11",
-      "score": 7.1,
+      "score": 6.9,
       "open_weights": null
     },
     {
       "mod": "Qwen2.5 Turbo",
       "emp": "Alibaba",
       "date": "2024-11-18",
-      "score": 6.3,
+      "score": 6,
       "open_weights": null
     },
     {
       "mod": "Pixtral Large",
       "emp": "Mistral",
       "date": "2024-11-18",
-      "score": 8.1,
+      "score": 8,
       "open_weights": null
     },
     {
       "mod": "OLMo 2 7B",
       "emp": "Allen Institute for AI",
       "date": "2024-11-26",
-      "score": 3.9,
+      "score": 3.5,
       "open_weights": null
     },
     {
       "mod": "QwQ 32B-Preview",
       "emp": "Alibaba",
       "date": "2024-11-27",
-      "score": 9.2,
+      "score": 9.1,
       "open_weights": null
     },
     {
       "mod": "Nova Lite",
       "emp": "Amazon",
       "date": "2024-12-03",
-      "score": 6.9,
+      "score": 6.7,
       "open_weights": null
     },
     {
       "mod": "Nova Micro",
       "emp": "Amazon",
       "date": "2024-12-03",
-      "score": 4.7,
+      "score": 4.4,
       "open_weights": null
     },
     {
       "mod": "Nova Pro",
       "emp": "Amazon",
       "date": "2024-12-03",
-      "score": 7.7,
+      "score": 7.5,
       "open_weights": null
     },
     {
       "mod": "o1",
       "emp": "OpenAI",
       "date": "2024-12-05",
-      "score": 23.4,
+      "score": 23.9,
       "open_weights": null
     },
     {
       "mod": "Llama 3.3 Instruct 70B",
       "emp": "Meta",
       "date": "2024-12-06",
-      "score": 9.4,
+      "score": 9.3,
       "open_weights": null
     },
     {
       "mod": "Gemini 2.0 Flash",
       "emp": "Google",
       "date": "2024-12-11",
-      "score": 12.3,
+      "score": 12.2,
       "open_weights": null
     },
     {
       "mod": "Phi-4",
       "emp": "Microsoft",
       "date": "2024-12-12",
-      "score": 4.9,
+      "score": 4.6,
       "open_weights": null
     },
     {
       "mod": "Grok 2",
       "emp": "xAI",
       "date": "2024-12-12",
-      "score": 8,
+      "score": 7.8,
       "open_weights": null
     },
     {
@@ -623,35 +623,35 @@
       "mod": "DeepSeek R1",
       "emp": "DeepSeek",
       "date": "2025-01-20",
-      "score": 18.5,
+      "score": 18.6,
       "open_weights": null
     },
     {
       "mod": "DeepSeek R1 Distill Llama 70B",
       "emp": "DeepSeek",
       "date": "2025-01-20",
-      "score": 9.9,
+      "score": 9.8,
       "open_weights": null
     },
     {
       "mod": "DeepSeek R1 Distill Llama 8B",
       "emp": "DeepSeek",
       "date": "2025-01-20",
-      "score": 6.4,
+      "score": 6.2,
       "open_weights": null
     },
     {
       "mod": "DeepSeek R1 Distill Qwen 1.5B",
       "emp": "DeepSeek",
       "date": "2025-01-20",
-      "score": 3.7,
+      "score": 3.3,
       "open_weights": null
     },
     {
       "mod": "DeepSeek R1 Distill Qwen 14B",
       "emp": "DeepSeek",
       "date": "2025-01-20",
-      "score": 9.8,
+      "score": 9.7,
       "open_weights": null
     },
     {
@@ -665,63 +665,63 @@
       "mod": "Sonar",
       "emp": "Perplexity",
       "date": "2025-01-21",
-      "score": 9.5,
+      "score": 9.4,
       "open_weights": null
     },
     {
       "mod": "Sonar Pro",
       "emp": "Perplexity",
       "date": "2025-01-21",
-      "score": 9.3,
+      "score": 9.1,
       "open_weights": null
     },
     {
       "mod": "Qwen2.5 Max",
       "emp": "Alibaba",
       "date": "2025-01-28",
-      "score": 10.2,
+      "score": 10.1,
       "open_weights": null
     },
     {
       "mod": "Sonar Reasoning",
       "emp": "Perplexity",
       "date": "2025-01-28",
-      "score": 11.7,
+      "score": 11.6,
       "open_weights": null
     },
     {
       "mod": "Sonar Reasoning Pro",
       "emp": "Perplexity",
       "date": "2025-01-28",
-      "score": 17.8,
+      "score": 18,
       "open_weights": null
     },
     {
       "mod": "Llama 3.1 Tulu3 405B",
       "emp": "Allen Institute for AI",
       "date": "2025-01-30",
-      "score": 8.3,
+      "score": 8.1,
       "open_weights": null
     },
     {
       "mod": "Mistral Small 3",
       "emp": "Mistral",
       "date": "2025-01-30",
-      "score": 6.9,
+      "score": 6.7,
       "open_weights": null
     },
     {
       "mod": "o3-mini",
       "emp": "OpenAI",
       "date": "2025-01-31",
-      "score": 19,
+      "score": 19.2,
       "open_weights": null
     },
     {
       "mod": "Gemini 2.0 Flash-Lite",
       "emp": "Google",
       "date": "2025-02-05",
-      "score": 8.8,
+      "score": 8.6,
       "open_weights": null
     },
     {
@@ -735,56 +735,56 @@
       "mod": "DeepHermes 3 - Llama-3.1 8B Preview",
       "emp": "Nous Research",
       "date": "2025-02-13",
-      "score": 2.3,
+      "score": 1.9,
       "open_weights": null
     },
     {
       "mod": "Mistral Saba",
       "emp": "Mistral",
       "date": "2025-02-17",
-      "score": 6.4,
+      "score": 6.2,
       "open_weights": null
     },
     {
       "mod": "R1 1776",
       "emp": "Perplexity",
       "date": "2025-02-18",
-      "score": 6.3,
+      "score": 6,
       "open_weights": null
     },
     {
       "mod": "Grok 3",
       "emp": "xAI",
       "date": "2025-02-19",
-      "score": 18.4,
+      "score": 18.6,
       "open_weights": null
     },
     {
       "mod": "Grok 3 mini Reasoning",
       "emp": "xAI",
       "date": "2025-02-19",
-      "score": 22.5,
+      "score": 22.9,
       "open_weights": null
     },
     {
       "mod": "Grok 3 Reasoning Beta",
       "emp": "xAI",
       "date": "2025-02-19",
-      "score": 15.1,
+      "score": 15.2,
       "open_weights": null
     },
     {
       "mod": "Claude 3.7 Sonnet",
       "emp": "Anthropic",
       "date": "2025-02-24",
-      "score": 27.1,
+      "score": 27.6,
       "open_weights": null
     },
     {
       "mod": "Phi-4 Multimodal Instruct",
       "emp": "Microsoft",
       "date": "2025-02-26",
-      "score": 4.5,
+      "score": 4.2,
       "open_weights": null
     },
     {
@@ -805,21 +805,21 @@
       "mod": "Jamba 1.6 Large",
       "emp": "AI21 Labs",
       "date": "2025-03-06",
-      "score": 5,
+      "score": 4.7,
       "open_weights": null
     },
     {
       "mod": "Jamba 1.6 Mini",
       "emp": "AI21 Labs",
       "date": "2025-03-06",
-      "score": 2.6,
+      "score": 2.1,
       "open_weights": null
     },
     {
       "mod": "Reka Flash 3",
       "emp": "Reka AI",
       "date": "2025-03-10",
-      "score": 4.1,
+      "score": 3.7,
       "open_weights": null
     },
     {
@@ -840,21 +840,21 @@
       "mod": "Gemma 3 4B Instruct",
       "emp": "Google",
       "date": "2025-03-12",
-      "score": 1.1,
+      "score": 1,
       "open_weights": null
     },
     {
       "mod": "OLMo 2 32B",
       "emp": "Allen Institute for AI",
       "date": "2025-03-13",
-      "score": 5,
+      "score": 4.7,
       "open_weights": null
     },
     {
       "mod": "Command A",
       "emp": "Cohere",
       "date": "2025-03-13",
-      "score": 7.7,
+      "score": 7.5,
       "open_weights": null
     },
     {
@@ -868,14 +868,14 @@
       "mod": "DeepHermes 3 - Mistral 24B Preview",
       "emp": "Nous Research",
       "date": "2025-03-13",
-      "score": 5.3,
+      "score": 5,
       "open_weights": null
     },
     {
       "mod": "Mistral Small 3.1",
       "emp": "Mistral",
       "date": "2025-03-17",
-      "score": 14.7,
+      "score": 14.9,
       "open_weights": null
     },
     {
@@ -889,49 +889,49 @@
       "mod": "o1-pro",
       "emp": "OpenAI",
       "date": "2025-03-19",
-      "score": 18.9,
+      "score": 19.1,
       "open_weights": null
     },
     {
       "mod": "DeepSeek V3 0324",
       "emp": "DeepSeek",
       "date": "2025-03-25",
-      "score": 15.4,
+      "score": 15.2,
       "open_weights": null
     },
     {
       "mod": "Gemini 2.5 Pro Preview",
       "emp": "Google",
       "date": "2025-03-25",
-      "score": 23,
+      "score": 23.4,
       "open_weights": null
     },
     {
       "mod": "Llama 4 Maverick",
       "emp": "Meta",
       "date": "2025-04-05",
-      "score": 14.3,
+      "score": 14.5,
       "open_weights": null
     },
     {
       "mod": "Llama 4 Scout",
       "emp": "Meta",
       "date": "2025-04-05",
-      "score": 10,
+      "score": 10.3,
       "open_weights": null
     },
     {
       "mod": "Llama 3.1 Nemotron Ultra 253B v1",
       "emp": "NVIDIA",
       "date": "2025-04-07",
-      "score": 9.1,
+      "score": 8.9,
       "open_weights": null
     },
     {
       "mod": "GPT-4.1",
       "emp": "OpenAI",
       "date": "2025-04-14",
-      "score": 19.4,
+      "score": 19.6,
       "open_weights": null
     },
     {
@@ -952,42 +952,42 @@
       "mod": "Granite 3.3 8B",
       "emp": "IBM",
       "date": "2025-04-16",
-      "score": 1.8,
+      "score": 1.3,
       "open_weights": null
     },
     {
       "mod": "o3",
       "emp": "OpenAI",
       "date": "2025-04-16",
-      "score": 30.4,
+      "score": 31.1,
       "open_weights": null
     },
     {
       "mod": "o4-mini",
       "emp": "OpenAI",
       "date": "2025-04-16",
-      "score": 25.6,
+      "score": 26.1,
       "open_weights": null
     },
     {
       "mod": "Gemini 2.5 Flash Preview",
       "emp": "Google",
       "date": "2025-04-17",
-      "score": 17.5,
+      "score": 17.7,
       "open_weights": null
     },
     {
       "mod": "Qwen3 0.6B",
       "emp": "Alibaba",
       "date": "2025-04-28",
-      "score": 1.3,
+      "score": 1,
       "open_weights": null
     },
     {
       "mod": "Qwen3 1.7B",
       "emp": "Alibaba",
       "date": "2025-04-28",
-      "score": 2.6,
+      "score": 2.2,
       "open_weights": null
     },
     {
@@ -1001,28 +1001,28 @@
       "mod": "Qwen3 235B A22B",
       "emp": "Alibaba",
       "date": "2025-04-28",
-      "score": 13.4,
+      "score": 13.5,
       "open_weights": null
     },
     {
       "mod": "Qwen3 30B A3B",
       "emp": "Alibaba",
       "date": "2025-04-28",
-      "score": 9.3,
+      "score": 9.2,
       "open_weights": null
     },
     {
       "mod": "Qwen3 32B",
       "emp": "Alibaba",
       "date": "2025-04-28",
-      "score": 11.5,
+      "score": 11.4,
       "open_weights": null
     },
     {
       "mod": "Qwen3 4B",
       "emp": "Alibaba",
       "date": "2025-04-28",
-      "score": 8.4,
+      "score": 8.2,
       "open_weights": null
     },
     {
@@ -1050,21 +1050,21 @@
       "mod": "Gemini 2.5 Flash",
       "emp": "Google",
       "date": "2025-05-20",
-      "score": 20.1,
+      "score": 20.3,
       "open_weights": null
     },
     {
       "mod": "Gemma 3n E4B Instruct Preview",
       "emp": "Google",
       "date": "2025-05-20",
-      "score": 4.6,
+      "score": 4.2,
       "open_weights": null
     },
     {
       "mod": "Llama 3.1 Nemotron Nano 4B v1.1",
       "emp": "NVIDIA",
       "date": "2025-05-20",
-      "score": 8.5,
+      "score": 8.4,
       "open_weights": null
     },
     {
@@ -1085,42 +1085,42 @@
       "mod": "Claude 4 Opus",
       "emp": "Anthropic",
       "date": "2025-05-22",
-      "score": 31,
+      "score": 31.7,
       "open_weights": null
     },
     {
       "mod": "Claude 4 Sonnet",
       "emp": "Anthropic",
       "date": "2025-05-22",
-      "score": 28.9,
+      "score": 29.8,
       "open_weights": null
     },
     {
       "mod": "Sarvam M",
       "emp": "Sarvam",
       "date": "2025-05-23",
-      "score": 3,
+      "score": 2.6,
       "open_weights": null
     },
     {
       "mod": "DeepSeek R1 0528",
       "emp": "DeepSeek",
       "date": "2025-05-28",
-      "score": 20.1,
+      "score": 20.4,
       "open_weights": null
     },
     {
       "mod": "DeepSeek R1 0528 Qwen3 8B",
       "emp": "DeepSeek",
       "date": "2025-05-29",
-      "score": 10.4,
+      "score": 10.3,
       "open_weights": null
     },
     {
       "mod": "Gemini 2.5 Pro",
       "emp": "Google",
       "date": "2025-06-05",
-      "score": 25.8,
+      "score": 25.9,
       "open_weights": null
     },
     {
@@ -1134,14 +1134,14 @@
       "mod": "Magistral Small 1",
       "emp": "Mistral",
       "date": "2025-06-10",
-      "score": 10.7,
+      "score": 10.6,
       "open_weights": null
     },
     {
       "mod": "o3-pro",
       "emp": "OpenAI",
       "date": "2025-06-10",
-      "score": 32.5,
+      "score": 33.3,
       "open_weights": null
     },
     {
@@ -1155,21 +1155,21 @@
       "mod": "MiniMax M1 40k",
       "emp": "MiniMax",
       "date": "2025-06-17",
-      "score": 14.4,
+      "score": 14.5,
       "open_weights": null
     },
     {
       "mod": "MiniMax M1 80k",
       "emp": "MiniMax",
       "date": "2025-06-17",
-      "score": 17.7,
+      "score": 17.9,
       "open_weights": null
     },
     {
       "mod": "Mistral Small 3.2",
       "emp": "Mistral",
       "date": "2025-06-20",
-      "score": 10.6,
+      "score": 10.7,
       "open_weights": null
     },
     {
@@ -1183,42 +1183,42 @@
       "mod": "Gemma 3n E4B Instruct",
       "emp": "Google",
       "date": "2025-06-26",
-      "score": 1.2,
+      "score": 1,
       "open_weights": null
     },
     {
       "mod": "ERNIE 4.5 300B A47B",
       "emp": "Baidu",
       "date": "2025-06-30",
-      "score": 9,
+      "score": 8.9,
       "open_weights": null
     },
     {
       "mod": "Jamba 1.7 Large",
       "emp": "AI21 Labs",
       "date": "2025-07-07",
-      "score": 5.3,
+      "score": 5,
       "open_weights": null
     },
     {
       "mod": "Jamba 1.7 Mini",
       "emp": "AI21 Labs",
       "date": "2025-07-07",
-      "score": 2.7,
+      "score": 2.3,
       "open_weights": null
     },
     {
       "mod": "Solar Pro 2",
       "emp": "Upstage",
       "date": "2025-07-09",
-      "score": 9,
+      "score": 8.8,
       "open_weights": null
     },
     {
       "mod": "LFM2 1.2B",
       "emp": "Liquid AI",
       "date": "2025-07-10",
-      "score": 1.1,
+      "score": 1,
       "open_weights": null
     },
     {
@@ -1232,49 +1232,49 @@
       "mod": "Grok 4",
       "emp": "xAI",
       "date": "2025-07-10",
-      "score": 33.3,
+      "score": 34.1,
       "open_weights": null
     },
     {
       "mod": "Kimi K2",
       "emp": "Moonshot AI",
       "date": "2025-07-11",
-      "score": 19.4,
+      "score": 19.7,
       "open_weights": null
     },
     {
       "mod": "Exaone 4.0 1.2B",
       "emp": "LG AI Research",
       "date": "2025-07-15",
-      "score": 2.9,
+      "score": 2.5,
       "open_weights": null
     },
     {
       "mod": "EXAONE 4.0 32B",
       "emp": "LG AI Research",
       "date": "2025-07-15",
-      "score": 10.6,
+      "score": 10.5,
       "open_weights": null
     },
     {
       "mod": "Qwen3 235B A22B 2507 Instruct",
       "emp": "Alibaba",
       "date": "2025-07-21",
-      "score": 18.2,
+      "score": 18.4,
       "open_weights": null
     },
     {
       "mod": "Qwen3 Coder 480B A35B Instruct",
       "emp": "Alibaba",
       "date": "2025-07-22",
-      "score": 18,
+      "score": 18.2,
       "open_weights": null
     },
     {
       "mod": "Qwen3 235B A22B 2507",
       "emp": "Alibaba",
       "date": "2025-07-25",
-      "score": 19.6,
+      "score": 19.9,
       "open_weights": null
     },
     {
@@ -1288,28 +1288,28 @@
       "mod": "GLM-4.5",
       "emp": "Zhipu AI",
       "date": "2025-07-28",
-      "score": 19.5,
+      "score": 19.7,
       "open_weights": null
     },
     {
       "mod": "GLM-4.5-Air",
       "emp": "Zhipu AI",
       "date": "2025-07-28",
-      "score": 16.5,
+      "score": 16.7,
       "open_weights": null
     },
     {
       "mod": "Qwen3 30B A3B 2507 Instruct",
       "emp": "Alibaba",
       "date": "2025-07-29",
-      "score": 9.1,
+      "score": 8.9,
       "open_weights": null
     },
     {
       "mod": "Qwen3 30B A3B 2507",
       "emp": "Alibaba",
       "date": "2025-07-30",
-      "score": 14.4,
+      "score": 14.6,
       "open_weights": null
     },
     {
@@ -1323,63 +1323,63 @@
       "mod": "Claude 4.1 Opus",
       "emp": "Anthropic",
       "date": "2025-08-05",
-      "score": 33.7,
+      "score": 34.5,
       "open_weights": null
     },
     {
       "mod": "gpt-oss-120b",
       "emp": "OpenAI",
       "date": "2025-08-05",
-      "score": 23.8,
+      "score": 24.1,
       "open_weights": null
     },
     {
       "mod": "gpt-oss-20b",
       "emp": "OpenAI",
       "date": "2025-08-05",
-      "score": 14.9,
+      "score": 15.2,
       "open_weights": null
     },
     {
       "mod": "Qwen3 4B 2507",
       "emp": "Alibaba",
       "date": "2025-08-06",
-      "score": 12,
+      "score": 11.9,
       "open_weights": null
     },
     {
       "mod": "Qwen3 4B 2507 Instruct",
       "emp": "Alibaba",
       "date": "2025-08-06",
-      "score": 7.1,
+      "score": 6.9,
       "open_weights": null
     },
     {
       "mod": "GPT-5",
       "emp": "OpenAI",
       "date": "2025-08-07",
-      "score": 34.7,
+      "score": 35.3,
       "open_weights": null
     },
     {
       "mod": "GPT-5 mini",
       "emp": "OpenAI",
       "date": "2025-08-07",
-      "score": 30.9,
+      "score": 31.6,
       "open_weights": null
     },
     {
       "mod": "GPT-5 nano",
       "emp": "OpenAI",
       "date": "2025-08-07",
-      "score": 19.9,
+      "score": 20.1,
       "open_weights": null
     },
     {
       "mod": "GLM-4.5V",
       "emp": "Zhipu AI",
       "date": "2025-08-11",
-      "score": 9.1,
+      "score": 9,
       "open_weights": null
     },
     {
@@ -1393,56 +1393,56 @@
       "mod": "Gemma 3 270M",
       "emp": "Google",
       "date": "2025-08-14",
-      "score": 2.4,
+      "score": 2,
       "open_weights": null
     },
     {
       "mod": "NVIDIA Nemotron Nano 9B V2",
       "emp": "NVIDIA",
       "date": "2025-08-18",
-      "score": 8.8,
+      "score": 8.7,
       "open_weights": null
     },
     {
       "mod": "Seed-OSS-36B-Instruct",
       "emp": "ByteDance Seed",
       "date": "2025-08-20",
-      "score": 18.3,
+      "score": 18.5,
       "open_weights": null
     },
     {
       "mod": "DeepSeek V3.1",
       "emp": "DeepSeek",
       "date": "2025-08-21",
-      "score": 21,
+      "score": 21.4,
       "open_weights": null
     },
     {
       "mod": "Hermes 4 - Llama-3.1 405B",
       "emp": "Nous Research",
       "date": "2025-08-27",
-      "score": 9,
+      "score": 8.8,
       "open_weights": null
     },
     {
       "mod": "Hermes 4 - Llama-3.1 70B",
       "emp": "Nous Research",
       "date": "2025-08-27",
-      "score": 10,
+      "score": 9.9,
       "open_weights": null
     },
     {
       "mod": "Grok Code Fast 1",
       "emp": "xAI",
       "date": "2025-08-28",
-      "score": 21.6,
+      "score": 22,
       "open_weights": null
     },
     {
       "mod": "Apertus 70B Instruct",
       "emp": "Swiss AI Initiative",
       "date": "2025-09-02",
-      "score": 2.4,
+      "score": 2,
       "open_weights": null
     },
     {
@@ -1456,280 +1456,280 @@
       "mod": "Qwen3 Max",
       "emp": "Alibaba",
       "date": "2025-09-05",
-      "score": 24,
+      "score": 24.5,
       "open_weights": null
     },
     {
       "mod": "Kimi K2 0905",
       "emp": "Moonshot AI",
       "date": "2025-09-05",
-      "score": 23.5,
+      "score": 24,
       "open_weights": null
     },
     {
       "mod": "Gemini 2.5 Flash-Lite Preview (Sep '25)",
       "emp": "Google",
       "date": "2025-09-08",
-      "score": 15.1,
+      "score": 15.2,
       "open_weights": null
     },
     {
       "mod": "Ling-mini-2.0",
       "emp": "InclusionAI",
       "date": "2025-09-09",
-      "score": 3.8,
+      "score": 3.4,
       "open_weights": null
     },
     {
       "mod": "Qwen3 Next 80B A3B",
       "emp": "Alibaba",
       "date": "2025-09-11",
-      "score": 16.7,
+      "score": 16.9,
       "open_weights": null
     },
     {
       "mod": "Qwen3 Next 80B A3B Instruct",
       "emp": "Alibaba",
       "date": "2025-09-11",
-      "score": 13.7,
+      "score": 13.8,
       "open_weights": null
     },
     {
       "mod": "Ling-flash-2.0",
       "emp": "InclusionAI",
       "date": "2025-09-17",
-      "score": 9.7,
+      "score": 9.6,
       "open_weights": null
     },
     {
       "mod": "Magistral Small 1.2",
       "emp": "Mistral",
       "date": "2025-09-17",
-      "score": 11.3,
+      "score": 11.5,
       "open_weights": null
     },
     {
       "mod": "Magistral Medium 1.2",
       "emp": "Mistral",
       "date": "2025-09-18",
-      "score": 17.9,
+      "score": 18,
       "open_weights": null
     },
     {
       "mod": "Ring-flash-2.0",
       "emp": "InclusionAI",
       "date": "2025-09-19",
-      "score": 8.2,
+      "score": 8,
       "open_weights": null
     },
     {
       "mod": "Grok 4 Fast",
       "emp": "xAI",
       "date": "2025-09-19",
-      "score": 27.4,
+      "score": 27.9,
       "open_weights": null
     },
     {
       "mod": "Qwen3 Omni 30B A3B",
       "emp": "Alibaba",
       "date": "2025-09-22",
-      "score": 9.6,
+      "score": 9.5,
       "open_weights": null
     },
     {
       "mod": "Qwen3 Omni 30B A3B Instruct",
       "emp": "Alibaba",
       "date": "2025-09-22",
-      "score": 5.1,
+      "score": 4.8,
       "open_weights": null
     },
     {
       "mod": "DeepSeek V3.1 Terminus",
       "emp": "DeepSeek",
       "date": "2025-09-22",
-      "score": 30.4,
+      "score": 30.6,
       "open_weights": null
     },
     {
       "mod": "Granite 4.0 H Small",
       "emp": "IBM",
       "date": "2025-09-22",
-      "score": 5.2,
+      "score": 4.9,
       "open_weights": null
     },
     {
       "mod": "Granite 4.0 Micro",
       "emp": "IBM",
       "date": "2025-09-22",
-      "score": 2.4,
+      "score": 2,
       "open_weights": null
     },
     {
       "mod": "Qwen3 VL 235B A22B",
       "emp": "Alibaba",
       "date": "2025-09-23",
-      "score": 20.6,
+      "score": 20.9,
       "open_weights": null
     },
     {
       "mod": "Qwen3 VL 235B A22B Instruct",
       "emp": "Alibaba",
       "date": "2025-09-23",
-      "score": 14.3,
+      "score": 14.4,
       "open_weights": null
     },
     {
       "mod": "LFM2 2.6B",
       "emp": "Liquid AI",
       "date": "2025-09-23",
-      "score": 2.7,
+      "score": 2.3,
       "open_weights": null
     },
     {
       "mod": "GPT-5 Codex",
       "emp": "OpenAI",
       "date": "2025-09-23",
-      "score": 36.1,
+      "score": 37,
       "open_weights": null
     },
     {
       "mod": "Gemini 2.5 Flash Preview (Sep '25)",
       "emp": "Google",
       "date": "2025-09-25",
-      "score": 23.8,
+      "score": 24.2,
       "open_weights": null
     },
     {
       "mod": "Claude 4.5 Sonnet",
       "emp": "Anthropic",
       "date": "2025-09-29",
-      "score": 36.4,
+      "score": 37.4,
       "open_weights": null
     },
     {
       "mod": "DeepSeek V3.2 Exp",
       "emp": "DeepSeek",
       "date": "2025-09-29",
-      "score": 25.4,
+      "score": 25.9,
       "open_weights": null
     },
     {
       "mod": "Apriel-v1.5-15B-Thinker",
       "emp": "ServiceNow",
       "date": "2025-09-30",
-      "score": 21.2,
+      "score": 21.6,
       "open_weights": null
     },
     {
       "mod": "GLM-4.6",
       "emp": "Zhipu AI",
       "date": "2025-09-30",
-      "score": 28.7,
+      "score": 29.3,
       "open_weights": null
     },
     {
       "mod": "Qwen3 VL 30B A3B",
       "emp": "Alibaba",
       "date": "2025-10-03",
-      "score": 13.3,
+      "score": 13.4,
       "open_weights": null
     },
     {
       "mod": "Qwen3 VL 30B A3B Instruct",
       "emp": "Alibaba",
       "date": "2025-10-03",
-      "score": 10,
+      "score": 9.9,
       "open_weights": null
     },
     {
       "mod": "LFM2 8B A1B",
       "emp": "Liquid AI",
       "date": "2025-10-07",
-      "score": 1.8,
+      "score": 1.3,
       "open_weights": null
     },
     {
       "mod": "Jamba Reasoning 3B",
       "emp": "AI21 Labs",
       "date": "2025-10-08",
-      "score": 4.1,
+      "score": 3.8,
       "open_weights": null
     },
     {
       "mod": "Ling-1T",
       "emp": "InclusionAI",
       "date": "2025-10-08",
-      "score": 12.8,
+      "score": 12.7,
       "open_weights": null
     },
     {
       "mod": "Ring-1T",
       "emp": "InclusionAI",
       "date": "2025-10-13",
-      "score": 16.2,
+      "score": 16.3,
       "open_weights": null
     },
     {
       "mod": "Qwen3 VL 4B",
       "emp": "Alibaba",
       "date": "2025-10-14",
-      "score": 7.9,
+      "score": 7.7,
       "open_weights": null
     },
     {
       "mod": "Qwen3 VL 4B Instruct",
       "emp": "Alibaba",
       "date": "2025-10-14",
-      "score": 4.1,
+      "score": 3.7,
       "open_weights": null
     },
     {
       "mod": "Qwen3 VL 8B",
       "emp": "Alibaba",
       "date": "2025-10-14",
-      "score": 10.6,
+      "score": 10.5,
       "open_weights": null
     },
     {
       "mod": "Qwen3 VL 8B Instruct",
       "emp": "Alibaba",
       "date": "2025-10-14",
-      "score": 8.4,
+      "score": 8.2,
       "open_weights": null
     },
     {
       "mod": "Claude 4.5 Haiku",
       "emp": "Anthropic",
       "date": "2025-10-15",
-      "score": 29.6,
+      "score": 29.9,
       "open_weights": null
     },
     {
       "mod": "Qwen3 VL 32B",
       "emp": "Alibaba",
       "date": "2025-10-21",
-      "score": 17.9,
+      "score": 18.1,
       "open_weights": null
     },
     {
       "mod": "Qwen3 VL 32B Instruct",
       "emp": "Alibaba",
       "date": "2025-10-21",
-      "score": 11.1,
+      "score": 11,
       "open_weights": null
     },
     {
       "mod": "MiniMax-M2",
       "emp": "MiniMax",
       "date": "2025-10-26",
-      "score": 28.3,
+      "score": 28.9,
       "open_weights": null
     },
     {
       "mod": "Granite 4.0 1B",
       "emp": "IBM",
       "date": "2025-10-28",
-      "score": 2.1,
+      "score": 1.6,
       "open_weights": null
     },
     {
@@ -1743,7 +1743,7 @@
       "mod": "Granite 4.0 H 1B",
       "emp": "IBM",
       "date": "2025-10-28",
-      "score": 2.7,
+      "score": 2.2,
       "open_weights": null
     },
     {
@@ -1757,77 +1757,77 @@
       "mod": "NVIDIA Nemotron Nano 12B v2 VL",
       "emp": "NVIDIA",
       "date": "2025-10-28",
-      "score": 9,
+      "score": 8.8,
       "open_weights": null
     },
     {
       "mod": "Nova 2.0 Lite",
       "emp": "Amazon",
       "date": "2025-10-29",
-      "score": 19,
+      "score": 19.2,
       "open_weights": null
     },
     {
       "mod": "Kimi Linear 48B A3B Instruct",
       "emp": "Moonshot AI",
       "date": "2025-10-30",
-      "score": 8.5,
+      "score": 8.4,
       "open_weights": null
     },
     {
       "mod": "Qwen3 Max Thinking",
       "emp": "Alibaba",
       "date": "2025-11-03",
-      "score": 31.7,
+      "score": 32.5,
       "open_weights": null
     },
     {
       "mod": "Kimi K2 Thinking",
       "emp": "Moonshot AI",
       "date": "2025-11-06",
-      "score": 32.7,
+      "score": 33.5,
       "open_weights": null
     },
     {
       "mod": "Doubao Seed Code",
       "emp": "ByteDance Seed",
       "date": "2025-11-11",
-      "score": 26,
+      "score": 26.5,
       "open_weights": null
     },
     {
       "mod": "KAT-Coder-Pro V1",
       "emp": "Kuaishou",
       "date": "2025-11-11",
-      "score": 28.3,
+      "score": 28.9,
       "open_weights": null
     },
     {
       "mod": "ERNIE 5.0 Thinking Preview",
       "emp": "Baidu",
       "date": "2025-11-13",
-      "score": 21.9,
+      "score": 22.3,
       "open_weights": null
     },
     {
       "mod": "GPT-5.1",
       "emp": "OpenAI",
       "date": "2025-11-13",
-      "score": 36.9,
+      "score": 37.5,
       "open_weights": null
     },
     {
       "mod": "GPT-5.1 Codex",
       "emp": "OpenAI",
       "date": "2025-11-13",
-      "score": 34.7,
+      "score": 35.6,
       "open_weights": null
     },
     {
       "mod": "GPT-5.1 Codex mini",
       "emp": "OpenAI",
       "date": "2025-11-13",
-      "score": 30.6,
+      "score": 31.3,
       "open_weights": null
     },
     {
@@ -1841,98 +1841,98 @@
       "mod": "Gemini 3 Pro Preview",
       "emp": "Google",
       "date": "2025-11-18",
-      "score": 39.6,
+      "score": 40.6,
       "open_weights": null
     },
     {
       "mod": "Grok 4.1 Fast",
       "emp": "xAI",
       "date": "2025-11-19",
-      "score": 30.6,
+      "score": 31.3,
       "open_weights": null
     },
     {
       "mod": "Olmo 3 32B Think",
       "emp": "Allen Institute for AI",
       "date": "2025-11-20",
-      "score": 6.4,
+      "score": 6.1,
       "open_weights": null
     },
     {
       "mod": "Olmo 3 7B Instruct",
       "emp": "Allen Institute for AI",
       "date": "2025-11-20",
-      "score": 2.8,
+      "score": 2.4,
       "open_weights": null
     },
     {
       "mod": "Olmo 3 7B Think",
       "emp": "Allen Institute for AI",
       "date": "2025-11-20",
-      "score": 4,
+      "score": 3.6,
       "open_weights": null
     },
     {
       "mod": "Claude Opus 4.5",
       "emp": "Anthropic",
       "date": "2025-11-24",
-      "score": 40.8,
+      "score": 41.9,
       "open_weights": null
     },
     {
       "mod": "Apriel-v1.6-15B-Thinker",
       "emp": "ServiceNow",
       "date": "2025-11-25",
-      "score": 20.5,
+      "score": 20.8,
       "open_weights": null
     },
     {
       "mod": "Nova 2.0 Omni",
       "emp": "Amazon",
       "date": "2025-11-26",
-      "score": 20.9,
+      "score": 21.3,
       "open_weights": null
     },
     {
       "mod": "Nova 2.0 Pro Preview",
       "emp": "Amazon",
       "date": "2025-11-27",
-      "score": 21.8,
+      "score": 22,
       "open_weights": null
     },
     {
       "mod": "INTELLECT-3",
       "emp": "Prime Intellect",
       "date": "2025-11-27",
-      "score": 15.6,
+      "score": 15.7,
       "open_weights": null
     },
     {
       "mod": "DeepSeek V3.2",
       "emp": "DeepSeek",
       "date": "2025-12-01",
-      "score": 32,
+      "score": 32.6,
       "open_weights": null
     },
     {
       "mod": "DeepSeek V3.2 Speciale",
       "emp": "DeepSeek",
       "date": "2025-12-01",
-      "score": 22.2,
+      "score": 22.6,
       "open_weights": null
     },
     {
       "mod": "Ministral 3 14B",
       "emp": "Mistral",
       "date": "2025-12-02",
-      "score": 11.1,
+      "score": 11.2,
       "open_weights": null
     },
     {
       "mod": "Ministral 3 3B",
       "emp": "Mistral",
       "date": "2025-12-02",
-      "score": 6.8,
+      "score": 7.1,
       "open_weights": null
     },
     {
@@ -1967,7 +1967,7 @@
       "mod": "GLM-4.6V",
       "emp": "Zhipu AI",
       "date": "2025-12-08",
-      "score": 16.8,
+      "score": 16.9,
       "open_weights": null
     },
     {
@@ -1981,21 +1981,21 @@
       "mod": "Devstral Small 2",
       "emp": "Mistral",
       "date": "2025-12-09",
-      "score": 17.4,
+      "score": 17.7,
       "open_weights": null
     },
     {
       "mod": "Molmo2-8B",
       "emp": "Allen Institute for AI",
       "date": "2025-12-11",
-      "score": 2,
+      "score": 1.6,
       "open_weights": null
     },
     {
       "mod": "Mi:dm K 2.5 Pro",
       "emp": "Korea Telecom",
       "date": "2025-12-11",
-      "score": 16.4,
+      "score": 16.6,
       "open_weights": null
     },
     {
@@ -2009,98 +2009,98 @@
       "mod": "GPT-5.2",
       "emp": "OpenAI",
       "date": "2025-12-11",
-      "score": 42.2,
+      "score": 43.3,
       "open_weights": null
     },
     {
       "mod": "GPT-5.2 Codex",
       "emp": "OpenAI",
       "date": "2025-12-11",
-      "score": 40.1,
+      "score": 41.2,
       "open_weights": null
     },
     {
       "mod": "Olmo 3.1 32B Think",
       "emp": "Allen Institute for AI",
       "date": "2025-12-12",
-      "score": 8.1,
+      "score": 7.9,
       "open_weights": null
     },
     {
       "mod": "K2 Think V2",
       "emp": "MBZUAI Institute of Foundation Models",
       "date": "2025-12-15",
-      "score": 17.3,
+      "score": 17.2,
       "open_weights": null
     },
     {
       "mod": "NVIDIA Nemotron 3 Nano 30B A3B",
       "emp": "NVIDIA",
       "date": "2025-12-15",
-      "score": 14.2,
+      "score": 14.5,
       "open_weights": null
     },
     {
       "mod": "MiMo-V2-Flash",
       "emp": "Xiaomi",
       "date": "2025-12-16",
-      "score": 33.2,
+      "score": 34,
       "open_weights": null
     },
     {
       "mod": "Gemini 3 Flash Preview",
       "emp": "Google",
       "date": "2025-12-17",
-      "score": 37.8,
+      "score": 38.7,
       "open_weights": null
     },
     {
       "mod": "Solar Open 100B",
       "emp": "Upstage",
       "date": "2025-12-17",
-      "score": 15.1,
+      "score": 15.2,
       "open_weights": null
     },
     {
       "mod": "GLM-4.7",
       "emp": "Zhipu AI",
       "date": "2025-12-22",
-      "score": 33.7,
+      "score": 34.5,
       "open_weights": null
     },
     {
       "mod": "MiniMax-M2.1",
       "emp": "MiniMax",
       "date": "2025-12-23",
-      "score": 31.4,
+      "score": 32.1,
       "open_weights": null
     },
     {
       "mod": "HyperCLOVA X SEED Think",
       "emp": "Naver",
       "date": "2025-12-26",
-      "score": 17,
+      "score": 17.2,
       "open_weights": null
     },
     {
       "mod": "K-EXAONE",
       "emp": "LG AI Research",
       "date": "2025-12-31",
-      "score": 22.1,
+      "score": 22.4,
       "open_weights": null
     },
     {
       "mod": "Falcon-H1R-7B",
       "emp": "TII UAE",
       "date": "2026-01-04",
-      "score": 9.8,
+      "score": 9.7,
       "open_weights": null
     },
     {
       "mod": "LFM2.5-1.2B-Instruct",
       "emp": "Liquid AI",
       "date": "2026-01-05",
-      "score": 2.7,
+      "score": 2.3,
       "open_weights": null
     },
     {
@@ -2114,63 +2114,63 @@
       "mod": "Olmo 3.1 32B Instruct",
       "emp": "Allen Institute for AI",
       "date": "2026-01-13",
-      "score": 6.5,
+      "score": 6.2,
       "open_weights": null
     },
     {
       "mod": "GLM-4.7-Flash",
       "emp": "Zhipu AI",
       "date": "2026-01-19",
-      "score": 22.9,
+      "score": 23.3,
       "open_weights": null
     },
     {
       "mod": "LFM2.5-1.2B-Thinking",
       "emp": "Liquid AI",
       "date": "2026-01-20",
-      "score": 2.7,
+      "score": 2.3,
       "open_weights": null
     },
     {
       "mod": "Step3 VL 10B",
       "emp": "StepFun",
       "date": "2026-01-20",
-      "score": 9.5,
+      "score": 9.3,
       "open_weights": null
     },
     {
       "mod": "Kimi K2.5",
       "emp": "Moonshot AI",
       "date": "2026-01-27",
-      "score": 35.4,
+      "score": 36,
       "open_weights": null
     },
     {
       "mod": "LongCat Flash Lite",
       "emp": "LongCat",
       "date": "2026-01-28",
-      "score": 17.2,
+      "score": 17.4,
       "open_weights": null
     },
     {
       "mod": "Step 3.5 Flash",
       "emp": "StepFun",
       "date": "2026-02-02",
-      "score": 25.5,
+      "score": 26,
       "open_weights": null
     },
     {
       "mod": "Qwen3 Coder Next",
       "emp": "Alibaba",
       "date": "2026-02-03",
-      "score": 21.1,
+      "score": 21.3,
       "open_weights": null
     },
     {
       "mod": "Claude Opus 4.6",
       "emp": "Anthropic",
       "date": "2026-02-05",
-      "score": 43.7,
+      "score": 44.9,
       "open_weights": null
     },
     {
@@ -2184,14 +2184,14 @@
       "mod": "GPT-5.3 Codex",
       "emp": "OpenAI",
       "date": "2026-02-05",
-      "score": 44.3,
+      "score": 45.5,
       "open_weights": null
     },
     {
       "mod": "Tri-21B-Think",
       "emp": "Trillion Labs",
       "date": "2026-02-10",
-      "score": 12.4,
+      "score": 12.3,
       "open_weights": null
     },
     {
@@ -2205,35 +2205,35 @@
       "mod": "Nanbeige4.1-3B",
       "emp": "Nanbeige",
       "date": "2026-02-11",
-      "score": 11.1,
+      "score": 11.2,
       "open_weights": null
     },
     {
       "mod": "GLM-5",
       "emp": "Zhipu AI",
       "date": "2026-02-11",
-      "score": 39.5,
+      "score": 40.6,
       "open_weights": null
     },
     {
       "mod": "MiniMax-M2.5",
       "emp": "MiniMax",
       "date": "2026-02-12",
-      "score": 33.7,
+      "score": 34.5,
       "open_weights": null
     },
     {
       "mod": "Qwen3.5 397B A17B",
       "emp": "Alibaba",
       "date": "2026-02-16",
-      "score": 33.7,
+      "score": 34.3,
       "open_weights": null
     },
     {
       "mod": "Claude Sonnet 4.6",
       "emp": "Anthropic",
       "date": "2026-02-17",
-      "score": 47.2,
+      "score": 48.4,
       "open_weights": null
     },
     {
@@ -2247,84 +2247,84 @@
       "mod": "Gemini 3.1 Pro Preview",
       "emp": "Google",
       "date": "2026-02-19",
-      "score": 46.5,
+      "score": 47.7,
       "open_weights": null
     },
     {
       "mod": "Mercury 2",
       "emp": "Inception",
       "date": "2026-02-20",
-      "score": 21.4,
+      "score": 21.9,
       "open_weights": null
     },
     {
       "mod": "Qwen3.5 122B A10B",
       "emp": "Alibaba",
       "date": "2026-02-24",
-      "score": 32.3,
+      "score": 32.8,
       "open_weights": null
     },
     {
       "mod": "Qwen3.5 27B",
       "emp": "Alibaba",
       "date": "2026-02-24",
-      "score": 33.8,
+      "score": 34.6,
       "open_weights": null
     },
     {
       "mod": "Qwen3.5 35B A3B",
       "emp": "Alibaba",
       "date": "2026-02-24",
-      "score": 29.3,
+      "score": 29.9,
       "open_weights": null
     },
     {
       "mod": "LFM2 24B A2B",
       "emp": "Liquid AI",
       "date": "2026-02-25",
-      "score": 4.9,
+      "score": 4.6,
       "open_weights": null
     },
     {
       "mod": "Qwen3.5 0.8B",
       "emp": "Alibaba",
       "date": "2026-03-02",
-      "score": 5.5,
+      "score": 5,
       "open_weights": null
     },
     {
       "mod": "Qwen3.5 2B",
       "emp": "Alibaba",
       "date": "2026-03-02",
-      "score": 7.6,
+      "score": 7.5,
       "open_weights": null
     },
     {
       "mod": "Qwen3.5 4B",
       "emp": "Alibaba",
       "date": "2026-03-02",
-      "score": 20.1,
+      "score": 20.4,
       "open_weights": null
     },
     {
       "mod": "Qwen3.5 9B",
       "emp": "Alibaba",
       "date": "2026-03-02",
-      "score": 21.4,
+      "score": 21.8,
       "open_weights": null
     },
     {
       "mod": "Gemini 3.1 Flash-Lite",
       "emp": "Google",
       "date": "2026-03-03",
-      "score": 25,
+      "score": 25.6,
       "open_weights": null
     },
     {
       "mod": "GPT-5.4",
       "emp": "OpenAI",
       "date": "2026-03-05",
-      "score": 51.4,
+      "score": 53.1,
       "open_weights": null
     },
     {
@@ -2345,280 +2345,280 @@
       "mod": "Sarvam 30B",
       "emp": "Sarvam",
       "date": "2026-03-06",
-      "score": 6.6,
+      "score": 6.4,
       "open_weights": null
     },
     {
       "mod": "Grok 4.20 0309",
       "emp": "xAI",
       "date": "2026-03-10",
-      "score": 36.5,
+      "score": 37.4,
       "open_weights": null
     },
     {
-      "mod": "NVIDIA Nemotron 3 Super 120B A12B",
+      "mod": "Nemotron 3 Super 120B A12B",
       "emp": "NVIDIA",
       "date": "2026-03-11",
-      "score": 25.4,
+      "score": 25.7,
       "open_weights": null
     },
     {
       "mod": "GLM-5-Turbo",
       "emp": "Zhipu AI",
       "date": "2026-03-15",
-      "score": 38.1,
+      "score": 39.1,
       "open_weights": null
     },
     {
       "mod": "Mistral Small 4",
       "emp": "Mistral",
       "date": "2026-03-16",
-      "score": 19.6,
+      "score": 19.7,
       "open_weights": null
     },
     {
       "mod": "NVIDIA Nemotron 3 Nano 4B",
       "emp": "NVIDIA",
       "date": "2026-03-16",
-      "score": 8.7,
+      "score": 8.8,
       "open_weights": null
     },
     {
       "mod": "GPT-5.4 mini",
       "emp": "OpenAI",
       "date": "2026-03-17",
-      "score": 40,
+      "score": 40.9,
       "open_weights": null
     },
     {
       "mod": "GPT-5.4 nano",
       "emp": "OpenAI",
       "date": "2026-03-17",
-      "score": 38.2,
+      "score": 39.7,
       "open_weights": null
     },
     {
       "mod": "MiniMax-M2.7",
       "emp": "MiniMax",
       "date": "2026-03-18",
-      "score": 38.1,
+      "score": 38.9,
       "open_weights": null
     },
     {
       "mod": "MiMo-V2-Pro",
       "emp": "Xiaomi",
       "date": "2026-03-18",
-      "score": 40.3,
+      "score": 41.4,
       "open_weights": null
     },
     {
       "mod": "Nemotron Cascade 2 30B A3B",
       "emp": "NVIDIA",
       "date": "2026-03-19",
-      "score": 17.6,
+      "score": 18,
       "open_weights": null
     },
     {
       "mod": "MiMo-V2-Omni",
       "emp": "Xiaomi",
       "date": "2026-03-19",
-      "score": 35,
+      "score": 35.9,
       "open_weights": null
     },
     {
       "mod": "KAT Coder Pro V2",
       "emp": "Kuaishou",
       "date": "2026-03-27",
-      "score": 33.7,
+      "score": 33.9,
       "open_weights": null
     },
     {
       "mod": "MiMo-V2-Omni-0327",
       "emp": "Xiaomi",
       "date": "2026-03-27",
-      "score": 36.4,
+      "score": 37.3,
       "open_weights": null
     },
     {
       "mod": "Qwen3.5 Omni Flash",
       "emp": "Alibaba",
       "date": "2026-03-30",
-      "score": 19,
+      "score": 19.2,
       "open_weights": null
     },
     {
       "mod": "Qwen3.5 Omni Plus",
       "emp": "Alibaba",
       "date": "2026-03-30",
-      "score": 30.6,
+      "score": 31.3,
       "open_weights": null
     },
     {
       "mod": "Trinity Large Thinking",
       "emp": "Arcee AI",
       "date": "2026-04-01",
-      "score": 18.2,
+      "score": 18.6,
       "open_weights": null
     },
     {
       "mod": "GLM 5V Turbo",
       "emp": "Zhipu AI",
       "date": "2026-04-01",
-      "score": 34.5,
+      "score": 35.3,
       "open_weights": null
     },
     {
       "mod": "Qwen3.6 Plus",
       "emp": "Alibaba",
       "date": "2026-04-02",
-      "score": 39.6,
+      "score": 40.5,
       "open_weights": null
     },
     {
       "mod": "Gemma 4 26B A4B",
       "emp": "Google",
       "date": "2026-04-02",
-      "score": 25.7,
+      "score": 26.1,
       "open_weights": null
     },
     {
       "mod": "Gemma 4 31B",
       "emp": "Google",
       "date": "2026-04-02",
-      "score": 29.4,
+      "score": 29.7,
       "open_weights": null
     },
     {
       "mod": "Gemma 4 E2B",
       "emp": "Google",
       "date": "2026-04-02",
-      "score": 9.7,
+      "score": 9.8,
       "open_weights": null
     },
     {
       "mod": "Step 3.5 Flash 2603",
       "emp": "StepFun",
       "date": "2026-04-02",
-      "score": 26,
+      "score": 26.5,
       "open_weights": null
     },
     {
       "mod": "Gemma 4 E4B",
       "emp": "Google",
       "date": "2026-04-03",
-      "score": 12.2,
+      "score": 12.4,
       "open_weights": null
     },
     {
       "mod": "Solar Pro 3",
       "emp": "Upstage",
       "date": "2026-04-06",
-      "score": 14.1,
+      "score": 14.5,
       "open_weights": null
     },
     {
       "mod": "Grok 4.20 0309 v2",
       "emp": "xAI",
       "date": "2026-04-07",
-      "score": 37,
+      "score": 38,
       "open_weights": null
     },
     {
       "mod": "GLM-5.1",
       "emp": "Zhipu AI",
       "date": "2026-04-07",
-      "score": 40.2,
+      "score": 41,
       "open_weights": null
     },
     {
       "mod": "Muse Spark",
       "emp": "Meta",
       "date": "2026-04-08",
-      "score": 43.1,
+      "score": 43.5,
       "open_weights": null
     },
     {
       "mod": "EXAONE 4.5 33B",
       "emp": "LG AI Research",
       "date": "2026-04-09",
-      "score": 20.2,
+      "score": 20.5,
       "open_weights": null
     },
     {
       "mod": "JT-MINI",
       "emp": "China Mobile",
       "date": "2026-04-15",
-      "score": 18.5,
+      "score": 18.8,
       "open_weights": null
     },
     {
       "mod": "Qwen3.6 35B A3B",
       "emp": "Alibaba",
       "date": "2026-04-16",
-      "score": 31.6,
+      "score": 32.1,
       "open_weights": null
     },
     {
       "mod": "Claude Opus 4.7",
       "emp": "Anthropic",
       "date": "2026-04-16",
-      "score": 53.5,
+      "score": 55,
       "open_weights": null
     },
     {
       "mod": "Qwen3.6 Max Preview",
       "emp": "Alibaba",
       "date": "2026-04-20",
-      "score": 40,
+      "score": 41.1,
       "open_weights": null
     },
     {
       "mod": "Kimi K2.6",
       "emp": "Moonshot AI",
       "date": "2026-04-20",
-      "score": 44.2,
+      "score": 45.1,
       "open_weights": null
     },
     {
       "mod": "Ling 2.6 Flash",
       "emp": "InclusionAI",
       "date": "2026-04-21",
-      "score": 14.1,
+      "score": 14.2,
       "open_weights": null
     },
     {
       "mod": "Qwen3.6 27B",
       "emp": "Alibaba",
       "date": "2026-04-22",
-      "score": 37.1,
+      "score": 37.7,
       "open_weights": null
     },
     {
       "mod": "MiMo-V2.5",
       "emp": "Xiaomi",
       "date": "2026-04-22",
-      "score": 37.2,
+      "score": 38,
       "open_weights": null
     },
     {
       "mod": "MiMo-V2.5-Pro",
       "emp": "Xiaomi",
       "date": "2026-04-22",
-      "score": 42.2,
+      "score": 42.9,
       "open_weights": null
     },
     {
       "mod": "Ling-2.6-1T",
       "emp": "InclusionAI",
       "date": "2026-04-23",
-      "score": 26.1,
+      "score": 26.6,
       "open_weights": null
     },
     {
       "mod": "GPT-5.5",
       "emp": "OpenAI",
       "date": "2026-04-23",
-      "score": 54.8,
+      "score": 56.3,
       "open_weights": null
     },
     {
@@ -2632,21 +2632,21 @@
       "mod": "Hy3-preview",
       "emp": "Tencent",
       "date": "2026-04-23",
-      "score": 33.6,
+      "score": 34.4,
       "open_weights": null
     },
     {
       "mod": "DeepSeek V4 Flash",
       "emp": "DeepSeek",
       "date": "2026-04-24",
-      "score": 40.3,
+      "score": 42.1,
       "open_weights": null
     },
     {
       "mod": "DeepSeek V4 Pro",
       "emp": "DeepSeek",
       "date": "2026-04-24",
-      "score": 44.3,
+      "score": 45.3,
       "open_weights": null
     },
     {
@@ -2667,336 +2667,364 @@
       "mod": "Granite 4.1 8B",
       "emp": "IBM",
       "date": "2026-04-29",
-      "score": 6.7,
+      "score": 6.4,
       "open_weights": null
     },
     {
       "mod": "Mistral Medium 3.5",
       "emp": "Mistral",
       "date": "2026-04-29",
-      "score": 29.9,
+      "score": 30.4,
       "open_weights": null
     },
     {
       "mod": "Nemotron 3 Nano Omni 30B A3B Reasoning",
       "emp": "NVIDIA",
       "date": "2026-04-29",
-      "score": 14.9,
+      "score": 15,
       "open_weights": null
     },
     {
       "mod": "Grok 4.3",
       "emp": "xAI",
       "date": "2026-04-30",
-      "score": 37.6,
+      "score": 37.9,
       "open_weights": null
     },
     {
       "mod": "GPT-5.5 Instant",
       "emp": "OpenAI",
       "date": "2026-05-05",
-      "score": 33.5,
+      "score": 34.3,
       "open_weights": null
     },
     {
       "mod": "Ring-2.6-1T",
       "emp": "InclusionAI",
       "date": "2026-05-08",
-      "score": 30.6,
+      "score": 31.1,
       "open_weights": null
     },
     {
       "mod": "MiniCPM-V 4.6 1.3B",
       "emp": "OpenBMB",
       "date": "2026-05-11",
-      "score": 4.2,
+      "score": 4.3,
       "open_weights": null
     },
     {
       "mod": "JT-35B-Flash",
       "emp": "China Mobile",
       "date": "2026-05-14",
-      "score": 28.4,
+      "score": 29,
       "open_weights": null
     },
     {
       "mod": "Qwen3.7 Max",
       "emp": "Alibaba",
       "date": "2026-05-19",
-      "score": 46,
+      "score": 46.7,
       "open_weights": null
     },
     {
       "mod": "Gemini 3.5 Flash",
       "emp": "Google",
       "date": "2026-05-19",
-      "score": 50.2,
+      "score": 52,
       "open_weights": null
     },
     {
       "mod": "Command A+",
       "emp": "Cohere",
       "date": "2026-05-20",
-      "score": 22.5,
+      "score": 22.8,
       "open_weights": null
     },
     {
       "mod": "MiniCPM5-1B",
       "emp": "OpenBMB",
       "date": "2026-05-25",
-      "score": 12,
+      "score": 11.9,
       "open_weights": null
     },
     {
       "mod": "HyperNova 60B 2605",
       "emp": "Multiverse Computing",
       "date": "2026-05-26",
-      "score": 17.8,
+      "score": 18.3,
       "open_weights": null
     },
     {
       "mod": "Claude Opus 4.8",
       "emp": "Anthropic",
       "date": "2026-05-28",
-      "score": 55.7,
+      "score": 57.3,
       "open_weights": null
     },
     {
       "mod": "LFM2.5-8B-A1B",
       "emp": "Liquid AI",
       "date": "2026-05-28",
-      "score": 8.3,
+      "score": 8.1,
       "open_weights": null
     },
     {
       "mod": "Step 3.7 Flash",
       "emp": "StepFun",
       "date": "2026-05-29",
-      "score": 30.3,
+      "score": 30.9,
       "open_weights": null
     },
     {
       "mod": "Qwen3.7 Plus",
       "emp": "Alibaba",
       "date": "2026-06-01",
-      "score": 39,
+      "score": 39.4,
       "open_weights": null
     },
     {
       "mod": "MiniMax-M3",
       "emp": "MiniMax",
       "date": "2026-06-01",
-      "score": 44.4,
+      "score": 45.4,
       "open_weights": null
     },
     {
       "mod": "Nex-N2-Pro",
       "emp": "Nex AGI",
       "date": "2026-06-02",
-      "score": 41,
+      "score": 41.7,
       "open_weights": null
     },
     {
       "mod": "Gemma 4 12B",
       "emp": "Google",
       "date": "2026-06-03",
-      "score": 21.8,
+      "score": 22.3,
       "open_weights": null
     },
     {
       "mod": "Nemotron 3 Ultra 550B A55B",
       "emp": "NVIDIA",
       "date": "2026-06-04",
-      "score": 37.8,
+      "score": 38.3,
       "open_weights": null
     },
     {
       "mod": "Claude Fable 5",
       "emp": "Anthropic",
       "date": "2026-06-09",
-      "score": 59.9,
+      "score": 62.1,
       "open_weights": null
     },
     {
       "mod": "North Mini Code",
       "emp": "Cohere",
       "date": "2026-06-09",
-      "score": 19.8,
+      "score": 20.2,
       "open_weights": null
     },
     {
       "mod": "DiffusionGemma 26B A4B",
       "emp": "Google",
       "date": "2026-06-10",
-      "score": 13.5,
+      "score": 13.8,
       "open_weights": null
     },
     {
       "mod": "Kimi K2.7 Code",
       "emp": "Moonshot AI",
       "date": "2026-06-12",
-      "score": 41.9,
+      "score": 43,
       "open_weights": null
     },
     {
       "mod": "Grok Build 0.1 0616",
       "emp": "xAI",
       "date": "2026-06-16",
-      "score": 39.8,
+      "score": 40.7,
       "open_weights": null
     },
     {
       "mod": "GLM-5.2",
       "emp": "Zhipu AI",
       "date": "2026-06-16",
-      "score": 51.1,
+      "score": 52.6,
       "open_weights": null
     },
     {
       "mod": "LongCat 2.0",
       "emp": "LongCat",
       "date": "2026-06-29",
-      "score": 33.5,
+      "score": 33.9,
       "open_weights": null
     },
     {
       "mod": "Claude Sonnet 5",
       "emp": "Anthropic",
       "date": "2026-06-30",
-      "score": 53.4,
+      "score": 55.3,
       "open_weights": null
     },
     {
       "mod": "Hy3",
       "emp": "Tencent",
       "date": "2026-07-06",
-      "score": 41.2,
+      "score": 42.2,
       "open_weights": null
     },
     {
       "mod": "Grok 4.5",
       "emp": "xAI",
       "date": "2026-07-08",
-      "score": 53.8,
+      "score": 55.8,
       "open_weights": null
     },
     {
       "mod": "JT-4.1 Flash 236B A21B",
       "emp": "China Mobile",
       "date": "2026-07-09",
-      "score": 38.8,
+      "score": 39.8,
       "open_weights": null
     },
     {
       "mod": "Muse Spark 1.1",
       "emp": "Meta",
       "date": "2026-07-09",
-      "score": 50.6,
+      "score": 53.2,
       "open_weights": null
     },
     {
       "mod": "GPT-5.6 Luna",
       "emp": "OpenAI",
       "date": "2026-07-09",
-      "score": 51.2,
+      "score": 52.3,
       "open_weights": null
     },
     {
       "mod": "GPT-5.6 Sol",
       "emp": "OpenAI",
       "date": "2026-07-09",
-      "score": 58.9,
+      "score": 60.9,
       "open_weights": null
     },
     {
       "mod": "GPT-5.6 Terra",
       "emp": "OpenAI",
       "date": "2026-07-09",
-      "score": 55,
+      "score": 56.6,
       "open_weights": null
     },
     {
       "mod": "Motif 3",
       "emp": "Motif Technologies",
       "date": "2026-07-14",
-      "score": 44.1,
+      "score": 44.9,
       "open_weights": null
     },
     {
       "mod": "Inkling",
       "emp": "Thinking Machines",
       "date": "2026-07-15",
-      "score": 40.7,
+      "score": 42.3,
       "open_weights": null
     },
     {
       "mod": "Kimi K3",
       "emp": "Moonshot AI",
       "date": "2026-07-16",
-      "score": 57.1,
+      "score": 59.7,
       "open_weights": null
     },
     {
       "mod": "Gemini 3.5 Flash-Lite",
       "emp": "Google",
       "date": "2026-07-21",
-      "score": 36.5,
+      "score": 37.4,
       "open_weights": null
     },
     {
       "mod": "Gemini 3.6 Flash",
       "emp": "Google",
       "date": "2026-07-21",
-      "score": 50.1,
+      "score": 51.6,
       "open_weights": null
     },
     {
       "mod": "G9v3-3B",
       "emp": "AI9Stars",
       "date": "2026-07-23",
-      "score": 16.1,
+      "score": 16.5,
       "open_weights": null
     },
     {
       "mod": "Claude Opus 5",
       "emp": "Anthropic",
       "date": "2026-07-24",
-      "score": 60.7,
+      "score": 63.1,
       "open_weights": null
     },
     {
       "mod": "Celeris-1",
       "emp": "Celeris",
       "date": "2026-07-24",
-      "score": 11.8,
+      "score": 12.5,
       "open_weights": null
     },
     {
       "mod": "Agnes 2.5 Pro Alpha",
       "emp": "Sapiens AI",
       "date": "2026-07-24",
-      "score": 38.8,
+      "score": 39.7,
       "open_weights": null
     },
     {
       "mod": "Inkling Small",
       "emp": "Thinking Machines",
       "date": "2026-07-30",
-      "score": 40.2,
+      "score": 41.2,
       "open_weights": null
     },
     {
       "mod": "DeepSeek V4 Flash 0731",
       "emp": "DeepSeek",
       "date": "2026-07-31",
-      "score": 49.9,
+      "score": 51.8,
       "open_weights": null
     },
     {
       "mod": "G9v3-39A5B",
       "emp": "AI9Stars",
       "date": "2026-08-03",
-      "score": 30.9,
+      "score": 31.4,
+      "open_weights": null
+    },
+    {
+      "mod": "Qwen3.8 Max",
+      "emp": "Alibaba",
+      "date": "2026-08-03",
+      "score": 58.1,
+      "open_weights": null
+    },
+    {
+      "mod": "Ling 3.0 Flash",
+      "emp": "InclusionAI",
+      "date": "2026-08-04",
+      "score": 37.8,
+      "open_weights": null
+    },
+    {
+      "mod": "Muse Spark 1.2",
+      "emp": "Meta",
+      "date": "2026-08-05",
+      "score": 56.8,
+      "open_weights": null
+    },
+    {
+      "mod": "Ling 3.0 Tiny",
+      "emp": "InclusionAI",
+      "date": "2026-08-06",
+      "score": 24.5,
       "open_weights": null
     }
   ]
