@@ -9,6 +9,13 @@
    eles ~mensalmente. Veja o bloco `source` abaixo e
    automation/GRATUITOS.md para o plano de coleta automatizada.
 
+   Quando um anúncio do próprio fornecedor é mais novo que a fonte
+   agregada (foi o caso em 10/ago/2026: ChatGPT ilimitado, Codex no
+   plano Free, OpenCode Zen), o item aponta `sourceUrl` para esse
+   anúncio em vez de The AI Rankings. O campo é por item justamente
+   para a página poder misturar as duas procedências sem mentir
+   sobre de onde veio cada número.
+
    PARA ATUALIZAR ESTA PÁGINA (hoje, manual):
    1. Confira a página da fonte (source.url) por mudanças nas cotas;
    2. Altere `source.lastChecked`, `updatedAt` e `updatedText`;
@@ -29,11 +36,11 @@ const GRATUITOS_DATA = {
     name: "The AI Rankings — Best Free AI Tools",
     url: "https://theairankings.com/best-free-ai-tools/",
     attribution: "Cotas e limites adaptados de The AI Rankings (theairankings.com)",
-    lastChecked: "2026-07-24",
+    lastChecked: "2026-08-10",
     schemaVersion: 2,
   },
-  updatedAt: "2026-07-24",
-  updatedText: "24 de Julho de 2026",
+  updatedAt: "2026-08-10",
+  updatedText: "10 de Agosto de 2026",
   categories: [
     { id: "todos", label: "Todas as IAs" },
     { id: "assistentes-dev", label: "Assistentes de Código & IDEs" },
@@ -66,23 +73,29 @@ const GRATUITOS_DATA = {
       tags: ["Gemini 3.5 Flash", "Voz", "Imagem", "Vídeo"]
     },
     {
-      id: "codex-chatgpt",
+      /* Reescrito em 10/ago/2026. Até 06/ago o plano grátis dava ~10 mensagens
+         do GPT-5.5 a cada 5h e depois rebaixava para o Instant/mini; agora o
+         padrão é o GPT-5.6 Luna e o texto é ilimitado. O `id` antigo era
+         "codex-chatgpt", nome herdado de quando Codex e ChatGPT eram a mesma
+         entrada — como o Codex virou card próprio logo abaixo, manter os dois
+         com nomes trocados só confundiria quem for editar. */
+      id: "chatgpt-free",
       rank: 2,
       name: "ChatGPT Free",
       company: "OpenAI",
       category: "modelos-llm",
       badge: "Web Chat",
-      highlight: "Chat geral com geração de imagens e edição no Canvas, acessível a qualquer conta.",
-      freeModel: "GPT-5.5 → mini",
-      freeQuota: "~10 mensagens do GPT-5.5 a cada 5h; depois cai para o modelo mini.",
-      limits: "Sessões pesadas recaem no mini; versão gratuita exibe anúncios em alguns mercados; conversas podem treinar o modelo se você não desativar.",
-      bestFor: "Chat geral, geração de imagens e edição no Canvas.",
+      highlight: "Desde 06/ago/2026, conversas de texto sem limite algum — e no GPT-5.6 Luna, não mais no modelo rebaixado.",
+      freeModel: "GPT-5.6 Luna",
+      freeQuota: "Chats de texto ilimitados, sem cota diária nem rebaixamento para o mini.",
+      limits: "O ilimitado vale só para texto: imagens, arquivos, voz e geração de imagem mantêm cotas separadas. A liberação é gradual desde o anúncio de 06/ago, então pode não ter chegado à sua conta ainda. Em alguns mercados a versão gratuita exibe anúncios, e as conversas podem treinar o modelo se você não desativar.",
+      bestFor: "Chat de texto em volume alto, sem ficar contando mensagens — mais o botão Think quando a pergunta é difícil.",
       paidStepUp: "Go $8/mês ou Plus $20/mês.",
-      theCatch: "A cota do GPT-5.5 é pequena e sessões pesadas caem para o mini.",
+      theCatch: "O Luna marca 52,3 no Intelligence Index da Artificial Analysis, abaixo do GPT-5.6 Sol (60,9), que segue exclusivo dos planos pagos junto com o Deep Research e o modo Work.",
       howToAccess: "Crie uma conta gratuita em chatgpt.com.",
       link: "https://chatgpt.com/",
-      sourceUrl: "https://theairankings.com/best-free-ai-tools/",
-      tags: ["GPT-5.5", "mini", "Imagens", "Canvas"]
+      sourceUrl: "https://openai.com/index/improving-gpt-5-6-sol-in-chatgpt/",
+      tags: ["GPT-5.6 Luna", "Texto ilimitado", "Think", "Imagens"]
     },
     {
       id: "claude-web",
@@ -289,6 +302,49 @@ const GRATUITOS_DATA = {
 
     /* ── Assistentes de Código & IDEs ───────────────────────── */
 
+    {
+      /* O Codex deixou de ser produto separado em 09/jul/2026: virou um dos
+         três modos do app de desktop do ChatGPT (Chat, Work, Codex). Só o
+         Codex e o Chat abrem no plano Free — o modo Work é pago, e é por isso
+         que ele não tem card próprio nesta página. */
+      id: "openai-codex-free",
+      name: "OpenAI Codex (Plano Free)",
+      company: "OpenAI",
+      category: "assistentes-dev",
+      badge: "Agente de Código",
+      highlight: "O agente de código da OpenAI passou a abrir na conta gratuita, no terminal, no VS Code e na web.",
+      freeModel: "Modelos leves da linha GPT-5.6",
+      freeQuota: "Tarefas locais em janelas de 5 horas, com um teto semanal por cima; sem cartão de crédito.",
+      limits: "A OpenAI não publica quantas mensagens nem quais modelos exatos cabem no plano Free — o contador aparece dentro do próprio Codex, e o GPT-5.6 Luna é o que mais estica a cota. Recursos de nuvem (revisão de código no GitHub, integração com Slack, execução de tarefas remotas) só nos planos pagos.",
+      bestFor: "Experimentar um agente que lê o projeto, edita arquivos e roda comandos, sem assinar nada.",
+      paidStepUp: "Go $8/mês, Plus $20/mês ou Pro a partir de $100/mês (5× os limites).",
+      theCatch: "É cota de avaliação, não de trabalho diário: sessões longas esgotam a janela de 5h. O modo Work (agente que devolve planilhas, relatórios e apps prontos) não abre no Free.",
+      howToAccess: "Instale o app de desktop do ChatGPT (Mac/Windows) ou o Codex CLI e entre com a conta gratuita.",
+      link: "https://developers.openai.com/codex/",
+      sourceUrl: "https://learn.chatgpt.com/docs/pricing",
+      tags: ["Codex", "CLI", "VS Code", "Agente"]
+    },
+    {
+      /* Duas coisas com nomes parecidos e um card só, porque na prática você
+         usa as duas juntas: o OpenCode (agente MIT, roda local) e o OpenCode
+         Zen (o gateway deles, que é de onde saem os modelos de graça). */
+      id: "opencode-zen",
+      name: "OpenCode + Zen (modelos grátis)",
+      company: "OpenCode",
+      category: "assistentes-dev",
+      badge: "Agente Open Source",
+      highlight: "Agente de código open source no terminal, com modelos de fronteira liberados de graça no gateway Zen — entre eles o DeepSeek V4 Flash.",
+      freeModel: "DeepSeek V4 Flash Free",
+      freeQuota: "Modelos marcados como Free no OpenCode Zen, sem custo por token enquanto durar o beta.",
+      limits: "São liberações por tempo limitado e sem cota publicada por modelo. O que você envia nos modelos gratuitos pode ser usado para melhorar o modelo — não mande dado pessoal ou confidencial.",
+      bestFor: "Rodar um agente de código completo no terminal sem pagar API, ou usar o DeepSeek em tarefas de programação.",
+      paidStepUp: "Zen pago é pré-pago por uso (a partir de $20 de saldo); o agente em si é grátis e MIT.",
+      theCatch: "Os modelos grátis entram e saem do catálogo sem aviso, e os termos de uso comercial não são claros — use para estudo e protótipo, não para produção.",
+      howToAccess: "Instale o OpenCode, crie a conta em opencode.ai/auth e conecte a chave do Zen com o comando /connect.",
+      link: "https://opencode.ai/docs/zen/",
+      sourceUrl: "https://opencode.ai/docs/zen/",
+      tags: ["DeepSeek V4 Flash", "Terminal", "Open Source", "MIT"]
+    },
     {
       id: "antigravity",
       name: "Google Antigravity",
