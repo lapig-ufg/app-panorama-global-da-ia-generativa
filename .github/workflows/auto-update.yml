@@ -35,15 +35,19 @@ jobs:
       - name: Preparar prompt (lê a planilha)
         run: node automation/prepare.mjs
 
+      # Pinado no SHA (= tag v1 em 10/ago/2026). A tag v1 é móvel: em 10/ago ela andou e
+      # passou a falhar o job quando num_turns > --max-turns (claude-code-action#1607).
       - name: Pesquisar lançamentos (Claude)
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@6b082c41935b4c8a3b8b0ef85ba4ba4d9eeb8975
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
             Leia o arquivo automation/_work/prompt.md e siga TODAS as instruções nele.
             Use WebSearch/WebFetch para pesquisar e escreva o resultado, no formato pedido,
             no arquivo automation/_work/candidates.json. Não edite nenhum outro arquivo e não rode git.
-          claude_args: '--allowedTools "WebSearch,WebFetch,Read,Write" --max-turns 30 --model sonnet'
+          # num_turns conta toda mensagem (inclusive retorno de ferramenta), não só turno do
+          # assistente: os runs reais gastam 37-47. 80 dá folga e ainda barra loop infinito.
+          claude_args: '--allowedTools "WebSearch,WebFetch,Read,Write" --max-turns 80 --model sonnet'
 
       - name: Validar e publicar
         env:
