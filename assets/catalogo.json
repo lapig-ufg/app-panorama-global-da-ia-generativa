@@ -3,8 +3,8 @@
   "source_url": "https://artificialanalysis.ai/",
   "attribution": "Dados: Artificial Analysis — artificialanalysis.ai",
   "api_tier": "free",
-  "fetched_at": "2026-08-24T09:38:40.993Z",
-  "familias_total": 444,
+  "fetched_at": "2026-08-31T16:35:00.458Z",
+  "familias_total": 451,
   "descartados": {
     "entradas_sem_data": 0,
     "anteriores_ao_marco": 0
@@ -3056,7 +3056,7 @@
       "open_weights": null
     },
     {
-      "mod": "K-EXAONE 2.0 0803",
+      "mod": "K-EXAONE 2.0",
       "emp": "LG AI Research",
       "date": "2026-08-12",
       "score": 31,
@@ -3116,6 +3116,55 @@
       "emp": "AI9Stars",
       "date": "2026-08-20",
       "score": 34,
+      "open_weights": null
+    },
+    {
+      "mod": "DeepSeek V4 Flash Vision",
+      "emp": "DeepSeek",
+      "date": "2026-08-21",
+      "score": 51.5,
+      "open_weights": null
+    },
+    {
+      "mod": "Granite 4.2 30B",
+      "emp": "IBM",
+      "date": "2026-08-25",
+      "score": 23.7,
+      "open_weights": null
+    },
+    {
+      "mod": "Granite 4.2 3B",
+      "emp": "IBM",
+      "date": "2026-08-25",
+      "score": 14.3,
+      "open_weights": null
+    },
+    {
+      "mod": "Granite 4.2 8B",
+      "emp": "IBM",
+      "date": "2026-08-25",
+      "score": 19.6,
+      "open_weights": null
+    },
+    {
+      "mod": "Qwen3.8-Flash-Next",
+      "emp": "Alibaba",
+      "date": "2026-08-26",
+      "score": 55.8,
+      "open_weights": null
+    },
+    {
+      "mod": "Agnes 2.5 Pro Beta",
+      "emp": "Sapiens AI",
+      "date": "2026-08-26",
+      "score": 49.1,
+      "open_weights": null
+    },
+    {
+      "mod": "GLM-5.3-Flash",
+      "emp": "Zhipu AI",
+      "date": "2026-08-26",
+      "score": 57.5,
       "open_weights": null
     }
   ]
