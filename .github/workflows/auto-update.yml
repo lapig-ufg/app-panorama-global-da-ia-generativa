@@ -1,8 +1,7 @@
 name: Atualização automática de lançamentos
 
 on:
-  schedule:
-    - cron: '0 12 * * 1' # toda segunda-feira, 12:00 UTC
+  # Sem agendamento: roda só via dispatch manual (botão no PWA).
   workflow_dispatch:
     inputs:
       dry_run:
@@ -51,9 +50,8 @@ jobs:
 
       - name: Validar e publicar
         env:
-          # Real (escreve na planilha) só quando: dispatch manual com dry_run desmarcado,
-          # OU agendado E a variável de repositório AUTO_PUBLISH == 'true'. Caso contrário, dry-run.
-          DRY_RUN: ${{ ((github.event_name == 'workflow_dispatch' && inputs.dry_run == false) || (github.event_name == 'schedule' && vars.AUTO_PUBLISH == 'true')) && 'false' || 'true' }}
+          # Real (escreve na planilha) só quando o dispatch manual vem com dry_run desmarcado.
+          DRY_RUN: ${{ inputs.dry_run && 'true' || 'false' }}
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           APPS_SCRIPT_TOKEN: ${{ secrets.APPS_SCRIPT_TOKEN }}
         run: node automation/publish.mjs
