@@ -45,7 +45,7 @@ const COMO_USAR_DATA = {
         esquerda: "Num data center, longe de você.",
         direita: "Num data center — o mesmo.",
         veredito: "Não é aqui que está a diferença.",
-        nota: "Claude Code, Codex CLI, OpenCode e Antigravity rodam NA sua máquina, mas o modelo continua na nuvem. A única família em que o modelo realmente pensa dentro do seu computador é a do Ollama e afins."
+        nota: "Claude Code, Codex CLI, OpenCode e Antigravity rodam NA sua máquina, mas o modelo continua na nuvem. O caso que mais desmonta o par de nomes é o do Ollama Cloud: a harness é configurada para falar com `http://localhost:11434` — um endereço local, de verdade, na sua máquina — e o modelo que responde está num data center. O endereço é local; o pensamento, não. Modelo dentro do computador, mesmo, só quando você baixa os pesos (`ollama pull`) e roda sem `:cloud`."
       },
       {
         pergunta: "O que a IA enxerga?",
@@ -570,9 +570,9 @@ const COMO_USAR_DATA = {
     },
     {
       id: "local",
-      titulo: "O modelo dentro da sua máquina",
-      subtitulo: "Aqui, e só aqui, \"IA no computador\" descreve onde o modelo pensa.",
-      explicacao: "Nas duas famílias acima, o programa é local e o modelo é remoto. Nesta, os pesos do modelo ficam no seu disco e a conta roda na sua CPU ou GPU: funciona sem internet, nenhum dado sai da máquina, e o preço é que o modelo que cabe no seu computador é bem menor que o da nuvem. Para dado sensível — prontuário, entrevista, informação de terceiro — essa troca costuma valer a pena.",
+      titulo: "O motor: de onde vem o modelo",
+      subtitulo: "Quem pensa, e onde. É o único lugar da página em que \"na sua máquina\" pode ser literal — mas não é sempre.",
+      explicacao: "Nas duas famílias acima o programa é local e o modelo é remoto, sem escolha. Aqui a escolha existe, e o Ollama a coloca atrás do MESMO comando: `ollama run qwen3.5:4b` carrega os pesos do seu disco e calcula na sua CPU ou GPU; `ollama run gemma4:cloud` manda a conta para o servidor da Ollama e devolve a resposta. Nos dois casos quem atende é o mesmo processo local, na porta 11434 — o sufixo do nome do modelo é a única coisa que diz onde o pensamento aconteceu. Modelo local ganha em privacidade e em não ter fatura; modelo na nuvem ganha em tamanho, e é o que torna a assinatura interessante para trabalho de verdade.",
       itens: [
         {
           nome: "Ollama",
@@ -581,8 +581,8 @@ const COMO_USAR_DATA = {
           instala: "curl -fsSL https://ollama.com/install.sh | sh",
           comando: true,
           instalaAlt: "macOS e Windows têm instalador próprio em ollama.com/download",
-          precisa: "8 GB de RAM dão conta de um modelo de 3B; 16 GB abrem os de 7–8B. GPU acelera, mas não é obrigatória.",
-          acesso: "Roda o modelo e expõe uma API local em 127.0.0.1:11434 — que os agentes acima sabem consumir.",
+          precisa: "Para rodar local: 8 GB de RAM dão conta de um modelo de 3–4B; 16 GB abrem os de 7–9B; GPU acelera, mas não é obrigatória. Para os modelos de nuvem, nenhum requisito de máquina — só a conta.",
+          acesso: "Serve os dois mundos na mesma API local (127.0.0.1:11434), que todas as harnesses desta página sabem consumir. E `ollama launch` conecta essa API a elas sem você editar um arquivo de configuração.",
           codigoAberto: true,
           link: "https://ollama.com/download",
           destaque: "É o tutorial interativo desta página."
@@ -592,8 +592,8 @@ const COMO_USAR_DATA = {
           empresa: "LM Studio",
           instala: "Aplicativo com interface gráfica (macOS, Windows, Linux)",
           instalaAlt: "Catálogo de modelos, chat e servidor local em botões.",
-          precisa: "Mesmo requisito de memória do Ollama.",
-          acesso: "Para quem quer o modelo local sem passar pelo terminal.",
+          precisa: "Mesmo requisito de memória do Ollama rodando local.",
+          acesso: "Só modelo local, e é essa a graça: para quem quer os pesos no próprio disco sem passar pelo terminal.",
           codigoAberto: false,
           link: "https://lmstudio.ai/"
         },
@@ -613,6 +613,100 @@ const COMO_USAR_DATA = {
   ],
 
   /* ─────────────────────────────────────────────────────────────
+     4b. A PONTE — `ollama launch`
+     O bloco que fecha o catálogo. As duas primeiras famílias são
+     harnesses; a terceira é o motor. Faltava dizer como se liga uma
+     coisa na outra — e a resposta, hoje, é um comando só.
+
+     A lista de integrações é a do `ollama launch --help` (v0.15+),
+     copiada verbatim, com os nomes de exibição do próprio programa.
+     Ela cresce a cada versão: por isso o texto manda o leitor rodar
+     `ollama launch` sem argumento para ver o menu DA VERSÃO DELE, em
+     vez de tratar esta tabela como definitiva.
+     ───────────────────────────────────────────────────────────── */
+  ponte: {
+    titulo: "A ponte: um comando que liga as duas colunas",
+    lede: "Até aqui são dois problemas separados: escolher a harness e escolher o motor. Ligar um no outro sempre foi a parte chata — variável de ambiente, URL de API, arquivo de configuração por ferramenta. O `ollama launch` (a partir da versão 0.15) faz isso sozinho: instala a harness se ela não estiver instalada, aponta para o servidor local do Ollama, escolhe o modelo e abre o programa.",
+
+    comandos: [
+      {
+        cmd: "ollama launch",
+        oQueFaz: "Sem argumento, abre o menu: lista as integrações que a sua versão conhece, marca as que já estão instaladas e deixa escolher o modelo. É por aqui que se começa — e é a lista real, não a tabela abaixo, que vale para a sua máquina."
+      },
+      {
+        cmd: "ollama launch claude",
+        oQueFaz: "Abre o Claude Code falando com o Ollama. Se o Claude Code não estiver instalado, ele se oferece para instalar. Por baixo, o que muda é `ANTHROPIC_BASE_URL=http://localhost:11434` — a harness pensa que está falando com a Anthropic e está falando com o processo local."
+      },
+      {
+        cmd: "ollama launch claude --model gpt-oss:120b-cloud",
+        oQueFaz: "O mesmo, já dizendo qual modelo. Sufixo `-cloud` (ou `:cloud`, nos modelos sem variante de tamanho) manda a conta para o servidor da Ollama; sem sufixo, roda no seu disco."
+      },
+      {
+        cmd: "ollama launch opencode --config",
+        oQueFaz: "`--config` configura sem abrir o programa: útil para deixar a máquina pronta e sair. `--restore` desfaz, devolvendo a integração ao perfil padrão dela."
+      },
+      {
+        cmd: "ollama launch codex -- --sandbox workspace-write",
+        oQueFaz: "Tudo depois de `--` vai direto para a harness, sem o Ollama interpretar. É como se passam as opções próprias de cada ferramenta."
+      },
+      {
+        cmd: "ollama launch claude --model gemma4:cloud --yes -- -p \"como este repositório funciona?\"",
+        oQueFaz: "`--yes` pula as confirmações e baixa o modelo se precisar (exige `--model`). É a forma de usar tudo isso dentro de um script ou de um pipeline de CI."
+      }
+    ],
+
+    integracoesTitulo: "As integrações que o `ollama launch` conhece",
+    integracoesNota: "Lista do `ollama launch --help`. Ela cresce a cada versão — rode o comando sem argumento para ver a da sua.",
+    integracoes: [
+      { id: "claude", nome: "Claude Code", nota: "Anthropic. Instala sozinho se faltar." },
+      { id: "chatgpt", nome: "ChatGPT", nota: "Aliases: codex-app, codex-desktop, codex-gui." },
+      { id: "hermes", nome: "Hermes Agent", nota: "Nous Research." },
+      { id: "openclaw", nome: "OpenClaw", nota: "Aliases: clawdbot, moltbot." },
+      { id: "opencode", nome: "OpenCode", nota: "Anomaly. Instala sozinho se faltar." },
+      { id: "codex", nome: "Codex", nota: "OpenAI." },
+      { id: "hermes-desktop", nome: "Hermes Desktop", nota: "Versão de janela do Hermes." },
+      { id: "copilot", nome: "Copilot CLI", nota: "GitHub. Alias: copilot-cli." },
+      { id: "omp", nome: "OMP", nota: "Agente com integração de IDE." },
+      { id: "droid", nome: "Droid", nota: "Factory." },
+      { id: "dsh", nome: "DeepSeek Harness", nota: "Alias: deepseek-harness." },
+      { id: "kimi", nome: "Kimi Code CLI", nota: "Moonshot." },
+      { id: "muse", nome: "Muse Code", nota: "Meta. Alias: muse-code." },
+      { id: "pi", nome: "Pi", nota: "Instala @earendil-works/pi-coding-agent se faltar." },
+      { id: "pool", nome: "Pool", nota: "Poolside." },
+      { id: "cline", nome: "Cline", nota: "Instala via npm se faltar." },
+      { id: "qwen", nome: "Qwen Code", nota: "Alibaba." },
+      { id: "vscode", nome: "VS Code", nota: "Alias: code." }
+    ],
+
+    planosTitulo: "O que a assinatura Cloud dá",
+    planosNota: "Preços da página oficial de planos, conferidos em 6 de setembro de 2026. Os créditos não acumulam de um mês para o outro — confira antes de fechar o orçamento do laboratório.",
+    planos: [
+      {
+        nome: "Free",
+        preco: "US$ 0",
+        credito: "Créditos iniciais",
+        detalhe: "Roda modelos locais à vontade e experimenta os modelos de nuvem \"starter\". 1 requisição por vez."
+      },
+      {
+        nome: "Pro",
+        preco: "US$ 20/mês",
+        credito: "US$ 60 de crédito/mês",
+        detalhe: "Abre os modelos maiores e permite 3 requisições simultâneas. No plano anual sai por US$ 200 (US$ 16,67/mês).",
+        destaque: true
+      },
+      {
+        nome: "Max",
+        preco: "US$ 100/mês",
+        credito: "US$ 300 de crédito/mês",
+        detalhe: "10 requisições simultâneas e acesso antecipado aos modelos novos."
+      }
+    ],
+    planosExtra: "Acima disso há Team (US$ 500/mês, US$ 1.000 de crédito compartilhado, faturamento centralizado) e Enterprise sob consulta, com controle de acesso a modelos e teto de gasto — que é a conversa que um laboratório com várias pessoas acaba tendo.",
+
+    fecho: "É aqui que a tese da página fecha em uma frase: <strong>a harness e o modelo são escolhas independentes</strong>. Você pode trocar de agente sem trocar de assinatura, e trocar de modelo sem reaprender o agente. O que não muda em nenhuma das combinações é o que dá potência a todas elas — a IA continua enxergando os seus arquivos e executando comandos."
+  },
+
+  /* ─────────────────────────────────────────────────────────────
      5. TUTORIAIS DO SIMULADOR
      A tela de computador é uma brincadeira com a cara dos anos
      2000, mas os comandos são reais e as saídas são reconstituições
@@ -622,11 +716,12 @@ const COMO_USAR_DATA = {
   tutoriais: [
     {
       id: "ollama",
-      nome: "Instalar o Ollama",
+      nome: "Ollama Cloud + launch",
+      nomeCurto: "Ollama Cloud",
       icone: "terminal",
-      legenda: "IA rodando 100% na sua máquina",
-      resumo: "Sete passos até um modelo de linguagem respondendo com o cabo de rede desligado.",
-      minutos: 8,
+      legenda: "Uma assinatura, qualquer harness",
+      resumo: "Do zero a um modelo grande dirigindo o Claude Code, o OpenCode ou o Pi — sem editar um arquivo de configuração.",
+      minutos: 9,
       passos: [
         {
           janela: "dialogo",
@@ -644,85 +739,120 @@ const COMO_USAR_DATA = {
         },
         {
           janela: "terminal",
-          titulo: "Instalar",
-          explicacao: "Uma linha só. O `curl` baixa o script oficial de instalação e o `sh` executa. Antes de rodar um `curl | sh` vindo de qualquer lugar, confira que o endereço é mesmo o do site oficial — este hábito vale para o resto da sua vida no terminal.",
+          titulo: "Instalar o Ollama",
+          explicacao: "Uma linha só. O `curl` baixa o script oficial e o `sh` executa. Antes de rodar um `curl | sh` vindo de qualquer lugar, confira que o endereço é mesmo o do site oficial — esse hábito vale para o resto da sua vida no terminal.",
           cmd: "curl -fsSL https://ollama.com/install.sh | sh",
           saida: [
             { t: "out", v: ">>> Installing ollama to /usr/local" },
             { t: "out", v: ">>> Downloading Linux amd64 bundle" },
             { t: "out", v: "######################################################### 100.0%" },
-            { t: "out", v: ">>> Creating ollama user..." },
             { t: "out", v: ">>> Creating ollama systemd service..." },
-            { t: "out", v: ">>> Enabling and starting ollama service..." },
             { t: "out", v: ">>> The Ollama API is now available at 127.0.0.1:11434." },
             { t: "out", v: ">>> Install complete. Run \"ollama\" from the command line." }
           ],
-          nota: "Aquele endereço 127.0.0.1 é a sua própria máquina falando com ela mesma. O Ollama virou um servidor local — é assim que outros programas vão conversar com ele."
+          nota: "Guarde esse endereço: 127.0.0.1:11434 é a sua própria máquina falando com ela mesma. Ele vai reaparecer no passo mais importante deste tutorial — e é ele que desmonta o par de nomes \"navegador × computador\"."
         },
         {
           janela: "terminal",
-          titulo: "Conferir que instalou",
-          explicacao: "Todo agente que se preze faz este passo, e você também deveria: confirmar antes de seguir. Se aparecer \"command not found\", feche e reabra o terminal.",
-          cmd: "ollama --version",
+          titulo: "Entrar na conta",
+          explicacao: "Aqui o tutorial se separa do caminho \"modelo no meu disco\". A assinatura Ollama Cloud dá acesso a modelos grandes demais para caber numa máquina comum, rodando nos servidores deles. O comando abre o navegador para você confirmar.",
+          cmd: "ollama signin",
           saida: [
-            { t: "out", v: "ollama version is 0.13.2" }
-          ]
-        },
-        {
-          janela: "terminal",
-          titulo: "Baixar um modelo",
-          explicacao: "Aqui o modelo entra no seu disco. `llama3.2:3b` são cerca de 2 GB — cabe em qualquer máquina com 8 GB de RAM. Se a sua tem 16 GB ou mais, `qwen3:8b` e `gemma3:12b` respondem bem melhor.",
-          cmd: "ollama pull llama3.2:3b",
-          saida: [
-            { t: "out", v: "pulling manifest" },
-            { t: "out", v: "pulling dde5aa3fc5ff... 100%  ▕████████████████▏ 2.0 GB" },
-            { t: "out", v: "pulling 966de95ca8a6... 100%  ▕████████████████▏ 1.4 KB" },
-            { t: "out", v: "verifying sha256 digest" },
-            { t: "out", v: "writing manifest" },
-            { t: "out", v: "success" }
+            { t: "out", v: "You need to be signed in to Ollama to run Cloud models." },
+            { t: "out", v: "" },
+            { t: "out", v: "If your browser did not open, navigate to:" },
+            { t: "out", v: "    https://ollama.com/connect?code=HTPK-QDVX" },
+            { t: "out", v: "" }
           ],
-          nota: "2 GB baixados uma vez. A partir daqui, nenhuma palavra sua sai da máquina."
+          nota: "Plano Free dá créditos iniciais e uma requisição por vez; o Pro (US$ 20/mês) dá US$ 60 de crédito por mês e três requisições simultâneas. Os valores estão no quadro da seção 05."
         },
         {
           janela: "terminal",
-          titulo: "Fazer a primeira pergunta",
-          explicacao: "Passando a pergunta na mesma linha, o Ollama responde e devolve o controle. É assim que ele entra em scripts.",
-          cmd: "ollama run llama3.2:3b \"Explique em duas frases o que é o Cerrado.\"",
+          titulo: "Rodar um modelo que não caberia aqui",
+          explicacao: "O sufixo é tudo: `-cloud` (ou `:cloud`, nos modelos sem variante de tamanho) manda a conta para o servidor da Ollama. Repare no que NÃO acontece — não tem barra de download, porque não há nada para baixar.",
+          cmd: "ollama run gpt-oss:120b-cloud \"Explique em duas frases o que é o Cerrado.\"",
           saida: [
             { t: "out", v: "O Cerrado é o segundo maior bioma da América do Sul, ocupando cerca de" },
             { t: "out", v: "dois milhões de km² no Brasil central, com vegetação de savana adaptada" },
             { t: "out", v: "a solos ácidos e ao fogo. É considerado um hotspot de biodiversidade e" },
             { t: "out", v: "abriga as nascentes de três das maiores bacias hidrográficas do país." }
           ],
-          nota: "Desligue o wi-fi e rode de novo: continua funcionando. É o teste que separa esta família de todas as outras desta página."
+          nota: "120 bilhões de parâmetros responderam em segundos numa máquina que não teria memória para carregá-los. O comando é local, o processo é local, a porta é local — o pensamento aconteceu num data center."
         },
         {
           janela: "terminal",
-          titulo: "Ver o que está instalado",
-          explicacao: "Modelos ocupam disco. Este comando mostra quanto, e `ollama rm nome` remove o que não serve mais.",
-          cmd: "ollama list",
+          titulo: "Abrir o menu do launch",
+          explicacao: "Este é o comando que muda o jogo. Sem argumento, `ollama launch` mostra as harnesses que a sua versão conhece, marca as que já estão instaladas e deixa escolher o modelo. Nada de variável de ambiente, nada de arquivo de configuração.",
+          cmd: "ollama launch",
           saida: [
-            { t: "out", v: "NAME             ID              SIZE     MODIFIED" },
-            { t: "out", v: "llama3.2:3b      a80c4f17acd5    2.0 GB   2 minutes ago" }
-          ]
-        },
-        {
-          janela: "terminal",
-          titulo: "Conversar de verdade",
-          explicacao: "Sem pergunta na linha, ele abre uma conversa. O `>>>` é o convite para digitar; `/bye` encerra.",
-          cmd: "ollama run llama3.2:3b",
-          saida: [
-            { t: "out", v: ">>> Send a message (/? for help)" },
-            { t: "out", v: ">>> /bye" }
+            { t: "out", v: "  Escolha uma integração:" },
+            { t: "out", v: "" },
+            { t: "out", v: "> claude      Claude Code        Anthropic's coding tool with subagents" },
+            { t: "out", v: "  chatgpt     ChatGPT            Use Ollama models in ChatGPT" },
+            { t: "out", v: "  opencode    OpenCode           Anomaly's open-source coding agent" },
+            { t: "out", v: "  codex       Codex              OpenAI's open-source coding agent" },
+            { t: "out", v: "  pi          Pi                 Minimal AI agent toolkit with plugin support" },
+            { t: "out", v: "  droid       Droid              Factory's coding agent across terminal and IDEs" },
+            { t: "out", v: "  dsh         DeepSeek Harness   DeepSeek's open-source agent harness" },
+            { t: "out", v: "  copilot     Copilot CLI        GitHub's AI coding agent for the terminal" },
+            { t: "out", v: "  ...         (18 no total)" }
           ],
-          nota: "Pronto: você tem um modelo de linguagem inteiro rodando offline. O próximo passo natural é apontar um agente (OpenCode, Pi) para este servidor local — aí o modelo é seu E tem mãos."
+          nota: "A lista completa está na seção 05. Ela cresce a cada versão do Ollama — por isso vale rodar o comando e olhar a sua, em vez de confiar em qualquer tabela publicada (esta inclusive)."
+        },
+        {
+          janela: "terminal",
+          titulo: "Dirigir o Claude Code com o modelo da Ollama",
+          explicacao: "Instala a harness se ela faltar, aponta para o servidor local e abre o programa. Se você já leu a seção 01 desta página, o que aparece na terceira linha da saída é a prova do argumento inteiro.",
+          cmd: "ollama launch claude --model gpt-oss:120b-cloud",
+          saida: [
+            { t: "out", v: "Claude Code is not installed. Install it now? [Y/n] y" },
+            { t: "out", v: "Installing Claude Code..." },
+            { t: "out", v: "ANTHROPIC_BASE_URL=http://localhost:11434" },
+            { t: "out", v: "Starting Claude Code with gpt-oss:120b-cloud" },
+            { t: "out", v: "" },
+            { t: "out", v: "  Welcome to Claude Code" },
+            { t: "out", v: "  cwd: /home/ana/projetos/analise-cerrado" },
+            { t: "out", v: "" },
+            { t: "out", v: "> " }
+          ],
+          nota: "`ANTHROPIC_BASE_URL=http://localhost:11434`: a harness acha que está falando com a Anthropic e está falando com o processo do Ollama, na sua máquina, que por sua vez fala com o data center. Endereço local, modelo remoto — as duas coisas ao mesmo tempo, no mesmo comando."
+        },
+        {
+          janela: "terminal",
+          titulo: "Trocar de harness sem trocar de assinatura",
+          explicacao: "A mesma conta serve qualquer uma das integrações. Aqui o Pi, que nem precisava estar instalado: o launch instala e abre. Vale igual para `ollama launch opencode`, `ollama launch codex`, `ollama launch droid`.",
+          cmd: "ollama launch pi --model gpt-oss:120b-cloud",
+          saida: [
+            { t: "out", v: "Pi is not installed. Install it now? [Y/n] y" },
+            { t: "out", v: "npm install -g @earendil-works/pi-coding-agent@latest" },
+            { t: "out", v: "added 1 package in 6s" },
+            { t: "out", v: "Starting Pi with gpt-oss:120b-cloud" },
+            { t: "out", v: "" },
+            { t: "out", v: "pi › " }
+          ],
+          nota: "É este o ganho prático da assinatura: harness e modelo viram escolhas independentes. Dá para trocar de agente sem trocar de plano, e trocar de modelo sem reaprender o agente."
+        },
+        {
+          janela: "terminal",
+          titulo: "E quando o dado não pode sair",
+          explicacao: "O mesmo programa faz o contrário: sem sufixo de nuvem, os pesos vêm para o seu disco e a conta roda na sua máquina. É a opção para prontuário, entrevista e qualquer dado sob termo de consentimento — e a razão pela qual esta família existe na página.",
+          cmd: "ollama pull qwen3.5:4b && ollama run qwen3.5:4b \"Resuma este trecho de entrevista.\"",
+          saida: [
+            { t: "out", v: "pulling manifest" },
+            { t: "out", v: "pulling 4c2a1f8d... 100%  ▕████████████████▏ 2.4 GB" },
+            { t: "out", v: "success" },
+            { t: "out", v: "" },
+            { t: "out", v: "[resposta gerada localmente]" }
+          ],
+          nota: "Desligue o wi-fi e rode de novo: este continua funcionando, o `:cloud` não. É o teste de uma linha que separa as duas coisas — e a única prova que vale antes de confiar um dado sensível a qualquer ferramenta desta página."
         }
       ],
-      fecho: "O modelo local não vai igualar o da nuvem: 3 bilhões de parâmetros não competem com centenas de bilhões. Ele ganha em outra coisa — funciona sem internet, não tem cota, não tem fatura, e o que você digita nunca sai do seu disco."
+      fecho: "Duas conclusões, e elas não se anulam. A assinatura Cloud resolve o problema de potência: modelos grandes demais para a sua máquina, dirigindo a harness que você preferir, por um comando só. O modelo local resolve o problema de sigilo: mais fraco, sem fatura, e nada sai do disco. O que os dois têm em comum é o que esta página inteira defende — em qualquer um deles a IA enxerga os seus arquivos e executa comandos, e é daí que vem a diferença."
     },
     {
       id: "antigravity",
       nome: "Instalar o Antigravity",
+      nomeCurto: "Antigravity",
       icone: "janela",
       legenda: "Um IDE em que o agente é o protagonista",
       resumo: "Do download à primeira tarefa executada por um agente com editor, terminal e navegador.",
@@ -842,8 +972,8 @@ const COMO_USAR_DATA = {
       texto: "Vale tanto para script que veio do chat quanto para `curl | sh` copiado de um blog. Se a origem não é a página oficial do projeto, não rode. O agente com terminal reduz o vaivém de copiar e colar justamente porque testa antes — mas a responsabilidade final continua na cadeira."
     },
     {
-      titulo: "Dado sensível pede modelo local",
-      texto: "Prontuário, entrevista, dado de terceiro sob termo de consentimento: nesses casos a pergunta não é qual modelo é melhor, e sim qual não manda nada para fora. É onde o Ollama deixa de ser curiosidade e vira requisito."
+      titulo: "Dado sensível pede modelo local — e `:cloud` não é local",
+      texto: "Prontuário, entrevista, dado de terceiro sob termo de consentimento: aqui a pergunta não é qual modelo é melhor, e sim qual não manda nada para fora. Cuidado com a armadilha de nome: `ollama run qwen3.5:4b` roda na sua máquina, `ollama run gemma4:cloud` roda no servidor da Ollama. É o mesmo programa, o mesmo comando e o mesmo endereço `localhost` — só o sufixo do modelo separa uma coisa da outra. Em dado sensível, confira o sufixo antes de confiar."
     }
   ]
 };

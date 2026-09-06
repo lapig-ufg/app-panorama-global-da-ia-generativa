@@ -316,6 +316,64 @@
     `).join('');
   }
 
+  /* ─── 05b · a ponte (`ollama launch`) ────────────────────── */
+
+  /* Três blocos num só: os comandos, a tabela de integrações e os planos.
+     Ficam juntos porque respondem à mesma pergunta prática — "e como eu ligo
+     o modelo na ferramenta?" — e separá-los faria o leitor montar a resposta
+     de cabeça a partir de três lugares da página. */
+  function renderPonte() {
+    const el = $('cu-ponte');
+    if (!el || !D.ponte) return;
+    const p = D.ponte;
+
+    el.innerHTML = `
+      <section class="cu-ponte" aria-labelledby="h-ponte">
+        <header class="cu-ponte-head">
+          <h3 id="h-ponte">${esc(p.titulo)}</h3>
+          <p class="cu-ponte-lede">${txt(p.lede)}</p>
+        </header>
+
+        <dl class="cu-cmds cu-ponte-cmds">
+          ${p.comandos.map(k => `
+            <div class="cu-cmd">
+              <dt><code>${esc(k.cmd)}</code></dt>
+              <dd>${txt(k.oQueFaz)}</dd>
+            </div>
+          `).join('')}
+        </dl>
+
+        <h4 class="cu-ponte-h4">${txt(p.integracoesTitulo)}</h4>
+        <p class="cu-ponte-nota">${txt(p.integracoesNota)}</p>
+        <ul class="cu-integs">
+          ${p.integracoes.map(i => `
+            <li class="cu-integ">
+              <code>${esc(i.id)}</code>
+              <strong>${esc(i.nome)}</strong>
+              <span>${esc(i.nota)}</span>
+            </li>
+          `).join('')}
+        </ul>
+
+        <h4 class="cu-ponte-h4">${txt(p.planosTitulo)}</h4>
+        <div class="cu-planos">
+          ${p.planos.map(pl => `
+            <article class="cu-plano ${pl.destaque ? 'is-destaque' : ''}">
+              <h5>${esc(pl.nome)}</h5>
+              <p class="cu-plano-preco">${esc(pl.preco)}</p>
+              <p class="cu-plano-credito">${esc(pl.credito)}</p>
+              <p class="cu-plano-det">${txt(pl.detalhe)}</p>
+            </article>
+          `).join('')}
+        </div>
+        <p class="cu-ponte-nota">${txt(p.planosExtra)}</p>
+        <p class="cu-ponte-nota cu-ponte-fonte">${txt(p.planosNota)}</p>
+
+        <p class="cu-licao cu-ponte-fecho">${p.fecho}</p>
+      </section>
+    `;
+  }
+
   /* ─── 06 · segurança ─────────────────────────────────────── */
 
   function renderSeguranca() {
@@ -325,7 +383,7 @@
       <article class="cu-seg-item">
         <span class="cu-seg-n">${String(i + 1).padStart(2, '0')}</span>
         <div>
-          <h3>${esc(s.titulo)}</h3>
+          <h3>${txt(s.titulo)}</h3>
           <p>${txt(s.texto)}</p>
         </div>
       </article>
@@ -403,8 +461,11 @@
     const desk = $('cu-desk');
     if (!desk) return;
 
+    /* O ícone usa `nomeCurto` quando existe: numa célula de 84px, "Ollama Cloud
+       + launch" quebraria em três linhas e empurraria os outros ícones. O nome
+       inteiro continua no roteiro e no menu Iniciar, onde há largura. */
     const itens = D.tutoriais.map(t => ({
-      id: t.id, nome: t.nome, icone: t.icone, legenda: t.legenda
+      id: t.id, nome: t.nomeCurto || t.nome, icone: t.icone, legenda: t.legenda
     })).concat([{ id: 'leiame', nome: 'Leia-me.txt', icone: 'leiame', legenda: 'O que é esta tela' }]);
 
     desk.innerHTML = itens.map(it => `
@@ -850,6 +911,7 @@
     pintarCenario();
     renderFerramentas();
     renderFamilias();
+    renderPonte();
     renderSeguranca();
     renderPlano();
 

@@ -1438,6 +1438,163 @@
   transform: translateY(-1px);
 }
 
+/* ─── a ponte: `ollama launch` ─── */
+
+/* O bloco é o fecho do catálogo e precisa parecer um fecho: fundo de papel,
+   moldura inteira e um filete verde no topo. Sem esse contorno ele lia como
+   "mais uma família", e a graça dele é justamente não ser — é o que liga as
+   três. */
+.cu-ponte {
+  margin-top: 8px;
+  padding: 20px 22px 22px;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-top: 3px solid var(--accent);
+  border-radius: 4px 4px 12px 12px;
+}
+
+.cu-ponte-head { margin-bottom: 16px; }
+
+.cu-ponte-head h3 {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.cu-ponte-lede {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-light);
+  max-width: 82ch;
+}
+
+.cu-ponte-cmds { background: var(--hair); }
+
+.cu-ponte-h4 {
+  margin: 26px 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+}
+
+.cu-ponte-nota {
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  max-width: 84ch;
+  margin-bottom: 12px;
+}
+
+.cu-ponte-fonte { font-style: italic; }
+
+/* A tabela de integrações é longa e monótona de propósito: o valor dela é ser
+   a lista INTEIRA, copiada do `--help`. Três colunas de linhas curtas leem
+   melhor que dezoito linhas de largura total. */
+/* Os filetes moram nas células, e não num `gap` sobre fundo colorido: com 18
+   itens em 4 colunas sobram duas células vazias na última fileira, e no truque
+   do gap elas viravam duas manchas cinza no canto — como se a tabela tivesse
+   quebrado. Com borda por item, célula que não existe simplesmente não
+   aparece. */
+.cu-integs {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  background: var(--white);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.cu-integ {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  background: var(--white);
+  border-right: 1px solid var(--hair);
+  border-bottom: 1px solid var(--hair);
+}
+
+.cu-integ code {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 2px 5px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.cu-integ strong {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.cu-integ span {
+  width: 100%;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+
+/* ─── planos da assinatura ─── */
+.cu-planos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.cu-plano {
+  padding: 14px 16px;
+  background: var(--white);
+  border: 1px solid var(--hair);
+  border-radius: 11px;
+}
+
+.cu-plano.is-destaque {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.cu-plano h5 {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+}
+
+.cu-plano-preco {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.024em;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.cu-plano-credito {
+  margin: 4px 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.cu-plano-det {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--ink-light);
+}
+
+.cu-ponte-fecho { margin-top: 20px; background: var(--white); }
+
 /* ═══ 06 · SEGURANÇA ═══ */
 .cu-seg {
   display: grid;

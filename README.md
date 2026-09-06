@@ -130,7 +130,8 @@ planilha, não depende de cron e não tem pipeline. Todo o conteúdo mora em
 `assets/como-usar-data.js` — é o único arquivo a editar para atualizar a aba.
 
 Ela responde ao "como" que faltava no painel: a diferença entre conversar com a IA numa
-aba do navegador e dar a ela acesso ao terminal da máquina. Seis seções:
+aba do navegador e dar a ela acesso ao terminal da máquina. Seis seções (a 05 termina com um
+bloco extra, "a ponte"):
 
 1. **O nome disso** — por que "navegador × computador" é um par de nomes errado (o navegador
    está no computador) e cinco pares candidatos em julgamento, com uma proposta marcada.
@@ -138,10 +139,12 @@ aba do navegador e dar a ela acesso ao terminal da máquina. Seis seções:
    lado a lado, com os comandos que o agente realmente digita e o custo de cada caminho.
 3. **O cinto de ferramentas** — Bash, ler, escrever, buscar, rodar código, web, MCP.
 4. **Instalar, passo a passo** — um simulador de área de trabalho estilo anos 2000 com dois
-   tutoriais interativos: **Ollama** (modelo rodando na própria máquina) e **Antigravity**.
-5. **O catálogo** — três famílias: CLIs (Claude Code, Codex CLI, OpenCode, Pi, Gemini CLI),
-   aplicativos de desktop (Claude Desktop, ChatGPT Desktop, Antigravity) e modelo local
-   (Ollama, LM Studio, llama.cpp).
+   tutoriais interativos: **Ollama Cloud + `ollama launch`** (assinar, rodar um modelo grande
+   sem baixar nada e usá-lo para dirigir Claude Code, Pi ou OpenCode) e **Antigravity**.
+5. **O catálogo** — três famílias: harnesses de terminal (Claude Code, Codex CLI, OpenCode,
+   Pi, Gemini CLI), aplicativos de desktop (Claude Desktop, ChatGPT Desktop, Antigravity) e
+   motores (Ollama local e na nuvem, LM Studio, llama.cpp). Fecha com **a ponte**: o quadro do
+   `ollama launch`, com as 18 integrações que ele conhece e os planos do Ollama Cloud.
 6. **O que você está autorizando** — as seis regras de segurança ao dar mãos a um agente.
 
 ### Regras de manutenção
@@ -156,6 +159,15 @@ aba do navegador e dar a ela acesso ao terminal da máquina. Seis seções:
   Se você acrescentar um passo, ele aparece nos dois lugares automaticamente.
 - **Instaladores e planos** foram conferidos nas páginas oficiais (última checagem em
   `updatedAt`). Revalide antes de citar cotas — elas mudam com frequência.
+- **A lista do `ollama launch` cresce a cada versão do Ollama.** A tabela em `ponte.integracoes`
+  é uma cópia verbatim do `ollama launch --help` (nomes, aliases e descrições vêm de
+  `cmd/launch/registry.go` no repositório do Ollama). O texto ao lado dela manda o leitor rodar
+  o comando sem argumento para ver a lista da versão dele — mantenha esse aviso ao atualizar,
+  porque é o que impede a tabela de envelhecer virando mentira.
+- **Cuidado com o sufixo dos modelos.** `gemma4:cloud` e `gpt-oss:120b-cloud` rodam no servidor
+  da Ollama; `qwen3.5:4b` roda no disco de quem executou. Mesmo comando, mesma porta 11434,
+  destinos opostos — é o exemplo que a seção 01 usa e a regra 06 repete. Não misture os dois em
+  exemplos sobre dado sensível.
 
 ---
 
