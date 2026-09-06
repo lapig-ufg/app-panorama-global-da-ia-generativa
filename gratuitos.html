@@ -38,7 +38,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="assets/styles.css?v=28">
+  <link rel="stylesheet" href="assets/styles.css?v=29">
   <link rel="stylesheet" href="assets/guia.css?v=27">
   <link rel="stylesheet" href="assets/gratuitos.css?v=4">
 
@@ -112,8 +112,10 @@
     </div>
 
     <!-- Cada seção é uma pergunta que ela responde, não um nome: "Régua" era
-         jargão de quem construiu o site. Os três itens dividem a largura em
-         terços iguais e a seção corrente encosta no filete preto. -->
+         jargão de quem construiu o site. Os quatro itens dividem a largura em
+         partes iguais e a seção corrente encosta no filete preto. Abaixo de
+         960px a fileira dobra em 2x2 (ver styles.css) — foi o preço de passar
+         de três para quatro perguntas sem perder a pergunta inteira. -->
     <nav class="page-switch" aria-label="Seções do painel">
       <a class="ps-link" href="index.html"
          title="Linha do tempo dos lançamentos de modelos de IA generativa, empresa por empresa">
@@ -163,6 +165,24 @@
           <span class="ps-q">O que dá pra usar de graça<span class="ps-mark">?</span></span>
           <span class="ps-short">De graça</span>
           <span class="ps-gloss">Os planos gratuitos e seus limites</span>
+        </span>
+        <svg class="ps-go" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+      <a class="ps-link" href="como-usar.html"
+         title="Como usar IA fora do navegador: no terminal, com acesso aos seus arquivos">
+        <span class="ps-icon" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2.5" y="4" width="19" height="16" rx="2" />
+            <path d="M7 9.5l3 2.5-3 2.5" />
+            <path d="M12.5 15h4.5" />
+          </svg>
+        </span>
+        <span class="ps-text">
+          <span class="ps-q">Como usar fora do navegador<span class="ps-mark">?</span></span>
+          <span class="ps-short">No terminal</span>
+          <span class="ps-gloss">Terminal, agentes e instalação</span>
         </span>
         <svg class="ps-go" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M5 12h14M13 6l6 6-6 6" />

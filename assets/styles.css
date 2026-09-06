@@ -261,13 +261,13 @@ body {
    última aba. Ficavam dois cotocos verdes com uma quebra visível no canto. */
 .page-switch {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid var(--hair);
 }
 
-/* min-width: 0 é o que mantém os terços realmente iguais: sem ele um item de
+/* min-width: 0 é o que mantém as colunas realmente iguais: sem ele um item de
    célula de grid nunca encolhe abaixo do próprio conteúdo, e num celular de
-   360px o primeiro rótulo (o mais longo) roubava largura dos outros dois — a
+   360px o primeiro rótulo (o mais longo) roubava largura dos outros — a
    divisão simétrica, que é justamente o sinal de "isto foi dimensionado",
    desmanchava exatamente onde há menos espaço para disfarçar. */
 .ps-link {
@@ -293,8 +293,8 @@ body {
   padding-right: var(--gutter);
 }
 
-/* Os filetes verticais caem exatamente em 1/3 e 2/3 da largura da página: é a
-   pista de que as três colunas foram dimensionadas, não sobraram. */
+/* Os filetes verticais caem exatamente em 1/4, 2/4 e 3/4 da largura da página:
+   é a pista de que as quatro colunas foram dimensionadas, não sobraram. */
 .ps-link + .ps-link {
   border-left: 1px solid var(--hair);
 }
@@ -1636,12 +1636,56 @@ kbd {
   }
 }
 
-/* As abas encolhem em dois degraus PRÓPRIOS, antes do resto do layout: a
-   fileira é a única coisa da página cuja altura depende de o texto caber em um
-   terço da tela, então ela precisa ceder mais cedo que o resto.
-   1º degrau — sai a glosa. Abaixo de ~1000px ela quebraria em duas linhas e a
-   barra saltaria de 58px para 90px justamente onde sobra menos tela. */
-@media (max-width: 1000px) {
+/* As abas encolhem em três degraus PRÓPRIOS, antes do resto do layout: a
+   fileira é a única coisa da página cuja altura depende de o texto caber numa
+   fração da tela, então ela precisa ceder mais cedo que o resto.
+
+   1º degrau — a fileira dobra em 2x2. Com quatro abas, a linha única acaba
+   cedo: em 1300px a última célula já entrava em reticências (ela é a que tem
+   a pergunta mais longa E paga a goteira de 40px do lado direito). Quebrando
+   em duas fileiras de dois, cada célula volta a ter metade da tela e tanto a
+   pergunta quanto a glosa sobrevivem por mais tempo. O preço é uma faixa de
+   cabeçalho mais alta, mas ela cresce UMA vez, em degrau conhecido, em vez de
+   crescer sozinha quando o texto não couber.
+   O valor foi medido, não estimado: acima de 1400px nenhum dos quatro rótulos
+   entra em reticências no arranjo de quatro colunas; abaixo disso, entra. */
+@media (max-width: 1400px) {
+  .page-switch {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Os filetes mudam de eixo junto com o grid: vertical só entre as duas
+     colunas, horizontal separando a segunda fileira da primeira. Sem isto o
+     `+ .ps-link` desenharia uma borda esquerda no 3º item, que é o primeiro
+     da sua fileira — um risco solto no meio do nada. */
+  .ps-link + .ps-link {
+    border-left: 0;
+  }
+
+  .ps-link:nth-child(even) {
+    border-left: 1px solid var(--hair);
+  }
+
+  .ps-link:nth-child(n+3) {
+    border-top: 1px solid var(--hair);
+  }
+
+  /* A goteira também muda de dono: com duas colunas, quem encosta na borda
+     esquerda são o 1º e o 3º; na direita, o 2º e o 4º. */
+  .ps-link:nth-child(odd) {
+    padding-left: var(--gutter);
+  }
+
+  .ps-link:nth-child(even) {
+    padding-right: var(--gutter);
+  }
+}
+
+/* 2º degrau — sai a glosa. Já em 2x2, metade de 700px são 350px por célula, e
+   aí a glosa mais longa começa a quebrar em duas linhas: a barra saltaria de
+   58px para 90px justamente onde sobra menos tela. A pergunta fica; ela é o
+   que identifica a seção. */
+@media (max-width: 700px) {
   .ps-gloss {
     display: none;
   }
@@ -1672,10 +1716,11 @@ kbd {
   }
 }
 
-/* 2º degrau — sai a pergunta. "Quem lançou o quê, e quando?" precisa de ~180px
-   e o terço já está em ~167px: sem isto ela quebra em duas linhas. A pergunta
-   continua no `title` e é o que o leitor de tela anuncia acima deste ponto. */
-@media (max-width: 820px) {
+/* 3º degrau — sai a pergunta. Mesmo com meia tela por célula, abaixo de ~480px
+   sobram ~160px de texto e "Quem lançou o quê, e quando?" pede ~175px: sem
+   isto ela quebra em duas linhas. A pergunta continua no `title` e é o que o
+   leitor de tela anuncia acima deste ponto. */
+@media (max-width: 480px) {
   .ps-q {
     display: none;
   }
@@ -1963,8 +2008,7 @@ kbd {
 
   /* Com a fileira indo de canto a canto, a goteira virou padding interno das
      células das pontas — a primeira, que tem o rótulo mais longo
-     ("Lançamentos"), perdeu 4px úteis. Ícone e vão menores devolvem a folga:
-     numa tela de 360px sobram 4px em vez de 1. */
+     ("Lançamentos"), perdeu 4px úteis. Ícone e vão menores devolvem a folga. */
   .ps-icon {
     width: 24px;
     height: 24px;
@@ -1976,10 +2020,11 @@ kbd {
     height: 12px;
   }
 
-  /* "Lançamentos" mede 73px a 11px e o terço de uma tela de 360px oferece 76px
-     — margem pequena demais para variação de fonte. A 10,5px sobram 7px. */
+  /* Com a fileira em 2x2, "Lançamentos" tem metade da tela e não 76px: a 11,5px
+     ele cabe com folga numa tela de 360px. O aperto que justificava 10,5px era
+     do arranjo em três colunas. */
   .ps-short {
-    font-size: 10.5px;
+    font-size: 11.5px;
   }
 
   /* Ordem natural: [−] [curso] [+] [Tela]. Antes o slider era jogado para

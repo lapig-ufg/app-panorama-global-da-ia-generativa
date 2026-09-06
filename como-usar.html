@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Como usar IA fora do navegador | Panorama Global da IA Generativa — LAPIG</title>
+
+  <!-- SEO & Social -->
+  <meta name="description" content="A diferença entre conversar com a IA numa aba do navegador e dar a ela acesso ao terminal do seu computador: comparações lado a lado com comandos reais, catálogo de ferramentas (Claude Code, Codex CLI, OpenCode, Pi, Antigravity, Ollama) e um tutorial interativo de instalação. LAPIG / IESA / UFG.">
+  <meta name="author" content="LAPIG / IESA / UFG">
+  <meta name="theme-color" content="#10a37f">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/como-usar.html">
+  <meta property="og:title" content="Como usar IA fora do navegador">
+  <meta property="og:description" content="Não é onde a IA está — é até onde vai a mão dela. Comparações com comandos reais, catálogo de agentes de terminal e tutorial interativo de instalação do Ollama e do Antigravity.">
+  <meta property="og:site_name" content="LAPIG / UFG">
+  <meta property="og:image" content="https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/assets/thumbnail.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:locale" content="pt_BR">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Como usar IA fora do navegador">
+  <meta name="twitter:description" content="A IA que responde e a IA que executa: a diferença, em comandos de verdade.">
+  <meta name="twitter:image" content="https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/assets/thumbnail.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2310a37f'/><text x='50' y='66' font-size='52' font-weight='800' text-anchor='middle' fill='white' font-family='system-ui,sans-serif'>L</text></svg>">
+
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="assets/styles.css?v=29">
+  <link rel="stylesheet" href="assets/guia.css?v=27">
+  <link rel="stylesheet" href="assets/como-usar.css?v=1">
+
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSBR3JMT2X"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CSBR3JMT2X');
+  </script>
+
+  <!-- Modo incorporado: ?embed=1 esconde a moldura própria (iframe do Observatório UFG-IA) -->
+  <script>
+    (function () {
+      if (!new URLSearchParams(location.search).has('embed')) return;
+      document.documentElement.classList.add('is-embed');
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.ps-link').forEach(function (a) {
+          var url = new URL(a.getAttribute('href'), location.href);
+          url.searchParams.set('embed', '1');
+          a.setAttribute('href', url.pathname + url.search);
+        });
+      });
+    })();
+  </script>
+</head>
+
+<body>
+
+  <div class="top-ribbon" aria-hidden="true">
+    <span class="r-west"></span>
+    <span class="r-east"></span>
+    <span class="r-world"></span>
+  </div>
+
+  <header class="app-header">
+    <div class="header-top">
+      <div class="header-brand">
+        <div class="header-logos">
+          <a href="https://lapig.iesa.ufg.br/" target="_blank" rel="noopener"
+             class="header-logo logo-lapig"
+             title="Laboratório de Processamento de Imagens e Geoinformação — LAPIG / UFG"
+             aria-label="LAPIG">
+            <img src="assets/logo-lapig.png" alt="Logo LAPIG">
+          </a>
+          <span class="logo-sep" aria-hidden="true"></span>
+          <a href="https://www.ufg.br/" target="_blank" rel="noopener"
+             class="header-logo logo-ufg"
+             title="Universidade Federal de Goiás — UFG"
+             aria-label="UFG">
+            <img src="assets/logo-ufg.png" alt="Logo UFG">
+          </a>
+        </div>
+        <div class="header-titlewrap">
+          <div class="header-breadcrumb">
+            <a class="back-to-observatory" href="https://lapig-ufg.github.io/observatorio-ia/" target="_blank" rel="noopener" title="Retornar para o Observatório UFG-IA">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              <span>Retornar para o Observatório UFG-IA</span>
+            </a>
+          </div>
+          <h1>Como usar IA fora do navegador</h1>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="meta-row"><span class="meta-label">Curadoria</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-value">LAPIG / UFG</span></div>
+        <div class="meta-row"><span class="meta-label">Atualizado</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-value" id="cu-updated">…</span></div>
+      </div>
+    </div>
+
+    <!-- Cada seção é uma pergunta que ela responde, não um nome: "Régua" era
+         jargão de quem construiu o site. Os quatro itens dividem a largura em
+         partes iguais e a seção corrente encosta no filete preto. Abaixo de
+         960px a fileira dobra em 2x2 (ver styles.css) — foi o preço de passar
+         de três para quatro perguntas sem perder a pergunta inteira. -->
+    <nav class="page-switch" aria-label="Seções do painel">
+      <a class="ps-link" href="index.html"
+         title="Linha do tempo dos lançamentos de modelos de IA generativa, empresa por empresa">
+        <span class="ps-icon" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12h18M7 8v8M13 6v12M19 9v6" />
+          </svg>
+        </span>
+        <span class="ps-text">
+          <span class="ps-q">Quem lançou o quê, e quando<span class="ps-mark">?</span></span>
+          <span class="ps-short">Lançamentos</span>
+          <span class="ps-gloss">A linha do tempo desde o ChatGPT</span>
+        </span>
+        <svg class="ps-go" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+      <a class="ps-link" href="guia.html"
+         title="Qual modelo de IA usar para cada tipo de tarefa">
+        <span class="ps-icon" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3v18h18" />
+            <path d="M7 15l4-5 3 3 5-7" />
+          </svg>
+        </span>
+        <span class="ps-text">
+          <span class="ps-q">Qual modelo usar<span class="ps-mark">?</span></span>
+          <span class="ps-short">Qual usar</span>
+          <span class="ps-gloss">O ranking por tarefa, custo e velocidade</span>
+        </span>
+        <svg class="ps-go" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+      <a class="ps-link" href="gratuitos.html"
+         title="Ferramentas e modelos de IA que você pode usar gratuitamente">
+        <span class="ps-icon" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12v10H4V12"/>
+            <path d="M2 7h20v5H2z"/>
+            <path d="M12 22V7"/>
+            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+          </svg>
+        </span>
+        <span class="ps-text">
+          <span class="ps-q">O que dá pra usar de graça<span class="ps-mark">?</span></span>
+          <span class="ps-short">De graça</span>
+          <span class="ps-gloss">Os planos gratuitos e seus limites</span>
+        </span>
+        <svg class="ps-go" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+      <a class="ps-link is-active" href="como-usar.html" aria-current="page"
+         title="Como usar IA fora do navegador: no terminal, com acesso aos seus arquivos">
+        <span class="ps-icon" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2.5" y="4" width="19" height="16" rx="2" />
+            <path d="M7 9.5l3 2.5-3 2.5" />
+            <path d="M12.5 15h4.5" />
+          </svg>
+        </span>
+        <span class="ps-text">
+          <span class="ps-q">Como usar fora do navegador<span class="ps-mark">?</span></span>
+          <span class="ps-short">No terminal</span>
+          <span class="ps-gloss">Terminal, agentes e instalação</span>
+        </span>
+        <svg class="ps-go" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Sumário: a página é longa e a ordem importa (o vocabulário sustenta a
+       comparação, que sustenta o catálogo). Os atalhos deixam quem já sabe
+       pular direto para a instalação sem esconder a espinha do argumento. -->
+  <div class="controls">
+    <div class="cu-toc" role="navigation" aria-label="Seções desta página">
+      <a class="cu-toc-link" href="#vocabulario"><span class="cu-toc-n">01</span> O nome disso</a>
+      <a class="cu-toc-link" href="#comparacao"><span class="cu-toc-n">02</span> A diferença, em comandos</a>
+      <a class="cu-toc-link" href="#ferramentas"><span class="cu-toc-n">03</span> O cinto de ferramentas</a>
+      <a class="cu-toc-link" href="#tutorial"><span class="cu-toc-n">04</span> Instalar, passo a passo</a>
+      <a class="cu-toc-link" href="#catalogo"><span class="cu-toc-n">05</span> O catálogo</a>
+      <a class="cu-toc-link" href="#seguranca"><span class="cu-toc-n">06</span> O que você autoriza</a>
+    </div>
+  </div>
+
+  <main class="main qm-main cu-main">
+
+    <!-- ─── TESE ─────────────────────────────────────────────── -->
+    <div class="qm-intro">
+      <p class="qm-lede">
+        As outras três abas respondem <strong>o que</strong> existe, <strong>qual</strong> escolher e
+        <strong>quanto</strong> custa. Esta responde <strong>como</strong> — e o "como" que mais muda
+        resultado não é jeito de escrever prompt: é o quanto a IA alcança da sua máquina.
+        A mesma pergunta, feita ao mesmo modelo, produz uma resposta muito diferente conforme ele
+        <em>possa ou não</em> abrir os seus arquivos e rodar comandos.
+      </p>
+      <p class="cu-lede-2">
+        Abaixo: por que "navegador × computador" é um par de nomes errado, cinco tarefas de
+        laboratório resolvidas dos dois jeitos com os comandos que a IA realmente digita, o que
+        instalar, e uma tela de computador de mentira onde você faz a instalação de verdade.
+      </p>
+      <p class="qm-source">
+        Comandos verificados em bash/GNU coreutils (Linux) antes da publicação; onde o
+        comportamento muda no macOS ou no Windows, está dito na própria transcrição.
+        Instaladores e planos conferidos nas páginas oficiais em 6 de setembro de 2026.
+      </p>
+    </div>
+
+    <!-- ─── 01 · VOCABULÁRIO ─────────────────────────────────── -->
+    <section id="vocabulario" class="cu-section" aria-labelledby="h-vocabulario">
+      <header class="cu-sec-head">
+        <span class="cu-sec-n">01</span>
+        <div>
+          <h2 id="h-vocabulario">Primeiro, o nome disso</h2>
+          <p class="cu-sec-sub" id="cu-vocab-lede"></p>
+        </div>
+      </header>
+
+      <div class="cu-eixos" id="cu-eixos"></div>
+
+      <p class="cu-tese" id="cu-tese"></p>
+
+      <h3 class="cu-h3">Cinco pares de nomes em julgamento</h3>
+      <div class="cu-nomes" id="cu-nomes"></div>
+      <p class="cu-aberto" id="cu-aberto"></p>
+    </section>
+
+    <!-- ─── 02 · COMPARAÇÃO ──────────────────────────────────── -->
+    <section id="comparacao" class="cu-section" aria-labelledby="h-comparacao">
+      <header class="cu-sec-head">
+        <span class="cu-sec-n">02</span>
+        <div>
+          <h2 id="h-comparacao">A diferença, em comandos</h2>
+          <p class="cu-sec-sub">
+            Cinco tarefas reais de laboratório, cada uma resolvida dos dois jeitos.
+            À esquerda, a conversa numa aba. À direita, a mesma frase dita a um agente com
+            acesso ao terminal — com os comandos que ele digita e o motivo de cada um.
+          </p>
+        </div>
+      </header>
+
+      <div class="cu-tabs" id="cu-cenario-tabs" role="tablist" aria-label="Escolher a tarefa"></div>
+      <div id="cu-cenario-painel"></div>
+    </section>
+
+    <!-- ─── 03 · FERRAMENTAS ─────────────────────────────────── -->
+    <section id="ferramentas" class="cu-section" aria-labelledby="h-ferramentas">
+      <header class="cu-sec-head">
+        <span class="cu-sec-n">03</span>
+        <div>
+          <h2 id="h-ferramentas">O cinto de ferramentas</h2>
+          <p class="cu-sec-sub">
+            Tecnicamente, a diferença entre a aba e o terminal não está no modelo: é a mesma
+            rede neural nos dois lados. Está na lista de ações que ele pode pedir para executar.
+            São estes os nomes que aparecem na tela quando um agente pede a sua permissão.
+          </p>
+        </div>
+      </header>
+      <div class="cu-tools" id="cu-tools"></div>
+    </section>
+
+    <!-- ─── 04 · SIMULADOR ───────────────────────────────────── -->
+    <section id="tutorial" class="cu-section" aria-labelledby="h-tutorial">
+      <header class="cu-sec-head">
+        <span class="cu-sec-n">04</span>
+        <div>
+          <h2 id="h-tutorial">Instalar, passo a passo</h2>
+          <p class="cu-sec-sub">
+            A tela abaixo é um computador de brincadeira — a cara é a dos anos 2000, de
+            propósito. Os comandos dentro dela são reais: dá para segui-los, linha por linha, no
+            seu terminal de verdade. Clique num ícone da área de trabalho para começar.
+          </p>
+        </div>
+      </header>
+
+      <!-- O simulador é enfeite com função: ele dá um lugar seguro para
+           errar. Quem nunca abriu um terminal trava no primeiro `$`, e a
+           tela de computador transforma esse primeiro passo numa coisa
+           obviamente reversível — não tem como quebrar nada aqui dentro. -->
+      <div class="cu-os" id="cu-os">
+        <div class="cu-os-bezel">
+          <div class="cu-os-screen" id="cu-os-screen">
+            <div class="cu-desk" id="cu-desk" role="group" aria-label="Área de trabalho"></div>
+            <div class="cu-windows" id="cu-windows"></div>
+            <div class="cu-taskbar">
+              <button type="button" class="cu-start" id="cu-start" aria-haspopup="true" aria-expanded="false">
+                <span class="cu-start-flag" aria-hidden="true"></span>
+                <span>Iniciar</span>
+              </button>
+              <div class="cu-task-items" id="cu-task-items"></div>
+              <div class="cu-tray"><span id="cu-clock">--:--</span></div>
+            </div>
+            <div class="cu-startmenu" id="cu-startmenu" hidden></div>
+          </div>
+        </div>
+        <p class="cu-os-legend">
+          Nada aqui roda de verdade: é uma reconstituição fiel das telas e das saídas.
+          O objetivo é você reconhecer o que vai ver quando rodar no seu computador.
+        </p>
+      </div>
+
+      <!-- Fallback sem JS e alternativa acessível: a mesma sequência em texto
+           corrido, copiável e legível por leitor de tela, sem depender da
+           simulação. -->
+      <details class="cu-plain" id="cu-plain">
+        <summary>Ver os tutoriais como texto (sem a simulação)</summary>
+        <div id="cu-plain-body"></div>
+      </details>
+    </section>
+
+    <!-- ─── 05 · CATÁLOGO ────────────────────────────────────── -->
+    <section id="catalogo" class="cu-section" aria-labelledby="h-catalogo">
+      <header class="cu-sec-head">
+        <span class="cu-sec-n">05</span>
+        <div>
+          <h2 id="h-catalogo">O catálogo</h2>
+          <p class="cu-sec-sub">
+            Três famílias, e a divisão repete o argumento da seção 01: nas duas primeiras o
+            programa é local e o modelo é remoto; só na terceira o modelo pensa dentro da sua
+            máquina.
+          </p>
+        </div>
+      </header>
+      <div id="cu-familias"></div>
+    </section>
+
+    <!-- ─── 06 · SEGURANÇA ───────────────────────────────────── -->
+    <section id="seguranca" class="cu-section" aria-labelledby="h-seguranca">
+      <header class="cu-sec-head">
+        <span class="cu-sec-n">06</span>
+        <div>
+          <h2 id="h-seguranca">O que você está autorizando</h2>
+          <p class="cu-sec-sub">
+            Dar mãos à IA é dar mãos à IA. Não é aviso legal: são as seis regras que evitam os
+            acidentes que a gente já viu acontecer.
+          </p>
+        </div>
+      </header>
+      <div class="cu-seg" id="cu-seg"></div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-credits">
+      Desenvolvido por Victor Amaral, <a href="https://lapig.iesa.ufg.br/" target="_blank" rel="noopener">LAPIG</a> / UFG
+    </div>
+    <div class="footer-meta">
+      <span>Comandos testados antes de publicar · instaladores conferidos nas páginas oficiais</span>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/como-usar-data.js?v=1"></script>
+  <script src="assets/como-usar.js?v=1"></script>
+</body>
+
+</html>

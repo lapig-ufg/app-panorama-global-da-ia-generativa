@@ -16,7 +16,7 @@ Acesse a versão pública em: **https://lapig-ufg.github.io/app-panorama-global-
 
 Este repositório é **mais do que o site** — são três partes que trabalham juntas:
 
-- **Site** (`index.html` + `assets/`) — a linha do tempo, publicada no **GitHub Pages**. Lê os dados de uma planilha Google Sheets em tempo real (sem novo deploy).
+- **Site** (`index.html` + `assets/`) — a linha do tempo, publicada no **GitHub Pages**. Lê os dados de uma planilha Google Sheets em tempo real (sem novo deploy). Junto dela vão três abas estáticas: `guia.html`, `gratuitos.html` e `como-usar.html`.
 - **Automação semanal** (`automation/` + `.github/workflows/auto-update.yml`) — um **cron do GitHub Actions** roda toda segunda: o Claude pesquisa lançamentos recentes na web e grava candidatos numa aba de **rascunho** (`Pendentes`) da planilha.
 - **PWA de curadoria** (`admin/`) — app instalável onde você **aprova/rejeita** os candidatos. **Só o que você aprova vai ao ar** — nada é publicado automaticamente.
 
@@ -57,6 +57,7 @@ panorama-llms/
 ├── index.html              # Página principal do site (timeline)
 ├── guia.html               # "Qual modelo usar" — rankings de benchmarks (interativa)
 ├── gratuitos.html          # Catálogo de IAs gratuitas
+├── como-usar.html          # "Como usar fora do navegador" — IA no terminal (interativa)
 ├── assets/
 │   ├── styles.css          # Estilos da timeline
 │   ├── data.js             # Logos, bandeiras, cores, grupos, aliases + SHEET_ID
@@ -64,7 +65,8 @@ panorama-llms/
 │   ├── app.js              # Carregamento de dados, tooltip, drag, exportação
 │   ├── benchmarks.json     # Dados da Artificial Analysis (gerado pelo cron)
 │   ├── guia.js / guia.css  # Página "Qual modelo usar" (abas, ordenação, comparação)
-│   └── gratuitos.*         # Página de IAs gratuitas
+│   ├── gratuitos.*         # Página de IAs gratuitas
+│   └── como-usar.*         # Página "Como usar fora do navegador" (dados, lógica, estilos)
 ├── admin/                  # PWA de curadoria (aprovar/rejeitar pendentes)
 ├── automation/             # Pipelines: lançamentos (prepare/publish) + benchmarks (update-benchmarks.mjs)
 │   ├── README.md           # Pipeline de lançamentos
@@ -118,6 +120,42 @@ planilha e o catálogo completo da Artificial Analysis (`assets/catalogo.json`, 
 com data de estreia, gerado pelo cron de benchmarks). A distinção entre curadoria humana e
 censo automático aparece na pílula, na legenda do SVG, no tooltip e nas colunas
 `Nível`/`Fonte` do CSV. Detalhes em [ARQUITETURA.md §15](ARQUITETURA.md).
+
+---
+
+## 🖥 A aba "Como usar fora do navegador"
+
+Página **estática e autocontida** (`como-usar.html` + `assets/como-usar*.js|css`): não lê
+planilha, não depende de cron e não tem pipeline. Todo o conteúdo mora em
+`assets/como-usar-data.js` — é o único arquivo a editar para atualizar a aba.
+
+Ela responde ao "como" que faltava no painel: a diferença entre conversar com a IA numa
+aba do navegador e dar a ela acesso ao terminal da máquina. Seis seções:
+
+1. **O nome disso** — por que "navegador × computador" é um par de nomes errado (o navegador
+   está no computador) e cinco pares candidatos em julgamento, com uma proposta marcada.
+2. **A diferença, em comandos** — cinco tarefas de laboratório resolvidas dos dois jeitos,
+   lado a lado, com os comandos que o agente realmente digita e o custo de cada caminho.
+3. **O cinto de ferramentas** — Bash, ler, escrever, buscar, rodar código, web, MCP.
+4. **Instalar, passo a passo** — um simulador de área de trabalho estilo anos 2000 com dois
+   tutoriais interativos: **Ollama** (modelo rodando na própria máquina) e **Antigravity**.
+5. **O catálogo** — três famílias: CLIs (Claude Code, Codex CLI, OpenCode, Pi, Gemini CLI),
+   aplicativos de desktop (Claude Desktop, ChatGPT Desktop, Antigravity) e modelo local
+   (Ollama, LM Studio, llama.cpp).
+6. **O que você está autorizando** — as seis regras de segurança ao dar mãos a um agente.
+
+### Regras de manutenção
+
+- **Todo comando publicado foi rodado antes.** As transcrições assumem bash/GNU coreutils
+  (Linux); onde o comportamento muda no macOS ou no Windows, isso está dito na própria
+  transcrição, e não num rodapé. Ao editar um comando, rode-o antes de commitar.
+- **Prosa aceita crases** (`` `mv -n` ``) e o renderizador as converte em `<code>` — a
+  conversão acontece depois do escape de HTML.
+- **O simulador nunca é o único caminho.** Os mesmos passos saem em texto corrido dentro do
+  `<details>` "Ver os tutoriais como texto", para leitor de tela, celular e copiar-colar.
+  Se você acrescentar um passo, ele aparece nos dois lugares automaticamente.
+- **Instaladores e planos** foram conferidos nas páginas oficiais (última checagem em
+  `updatedAt`). Revalide antes de citar cotas — elas mudam com frequência.
 
 ---
 

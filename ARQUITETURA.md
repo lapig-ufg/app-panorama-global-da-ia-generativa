@@ -542,6 +542,11 @@ panorama-llms/
 ├── guia.html, assets/{guia.js,benchmarks.json,guia.css}  # "Qual modelo usar" (benchmarks AA)
 ├── gratuitos.html, assets/{gratuitos.js,gratuitos-data.js,gratuitos.css}  # "IAs gratuitas"
 │                                                          #   catálogo v2; fonte: The AI Rankings
+├── como-usar.html, assets/{como-usar.js,como-usar-data.js,como-usar.css}  # "Como usar fora
+│                                  #   do navegador": IA no terminal. Estática e autocontida —
+│                                  #   sem planilha, sem cron, sem pipeline. Todo o conteúdo
+│                                  #   (comparações, catálogo, tutoriais do simulador) mora em
+│                                  #   como-usar-data.js. Ver README § "A aba Como usar".
 ├── admin/                         # PWA de curadoria
 │   ├── index.html                 #   app (shell + lógica): lê via fetch CORS (?action=listar),
 │   │                              #   aprova/rejeita (POST + reconcile via listar), botão 🔍 (rodar)
