@@ -383,7 +383,9 @@
   font-weight: 500;
 }
 
-.cu-tag-chat { color: var(--ink-muted); }
+/* Índigo, o mesmo do gráfico e do diagrama: a etiqueta da coluna, a bolinha
+   vazada e a seta de volta precisam ser reconhecíveis como a MESMA coisa. */
+.cu-tag-chat { color: #5B53A8; }
 .cu-tag-term { color: var(--accent); }
 
 .cu-col-term .cu-col-head {
@@ -583,6 +585,372 @@
 }
 
 .cu-licao strong { color: var(--ink); }
+
+/* ═══ 02b · O DIAGRAMA DO CICLO ═══ */
+
+/* As duas metades ficam lado a lado porque a leitura é comparativa: o que se
+   vê não é "um ciclo" e depois "outro ciclo", é a MESMA figura com a volta em
+   lugares diferentes. Empilhadas, essa simetria some. */
+.cu-ciclo {
+  margin: 0 0 26px;
+  padding: 18px 20px 16px;
+  background: var(--white);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+}
+
+.cu-ciclo-par {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.cu-ciclo-t { margin-bottom: 10px; }
+
+.cu-ciclo-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 500;
+}
+
+.cu-ciclo-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Divisor tracejado: é a única linha da figura que NÃO representa um caminho,
+   e o tracejado é o que impede de lê-la como mais uma seta. */
+.cu-cd-divisor {
+  stroke: var(--ink-faint);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+.cu-cd-col {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  fill: var(--ink-muted);
+  text-anchor: middle;
+}
+
+.cu-cd-no rect {
+  fill: var(--paper);
+  stroke: var(--hair);
+  stroke-width: 1;
+}
+
+.cu-cd-no text {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  fill: var(--ink);
+  text-anchor: middle;
+}
+
+.cu-cd-aprova rect { fill: rgba(16, 163, 127, 0.09); stroke: rgba(16, 163, 127, 0.4); }
+
+.cu-cd-seta {
+  fill: none;
+  stroke: #8d8877;
+  stroke-width: 1.4;
+}
+
+/* A volta é a única linha grossa das duas figuras: ela é a informação. À
+   esquerda ela cruza a fronteira (o resultado precisa de você); à direita ela
+   nem chega perto (a máquina lê a própria saída). */
+.cu-cd-volta {
+  fill: none;
+  stroke-width: 2.6;
+}
+
+.cu-cd-volta-chat { stroke: #5B53A8; }
+.cu-cd-volta-term { stroke: #10a37f; }
+
+.cu-ciclo-leg {
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink-light);
+}
+
+.cu-ciclo-leg strong { color: var(--ink); }
+
+.cu-ciclo-cap {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hair);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+.cu-defs { position: absolute; width: 0; height: 0; }
+
+/* ═══ 02b · A TIRA DAS LIÇÕES ═══ */
+
+.cu-licoes {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.cu-licao-chip {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 11px;
+  text-align: left;
+  background: var(--white);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: var(--sans);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.cu-licao-chip:hover { border-color: var(--accent); }
+
+.cu-licao-chip.is-active {
+  border-color: var(--accent);
+  background: linear-gradient(to bottom, var(--white) 40%, rgba(10, 115, 89, 0.07));
+}
+
+.cu-licao-n {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  padding-top: 1px;
+}
+
+.cu-licao-txt {
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink-light);
+}
+
+.cu-licao-chip.is-active .cu-licao-txt { color: var(--ink); }
+
+/* ═══ 02c · O GRÁFICO DOS CUSTOS ═══ */
+
+.cu-graf {
+  margin: 22px 0 0;
+  padding: 18px 20px 16px;
+  background: var(--white);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+}
+
+.cu-graf-cap h3 {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.016em;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.cu-graf-cap p {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  max-width: 74ch;
+}
+
+/* Legenda sempre presente: são duas séries, e identidade nunca pode depender
+   só da cor. A bolinha vazada contra a cheia repete a distinção sem cor. */
+.cu-graf-leg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 12px 0 4px;
+}
+
+.cu-lg {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11.5px;
+  color: var(--ink-light);
+}
+
+.cu-lg-m {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.cu-lg-chat { border: 2.5px solid #5B53A8; background: var(--white); }
+.cu-lg-term { background: #10a37f; }
+
+.cu-graf-rola { overflow-x: auto; }
+
+.cu-graf-svg {
+  display: block;
+  width: 100%;
+  min-width: 520px;
+  height: auto;
+}
+
+/* Grade em filete sólido de 1px e recuada: ela orienta, não compete. */
+.cu-gr-grade { stroke: var(--hair); stroke-width: 1; }
+
+.cu-gr-eixo {
+  font-family: var(--mono);
+  font-size: 10px;
+  fill: var(--ink-muted);
+  text-anchor: middle;
+}
+
+.cu-gr-unid { letter-spacing: 0.04em; }
+
+.cu-gr-faixa { fill: transparent; }
+.cu-gr-linha:hover .cu-gr-faixa { fill: rgba(10, 115, 89, 0.045); }
+
+.cu-gr-rot {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--ink);
+  text-anchor: end;
+}
+
+.cu-gr-haste { stroke: #d8d4c8; stroke-width: 2; }
+
+/* Anel de superfície nas marcas: onde os dois pontos quase se tocam (a linha
+   das planilhas) é ele que impede os dois círculos de virarem uma mancha só. */
+.cu-gr-p { stroke: var(--white); stroke-width: 2; }
+.cu-gr-chat { fill: var(--white); stroke: #5B53A8; stroke-width: 2.5; }
+.cu-gr-term { fill: #10a37f; }
+
+/* Os números usam tinta de texto, nunca a cor da série: a identidade já está
+   na marca ao lado. */
+.cu-gr-val {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  fill: var(--ink-muted);
+}
+
+.cu-graf-nota {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: var(--paper);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-light);
+}
+
+.cu-graf-nota strong { color: var(--ink); }
+
+.cu-graf-tab { margin-top: 12px; }
+
+.cu-graf-tab summary {
+  cursor: pointer;
+  font-size: 11.5px;
+  color: var(--ink-muted);
+}
+
+.cu-graf-tab table {
+  margin-top: 10px;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.cu-graf-tab th,
+.cu-graf-tab td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--hair);
+  text-align: left;
+}
+
+.cu-graf-tab th {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+.cu-graf-tab td { color: var(--ink-light); }
+
+/* ═══ 02d · O CONTRAPONTO ═══ */
+
+/* Índigo, e não verde: este bloco defende o outro lado, e usar o verde da
+   página aqui faria a contraprova parecer mais uma vitória do terminal. */
+.cu-contra {
+  margin-top: 24px;
+  padding: 20px 22px;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-top: 3px solid #5B53A8;
+  border-radius: 4px 4px 12px 12px;
+}
+
+.cu-contra h3 {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.cu-contra-lede {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-light);
+  max-width: 82ch;
+  margin-bottom: 16px;
+}
+
+.cu-contra-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+}
+
+.cu-contra-item {
+  padding: 13px 15px;
+  background: var(--white);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+}
+
+.cu-contra-item h4 {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  color: #4a4394;
+  margin-bottom: 5px;
+}
+
+.cu-contra-item p {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink-light);
+}
+
+.cu-contra-fecho {
+  margin-top: 16px;
+  padding: 13px 15px;
+  background: var(--white);
+  border: 1px solid rgba(91, 83, 168, 0.4);
+  border-left-width: 4px;
+  border-radius: 0 10px 10px 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-light);
+}
+
+.cu-contra-fecho strong { color: var(--ink); }
 
 /* ═══ 03 · CINTO DE FERRAMENTAS ═══ */
 .cu-tools {
@@ -927,6 +1295,61 @@
   font-size: 11.5px;
   font-weight: 700;
   color: #2a2823;
+}
+
+/* ─── revisão em diff (a janela que o terminal não desenha) ─── */
+.cu-win-diff { background: #fff; display: flex; flex-direction: column; min-height: 0; }
+
+.cu-diff-barra {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 12px;
+  background: #dfdcd0;
+  border-bottom: 1px solid #b9b5a6;
+}
+
+.cu-diff-arq { font-family: var(--mono); font-size: 11px; font-weight: 500; color: #2a2823; }
+.cu-diff-cont { font-size: 10px; color: #6b6860; }
+
+.cu-diff-corpo {
+  flex: 1;
+  overflow: auto;
+  padding: 6px 0;
+  background: #fbfaf7;
+}
+
+.cu-diff-l {
+  display: flex;
+  gap: 8px;
+  padding: 1px 12px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+/* O sinal vem antes da cor: em impressão preto-e-branco, com daltonismo, ou
+   quando o leitor copia o texto, é ele que diz o que entrou e o que saiu. */
+.cu-diff-s { flex-shrink: 0; width: 8px; font-weight: 700; }
+
+.cu-diff-ctx { color: #55524b; }
+.cu-diff-mais { background: rgba(16, 163, 127, 0.13); color: #08553f; }
+.cu-diff-menos { background: rgba(163, 61, 42, 0.11); color: #8c3423; }
+
+.cu-diff-bts {
+  display: flex;
+  gap: 8px;
+  padding: 9px 12px;
+  background: #ece9d8;
+  border-top: 1px solid #b9b5a6;
+}
+
+.cu-dlg-btn.is-primario {
+  background: linear-gradient(180deg, #4a90e2, #2c65c8);
+  border-color: #1c4fae;
+  color: #fff;
 }
 
 /* ─── caixa de diálogo ─── */
@@ -1543,6 +1966,71 @@
   color: var(--ink-muted);
 }
 
+/* Caixa de consulta recolhida: o resumo entrega a contagem, que é o que a
+   maioria quer daqui, e as dezoito linhas só aparecem para quem foi procurar
+   uma delas. */
+.cu-integs-caixa {
+  margin: 6px 0 4px;
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  background: var(--white);
+  overflow: hidden;
+}
+
+.cu-integs-caixa > summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 14px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.cu-integs-caixa > summary::-webkit-details-marker { display: none; }
+
+.cu-integs-sum {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+
+.cu-integs-n {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 3px 7px;
+  border-radius: 5px;
+}
+
+.cu-integs-caixa[open] > summary { border-bottom: 1px solid var(--hair); }
+.cu-integs-caixa .cu-ponte-nota { padding: 10px 14px 0; margin-bottom: 8px; }
+.cu-integs-caixa .cu-integs { border: 0; border-radius: 0; margin-bottom: 0; }
+.cu-integs-caixa .cu-integ:last-child { border-bottom: 0; }
+
+/* Botão "mostrar o resto", só no celular (ver colapsarCatalogoNoCelular). */
+.cu-mais {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 11px 14px;
+  background: var(--white);
+  border: 1px dashed var(--hair);
+  border-radius: 10px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.cu-mais:hover { border-color: var(--accent); border-style: solid; }
+
 /* ─── planos da assinatura ─── */
 .cu-planos {
   display: grid;
@@ -1641,6 +2129,12 @@
    RESPONSIVIDADE
    ═══════════════════════════════════════════════════════════════ */
 
+@media (max-width: 1100px) {
+  /* A tira de cinco lições vira 3+2 antes de as frases começarem a quebrar em
+     três linhas — que é quando ela deixa de ser lida de relance. */
+  .cu-licoes { grid-template-columns: repeat(3, 1fr); }
+}
+
 @media (max-width: 980px) {
   .cu-eixos { grid-template-columns: 1fr; }
 
@@ -1651,6 +2145,10 @@
   .cu-lado-a-lado { grid-template-columns: 1fr; }
 
   .cu-cmd { grid-template-columns: 1fr; gap: 5px; }
+
+  /* O par de ciclos empilha: comparar duas figuras de 300px de largura numa
+     tela estreita é pior do que ler uma embaixo da outra com o texto inteiro. */
+  .cu-ciclo-par { grid-template-columns: 1fr; gap: 22px; }
 }
 
 @media (max-width: 760px) {
@@ -1671,6 +2169,11 @@
 }
 
 @media (max-width: 520px) {
+  .cu-licoes { grid-template-columns: repeat(2, 1fr); }
+  .cu-ciclo { padding: 14px 14px 12px; }
+  .cu-graf { padding: 14px 14px 12px; }
+  .cu-contra { padding: 16px 15px; }
+
   .cu-os-bezel { padding: 7px; border-radius: 11px; }
 
   /* No celular a área de trabalho vira uma fileira horizontal no topo: em

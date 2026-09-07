@@ -135,8 +135,10 @@ bloco extra, "a ponte"):
 
 1. **O nome disso** — por que "navegador × computador" é um par de nomes errado (o navegador
    está no computador) e cinco pares candidatos em julgamento, com uma proposta marcada.
-2. **A diferença, em comandos** — cinco tarefas de laboratório resolvidas dos dois jeitos,
-   lado a lado, com os comandos que o agente realmente digita e o custo de cada caminho.
+2. **A diferença, em comandos** — abre com o **diagrama do ciclo** (dois SVG: à esquerda o
+   resultado só volta pela sua digitação; à direita a IA lê a própria saída), seguido de cinco
+   tarefas de laboratório resolvidas dos dois jeitos, um **gráfico de halteres** com as dez
+   medidas de tempo e a contra-seção **"onde a aba ganha"**.
 3. **O cinto de ferramentas** — Bash, ler, escrever, buscar, rodar código, web, MCP.
 4. **Instalar, passo a passo** — um simulador de área de trabalho estilo anos 2000 com dois
    tutoriais interativos: **Ollama Cloud + `ollama launch`** (assinar, rodar um modelo grande
@@ -156,7 +158,16 @@ bloco extra, "a ponte"):
   conversão acontece depois do escape de HTML.
 - **O simulador nunca é o único caminho.** Os mesmos passos saem em texto corrido dentro do
   `<details>` "Ver os tutoriais como texto", para leitor de tela, celular e copiar-colar.
-  Se você acrescentar um passo, ele aparece nos dois lugares automaticamente.
+  Se você acrescentar um passo, ele aparece nos dois lugares automaticamente. Há quatro tipos
+  de janela — `terminal`, `navegador`, `dialogo` e `diff` —, declarados no campo `janela` de
+  cada passo.
+- **Quatro dos cinco cenários moram atrás de abas.** A tira de lições acima delas existe só
+  para tornar visível o que cada um ensina de diferente; ao acrescentar um cenário, escreva
+  também o `licaoCurta`, senão ele entra na página como se fosse repetição do anterior.
+- **O celular é o caso difícil.** A página tem ~22 telas de rolagem em 390px, e o catálogo é
+  a maior fatia. Por isso as famílias mostram um cartão e um botão nessa largura
+  (`colapsarCatalogoNoCelular`) e a tabela de integrações vem fechada. Ao acrescentar
+  conteúdo, meça antes: `document.documentElement.scrollHeight` dividido pela altura da tela.
 - **Instaladores e planos** foram conferidos nas páginas oficiais (última checagem em
   `updatedAt`). Revalide antes de citar cotas — elas mudam com frequência.
 - **A lista do `ollama launch` cresce a cada versão do Ollama.** A tabela em `ponte.integracoes`
@@ -164,6 +175,16 @@ bloco extra, "a ponte"):
   `cmd/launch/registry.go` no repositório do Ollama). O texto ao lado dela manda o leitor rodar
   o comando sem argumento para ver a lista da versão dele — mantenha esse aviso ao atualizar,
   porque é o que impede a tabela de envelhecer virando mentira.
+- **As cores do gráfico e do diagrama foram validadas, não escolhidas a olho.** O par é
+  `#5B53A8` (a aba) e `#10a37f` (o terminal), e ele passa os seis testes do validador de
+  paleta. O par "natural" — o cinza quente `--ink-muted` contra o verde `--accent` — foi
+  **reprovado**: ΔE 1,9 em protanopia, ou seja, indistinguível para parte dos leitores.
+  Ao mexer nessas cores, rode o validador de novo em vez de confiar no olho. As mesmas duas
+  cores marcam a etiqueta de cada coluna da comparação, a seta de volta de cada diagrama e as
+  duas marcas do gráfico — se uma mudar, mudam as três.
+- **O gráfico mostra uma derrota de propósito.** Na linha das planilhas o terminal é mais
+  lento. Não "corrija" isso: é o dado que impede a figura de virar propaganda, e a nota ao
+  lado dela existe para explicar por que a derrota é o caso mais forte da página.
 - **Cuidado com o sufixo dos modelos.** `gemma4:cloud` e `gpt-oss:120b-cloud` rodam no servidor
   da Ollama; `qwen3.5:4b` roda no disco de quem executou. Mesmo comando, mesma porta 11434,
   destinos opostos — é o exemplo que a seção 01 usa e a regra 06 repete. Não misture os dois em

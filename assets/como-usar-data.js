@@ -110,6 +110,7 @@ const COMO_USAR_DATA = {
   cenarios: [
     {
       id: "fotos",
+      licaoCurta: "Olhar antes, conferir depois",
       aba: "Organizar 1.240 fotos",
       titulo: "Organizar 1.240 fotos de campo em pastas por data",
       contexto: "Você voltou de três semanas de campo. As fotos estão todas numa pasta só, com nomes de câmera, e três delas alguém já renomeou na mão.",
@@ -126,7 +127,7 @@ const COMO_USAR_DATA = {
           { t: "ia", v: "Provavelmente três arquivos não seguem o padrão de nome. Você poderia verificar quais são?" },
           { t: "nota", v: "Ele pergunta porque não consegue olhar. A conversa vira você sendo os olhos e as mãos de um modelo que sabe mais bash do que você." }
         ],
-        custo: { tempo: "~25 minutos", idas: "7 idas e voltas", risco: "Você colou no terminal um script que ninguém testou nesses arquivos." }
+        custo: { minutos: 25, tempo: "~25 minutos", idas: "7 idas e voltas", risco: "Você colou no terminal um script que ninguém testou nesses arquivos." }
       },
 
       terminal: {
@@ -154,7 +155,7 @@ const COMO_USAR_DATA = {
           { t: "out", v: "2026-07-14  2026-07-15  2026-07-16  2026-07-17  ...  2026-08-02" },
           { t: "nota", v: "1240 saiu, 1240 chegou. A conferência é o passo que o chat não tem como dar." }
         ],
-        custo: { tempo: "~40 segundos", idas: "1 frase", risco: "`mv -n` não sobrescreve nada, e a conferência final é parte do trabalho." }
+        custo: { minutos: 0.7, tempo: "~40 segundos", idas: "1 frase", risco: "`mv -n` não sobrescreve nada, e a conferência final é parte do trabalho." }
       },
 
       comandos: [
@@ -170,6 +171,7 @@ const COMO_USAR_DATA = {
 
     {
       id: "nomes",
+      licaoCurta: "Ensaiar antes de destruir",
       aba: "Padronizar 340 nomes",
       titulo: "Padronizar o nome de 340 arquivos de raster",
       contexto: "Cinco anos de bolsistas diferentes: espaço, acento, MAIÚSCULA, \"(final)\", \"CÓPIA\". Nada disso sobrevive a um script de processamento.",
@@ -184,7 +186,7 @@ const COMO_USAR_DATA = {
           { t: "ia", v: "Isso indica que seu locale está como C/POSIX. Rode `locale` para conferir…" },
           { t: "nota", v: "Mais uma rodada de você-executa-eu-adivinho. E os 340 arquivos já foram renomeados errado." }
         ],
-        custo: { tempo: "~20 minutos", idas: "5 idas e voltas", risco: "Renomeação é destrutiva: o nome errado já substituiu o certo antes de alguém perceber." }
+        custo: { minutos: 20, tempo: "~20 minutos", idas: "5 idas e voltas", risco: "Renomeação é destrutiva: o nome errado já substituiu o certo antes de alguém perceber." }
       },
 
       terminal: {
@@ -213,7 +215,7 @@ const COMO_USAR_DATA = {
           { t: "out", v: "recorte GO 2026.TIF  ->  recorte_go_2026.tif" },
           { t: "nota", v: "Este é o ensaio. Só depois de você olhar esta lista o `echo` vira `mv -n --`." }
         ],
-        custo: { tempo: "~2 minutos", idas: "1 frase e 1 confirmação", risco: "O ensaio (`echo` no lugar de `mv`) é o que separa 340 arquivos salvos de 340 arquivos remendados." }
+        custo: { minutos: 2, tempo: "~2 minutos", idas: "1 frase e 1 confirmação", risco: "O ensaio (`echo` no lugar de `mv`) é o que separa 340 arquivos salvos de 340 arquivos remendados." }
       },
 
       comandos: [
@@ -229,6 +231,7 @@ const COMO_USAR_DATA = {
 
     {
       id: "planilhas",
+      licaoCurta: "Fazer a pergunta que faltava",
       aba: "40 planilhas → CSV",
       titulo: "Converter 40 planilhas .xlsx em CSV",
       contexto: "Dados de campo entregues em Excel, ano a ano, para entrar num script de R que só lê CSV.",
@@ -242,7 +245,7 @@ const COMO_USAR_DATA = {
           { t: "voce", v: "[roda, vê 40 arquivos em csv/, segue a vida]" },
           { t: "nota", v: "Três semanas depois alguém pergunta cadê os dados de 2021. Estavam na segunda aba da planilha." }
         ],
-        custo: { tempo: "~2 minutos", idas: "1 pergunta", risco: "O erro não aparece: 40 arquivos entraram, 40 saíram. O que sumiu foi o que estava dentro deles." }
+        custo: { minutos: 2, tempo: "~2 minutos", idas: "1 pergunta", risco: "O erro não aparece: 40 arquivos entraram, 40 saíram. O que sumiu foi o que estava dentro deles." }
       },
 
       terminal: {
@@ -269,7 +272,7 @@ const COMO_USAR_DATA = {
           { t: "cmd", v: "ls csv/*.csv | wc -l" },
           { t: "out", v: "97" }
         ],
-        custo: { tempo: "~3 minutos", idas: "1 frase", risco: "Nenhuma aba perdida — porque alguém contou as abas." }
+        custo: { minutos: 3, tempo: "~3 minutos", idas: "1 frase", risco: "Nenhuma aba perdida — porque alguém contou as abas." }
       },
 
       comandos: [
@@ -284,6 +287,7 @@ const COMO_USAR_DATA = {
 
     {
       id: "disco",
+      licaoCurta: "Descer a árvore sem você no meio",
       aba: "Achar o que lotou o HD",
       titulo: "O disco encheu: descobrir o que está ocupando 400 GB",
       contexto: "A máquina do laboratório parou de gravar. Ninguém sabe o que está ocupando espaço, e ninguém quer apagar às cegas.",
@@ -298,7 +302,7 @@ const COMO_USAR_DATA = {
           { t: "ia", v: "Pelo que você mandou, a pasta rasters tem 188 GB. Você poderia entrar nela e repetir o comando?" },
           { t: "nota", v: "Diagnóstico é uma árvore: cada resposta decide a próxima pergunta. Copiar e colar cada nível dessa árvore, à mão, é onde a paciência acaba." }
         ],
-        custo: { tempo: "~15 minutos", idas: "6 idas e voltas", risco: "Cansaço leva a apagar pela pasta com nome mais suspeito, e não pela maior." }
+        custo: { minutos: 15, tempo: "~15 minutos", idas: "6 idas e voltas", risco: "Cansaço leva a apagar pela pasta com nome mais suspeito, e não pela maior." }
       },
 
       terminal: {
@@ -325,7 +329,7 @@ const COMO_USAR_DATA = {
           { t: "out", v: "104.3 GB em arquivos com mais de 6 meses" },
           { t: "nota", v: "Nada foi apagado. O relatório é que ficou pronto — e a decisão continua sendo sua." }
         ],
-        custo: { tempo: "~90 segundos", idas: "1 frase", risco: "Só leitura: `du`, `find` e `md5sum` não apagam nada. Apagar é um segundo pedido, com outra aprovação." }
+        custo: { minutos: 1.5, tempo: "~90 segundos", idas: "1 frase", risco: "Só leitura: `du`, `find` e `md5sum` não apagam nada. Apagar é um segundo pedido, com outra aprovação." }
       },
 
       comandos: [
@@ -340,6 +344,7 @@ const COMO_USAR_DATA = {
 
     {
       id: "rasters",
+      licaoCurta: "A checagem de 2 segundos",
       aba: "Recortar 60 rasters",
       titulo: "Recortar 60 imagens de satélite pelo limite de Goiás",
       contexto: "Rotina de laboratório: uma série temporal inteira precisa ser recortada pelo mesmo polígono antes de virar estatística.",
@@ -353,7 +358,7 @@ const COMO_USAR_DATA = {
           { t: "voce", v: "Rodou nos 60, mas 14 saíram vazios." },
           { t: "ia", v: "Isso costuma indicar que o raster e o vetor estão em CRS diferentes. Você pode rodar `gdalinfo` num deles e me mandar?" }
         ],
-        custo: { tempo: "~30 minutos", idas: "8 idas e voltas", risco: "14 arquivos vazios que parecem prontos: o erro só aparece na estatística, semanas depois." }
+        custo: { minutos: 30, tempo: "~30 minutos", idas: "8 idas e voltas", risco: "14 arquivos vazios que parecem prontos: o erro só aparece na estatística, semanas depois." }
       },
 
       terminal: {
@@ -383,7 +388,7 @@ const COMO_USAR_DATA = {
           { t: "out", v: "12G  entrada" },
           { t: "out", v: "1.4G recorte" }
         ],
-        custo: { tempo: "~6 minutos (dos quais 5 são o GDAL trabalhando)", idas: "1 frase", risco: "O `-overwrite` só age dentro de recorte/; a pasta de entrada nunca é tocada." }
+        custo: { minutos: 6, tempo: "~6 minutos (dos quais 5 são o GDAL trabalhando)", idas: "1 frase", risco: "O `-overwrite` só age dentro de recorte/; a pasta de entrada nunca é tocada." }
       },
 
       comandos: [
@@ -397,6 +402,43 @@ const COMO_USAR_DATA = {
       licao: "Aqui o ganho não é velocidade: é a <strong>checagem de projeção antes do laço</strong>. Um agente que enxerga os arquivos gasta 2 segundos onde o vaivém de chat gasta 30 minutos e ainda entrega 14 arquivos vazios."
     }
   ],
+
+  /* ─────────────────────────────────────────────────────────────
+     2b. O OUTRO LADO
+     Cinco seções defendendo uma tese, sem nenhuma linha a favor do
+     lado oposto, é panfleto — e público acadêmico desconfia de
+     panfleto com razão. Este bloco não é ressalva de rodapé: são os
+     casos em que a aba do navegador é honestamente a escolha certa,
+     e ele mora logo depois da comparação, onde o texto está mais
+     enviesado e o leitor mais precisa da contraprova.
+     ───────────────────────────────────────────────────────────── */
+  contraponto: {
+    titulo: "O outro lado: onde a aba ganha",
+    lede: "A seção acima tem cinco tarefas e quatro vitórias folgadas do terminal. Isso não faz do agente a resposta para tudo — faz dele a resposta para tarefas com ARQUIVO e com REPETIÇÃO. Quando a tarefa não tem nenhum dos dois, a aba costuma ganhar, e por motivos que não são consolo.",
+    itens: [
+      {
+        titulo: "Pensar em voz alta",
+        texto: "Rascunhar um argumento, achar o nome de um método, discutir um desenho experimental, encontrar a palavra que falta num parágrafo. Não há arquivo para abrir nem comando para rodar: o cinto de ferramentas inteiro fica ocioso, e a aba responde sem pedir instalação, permissão nem pasta."
+      },
+      {
+        titulo: "Quando os arquivos não são seus",
+        texto: "Um PDF que chegou por e-mail, uma tabela que um colega mandou no chat, uma foto tirada agora no celular. Arrastar para a conversa leva três segundos; baixar, escolher uma pasta e abrir um agente ali leva bem mais — e não melhora a resposta."
+      },
+      {
+        titulo: "Uma pergunta só",
+        texto: "Instalar uma CLI, autenticar e escolher o modelo custa uns 15 minutos na primeira vez. Para uma dúvida avulsa, a aba responde antes de o `npm install` terminar. O agente compensa quando a mesma tarefa volta — e é aí que ele compensa muito."
+      },
+      {
+        titulo: "Aprender fazendo",
+        texto: "Quem está aprendendo o terminal aprende mais colando o comando, errando e lendo a mensagem de erro do que aprovando o comando de outra pessoa. O agente é ótimo para produzir e péssimo para ensinar: ele resolve rápido demais para você ver o que aconteceu."
+      },
+      {
+        titulo: "Onde você não pode instalar nada",
+        texto: "Computador de laboratório com política travada, máquina emprestada, terminal de um servidor onde você não é dono do ambiente. A aba funciona em qualquer navegador — o que, aliás, é a maior vantagem que ela tem, e nenhuma seção desta página tira isso dela."
+      }
+    ],
+    fecho: "A regra prática cabe em uma linha: <strong>tem arquivo e vai repetir, use o agente; é conversa e é uma vez só, use a aba.</strong> As duas coisas convivem no mesmo dia de trabalho, e quem só usa uma das duas está pagando caro em algum dos dois lados."
+  },
 
   /* ─────────────────────────────────────────────────────────────
      3. O CINTO DE FERRAMENTAS
@@ -847,7 +889,7 @@ const COMO_USAR_DATA = {
           nota: "Desligue o wi-fi e rode de novo: este continua funcionando, o `:cloud` não. É o teste de uma linha que separa as duas coisas — e a única prova que vale antes de confiar um dado sensível a qualquer ferramenta desta página."
         }
       ],
-      fecho: "Duas conclusões, e elas não se anulam. A assinatura Cloud resolve o problema de potência: modelos grandes demais para a sua máquina, dirigindo a harness que você preferir, por um comando só. O modelo local resolve o problema de sigilo: mais fraco, sem fatura, e nada sai do disco. O que os dois têm em comum é o que esta página inteira defende — em qualquer um deles a IA enxerga os seus arquivos e executa comandos, e é daí que vem a diferença."
+      fecho: "Duas conclusões, e elas não se anulam. A assinatura Cloud resolve o problema de potência: modelos grandes demais para a sua máquina, dirigindo a harness que você preferir, por um comando só. O modelo local resolve o problema de sigilo: mais fraco, sem fatura, e nada sai do disco. A escolha entre os dois é por tarefa, não de uma vez — e dá para alternar no meio do dia trocando o sufixo do modelo."
     },
     {
       id: "antigravity",
@@ -855,8 +897,8 @@ const COMO_USAR_DATA = {
       nomeCurto: "Antigravity",
       icone: "janela",
       legenda: "Um IDE em que o agente é o protagonista",
-      resumo: "Do download à primeira tarefa executada por um agente com editor, terminal e navegador.",
-      minutos: 10,
+      resumo: "Do download à primeira tarefa executada, revisada em diff e conferida pelo próprio agente.",
+      minutos: 12,
       passos: [
         {
           janela: "navegador",
@@ -936,11 +978,44 @@ const COMO_USAR_DATA = {
             { t: "out", v: "1240" },
             { t: "out", v: "" },
             { t: "out", v: "[agente] 1240 arquivos em 20 subpastas por data. Nenhum sobrou." },
-            { t: "out", v: "[agente] Nada foi sobrescrito (mv -n). Quer que eu gere um índice CSV?" }
+            { t: "out", v: "[agente] Escrevi indice.py para gerar o CSV. Quer revisar?" }
           ]
+        },
+        {
+          janela: "diff",
+          titulo: "Revisar antes de aceitar",
+          explicacao: "Aqui está a parte que o terminal não desenha bem. O agente não aplicou nada: ele propôs, e a mudança chega como diff — linha que sai em vermelho, linha que entra em verde, arquivo por arquivo. Você lê, aceita ou rejeita trecho a trecho. É a mesma aprovação do CLI, com o texto na frente dos olhos em vez de rolando no histórico.",
+          diff: {
+            arquivo: "indice.py",
+            linhas: [
+              { t: "ctx", v: "import csv, pathlib" },
+              { t: "ctx", v: "" },
+              { t: "menos", v: "for f in pathlib.Path('.').glob('*.jpg'):" },
+              { t: "mais", v: "raiz = pathlib.Path.home() / 'campo-2026' / 'ORGANIZADAS'" },
+              { t: "mais", v: "for f in sorted(raiz.rglob('*.jpg')):" },
+              { t: "ctx", v: "    linhas.append([f.name, f.parent.name, f.stat().st_size])" },
+              { t: "ctx", v: "" },
+              { t: "mais", v: "# a data vem da PASTA, que já foi conferida — e não do nome do arquivo" }
+            ],
+            botoes: ["Aceitar tudo", "Rejeitar"]
+          },
+          nota: "Repare no comentário que ele escreveu na última linha: o agente registrou POR QUE tirou a data do nome do arquivo. Num terminal essa justificativa some com a rolagem; num diff ela fica no arquivo, para o próximo bolsista ler."
+        },
+        {
+          janela: "navegador",
+          titulo: "Deixar o agente conferir sozinho",
+          explicacao: "O navegador embutido é a ferramenta que nenhuma CLI tem: o agente abre o que acabou de construir, olha, e conserta se estiver errado — sem você virar o olho de revisão. Aqui ele gerou uma prévia do índice e foi verificar se as 20 pastas apareceram mesmo.",
+          navegador: {
+            url: "localhost:8000/indice.html",
+            titulo: "Índice de campo — 2026",
+            texto: "1.240 fotos · 20 dias de campo · gerado por indice.py",
+            opcoes: ["2026-07-14 — 96 fotos", "2026-07-15 — 71 fotos", "2026-07-16 — 88 fotos"],
+            botao: "Baixar CSV"
+          },
+          nota: "O agente confere o próprio trabalho olhando o resultado, e não relendo o código que escreveu. É o mesmo movimento do `wc -l` do primeiro cenário desta página — só que com olhos."
         }
       ],
-      fecho: "O Antigravity resolve a parte que trava a maioria das pessoas — a janela preta — sem abrir mão do essencial: o agente enxerga os arquivos e executa comandos. É a mesma potência do CLI numa embalagem com botões."
+      fecho: "O Antigravity resolve a parte que trava a maioria das pessoas — a janela preta — e ainda ganha duas coisas que o terminal não desenha: a revisão em diff, que deixa a aprovação legível, e o navegador embutido, que deixa o agente conferir o próprio resultado. O preço é ser um programa a mais para instalar e uma conta a mais para ter."
     }
   ],
 

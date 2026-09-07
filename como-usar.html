@@ -40,7 +40,7 @@
   <!-- Estilos -->
   <link rel="stylesheet" href="assets/styles.css?v=29">
   <link rel="stylesheet" href="assets/guia.css?v=27">
-  <link rel="stylesheet" href="assets/como-usar.css?v=2">
+  <link rel="stylesheet" href="assets/como-usar.css?v=3">
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSBR3JMT2X"></script>
@@ -261,8 +261,110 @@
         </div>
       </header>
 
+      <!-- O MECANISMO, ANTES DAS PROVAS.
+           As cinco transcrições abaixo são evidência de uma coisa só, e essa
+           coisa é um ciclo: quem lê a saída decide o próximo passo. Enquanto
+           isso só existia em prosa, cada cenário precisava reensinar o
+           argumento do zero. Com a figura, eles viram confirmação — que é o
+           papel que exemplo deveria ter.
+
+           São dois SVG e não um: assim eles empilham no celular sem precisar
+           reescalar texto, e cada um carrega o próprio título para leitor de
+           tela. -->
+      <figure class="cu-ciclo">
+        <div class="cu-ciclo-par">
+
+          <div class="cu-ciclo-lado">
+            <h3 class="cu-ciclo-t"><span class="cu-ciclo-tag cu-tag-chat">Na aba do navegador</span></h3>
+            <svg viewBox="0 0 380 268" class="cu-ciclo-svg" role="img" aria-labelledby="ciclo-a-t ciclo-a-d">
+              <title id="ciclo-a-t">O ciclo numa aba de navegador</title>
+              <desc id="ciclo-a-d">Você pergunta; a IA escreve um roteiro; você executa; você digita de volta o que aconteceu. O resultado só chega à IA pela sua descrição.</desc>
+
+              <line x1="190" y1="26" x2="190" y2="252" class="cu-cd-divisor" />
+              <text x="96" y="18" class="cu-cd-col">VOCÊ</text>
+              <text x="284" y="18" class="cu-cd-col">A IA</text>
+
+              <g class="cu-cd-no"><rect x="22" y="32" width="148" height="34" rx="8" /><text x="96" y="53">1 · você pergunta</text></g>
+              <g class="cu-cd-no"><rect x="210" y="88" width="148" height="34" rx="8" /><text x="284" y="109">2 · escreve um roteiro</text></g>
+              <g class="cu-cd-no"><rect x="22" y="144" width="148" height="34" rx="8" /><text x="96" y="165">3 · você executa</text></g>
+              <g class="cu-cd-no"><rect x="22" y="200" width="148" height="34" rx="8" /><text x="96" y="221">4 · você conta o que deu</text></g>
+
+              <path d="M170 49 H190 Q206 49 206 66 V88" class="cu-cd-seta" marker-end="url(#pt-a)" />
+              <path d="M210 116 H190 Q174 116 174 133 V144" class="cu-cd-seta" marker-end="url(#pt-a)" />
+              <path d="M96 178 V200" class="cu-cd-seta" marker-end="url(#pt-a)" />
+              <path d="M170 217 H340 Q358 217 358 199 V122" class="cu-cd-volta cu-cd-volta-chat" marker-end="url(#pt-chat)" />
+            </svg>
+            <p class="cu-ciclo-leg">
+              A volta é a linha grossa: <strong>o resultado só chega à IA se você digitar o que viu</strong> —
+              e só o pedaço que você percebeu. Toda rodada custa duas travessias suas.
+            </p>
+          </div>
+
+          <div class="cu-ciclo-lado">
+            <h3 class="cu-ciclo-t"><span class="cu-ciclo-tag cu-tag-term">Com acesso ao terminal</span></h3>
+            <svg viewBox="0 0 380 268" class="cu-ciclo-svg" role="img" aria-labelledby="ciclo-b-t ciclo-b-d">
+              <title id="ciclo-b-t">O ciclo com acesso ao terminal</title>
+              <desc id="ciclo-b-d">Você pede uma vez e aprova; a IA propõe, executa, lê a saída e decide o próximo passo sozinha. O resultado volta inteiro, sem passar pela sua descrição.</desc>
+
+              <line x1="190" y1="26" x2="190" y2="252" class="cu-cd-divisor" />
+              <text x="96" y="18" class="cu-cd-col">VOCÊ</text>
+              <text x="284" y="18" class="cu-cd-col">A IA</text>
+
+              <g class="cu-cd-no"><rect x="22" y="32" width="148" height="34" rx="8" /><text x="96" y="53">1 · você pede</text></g>
+              <g class="cu-cd-no"><rect x="210" y="88" width="148" height="34" rx="8" /><text x="284" y="109">2 · propõe o comando</text></g>
+              <g class="cu-cd-no cu-cd-aprova"><rect x="22" y="144" width="148" height="34" rx="8" /><text x="96" y="165">3 · você aprova</text></g>
+              <g class="cu-cd-no"><rect x="210" y="144" width="148" height="34" rx="8" /><text x="284" y="165">4 · executa</text></g>
+              <g class="cu-cd-no"><rect x="210" y="200" width="148" height="34" rx="8" /><text x="284" y="221">5 · lê a saída</text></g>
+
+              <path d="M170 49 H190 Q206 49 206 66 V88" class="cu-cd-seta" marker-end="url(#pt-a)" />
+              <path d="M210 110 H190 Q174 110 174 127 V144" class="cu-cd-seta" marker-end="url(#pt-a)" />
+              <path d="M170 161 H210" class="cu-cd-seta" marker-end="url(#pt-a)" />
+              <path d="M284 178 V200" class="cu-cd-seta" marker-end="url(#pt-a)" />
+              <path d="M358 217 Q372 217 372 199 V122 Q372 106 358 106" class="cu-cd-volta cu-cd-volta-term" marker-end="url(#pt-term)" />
+            </svg>
+            <p class="cu-ciclo-leg">
+              A volta não sai do lado direito: <strong>quem lê a saída é quem escolhe o próximo comando</strong>.
+              Você entra para pedir e para aprovar — não para transcrever.
+            </p>
+          </div>
+        </div>
+
+        <figcaption class="cu-ciclo-cap">
+          É esta a diferença que as cinco tarefas abaixo medem. Ela também explica o caso em que o
+          terminal é <em>mais lento</em> (as planilhas): o ciclo fechado não serve só para correr —
+          serve para a IA descobrir que o próprio resultado estava errado.
+        </figcaption>
+      </figure>
+
+      <!-- marcadores de seta compartilhados pelos dois diagramas -->
+      <svg width="0" height="0" aria-hidden="true" focusable="false" class="cu-defs">
+        <defs>
+          <marker id="pt-a" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0 0 L8 4 L0 8 z" fill="#8d8877" />
+          </marker>
+          <marker id="pt-chat" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+            <path d="M0 0 L8 4 L0 8 z" fill="#5B53A8" />
+          </marker>
+          <marker id="pt-term" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+            <path d="M0 0 L8 4 L0 8 z" fill="#10a37f" />
+          </marker>
+        </defs>
+      </svg>
+
+      <!-- A tira de lições existe porque 4 dos 5 cenários moram atrás de abas
+           que a maioria não clica: sem ela, 80% do trabalho desta seção fica
+           invisível. Cada item diz o que aquela tarefa ensina de DIFERENTE, e
+           clicar troca a aba. -->
+      <div class="cu-licoes" id="cu-licoes" aria-hidden="true"></div>
+
       <div class="cu-tabs" id="cu-cenario-tabs" role="tablist" aria-label="Escolher a tarefa"></div>
       <div id="cu-cenario-painel"></div>
+
+      <!-- O gráfico fecha a seção com as dez medidas juntas. Separadas, uma por
+           aba, elas nunca formam a comparação que justificam. -->
+      <div id="cu-grafico"></div>
+
+      <div id="cu-contraponto"></div>
     </section>
 
     <!-- ─── 03 · FERRAMENTAS ─────────────────────────────────── -->
@@ -378,8 +480,8 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="assets/como-usar-data.js?v=2"></script>
-  <script src="assets/como-usar.js?v=2"></script>
+  <script src="assets/como-usar-data.js?v=3"></script>
+  <script src="assets/como-usar.js?v=3"></script>
 </body>
 
 </html>

@@ -161,6 +161,7 @@
   function irPara(i, focar) {
     cenarioAtual = (i + D.cenarios.length) % D.cenarios.length;
     renderTabs();
+    renderLicoes();
     pintarCenario();
     if (focar) {
       const alvo = $('cu-cenario-tabs').querySelector('.cu-tab.is-active');
@@ -171,6 +172,15 @@
   function ligarTabs() {
     const tabs = $('cu-cenario-tabs');
     if (!tabs) return;
+
+    const tira = $('cu-licoes');
+    if (tira) {
+      tira.addEventListener('click', (e) => {
+        const chip = e.target.closest('.cu-licao-chip');
+        if (!chip) return;
+        irPara(+chip.dataset.i, false);
+      });
+    }
 
     tabs.addEventListener('click', (e) => {
       const btn = e.target.closest('.cu-tab');
@@ -192,6 +202,22 @@
       e.preventDefault();
       irPara(mapa[e.key], true);
     });
+  }
+
+  /* A tira das cinco lições. Ela não é sumário: é o inventário do que cada
+     cenário ensina de diferente, para o leitor saber o que ganha ao clicar.
+     aria-hidden porque as abas logo abaixo já expõem a mesma navegação ao
+     leitor de tela — repeti-la seria obrigá-lo a ouvir a fileira duas vezes. */
+  function renderLicoes() {
+    const el = $('cu-licoes');
+    if (!el) return;
+    el.innerHTML = D.cenarios.map((c, i) => `
+      <button type="button" class="cu-licao-chip ${i === cenarioAtual ? 'is-active' : ''}"
+              data-i="${i}" tabindex="-1">
+        <span class="cu-licao-n">${i + 1}</span>
+        <span class="cu-licao-txt">${esc(c.licaoCurta)}</span>
+      </button>
+    `).join('');
   }
 
   function pintarCenario() {
@@ -244,6 +270,148 @@
 
         <p class="cu-licao">${c.licao}</p>
       </div>
+    `;
+  }
+
+  /* ─── 02c · o gráfico dos custos ─────────────────────────── */
+
+  /* FORMA: dumbbell. São dois valores por tarefa e o que interessa é o VÃO
+     entre eles, não cada um isolado — barras agrupadas dariam dez marcas para
+     comparar duas a duas; o haltere dá cinco vãos para ler de uma vez.
+
+     COR: emparelhada com a própria página (índigo = a aba, verde = o terminal)
+     e escolhida com o validador, não a olho. O cinza quente do site contra o
+     verde do site davam ΔE 1,9 em protanopia — indistinguíveis. Este par passa
+     os seis testes; a bolinha vazada contra a cheia é a codificação secundária,
+     para quem imprime em preto e branco.
+
+     O ponto todo do gráfico é a terceira linha: nela o terminal é MAIS LENTO.
+     Uma figura que mostrasse cinco vitórias seria propaganda; esta mostra
+     quatro vitórias e uma derrota, e é por isso que dá para acreditar nela. */
+  const COR_CHAT = '#5B53A8';
+  const COR_TERM = '#10a37f';
+
+  function renderGrafico() {
+    const el = $('cu-grafico');
+    if (!el) return;
+
+    const dados = D.cenarios.map(c => ({
+      nome: c.aba,
+      chat: c.chat.custo.minutos,
+      term: c.terminal.custo.minutos
+    }));
+
+    const L = 178, R = 64, T = 16, ALT_LINHA = 44;
+    const W = 720;
+    const H = T + dados.length * ALT_LINHA + 34;
+    const maxX = 32;
+    const x = m => L + (m / maxX) * (W - L - R);
+
+    const grades = [0, 10, 20, 30];
+
+    const linhas = dados.map((d, i) => {
+      const y = T + i * ALT_LINHA + ALT_LINHA / 2;
+      const xc = x(d.chat), xt = x(d.term);
+      const fmt = v => (v < 1 ? Math.round(v * 60) + ' s' : (Number.isInteger(v) ? v : v.toFixed(1).replace('.', ',')) + ' min');
+
+      /* Cada número fica do lado de FORA do seu próprio ponto, para os dois
+         nunca se encontrarem no meio. Quando não cabe — ponto colado no zero,
+         com o rótulo invadindo a coluna de nomes — o número sobe para cima da
+         marca em vez de brigar por espaço. Foi o que aconteceu em três das
+         cinco linhas: sem este desvio, "42 s" caía dentro de
+         "Organizar 1.240 fotos". */
+      const larg = t => t.length * 6.3;
+      function poe(xp, valor, lado) {
+        const t = fmt(valor);
+        if (lado === 'esq') {
+          if (xp - 11 - larg(t) >= L + 4) return { x: xp - 11, y: y + 4, anc: 'end', t };
+        } else {
+          if (xp + 11 + larg(t) <= W - 6) return { x: xp + 11, y: y + 4, anc: 'start', t };
+        }
+        return { x: xp, y: y - 12, anc: 'middle', t };
+      }
+
+      const esq = xc <= xt ? 'chat' : 'term';
+      const rc = poe(xc, d.chat, esq === 'chat' ? 'esq' : 'dir');
+      const rt = poe(xt, d.term, esq === 'chat' ? 'dir' : 'esq');
+
+      return `
+        <g class="cu-gr-linha">
+          <title>${esc(d.nome)}: ${fmt(d.chat)} na aba, ${fmt(d.term)} com terminal</title>
+          <rect x="0" y="${y - ALT_LINHA / 2}" width="${W}" height="${ALT_LINHA}" class="cu-gr-faixa" />
+          <text x="${L - 14}" y="${y + 4}" class="cu-gr-rot">${esc(d.nome)}</text>
+          <line x1="${Math.min(xc, xt)}" y1="${y}" x2="${Math.max(xc, xt)}" y2="${y}" class="cu-gr-haste" />
+          <circle cx="${xc}" cy="${y}" r="6" class="cu-gr-p cu-gr-chat" />
+          <circle cx="${xt}" cy="${y}" r="6" class="cu-gr-p cu-gr-term" />
+          <text x="${rc.x}" y="${rc.y}" text-anchor="${rc.anc}" class="cu-gr-val">${rc.t}</text>
+          <text x="${rt.x}" y="${rt.y}" text-anchor="${rt.anc}" class="cu-gr-val">${rt.t}</text>
+        </g>`;
+    }).join('');
+
+    el.innerHTML = `
+      <figure class="cu-graf">
+        <figcaption class="cu-graf-cap">
+          <h3>O que custou cada tarefa</h3>
+          <p>Tempo <strong>em minutos</strong> até o trabalho ficar pronto e conferido, nas cinco
+             tarefas acima. Estimativas do cenário descrito em cada aba — não são cronometragens.</p>
+        </figcaption>
+
+        <div class="cu-graf-leg">
+          <span class="cu-lg"><span class="cu-lg-m cu-lg-chat"></span>na aba do navegador</span>
+          <span class="cu-lg"><span class="cu-lg-m cu-lg-term"></span>com acesso ao terminal</span>
+        </div>
+
+        <div class="cu-graf-rola">
+          <svg viewBox="0 0 ${W} ${H}" class="cu-graf-svg" role="img" aria-label="Gráfico de halteres comparando o tempo de cada tarefa nos dois modos. Em quatro das cinco tarefas o terminal é mais rápido; em converter 40 planilhas ele é mais lento.">
+            ${grades.map(g => `
+              <line x1="${x(g)}" y1="${T}" x2="${x(g)}" y2="${H - 30}" class="cu-gr-grade" />
+              <text x="${x(g)}" y="${H - 14}" class="cu-gr-eixo">${g}</text>`).join('')}
+            ${linhas}
+          </svg>
+        </div>
+
+        <p class="cu-graf-nota">
+          A linha que importa é a terceira. Converter 40 planilhas leva <strong>mais</strong> tempo com o
+          agente — e ainda assim é o caso mais forte da página: foi só ali que alguém contou as abas e
+          descobriu que 40 arquivos guardavam 97 tabelas. <strong>O ganho nem sempre é velocidade;
+          às vezes é a única versão que está certa.</strong>
+        </p>
+
+        <details class="cu-graf-tab">
+          <summary>Ver os números em tabela</summary>
+          <table>
+            <thead><tr><th>Tarefa</th><th>Na aba</th><th>Com terminal</th></tr></thead>
+            <tbody>
+              ${dados.map(d => `<tr><td>${esc(d.nome)}</td><td>${d.chat} min</td><td>${d.term} min</td></tr>`).join('')}
+            </tbody>
+          </table>
+        </details>
+      </figure>
+    `;
+  }
+
+  /* ─── 02b · o contraponto ────────────────────────────────── */
+
+  function renderContraponto() {
+    const el = $('cu-contraponto');
+    if (!el || !D.contraponto) return;
+    const c = D.contraponto;
+    el.innerHTML = `
+      <section class="cu-contra" aria-labelledby="h-contra">
+        <header>
+          <h3 id="h-contra">${esc(c.titulo)}</h3>
+          <p class="cu-contra-lede">${txt(c.lede)}</p>
+        </header>
+        <div class="cu-contra-grid">
+          ${c.itens.map(i => `
+            <article class="cu-contra-item">
+              <h4>${esc(i.titulo)}</h4>
+              <p>${txt(i.texto)}</p>
+            </article>
+          `).join('')}
+        </div>
+        <p class="cu-contra-fecho">${c.fecho}</p>
+      </section>
     `;
   }
 
@@ -343,17 +511,26 @@
           `).join('')}
         </dl>
 
-        <h4 class="cu-ponte-h4">${txt(p.integracoesTitulo)}</h4>
-        <p class="cu-ponte-nota">${txt(p.integracoesNota)}</p>
-        <ul class="cu-integs">
-          ${p.integracoes.map(i => `
-            <li class="cu-integ">
-              <code>${esc(i.id)}</code>
-              <strong>${esc(i.nome)}</strong>
-              <span>${esc(i.nota)}</span>
-            </li>
-          `).join('')}
-        </ul>
+        <!-- Dezoito linhas de tabela são consulta, não leitura: abertas por
+             padrão elas eram quase uma tela inteira de rolagem entre o leitor
+             e os planos. Fechadas, o título já entrega o número — que é a única
+             informação que a maioria quer daqui. -->
+        <details class="cu-integs-caixa">
+          <summary>
+            <span class="cu-integs-sum">${txt(p.integracoesTitulo)}</span>
+            <span class="cu-integs-n">${p.integracoes.length} integrações</span>
+          </summary>
+          <p class="cu-ponte-nota">${txt(p.integracoesNota)}</p>
+          <ul class="cu-integs">
+            ${p.integracoes.map(i => `
+              <li class="cu-integ">
+                <code>${esc(i.id)}</code>
+                <strong>${esc(i.nome)}</strong>
+                <span>${esc(i.nota)}</span>
+              </li>
+            `).join('')}
+          </ul>
+        </details>
 
         <h4 class="cu-ponte-h4">${txt(p.planosTitulo)}</h4>
         <div class="cu-planos">
@@ -372,6 +549,44 @@
         <p class="cu-licao cu-ponte-fecho">${p.fecho}</p>
       </section>
     `;
+  }
+
+  /* No celular o catálogo ocupava 8,8 telas de rolagem — 45% da página — para
+     entregar material de consulta. Aqui cada família passa a mostrar o primeiro
+     cartão e um botão com a contagem do resto. No desktop nada muda: lá as
+     famílias cabem em três colunas e a leitura é horizontal. */
+  function colapsarCatalogoNoCelular() {
+    const mq = window.matchMedia('(max-width: 760px)');
+    const grades = [...document.querySelectorAll('.cu-fam-grid')];
+    if (!grades.length) return;
+
+    function aplicar() {
+      grades.forEach(g => {
+        const cards = [...g.children].filter(c => c.classList.contains('cu-ferr'));
+        const btnAntigo = g.parentElement.querySelector('.cu-mais');
+        if (btnAntigo) btnAntigo.remove();
+        cards.forEach(c => c.hidden = false);
+
+        if (!mq.matches || cards.length < 3) return;
+
+        cards.slice(1).forEach(c => c.hidden = true);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cu-mais';
+        btn.textContent = `Mostrar as outras ${cards.length - 1} ferramentas`;
+        btn.addEventListener('click', () => {
+          cards.forEach(c => c.hidden = false);
+          btn.remove();
+        });
+        g.insertAdjacentElement('afterend', btn);
+      });
+    }
+
+    aplicar();
+    /* addEventListener em MediaQueryList é o caminho moderno; addListener é a
+       reserva para Safari antigo, onde o outro simplesmente não existe. */
+    if (mq.addEventListener) mq.addEventListener('change', aplicar);
+    else if (mq.addListener) mq.addListener(aplicar);
   }
 
   /* ─── 06 · segurança ─────────────────────────────────────── */
@@ -406,6 +621,7 @@
               ${p.cmd ? `<pre><code>${esc(p.cmd)}</code></pre>` : ''}
               ${p.dialogo ? `<ul>${p.dialogo.linhas.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
               ${p.navegador ? `<p class="cu-plain-url">${esc(p.navegador.url)}</p>` : ''}
+              ${p.diff ? `<pre><code>${p.diff.linhas.map(l => esc((l.t === 'mais' ? '+ ' : l.t === 'menos' ? '- ' : '  ') + l.v)).join('\n')}</code></pre>` : ''}
               ${p.nota ? `<p class="cu-plain-nota">${txt(p.nota)}</p>` : ''}
             </li>
           `).join('')}
@@ -596,6 +812,27 @@
             <span class="cu-nav-btn">${esc(n.botao)}</span>
           </div>
         </div>`;
+    } else if (cfg.tipo === 'diff') {
+      /* O diff é a coisa que a janela faz melhor que o terminal: a aprovação
+         vira leitura, com a linha que sai e a linha que entra uma embaixo da
+         outra. O sinal (+/-) vem antes da cor, para o caso de daltonismo e
+         para quem copia o texto. */
+      const d = cfg.diff;
+      corpo = `
+        <div class="cu-win-diff">
+          <div class="cu-diff-barra">
+            <span class="cu-diff-arq">${esc(d.arquivo)}</span>
+            <span class="cu-diff-cont">${d.linhas.filter(l => l.t === 'mais').length} adições · ${d.linhas.filter(l => l.t === 'menos').length} remoção</span>
+          </div>
+          <div class="cu-diff-corpo">
+            ${d.linhas.map(l => `
+              <div class="cu-diff-l cu-diff-${esc(l.t)}"><span class="cu-diff-s">${l.t === 'mais' ? '+' : l.t === 'menos' ? '−' : ' '}</span><code>${esc(l.v)}</code></div>
+            `).join('')}
+          </div>
+          <div class="cu-diff-bts">
+            ${d.botoes.map((b, i) => `<span class="cu-dlg-btn ${i === 0 ? 'is-primario' : ''}">${esc(b)}</span>`).join('')}
+          </div>
+        </div>`;
     } else if (cfg.tipo === 'dialogo') {
       const g = cfg.dlg;
       corpo = `
@@ -658,6 +895,8 @@
       pintarJanela({ tipo: 'terminal', titulo: 'Terminal — bash', linhas: linhasDoPasso(p) });
     } else if (p.janela === 'navegador') {
       pintarJanela({ tipo: 'navegador', titulo: 'Navegador', nav: p.navegador });
+    } else if (p.janela === 'diff') {
+      pintarJanela({ tipo: 'diff', titulo: 'Revisão — ' + p.diff.arquivo, diff: p.diff });
     } else {
       pintarJanela({ tipo: 'dialogo', titulo: p.dialogo.titulo, dlg: p.dialogo });
     }
@@ -796,7 +1035,7 @@
     if (fim) {
       acao = `<button type="button" class="cu-rot-btn" data-acao="fechar">Concluir e fechar</button>`;
     } else if (p.janela !== 'terminal') {
-      acao = `<button type="button" class="cu-rot-btn" data-acao="avancar">${esc((p.dialogo && p.dialogo.botao) || (p.navegador && p.navegador.botao) || 'Continuar')}</button>`;
+      acao = `<button type="button" class="cu-rot-btn" data-acao="avancar">${esc((p.dialogo && p.dialogo.botao) || (p.navegador && p.navegador.botao) || (p.diff && p.diff.botoes[0]) || 'Continuar')}</button>`;
     } else if (os.fase === 'pronto') {
       acao = `<button type="button" class="cu-rot-btn" data-acao="executar">Executar o comando</button>`;
     } else if (os.fase === 'rodando') {
@@ -907,10 +1146,14 @@
 
     renderVocabulario();
     renderTabs();
+    renderLicoes();
     ligarTabs();
     pintarCenario();
+    renderGrafico();
+    renderContraponto();
     renderFerramentas();
     renderFamilias();
+    colapsarCatalogoNoCelular();
     renderPonte();
     renderSeguranca();
     renderPlano();
