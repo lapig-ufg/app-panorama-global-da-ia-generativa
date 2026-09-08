@@ -952,7 +952,208 @@
 
 .cu-contra-fecho strong { color: var(--ink); }
 
-/* ═══ 03 · CINTO DE FERRAMENTAS ═══ */
+/* ═══ 03 · O QUE FICA DEPOIS ═══ */
+
+/* ─── o comparativo: o que resta de cada lado ─── */
+
+/* Listas, e não cartões: a página já tem grade de cartões em quatro seções, e
+   o que este bloco precisa mostrar é uma COLUNA contra a outra, item a item —
+   coisa que cartão lado a lado não faz. As mesmas duas cores do gráfico e do
+   diagrama identificam os dois lados. */
+.cu-resta {
+  padding: 18px 20px 16px;
+  background: var(--white);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+}
+
+.cu-resta h3 {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.016em;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+.cu-resta-par {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.cu-resta-lado {
+  min-width: 0;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+}
+
+.cu-resta-chat { border-top: 3px solid #5B53A8; }
+.cu-resta-term { border-top: 3px solid #10a37f; }
+
+.cu-resta-rot {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 10px;
+}
+
+.cu-resta-chat .cu-resta-rot { color: #4a4394; }
+.cu-resta-term .cu-resta-rot { color: var(--accent); }
+
+.cu-resta-lado ul {
+  list-style: none;
+  display: grid;
+  gap: 9px;
+}
+
+.cu-resta-lado li {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 8px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-light);
+}
+
+/* O sinal antes da cor, de novo: × e ✓ dizem a mesma coisa que o tom, para
+   quem imprime em preto e branco ou não distingue os dois. */
+.cu-rst-m {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.cu-resta-lado li.is-some .cu-rst-m { color: #9a95b8; }
+.cu-resta-lado li.is-fica .cu-rst-m { color: var(--accent); }
+.cu-resta-lado li.is-some { color: var(--ink-muted); }
+
+.cu-resta-nota {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--hair);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+/* ─── os quatro mecanismos ─── */
+
+/* Faixa e não cartão: texto à esquerda, artefato à direita. O artefato é o
+   que impede a seção de virar quatro parágrafos de opinião — cada afirmação
+   vem acompanhada da coisa concreta de que ela fala. */
+.cu-mecs {
+  display: grid;
+  gap: 1px;
+  margin-top: 18px;
+  background: var(--hair);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cu-mec {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 18px 20px;
+  background: var(--white);
+  align-items: start;
+}
+
+/* `min-width: 0` nas duas colunas, e ele não é decoração: um item de grid não
+   encolhe abaixo da largura mínima do próprio conteúdo, e o conteúdo da
+   direita é um `git log` de linhas longas em `white-space: pre`. Sem isto a
+   faixa inteira ficava do tamanho do log, a coluna de texto ia junto, e o
+   `overflow: hidden` do contêiner CORTAVA a frase no meio — no celular
+   sumia metade de cada parágrafo. Com min-width: 0 a coluna volta a caber e
+   quem rola é só o artefato, que tem `overflow-x: auto` para isso. */
+.cu-mec-txt,
+.cu-mec-art { min-width: 0; }
+
+.cu-mec-txt h4 {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+  margin-bottom: 7px;
+}
+
+.cu-mec-n {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.cu-mec-txt p {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-light);
+}
+
+.cu-mec-nota {
+  margin-top: 10px;
+  padding: 9px 12px;
+  border-left: 3px solid var(--accent);
+  background: rgba(10, 115, 89, 0.05);
+  border-radius: 0 7px 7px 0;
+  font-size: 11.5px !important;
+  line-height: 1.55 !important;
+  color: var(--ink-muted) !important;
+}
+
+/* ─── os artefatos ─── */
+.cu-art {
+  border-radius: 9px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.cu-art-l { display: flex; gap: 7px; white-space: pre; }
+.cu-art-l code { font-family: inherit; white-space: pre; }
+
+.cu-art-term { background: #14150f; color: #e9e6d8; padding: 11px 13px; }
+.cu-art-term .cu-art-ps { color: var(--accent-bright); flex-shrink: 0; }
+.cu-art-term .cu-art-out { color: #a9a598; padding-left: 15px; }
+
+/* Árvore de pastas em tinta de papel, não em terminal: ela não é uma saída de
+   comando, é um desenho da estrutura — e vestir de preto faria o leitor
+   procurar o `$` que não existe. */
+.cu-art-arv {
+  background: var(--paper-tint);
+  color: var(--ink-light);
+  padding: 12px 14px;
+  border: 1px solid var(--hair);
+}
+
+.cu-art-arq {
+  background: var(--white);
+  border: 1px solid var(--hair);
+}
+
+.cu-art-barra {
+  padding: 6px 12px;
+  background: var(--paper-tint);
+  border-bottom: 1px solid var(--hair);
+  font-size: 10.5px;
+  color: var(--ink-muted);
+}
+
+.cu-art-corpo { padding: 10px 13px; color: var(--ink-light); }
+
+.cu-perm-fecho { margin-top: 18px; }
+
+/* ═══ 04 · CINTO DE FERRAMENTAS ═══ */
 .cu-tools {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -1004,7 +1205,7 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   04 · O SIMULADOR DE ÁREA DE TRABALHO
+   05 · O SIMULADOR DE ÁREA DE TRABALHO
    ═══════════════════════════════════════════════════════════════ */
 
 .cu-os { margin-top: 4px; }
@@ -1704,7 +1905,7 @@
 .cu-plain-nota { margin-top: 6px; font-style: italic; color: var(--ink-muted); font-size: 11.5px; }
 .cu-plain-fecho { margin-top: 12px; font-size: 12.5px; line-height: 1.55; color: var(--ink-muted); }
 
-/* ═══ 05 · CATÁLOGO ═══ */
+/* ═══ 06 · CATÁLOGO ═══ */
 .cu-fam { margin-bottom: 30px; }
 
 .cu-fam-head {
@@ -2083,7 +2284,7 @@
 
 .cu-ponte-fecho { margin-top: 20px; background: var(--white); }
 
-/* ═══ 06 · SEGURANÇA ═══ */
+/* ═══ 07 · SEGURANÇA ═══ */
 .cu-seg {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -2149,6 +2350,11 @@
   /* O par de ciclos empilha: comparar duas figuras de 300px de largura numa
      tela estreita é pior do que ler uma embaixo da outra com o texto inteiro. */
   .cu-ciclo-par { grid-template-columns: 1fr; gap: 22px; }
+
+  /* O artefato desce para baixo do texto: espremido em metade de 900px, o
+     `git log` quebraria toda linha em duas e deixaria de parecer um log. */
+  .cu-mec { grid-template-columns: 1fr; gap: 14px; }
+  .cu-resta-par { grid-template-columns: 1fr; gap: 12px; }
 }
 
 @media (max-width: 760px) {

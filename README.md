@@ -130,8 +130,8 @@ planilha, não depende de cron e não tem pipeline. Todo o conteúdo mora em
 `assets/como-usar-data.js` — é o único arquivo a editar para atualizar a aba.
 
 Ela responde ao "como" que faltava no painel: a diferença entre conversar com a IA numa
-aba do navegador e dar a ela acesso ao terminal da máquina. Seis seções (a 05 termina com um
-bloco extra, "a ponte"):
+aba do navegador e dar a ela acesso ao terminal da máquina — no eixo de uma tarefa (seção 02)
+e no eixo do tempo (seção 03). São sete seções (a 06 termina com um bloco extra, "a ponte"):
 
 1. **O nome disso** — por que "navegador × computador" é um par de nomes errado (o navegador
    está no computador) e cinco pares candidatos em julgamento, com uma proposta marcada.
@@ -139,23 +139,34 @@ bloco extra, "a ponte"):
    resultado só volta pela sua digitação; à direita a IA lê a própria saída), seguido de cinco
    tarefas de laboratório resolvidas dos dois jeitos, um **gráfico de halteres** com as dez
    medidas de tempo e a contra-seção **"onde a aba ganha"**.
-3. **O cinto de ferramentas** — Bash, ler, escrever, buscar, rodar código, web, MCP.
-4. **Instalar, passo a passo** — um simulador de área de trabalho estilo anos 2000 com dois
+3. **O que fica depois** — o segundo eixo do argumento. A seção 02 mede uma tarefa; esta mede
+   o que sobra dela: um comparativo do que resta de cada lado uma semana depois, e quatro
+   mecanismos com artefato ao lado — `git log` como registro (e não só como rede), a estrutura
+   de pastas como metade da documentação, o `AGENTS.md` como a única memória do agente que
+   sobrevive ao fim da conversa, e a reprodutibilidade.
+4. **O cinto de ferramentas** — Bash, ler, escrever, buscar, rodar código, web, MCP.
+5. **Instalar, passo a passo** — um simulador de área de trabalho estilo anos 2000 com dois
    tutoriais interativos: **Ollama Cloud + `ollama launch`** (assinar, rodar um modelo grande
    sem baixar nada e usá-lo para dirigir Claude Code, Pi ou OpenCode) e **Antigravity**.
-5. **O catálogo** — três famílias: harnesses de terminal (Claude Code, Codex CLI, OpenCode,
+6. **O catálogo** — três famílias: harnesses de terminal (Claude Code, Codex CLI, OpenCode,
    Pi, Gemini CLI), aplicativos de desktop (Claude Desktop, ChatGPT Desktop, Antigravity) e
    motores (Ollama local e na nuvem, LM Studio, llama.cpp). Fecha com **a ponte**: o quadro do
    `ollama launch`, com as 18 integrações que ele conhece e os planos do Ollama Cloud.
-6. **O que você está autorizando** — as seis regras de segurança ao dar mãos a um agente.
+7. **O que você está autorizando** — as seis regras de segurança ao dar mãos a um agente.
 
 ### Regras de manutenção
 
 - **Todo comando publicado foi rodado antes.** As transcrições assumem bash/GNU coreutils
   (Linux); onde o comportamento muda no macOS ou no Windows, isso está dito na própria
   transcrição, e não num rodapé. Ao editar um comando, rode-o antes de commitar.
-- **Prosa aceita crases** (`` `mv -n` ``) e o renderizador as converte em `<code>` — a
-  conversão acontece depois do escape de HTML.
+- **Prosa aceita crases e asteriscos** (`` `mv -n` ``, `**assim**`) e o renderizador os
+  converte em `<code>` e `<strong>` — a conversão acontece depois do escape de HTML. Por isso
+  **não escreva tags HTML nesses campos**: elas aparecem escritas na tela. Os campos que
+  aceitam HTML de verdade são outros — `tese`, `licao`, `lede`, `fecho` — e vão para a página
+  crus, de propósito.
+- **Os artefatos da seção 03 são conteúdo literal.** As crases dentro do bloco `AGENTS.md` são
+  o texto do arquivo, não marcação: o renderizador não as toca (ver `.cu-art`). Se elas
+  virarem `<code>`, o exemplo deixa de mostrar como o arquivo é de verdade.
 - **O simulador nunca é o único caminho.** Os mesmos passos saem em texto corrido dentro do
   `<details>` "Ver os tutoriais como texto", para leitor de tela, celular e copiar-colar.
   Se você acrescentar um passo, ele aparece nos dois lugares automaticamente. Há quatro tipos

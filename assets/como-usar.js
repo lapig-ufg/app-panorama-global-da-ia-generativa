@@ -43,12 +43,18 @@
     return `${m[3]} ${MESES_BR[+m[2] - 1]} ${m[1]}`;
   }
 
-  /* Prosa com trechos de comando: no arquivo de dados eles vêm entre crases,
-     como em markdown, porque escrever <code> no meio de uma frase em
-     português torna o texto ilegível para quem edita. A conversão acontece
-     DEPOIS do escape, então o conteúdo continua sendo tratado como texto. */
+  /* Prosa com trechos de comando e ênfase: no arquivo de dados eles vêm entre
+     crases e asteriscos, como em markdown, porque escrever <code> ou <strong>
+     no meio de uma frase em português torna o texto ilegível para quem edita.
+     A conversão acontece DEPOIS do escape, então o conteúdo continua sendo
+     tratado como texto — uma tag escrita à mão no arquivo de dados aparece
+     como tag, e não vira marcação (foi assim que um <strong> perdido apareceu
+     escrito na tela). Campos com HTML de verdade (tese, licao, fecho, lede)
+     não passam por aqui: eles são inseridos crus, de propósito. */
   function txt(str) {
-    return esc(str).replace(/`([^`]+)`/g, '<code>$1</code>');
+    return esc(str)
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   }
 
   function $(id) { return document.getElementById(id); }
@@ -415,7 +421,79 @@
     `;
   }
 
-  /* ─── 03 · ferramentas ───────────────────────────────────── */
+  /* ─── 03 · o que fica depois ─────────────────────────────── */
+
+  /* Forma deliberadamente diferente do resto da página: um comparativo em duas
+     colunas (listas, não cartões) e depois quatro faixas de texto-com-artefato.
+     A aba já tinha grade de cartões em quatro seções; mais uma aqui e a seção
+     nova entraria como "mais do mesmo", que é justamente o problema que ela
+     veio resolver. */
+  function renderPermanencia() {
+    const el = $('cu-permanencia');
+    const lede = $('cu-perm-lede');
+    if (!el || !D.permanencia) return;
+    const P = D.permanencia;
+
+    if (lede) lede.innerHTML = P.lede;
+
+    const lista = (itens) => itens.map(i => `
+      <li class="${i.ok ? 'is-fica' : 'is-some'}">
+        <span class="cu-rst-m" aria-hidden="true">${i.ok ? '✓' : '×'}</span>
+        <span>${txt(i.v)}</span>
+      </li>`).join('');
+
+    const artefato = (a) => {
+      if (!a) return '';
+      if (a.tipo === 'terminal') {
+        return `<div class="cu-art cu-art-term">${a.linhas.map(l =>
+          l.startsWith('$ ')
+            ? `<div class="cu-art-l"><span class="cu-art-ps">$</span><code>${esc(l.slice(2))}</code></div>`
+            : `<div class="cu-art-l cu-art-out"><code>${esc(l)}</code></div>`
+        ).join('')}</div>`;
+      }
+      if (a.tipo === 'arquivo') {
+        return `<div class="cu-art cu-art-arq">
+          <div class="cu-art-barra">${esc(a.nome)}</div>
+          <div class="cu-art-corpo">${a.linhas.map(l => `<div class="cu-art-l"><code>${esc(l) || '&nbsp;'}</code></div>`).join('')}</div>
+        </div>`;
+      }
+      return `<div class="cu-art cu-art-arv">${a.linhas.map(l => `<div class="cu-art-l"><code>${esc(l)}</code></div>`).join('')}</div>`;
+    };
+
+    el.innerHTML = `
+      <section class="cu-resta" aria-labelledby="h-resta">
+        <h3 id="h-resta">${esc(P.restaTitulo)}</h3>
+        <div class="cu-resta-par">
+          <div class="cu-resta-lado cu-resta-chat">
+            <span class="cu-resta-rot">${esc(P.resta.conversaRotulo)}</span>
+            <ul>${lista(P.resta.conversa)}</ul>
+          </div>
+          <div class="cu-resta-lado cu-resta-term">
+            <span class="cu-resta-rot">${esc(P.resta.agenteRotulo)}</span>
+            <ul>${lista(P.resta.agente)}</ul>
+          </div>
+        </div>
+        <p class="cu-resta-nota">${txt(P.resta.nota)}</p>
+      </section>
+
+      <div class="cu-mecs">
+        ${P.mecanismos.map((m, i) => `
+          <article class="cu-mec">
+            <div class="cu-mec-txt">
+              <h4><span class="cu-mec-n">${String(i + 1).padStart(2, '0')}</span>${esc(m.titulo)}</h4>
+              <p>${txt(m.texto)}</p>
+              ${m.nota ? `<p class="cu-mec-nota">${txt(m.nota)}</p>` : ''}
+            </div>
+            <div class="cu-mec-art">${artefato(m.artefato)}</div>
+          </article>
+        `).join('')}
+      </div>
+
+      <p class="cu-licao cu-perm-fecho">${P.fecho}</p>
+    `;
+  }
+
+  /* ─── 04 · ferramentas ───────────────────────────────────── */
 
   function renderFerramentas() {
     const el = $('cu-tools');
@@ -430,7 +508,7 @@
     `).join('');
   }
 
-  /* ─── 05 · catálogo ──────────────────────────────────────── */
+  /* ─── 06 · catálogo ──────────────────────────────────────── */
 
   function renderFamilias() {
     const el = $('cu-familias');
@@ -484,7 +562,7 @@
     `).join('');
   }
 
-  /* ─── 05b · a ponte (`ollama launch`) ────────────────────── */
+  /* ─── 06b · a ponte (`ollama launch`) ────────────────────── */
 
   /* Três blocos num só: os comandos, a tabela de integrações e os planos.
      Ficam juntos porque respondem à mesma pergunta prática — "e como eu ligo
@@ -589,7 +667,7 @@
     else if (mq.addListener) mq.addListener(aplicar);
   }
 
-  /* ─── 06 · segurança ─────────────────────────────────────── */
+  /* ─── 07 · segurança ─────────────────────────────────────── */
 
   function renderSeguranca() {
     const el = $('cu-seg');
@@ -605,7 +683,7 @@
     `).join('');
   }
 
-  /* ─── 04 · tutoriais em texto (o caminho sem simulação) ──── */
+  /* ─── 05 · tutoriais em texto (o caminho sem simulação) ──── */
 
   function renderPlano() {
     const el = $('cu-plain-body');
@@ -632,7 +710,7 @@
   }
 
   /* ═══════════════════════════════════════════════════════════
-     04 · O SIMULADOR
+     05 · O SIMULADOR
      ═══════════════════════════════════════════════════════════
      Uma tela de computador de mentira com um tutorial de verdade
      dentro. A brincadeira visual tem função: quem nunca abriu um
@@ -1151,6 +1229,7 @@
     pintarCenario();
     renderGrafico();
     renderContraponto();
+    renderPermanencia();
     renderFerramentas();
     renderFamilias();
     colapsarCatalogoNoCelular();

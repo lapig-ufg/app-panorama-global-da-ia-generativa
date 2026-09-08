@@ -441,7 +441,115 @@ const COMO_USAR_DATA = {
   },
 
   /* ─────────────────────────────────────────────────────────────
-     3. O CINTO DE FERRAMENTAS
+     3. O QUE FICA DEPOIS
+     A seção 02 mede UMA tarefa: mais rápido, mais certo. Faltava o
+     outro eixo, o do tempo — o que sobra quando a tarefa acaba. É o
+     argumento mais forte para um laboratório e era o mais ausente da
+     página: `git` aparecia seis vezes e nas seis como rede de
+     segurança, "reprodutibilidade" não aparecia nenhuma.
+
+     O mecanismo desta seção é real e verificável, não retórica: um
+     agente LÊ o repositório antes de agir. A estrutura que fica é o
+     que faz a próxima sessão começar sabendo o que esta aprendeu.
+     ───────────────────────────────────────────────────────────── */
+  permanencia: {
+    titulo: "O que fica depois",
+    lede: "Tudo até aqui compara uma tarefa: quem termina antes, quem termina certo. Falta a pergunta que só aparece na segunda-feira seguinte — <strong>o que sobrou daquilo?</strong> É aqui que a distância entre os dois modos deixa de ser de minutos e passa a ser de anos.",
+
+    restaTitulo: "O que resta, uma semana depois",
+    resta: {
+      conversaRotulo: "De uma conversa na aba",
+      conversa: [
+        { ok: false, v: "O fio da conversa — se você lembrar em qual das 300 conversas foi." },
+        { ok: false, v: "O resultado, colado em algum lugar: um e-mail, um documento, a área de transferência." },
+        { ok: false, v: "A lembrança de que funcionou. Não de por quê." },
+        { ok: false, v: "Nada que outra pessoa consiga abrir e continuar." }
+      ],
+      agenteRotulo: "De uma sessão com acesso aos arquivos",
+      agente: [
+        { ok: true, v: "O script que fez o trabalho, no disco, pronto para rodar de novo." },
+        { ok: true, v: "As pastas do jeito que ficaram — e o jeito que ficaram é a decisão registrada." },
+        { ok: true, v: "Um commit por passo, com a mensagem dizendo o que mudou e por quê." },
+        { ok: true, v: "Um arquivo de convenções que a PRÓXIMA sessão vai ler antes de agir." }
+      ],
+      nota: "Não é que a conversa seja pior: é que ela não tem onde deixar nada. O agente escreve no mesmo lugar em que você trabalha, e é por isso que o trabalho dele se acumula em vez de recomeçar."
+    },
+
+    mecanismos: [
+      {
+        titulo: "O git deixa de ser rede e vira registro",
+        texto: "Na seção 07 o versionamento aparece como proteção — e é. Mas o ganho maior é outro: com o histórico, cada coisa que o agente fez tem uma linha com data, autor e motivo. `git diff` revisa antes de aceitar, `git log` conta o que aconteceu semanas depois, e `git revert` desfaz UM passo sem derrubar os outros. A aprovação deixa de ser um clique que some da tela e vira uma decisão auditável.",
+        artefato: {
+          tipo: "terminal",
+          linhas: [
+            "$ git log --oneline -6",
+            "a3f19c2 organiza campo-2026 por data (1240 fotos, mv -n)",
+            "7b2e410 indice.py: data vem da pasta, nao do nome do arquivo",
+            "c8d0a95 recorte GO: reprojeta o vetor, nao os 60 rasters",
+            "2e1f883 padroniza 340 nomes (locale C.UTF-8 no iconv)",
+            "9a44d17 converte 40 xlsx -> 97 csv (uma aba por arquivo)",
+            "5c0b621 estrutura inicial do projeto de campo"
+          ]
+        },
+        nota: "Cada linha desse histórico é uma das cinco tarefas da seção 02. O que na aba seriam cinco conversas perdidas, aqui é o registro de um projeto."
+      },
+      {
+        titulo: "A pasta é metade da documentação",
+        texto: "Uma estrutura previsível — bruto separado de processado, script separado de saída — faz duas coisas ao mesmo tempo. Para a pessoa, diz onde procurar sem perguntar a ninguém. Para o agente, elimina o chute: ele não precisa adivinhar onde os dados estão nem onde pode escrever, e a taxa de acerto dele sobe junto. Organizar pastas parece burocracia até a primeira vez em que alguém pergunta \"cadê o dado original?\" e a resposta é imediata.",
+        artefato: {
+          tipo: "arvore",
+          linhas: [
+            "campo-2026/",
+            "├── AGENTS.md          ← as regras da casa",
+            "├── dados/",
+            "│   ├── brutos/        ← somente leitura, nunca alterado",
+            "│   └── processados/",
+            "├── scripts/",
+            "│   └── indice.py",
+            "└── saidas/",
+            "    └── recorte/"
+          ]
+        }
+      },
+      {
+        titulo: "Um arquivo de convenções é a memória do agente",
+        texto: "Este é o mecanismo que quase ninguém conhece, e é o que mais muda o resultado no mês seguinte: **agentes leem o repositório antes de agir**. Um arquivo de convenções na raiz do projeto — `AGENTS.md`, `CLAUDE.md`, ou o próprio `README.md` — é lido no começo de cada sessão. Ou seja: é o único jeito de ensinar alguma coisa ao agente que sobrevive ao fim da conversa. Cada erro que você corrigiu uma vez vira uma linha ali, e não volta a acontecer.",
+        artefato: {
+          tipo: "arquivo",
+          nome: "AGENTS.md",
+          linhas: [
+            "# Convenções deste projeto",
+            "",
+            "- `dados/brutos/` é somente leitura. Nunca escreva aqui.",
+            "- Nome de arquivo: minúsculo, sem acento, separado por _",
+            "- Raster: EPSG:4326, nodata -3000, COMPRESS=DEFLATE",
+            "- Antes de mover em lote, rode o laço com `echo` e me mostre",
+            "  a lista antes de trocar por `mv`."
+          ]
+        },
+        nota: "Repare de onde saiu cada linha: são as lições dos cenários 2, 5 e 1 desta página, viradas em regra permanente. É assim que uma correção deixa de ser um episódio e vira comportamento."
+      },
+      {
+        titulo: "E, no fim, a reprodutibilidade",
+        texto: "Uma conversa não é um método. Se o resultado vai para um artigo, um relatório ou a tese de alguém, em algum momento vai ser preciso responder quatro perguntas — e um fio de chat não responde nenhuma delas. Uma pasta versionada responde as quatro sem esforço extra, porque as respostas foram sendo escritas enquanto o trabalho acontecia. Para trabalho publicado isso não é conveniência: é requisito.",
+        artefato: {
+          tipo: "arvore",
+          linhas: [
+            "campo-2026/ @ a3f19c2",
+            "  ├─ o que foi feito ..... git log",
+            "  ├─ por quê ............. mensagens de commit + AGENTS.md",
+            "  ├─ como refazer ........ scripts/",
+            "  └─ com quais dados ..... dados/brutos/ (intocado)"
+          ]
+        }
+      }
+    ],
+
+    fecho: "Junte isto com o diagrama da seção 02 e aparecem <strong>dois ciclos, não um</strong>. O curto acontece dentro da tarefa: a IA executa, lê a saída e corrige. O longo acontece entre tarefas: o que ficou no disco — o script, a pasta, o histórico, as convenções — é o que a próxima sessão lê antes de começar. O primeiro ciclo é o que faz a tarefa dar certo hoje; <strong>o segundo é o que faz o trabalho compor em vez de recomeçar do zero toda vez.</strong>"
+  },
+
+  /* ─────────────────────────────────────────────────────────────
+     4. O CINTO DE FERRAMENTAS
      O que muda tecnicamente entre a aba e o terminal não é o modelo:
      é a lista de ações que ele pode pedir. Vale nomeá-las, porque é
      esse vocabulário que aparece na tela quando o agente pede
@@ -493,7 +601,7 @@ const COMO_USAR_DATA = {
   ],
 
   /* ─────────────────────────────────────────────────────────────
-     4. O CATÁLOGO
+     5. O CATÁLOGO
      Três famílias, e a divisão é proposital: ela repete o argumento
      do vocabulário. Note a terceira — é a única em que "no
      computador" descreve onde o modelo PENSA.
@@ -655,7 +763,7 @@ const COMO_USAR_DATA = {
   ],
 
   /* ─────────────────────────────────────────────────────────────
-     4b. A PONTE — `ollama launch`
+     5b. A PONTE — `ollama launch`
      O bloco que fecha o catálogo. As duas primeiras famílias são
      harnesses; a terceira é o motor. Faltava dizer como se liga uma
      coisa na outra — e a resposta, hoje, é um comando só.
@@ -749,7 +857,7 @@ const COMO_USAR_DATA = {
   },
 
   /* ─────────────────────────────────────────────────────────────
-     5. TUTORIAIS DO SIMULADOR
+     6. TUTORIAIS DO SIMULADOR
      A tela de computador é uma brincadeira com a cara dos anos
      2000, mas os comandos são reais e as saídas são reconstituições
      fiéis — não gravações. Cada passo declara em que janela
@@ -1020,7 +1128,7 @@ const COMO_USAR_DATA = {
   ],
 
   /* ─────────────────────────────────────────────────────────────
-     6. O QUE VOCÊ ESTÁ AUTORIZANDO
+     7. O QUE VOCÊ ESTÁ AUTORIZANDO
      Dar mãos à IA é dar mãos à IA. Esta seção não é aviso legal:
      são as cinco regras que evitam os acidentes que a gente já viu
      acontecer.
@@ -1036,7 +1144,7 @@ const COMO_USAR_DATA = {
     },
     {
       titulo: "Git (ou uma cópia) antes de soltar",
-      texto: "Com o histórico versionado, todo estrago tem `git diff` e tem volta. Sem ele, um `mv` bem-intencionado em 1.240 arquivos é irreversível. Se o material não é código, uma cópia da pasta resolve."
+      texto: "Com o histórico versionado, todo estrago tem `git diff` e tem volta. Sem ele, um `mv` bem-intencionado em 1.240 arquivos é irreversível. Se o material não é código, uma cópia da pasta resolve. Vale lembrar que aqui o versionamento é só a rede de segurança — a seção 03 mostra o que ele faz quando nada dá errado."
     },
     {
       titulo: "Comando destrutivo merece leitura",
