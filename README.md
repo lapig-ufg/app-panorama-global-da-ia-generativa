@@ -16,7 +16,7 @@ Acesse a versão pública em: **https://lapig-ufg.github.io/app-panorama-global-
 
 Este repositório é **mais do que o site** — são três partes que trabalham juntas:
 
-- **Site** (`index.html` + `assets/`) — a linha do tempo, publicada no **GitHub Pages**. Lê os dados de uma planilha Google Sheets em tempo real (sem novo deploy).
+- **Site** (`index.html` + `assets/`) — a linha do tempo, publicada no **GitHub Pages**. Lê os dados de uma planilha Google Sheets em tempo real (sem novo deploy). Junto dela vão as abas `guia.html` (interativa — os benchmarks caem de `benchmarks.json`, regenerado pelo pipeline), `gratuitos.html` e `como-usar.html` (interativa — simulador de terminal).
 - **Automação semanal** (`automation/` + `.github/workflows/auto-update.yml`) — um **cron do GitHub Actions** roda toda segunda: o Claude pesquisa lançamentos recentes na web e grava candidatos numa aba de **rascunho** (`Pendentes`) da planilha.
 - **PWA de curadoria** (`admin/`) — app instalável onde você **aprova/rejeita** os candidatos. **Só o que você aprova vai ao ar** — nada é publicado automaticamente.
 
@@ -57,6 +57,7 @@ panorama-llms/
 ├── index.html              # Página principal do site (timeline)
 ├── guia.html               # "Qual modelo usar" — rankings de benchmarks (interativa)
 ├── gratuitos.html          # Catálogo de IAs gratuitas
+├── como-usar.html          # "Como usar fora do navegador" — IA no terminal (interativa)
 ├── assets/
 │   ├── styles.css          # Estilos da timeline
 │   ├── data.js             # Logos, bandeiras, cores, grupos, aliases + SHEET_ID
@@ -64,7 +65,8 @@ panorama-llms/
 │   ├── app.js              # Carregamento de dados, tooltip, drag, exportação
 │   ├── benchmarks.json     # Dados da Artificial Analysis (gerado pelo cron)
 │   ├── guia.js / guia.css  # Página "Qual modelo usar" (abas, ordenação, comparação)
-│   └── gratuitos.*         # Página de IAs gratuitas
+│   ├── gratuitos.*         # Página de IAs gratuitas
+│   └── como-usar.*         # Página "Como usar fora do navegador" (dados, lógica, estilos)
 ├── admin/                  # PWA de curadoria (aprovar/rejeitar pendentes)
 ├── automation/             # Pipelines: lançamentos (prepare/publish) + benchmarks (update-benchmarks.mjs)
 │   ├── README.md           # Pipeline de lançamentos
@@ -118,6 +120,86 @@ planilha e o catálogo completo da Artificial Analysis (`assets/catalogo.json`, 
 com data de estreia, gerado pelo cron de benchmarks). A distinção entre curadoria humana e
 censo automático aparece na pílula, na legenda do SVG, no tooltip e nas colunas
 `Nível`/`Fonte` do CSV. Detalhes em [ARQUITETURA.md §15](ARQUITETURA.md).
+
+---
+
+## 🖥 A aba "Como usar fora do navegador"
+
+Página **estática e autocontida** (`como-usar.html` + `assets/como-usar*.js|css`): não lê
+planilha, não depende de cron e não tem pipeline. Todo o conteúdo mora em
+`assets/como-usar-data.js` — é o único arquivo a editar para atualizar a aba.
+
+Ela responde ao "como" que faltava no painel: a diferença entre conversar com a IA numa
+aba do navegador e dar a ela acesso ao terminal da máquina — no eixo de uma tarefa (seção 02)
+e no eixo do tempo (seção 03). São sete seções (a 06 termina com um bloco extra, "a ponte"):
+
+1. **O nome disso** — por que "navegador × computador" é um par de nomes errado (o navegador
+   está no computador) e cinco pares candidatos em julgamento, com uma proposta marcada.
+2. **A diferença, em comandos** — abre com o **diagrama do ciclo** (dois SVG: à esquerda o
+   resultado só volta pela sua digitação; à direita a IA lê a própria saída), seguido de cinco
+   tarefas de laboratório resolvidas dos dois jeitos, um **gráfico de halteres** com as dez
+   medidas de tempo e a contra-seção **"onde a aba ganha"**.
+3. **O que fica depois** — o segundo eixo do argumento. A seção 02 mede uma tarefa; esta mede
+   o que sobra dela: um comparativo do que resta de cada lado uma semana depois, e quatro
+   mecanismos com artefato ao lado — `git log` como registro (e não só como rede), a estrutura
+   de pastas como metade da documentação, o `AGENTS.md` como a única memória do agente que
+   sobrevive ao fim da conversa, e a reprodutibilidade.
+4. **O cinto de ferramentas** — Bash, ler, escrever, buscar, rodar código, web, MCP.
+5. **Instalar, passo a passo** — um simulador de área de trabalho estilo anos 2000 com dois
+   tutoriais interativos: **Ollama Cloud + `ollama launch`** (assinar, rodar um modelo grande
+   sem baixar nada e usá-lo para dirigir Claude Code, Pi ou OpenCode) e **Antigravity**.
+6. **O catálogo** — três famílias: harnesses de terminal (Claude Code, Codex CLI, OpenCode,
+   Pi, Gemini CLI), aplicativos de desktop (Claude Desktop, ChatGPT Desktop, Antigravity) e
+   motores (Ollama local e na nuvem, LM Studio, llama.cpp). Fecha com **a ponte**: o quadro do
+   `ollama launch`, com as 18 integrações que ele conhece e os planos do Ollama Cloud.
+7. **O que você está autorizando** — as seis regras de segurança ao dar mãos a um agente.
+
+### Regras de manutenção
+
+- **Todo comando publicado foi rodado antes.** As transcrições assumem bash/GNU coreutils
+  (Linux); onde o comportamento muda no macOS ou no Windows, isso está dito na própria
+  transcrição, e não num rodapé. Ao editar um comando, rode-o antes de commitar.
+- **Prosa aceita crases e asteriscos** (`` `mv -n` ``, `**assim**`) e o renderizador os
+  converte em `<code>` e `<strong>` — a conversão acontece depois do escape de HTML. Por isso
+  **não escreva tags HTML nesses campos**: elas aparecem escritas na tela. Os campos que
+  aceitam HTML de verdade são outros — `tese`, `licao`, `lede`, `fecho` — e vão para a página
+  crus, de propósito.
+- **Os artefatos da seção 03 são conteúdo literal.** As crases dentro do bloco `AGENTS.md` são
+  o texto do arquivo, não marcação: o renderizador não as toca (ver `.cu-art`). Se elas
+  virarem `<code>`, o exemplo deixa de mostrar como o arquivo é de verdade.
+- **O simulador nunca é o único caminho.** Os mesmos passos saem em texto corrido dentro do
+  `<details>` "Ver os tutoriais como texto", para leitor de tela, celular e copiar-colar.
+  Se você acrescentar um passo, ele aparece nos dois lugares automaticamente. Há quatro tipos
+  de janela — `terminal`, `navegador`, `dialogo` e `diff` —, declarados no campo `janela` de
+  cada passo.
+- **Quatro dos cinco cenários moram atrás de abas.** A tira de lições acima delas existe só
+  para tornar visível o que cada um ensina de diferente; ao acrescentar um cenário, escreva
+  também o `licaoCurta`, senão ele entra na página como se fosse repetição do anterior.
+- **O celular é o caso difícil.** A página tem ~22 telas de rolagem em 390px, e o catálogo é
+  a maior fatia. Por isso as famílias mostram um cartão e um botão nessa largura
+  (`colapsarCatalogoNoCelular`) e a tabela de integrações vem fechada. Ao acrescentar
+  conteúdo, meça antes: `document.documentElement.scrollHeight` dividido pela altura da tela.
+- **Instaladores e planos** foram conferidos nas páginas oficiais (última checagem em
+  `updatedAt`). Revalide antes de citar cotas — elas mudam com frequência.
+- **A lista do `ollama launch` cresce a cada versão do Ollama.** A tabela em `ponte.integracoes`
+  é uma cópia verbatim do `ollama launch --help` (nomes, aliases e descrições vêm de
+  `cmd/launch/registry.go` no repositório do Ollama). O texto ao lado dela manda o leitor rodar
+  o comando sem argumento para ver a lista da versão dele — mantenha esse aviso ao atualizar,
+  porque é o que impede a tabela de envelhecer virando mentira.
+- **As cores do gráfico e do diagrama foram validadas, não escolhidas a olho.** O par é
+  `#5B53A8` (a aba) e `#10a37f` (o terminal), e ele passa os seis testes do validador de
+  paleta. O par "natural" — o cinza quente `--ink-muted` contra o verde `--accent` — foi
+  **reprovado**: ΔE 1,9 em protanopia, ou seja, indistinguível para parte dos leitores.
+  Ao mexer nessas cores, rode o validador de novo em vez de confiar no olho. As mesmas duas
+  cores marcam a etiqueta de cada coluna da comparação, a seta de volta de cada diagrama e as
+  duas marcas do gráfico — se uma mudar, mudam as três.
+- **O gráfico mostra uma derrota de propósito.** Na linha das planilhas o terminal é mais
+  lento. Não "corrija" isso: é o dado que impede a figura de virar propaganda, e a nota ao
+  lado dela existe para explicar por que a derrota é o caso mais forte da página.
+- **Cuidado com o sufixo dos modelos.** `gemma4:cloud` e `gpt-oss:120b-cloud` rodam no servidor
+  da Ollama; `qwen3.5:4b` roda no disco de quem executou. Mesmo comando, mesma porta 11434,
+  destinos opostos — é o exemplo que a seção 01 usa e a regra 06 repete. Não misture os dois em
+  exemplos sobre dado sensível.
 
 ---
 

@@ -1,0 +1,1320 @@
+/* ═══════════════════════════════════════════════════════════════
+   Panorama Global da IA Generativa — "Como usar fora do navegador"
+   Renderização das seções e o simulador de área de trabalho com os
+   tutoriais interativos.
+
+   DUAS DECISÕES QUE EXPLICAM O RESTO DO ARQUIVO:
+
+   1. Tudo é gerado a partir de COMO_USAR_DATA. A página não guarda
+      texto no HTML porque o conteúdo aqui é uma tese em cinco atos,
+      e tese se revisa: manter o texto num arquivo só evita a
+      situação clássica de corrigir um número no card e esquecer o
+      mesmo número na tabela.
+
+   2. O simulador nunca é o único caminho. Todo passo dos tutoriais
+      também sai em texto corrido dentro de <details> — quem usa
+      leitor de tela, quem está no celular e quem só quer copiar os
+      comandos não deveria precisar operar uma janelinha de mentira
+      para chegar ao conteúdo.
+   ═══════════════════════════════════════════════════════════════ */
+
+(function () {
+  'use strict';
+
+  const D = typeof COMO_USAR_DATA !== 'undefined' ? COMO_USAR_DATA : null;
+
+  /* ─── utilidades ─────────────────────────────────────────── */
+
+  function esc(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  /* Cópia local do fmtDataBR de data.js, como em gratuitos.js: esta página
+     também não carrega data.js só para formatar uma data. */
+  const MESES_BR = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+
+  function fmtDataCurta(iso) {
+    const m = String(iso == null ? '' : iso).slice(0, 10).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return '';
+    return `${m[3]} ${MESES_BR[+m[2] - 1]} ${m[1]}`;
+  }
+
+  /* Prosa com trechos de comando e ênfase: no arquivo de dados eles vêm entre
+     crases e asteriscos, como em markdown, porque escrever <code> ou <strong>
+     no meio de uma frase em português torna o texto ilegível para quem edita.
+     A conversão acontece DEPOIS do escape, então o conteúdo continua sendo
+     tratado como texto — uma tag escrita à mão no arquivo de dados aparece
+     como tag, e não vira marcação (foi assim que um <strong> perdido apareceu
+     escrito na tela). Campos com HTML de verdade (tese, licao, fecho, lede)
+     não passam por aqui: eles são inseridos crus, de propósito. */
+  function txt(str) {
+    return esc(str)
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  }
+
+  function $(id) { return document.getElementById(id); }
+
+  /* O usuário pediu menos animação no sistema operacional dele. Respeitar isso
+     não é enfeite de acessibilidade: para quem tem sensibilidade vestibular,
+     texto que se datilografa sozinho é desconforto real. */
+  const semMovimento = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ─── 01 · vocabulário ───────────────────────────────────── */
+
+  function renderVocabulario() {
+    const v = D.vocabulario;
+
+    const lede = $('cu-vocab-lede');
+    if (lede) lede.textContent = v.lede;
+
+    const eixos = $('cu-eixos');
+    if (eixos) {
+      eixos.innerHTML = v.eixos.map((e, i) => `
+        <article class="cu-eixo ${i === 0 ? 'is-nao' : 'is-sim'}">
+          <h3 class="cu-eixo-q">${esc(e.pergunta)}</h3>
+          <div class="cu-eixo-par">
+            <div class="cu-eixo-lado">
+              <span class="cu-eixo-rot">Numa aba do navegador</span>
+              <p>${esc(e.esquerda)}</p>
+            </div>
+            <div class="cu-eixo-lado">
+              <span class="cu-eixo-rot">Com acesso ao terminal</span>
+              <p>${esc(e.direita)}</p>
+            </div>
+          </div>
+          <p class="cu-eixo-ver">${esc(e.veredito)}</p>
+          <p class="cu-eixo-nota">${txt(e.nota)}</p>
+        </article>
+      `).join('');
+    }
+
+    const tese = $('cu-tese');
+    if (tese) tese.innerHTML = v.tese;
+
+    const nomes = $('cu-nomes');
+    if (nomes) {
+      nomes.innerHTML = v.candidatos.map(c => `
+        <article class="cu-nome ${c.recomendado ? 'is-rec' : ''}">
+          <header class="cu-nome-head">
+            <h4>${esc(c.par)}</h4>
+            ${c.recomendado ? '<span class="cu-nome-badge">nossa proposta</span>' : ''}
+          </header>
+          <p class="cu-nome-pro"><span>A favor</span>${txt(c.aFavor)}</p>
+          <p class="cu-nome-con"><span>Contra</span>${txt(c.contra)}</p>
+        </article>
+      `).join('');
+    }
+
+    const aberto = $('cu-aberto');
+    if (aberto) aberto.textContent = v.emAberto;
+  }
+
+  /* ─── transcrições ───────────────────────────────────────── */
+
+  /* Um único renderizador para os dois lados da comparação e para o terminal
+     do simulador: se a aparência da linha de comando divergir entre as
+     seções, o leitor passa a achar que são coisas diferentes. */
+  function linhaTerminal(l) {
+    const v = esc(l.v);
+    switch (l.t) {
+      case 'cmd':  return `<div class="cu-t-linha"><span class="cu-t-ps">$</span><code>${v}</code></div>`;
+      case 'cont': return `<div class="cu-t-linha"><span class="cu-t-ps cu-t-ps2">&gt;</span><code>${v}</code></div>`;
+      case 'err':  return `<div class="cu-t-linha cu-t-err"><code>${v}</code></div>`;
+      case 'nota': return `<div class="cu-t-nota">${txt(l.v)}</div>`;
+      case 'pedido': return `<div class="cu-t-linha cu-t-pedido"><span class="cu-t-ps">❯</span><code>${v}</code></div>`;
+      /* Linha vazia é espaço de respiro que o autor do dado escreveu de
+         propósito; sem o &nbsp; o flex da linha colapsa a zero pixels. */
+      default:     return `<div class="cu-t-linha cu-t-out"><code>${v || '&nbsp;'}</code></div>`;
+    }
+  }
+
+  function linhaChat(l) {
+    if (l.t === 'nota') return `<div class="cu-c-nota">${txt(l.v)}</div>`;
+    const quem = l.t === 'voce' ? 'Você' : 'IA';
+    /* txt(), não esc(): os dados usam crases para nomes de comando — a coluna
+       do terminal converte, e a bolha de chat precisa converter igual. */
+    return `
+      <div class="cu-c-linha cu-c-${l.t === 'voce' ? 'voce' : 'ia'}">
+        <span class="cu-c-quem">${quem}</span>
+        <p>${txt(l.v)}</p>
+      </div>`;
+  }
+
+  /* ─── 02 · cenários ──────────────────────────────────────── */
+
+  let cenarioAtual = 0;
+
+  /* Só desenha os botões. Os ouvintes ficam em ligarTabs(), chamado uma vez na
+     partida: como esta função é reexecutada a cada troca de aba, registrar o
+     ouvinte aqui empilharia um a cada clique — e a seta do teclado passaria a
+     pular várias abas de uma vez, uma por ouvinte acumulado. */
+  function renderTabs() {
+    const tabs = $('cu-cenario-tabs');
+    if (!tabs) return;
+
+    tabs.innerHTML = D.cenarios.map((c, i) => `
+      <button type="button" role="tab" class="cu-tab ${i === cenarioAtual ? 'is-active' : ''}"
+              id="cu-tab-${esc(c.id)}" data-i="${i}" tabindex="${i === cenarioAtual ? '0' : '-1'}"
+              aria-selected="${i === cenarioAtual}" aria-controls="cu-painel-cenario">
+        ${esc(c.aba)}
+      </button>
+    `).join('');
+  }
+
+  function irPara(i, focar) {
+    cenarioAtual = (i + D.cenarios.length) % D.cenarios.length;
+    renderTabs();
+    renderLicoes();
+    pintarCenario();
+    if (focar) {
+      const alvo = $('cu-cenario-tabs').querySelector('.cu-tab.is-active');
+      if (alvo) alvo.focus();
+    }
+  }
+
+  function ligarTabs() {
+    const tabs = $('cu-cenario-tabs');
+    if (!tabs) return;
+
+    const tira = $('cu-licoes');
+    if (tira) {
+      tira.addEventListener('click', (e) => {
+        const chip = e.target.closest('.cu-licao-chip');
+        if (!chip) return;
+        /* focar=true também no clique: quem ativa com Enter precisa do foco
+           de volta, senão o re-render apaga o botão e a fileira perde as
+           setas do teclado até o próximo Tab do topo da página. */
+        irPara(+chip.dataset.i, true);
+      });
+    }
+
+    tabs.addEventListener('click', (e) => {
+      const btn = e.target.closest('.cu-tab');
+      if (!btn) return;
+      irPara(+btn.dataset.i, true);
+    });
+
+    /* Setas, Home e End dentro da fileira, com tabindex móvel: é o padrão
+       WAI-ARIA de tablist. Sem ele o Tab gasta cinco paradas para atravessar
+       as abas antes de chegar ao conteúdo que elas controlam. */
+    tabs.addEventListener('keydown', (e) => {
+      const mapa = {
+        ArrowRight: cenarioAtual + 1,
+        ArrowLeft: cenarioAtual - 1,
+        Home: 0,
+        End: D.cenarios.length - 1
+      };
+      if (!(e.key in mapa)) return;
+      e.preventDefault();
+      irPara(mapa[e.key], true);
+    });
+  }
+
+  /* A tira das cinco lições. Ela não é sumário: é o inventário do que cada
+     cenário ensina de diferente, para o leitor saber o que ganha ao clicar.
+     aria-hidden porque as abas logo abaixo já expõem a mesma navegação ao
+     leitor de tela — repeti-la seria obrigá-lo a ouvir a fileira duas vezes. */
+  function renderLicoes() {
+    const el = $('cu-licoes');
+    if (!el) return;
+    el.innerHTML = D.cenarios.map((c, i) => `
+      <button type="button" class="cu-licao-chip ${i === cenarioAtual ? 'is-active' : ''}"
+              data-i="${i}" tabindex="-1">
+        <span class="cu-licao-n">${i + 1}</span>
+        <span class="cu-licao-txt">${esc(c.licaoCurta)}</span>
+      </button>
+    `).join('');
+  }
+
+  function pintarCenario() {
+    const painel = $('cu-cenario-painel');
+    if (!painel) return;
+    const c = D.cenarios[cenarioAtual];
+
+    painel.innerHTML = `
+      <div class="cu-cen" id="cu-painel-cenario" role="tabpanel"
+           aria-labelledby="cu-tab-${esc(c.id)}" tabindex="0">
+
+        <h3 class="cu-cen-titulo">${esc(c.titulo)}</h3>
+        <p class="cu-cen-ctx">${esc(c.contexto)}</p>
+
+        <div class="cu-lado-a-lado">
+          <section class="cu-col cu-col-chat" aria-label="${esc(c.chat.rotulo)}">
+            <header class="cu-col-head">
+              <span class="cu-col-tag cu-tag-chat">${esc(c.chat.rotulo)}</span>
+            </header>
+            <div class="cu-chat">${c.chat.transcricao.map(linhaChat).join('')}</div>
+            <footer class="cu-custo">
+              <div><span>Tempo</span>${esc(c.chat.custo.tempo)}</div>
+              <div><span>Vaivém</span>${esc(c.chat.custo.idas)}</div>
+              <div class="cu-custo-risco"><span>Risco</span>${txt(c.chat.custo.risco)}</div>
+            </footer>
+          </section>
+
+          <section class="cu-col cu-col-term" aria-label="${esc(c.terminal.rotulo)}">
+            <header class="cu-col-head">
+              <span class="cu-col-tag cu-tag-term">${esc(c.terminal.rotulo)}</span>
+            </header>
+            <div class="cu-term">${c.terminal.transcricao.map(linhaTerminal).join('')}</div>
+            <footer class="cu-custo">
+              <div><span>Tempo</span>${esc(c.terminal.custo.tempo)}</div>
+              <div><span>Vaivém</span>${esc(c.terminal.custo.idas)}</div>
+              <div class="cu-custo-risco"><span>Risco</span>${txt(c.terminal.custo.risco)}</div>
+            </footer>
+          </section>
+        </div>
+
+        <h4 class="cu-cmd-h">Os comandos, um por um</h4>
+        <dl class="cu-cmds">
+          ${c.comandos.map(k => `
+            <div class="cu-cmd">
+              <dt><code>${esc(k.cmd)}</code></dt>
+              <dd>${txt(k.oQueFaz)}</dd>
+            </div>
+          `).join('')}
+        </dl>
+
+        <p class="cu-licao">${c.licao}</p>
+      </div>
+    `;
+  }
+
+  /* ─── 02c · o gráfico dos custos ─────────────────────────── */
+
+  /* FORMA: dumbbell. São dois valores por tarefa e o que interessa é o VÃO
+     entre eles, não cada um isolado — barras agrupadas dariam dez marcas para
+     comparar duas a duas; o haltere dá cinco vãos para ler de uma vez.
+
+     COR: emparelhada com a própria página (índigo = a aba, verde = o terminal)
+     e escolhida com o validador, não a olho. O cinza quente do site contra o
+     verde do site davam ΔE 1,9 em protanopia — indistinguíveis. Este par passa
+     os seis testes; a bolinha vazada contra a cheia é a codificação secundária,
+     para quem imprime em preto e branco.
+
+     O ponto todo do gráfico é a terceira linha: nela o terminal é MAIS LENTO.
+     Uma figura que mostrasse cinco vitórias seria propaganda; esta mostra
+     quatro vitórias e uma derrota, e é por isso que dá para acreditar nela. */
+  const COR_CHAT = '#5B53A8';
+  const COR_TERM = '#10a37f';
+
+  function renderGrafico() {
+    const el = $('cu-grafico');
+    if (!el) return;
+
+    const dados = D.cenarios.map(c => ({
+      nome: c.aba,
+      chat: c.chat.custo.minutos,
+      term: c.terminal.custo.minutos
+    }));
+
+    const fmt = v => (v < 1 ? Math.round(v * 60) + ' s' : (Number.isInteger(v) ? v : v.toFixed(1).replace('.', ',')) + ' min');
+
+    const L = 178, R = 64, T = 16, ALT_LINHA = 44;
+    const W = 720;
+    const H = T + dados.length * ALT_LINHA + 34;
+
+    /* O eixo nasce dos dados, não de um número fixo: um cenário futuro com
+       mais de 32 min colocaria o ponto para fora do viewBox e o SVG o
+       cortaria em silêncio. Nunca menor que 32 (a geometria de hoje não
+       muda), mas cresce com o que vier a existir no arquivo de dados. */
+    const maxDados = Math.max(0, ...dados.flatMap(d => [d.chat, d.term]));
+    const maxX = Math.max(32, Math.ceil(maxDados / 10) * 10);
+    const x = m => L + (m / maxX) * (W - L - R);
+
+    const passo = maxX <= 40 ? 10 : maxX / 4;
+    const grades = [];
+    for (let g = 0; g < maxX; g += passo) grades.push(g);
+
+    const linhas = dados.map((d, i) => {
+      const y = T + i * ALT_LINHA + ALT_LINHA / 2;
+      const xc = x(d.chat), xt = x(d.term);
+
+      /* Cada número fica do lado de FORA do seu próprio ponto, para os dois
+         nunca se encontrarem no meio. Quando não cabe — ponto colado no zero,
+         com o rótulo invadindo a coluna de nomes — o número sobe para cima da
+         marca em vez de brigar por espaço. Foi o que aconteceu em três das
+         cinco linhas: sem este desvio, "42 s" caía dentro de
+         "Organizar 1.240 fotos". */
+      const larg = t => t.length * 6.3;
+      function poe(xp, valor, lado) {
+        const t = fmt(valor);
+        if (lado === 'esq') {
+          if (xp - 11 - larg(t) >= L + 4) return { x: xp - 11, y: y + 4, anc: 'end', t };
+        } else {
+          if (xp + 11 + larg(t) <= W - 6) return { x: xp + 11, y: y + 4, anc: 'start', t };
+        }
+        return { x: xp, y: y - 12, anc: 'middle', t };
+      }
+
+      const esq = xc <= xt ? 'chat' : 'term';
+      const rc = poe(xc, d.chat, esq === 'chat' ? 'esq' : 'dir');
+      const rt = poe(xt, d.term, esq === 'chat' ? 'dir' : 'esq');
+
+      return `
+        <g class="cu-gr-linha">
+          <title>${esc(d.nome)}: ${fmt(d.chat)} na aba, ${fmt(d.term)} com terminal</title>
+          <rect x="0" y="${y - ALT_LINHA / 2}" width="${W}" height="${ALT_LINHA}" class="cu-gr-faixa" />
+          <text x="${L - 14}" y="${y + 4}" class="cu-gr-rot">${esc(d.nome)}</text>
+          <line x1="${Math.min(xc, xt)}" y1="${y}" x2="${Math.max(xc, xt)}" y2="${y}" class="cu-gr-haste" />
+          <circle cx="${xc}" cy="${y}" r="6" class="cu-gr-p cu-gr-chat" />
+          <circle cx="${xt}" cy="${y}" r="6" class="cu-gr-p cu-gr-term" />
+          <text x="${rc.x}" y="${rc.y}" text-anchor="${rc.anc}" class="cu-gr-val">${rc.t}</text>
+          <text x="${rt.x}" y="${rt.y}" text-anchor="${rt.anc}" class="cu-gr-val">${rt.t}</text>
+        </g>`;
+    }).join('');
+
+    el.innerHTML = `
+      <figure class="cu-graf">
+        <figcaption class="cu-graf-cap">
+          <h3>O que custou cada tarefa</h3>
+          <p>Tempo <strong>em minutos</strong> até o trabalho ficar pronto e conferido, nas cinco
+             tarefas acima. Estimativas do cenário descrito em cada aba — não são cronometragens.</p>
+        </figcaption>
+
+        <div class="cu-graf-leg">
+          <span class="cu-lg"><span class="cu-lg-m cu-lg-chat"></span>na aba do navegador</span>
+          <span class="cu-lg"><span class="cu-lg-m cu-lg-term"></span>com acesso ao terminal</span>
+        </div>
+
+        <div class="cu-graf-rola">
+          <svg viewBox="0 0 ${W} ${H}" class="cu-graf-svg" role="img" aria-label="Gráfico de halteres comparando o tempo de cada tarefa nos dois modos. Em quatro das cinco tarefas o terminal é mais rápido; em converter 40 planilhas ele é mais lento.">
+            ${grades.map(g => `
+              <line x1="${x(g)}" y1="${T}" x2="${x(g)}" y2="${H - 30}" class="cu-gr-grade" />
+              <text x="${x(g)}" y="${H - 14}" class="cu-gr-eixo">${g}</text>`).join('')}
+            ${linhas}
+          </svg>
+        </div>
+
+        <p class="cu-graf-nota">
+          A linha que importa é a terceira. Converter 40 planilhas leva <strong>mais</strong> tempo com o
+          agente — e ainda assim é o caso mais forte da página: foi só ali que alguém contou as abas e
+          descobriu que 40 arquivos guardavam 97 tabelas. <strong>O ganho nem sempre é velocidade;
+          às vezes é a única versão que está certa.</strong>
+        </p>
+
+        <details class="cu-graf-tab">
+          <summary>Ver os números em tabela</summary>
+          <table>
+            <thead><tr><th>Tarefa</th><th>Na aba</th><th>Com terminal</th></tr></thead>
+            <tbody>
+              ${dados.map(d => `<tr><td>${esc(d.nome)}</td><td>${fmt(d.chat)}</td><td>${fmt(d.term)}</td></tr>`).join('')}
+            </tbody>
+          </table>
+        </details>
+      </figure>
+    `;
+  }
+
+  /* ─── 02b · o contraponto ────────────────────────────────── */
+
+  function renderContraponto() {
+    const el = $('cu-contraponto');
+    if (!el || !D.contraponto) return;
+    const c = D.contraponto;
+    el.innerHTML = `
+      <section class="cu-contra" aria-labelledby="h-contra">
+        <header>
+          <h3 id="h-contra">${esc(c.titulo)}</h3>
+          <p class="cu-contra-lede">${txt(c.lede)}</p>
+        </header>
+        <div class="cu-contra-grid">
+          ${c.itens.map(i => `
+            <article class="cu-contra-item">
+              <h4>${esc(i.titulo)}</h4>
+              <p>${txt(i.texto)}</p>
+            </article>
+          `).join('')}
+        </div>
+        <p class="cu-contra-fecho">${c.fecho}</p>
+      </section>
+    `;
+  }
+
+  /* ─── 03 · o que fica depois ─────────────────────────────── */
+
+  /* Forma deliberadamente diferente do resto da página: um comparativo em duas
+     colunas (listas, não cartões) e depois quatro faixas de texto-com-artefato.
+     A aba já tinha grade de cartões em quatro seções; mais uma aqui e a seção
+     nova entraria como "mais do mesmo", que é justamente o problema que ela
+     veio resolver. */
+  function renderPermanencia() {
+    const el = $('cu-permanencia');
+    const lede = $('cu-perm-lede');
+    if (!el || !D.permanencia) return;
+    const P = D.permanencia;
+
+    if (lede) lede.innerHTML = P.lede;
+
+    const lista = (itens) => itens.map(i => `
+      <li class="${i.ok ? 'is-fica' : 'is-some'}">
+        <span class="cu-rst-m" aria-hidden="true">${i.ok ? '✓' : '×'}</span>
+        <span>${txt(i.v)}</span>
+      </li>`).join('');
+
+    const artefato = (a) => {
+      if (!a) return '';
+      if (a.tipo === 'terminal') {
+        return `<div class="cu-art cu-art-term">${a.linhas.map(l =>
+          l.startsWith('$ ')
+            ? `<div class="cu-art-l"><span class="cu-art-ps">$</span><code>${esc(l.slice(2))}</code></div>`
+            : `<div class="cu-art-l cu-art-out"><code>${esc(l)}</code></div>`
+        ).join('')}</div>`;
+      }
+      if (a.tipo === 'arquivo') {
+        return `<div class="cu-art cu-art-arq">
+          <div class="cu-art-barra">${esc(a.nome)}</div>
+          <div class="cu-art-corpo">${a.linhas.map(l => `<div class="cu-art-l"><code>${esc(l) || '&nbsp;'}</code></div>`).join('')}</div>
+        </div>`;
+      }
+      return `<div class="cu-art cu-art-arv">${a.linhas.map(l => `<div class="cu-art-l"><code>${esc(l)}</code></div>`).join('')}</div>`;
+    };
+
+    el.innerHTML = `
+      <section class="cu-resta" aria-labelledby="h-resta">
+        <h3 id="h-resta">${esc(P.restaTitulo)}</h3>
+        <div class="cu-resta-par">
+          <div class="cu-resta-lado cu-resta-chat">
+            <span class="cu-resta-rot">${esc(P.resta.conversaRotulo)}</span>
+            <ul>${lista(P.resta.conversa)}</ul>
+          </div>
+          <div class="cu-resta-lado cu-resta-term">
+            <span class="cu-resta-rot">${esc(P.resta.agenteRotulo)}</span>
+            <ul>${lista(P.resta.agente)}</ul>
+          </div>
+        </div>
+        <p class="cu-resta-nota">${txt(P.resta.nota)}</p>
+      </section>
+
+      <div class="cu-mecs">
+        ${P.mecanismos.map((m, i) => `
+          <article class="cu-mec">
+            <div class="cu-mec-txt">
+              <h4><span class="cu-mec-n">${String(i + 1).padStart(2, '0')}</span>${esc(m.titulo)}</h4>
+              <p>${txt(m.texto)}</p>
+              ${m.nota ? `<p class="cu-mec-nota">${txt(m.nota)}</p>` : ''}
+            </div>
+            <div class="cu-mec-art">${artefato(m.artefato)}</div>
+          </article>
+        `).join('')}
+      </div>
+
+      <p class="cu-licao cu-perm-fecho">${P.fecho}</p>
+    `;
+  }
+
+  /* ─── 04 · ferramentas ───────────────────────────────────── */
+
+  function renderFerramentas() {
+    const el = $('cu-tools');
+    if (!el) return;
+    el.innerHTML = D.ferramentas.map(f => `
+      <article class="cu-tool">
+        <h3>${esc(f.nome)}</h3>
+        <p class="cu-tool-oq">${txt(f.oQueE)}</p>
+        <p class="cu-tool-dest">${txt(f.destrava)}</p>
+        <p class="cu-tool-ex"><code>${esc(f.exemplo)}</code></p>
+      </article>
+    `).join('');
+  }
+
+  /* ─── 06 · catálogo ──────────────────────────────────────── */
+
+  function renderFamilias() {
+    const el = $('cu-familias');
+    if (!el) return;
+    el.innerHTML = D.familias.map(fam => `
+      <section class="cu-fam" aria-labelledby="fam-${esc(fam.id)}">
+        <header class="cu-fam-head">
+          <h3 id="fam-${esc(fam.id)}">${esc(fam.titulo)}</h3>
+          <p class="cu-fam-sub">${esc(fam.subtitulo)}</p>
+        </header>
+        <p class="cu-fam-exp">${txt(fam.explicacao)}</p>
+        <div class="cu-fam-grid">
+          ${fam.itens.map(it => `
+            <article class="cu-ferr ${it.destaque ? 'is-destaque' : ''}">
+              <header class="cu-ferr-head">
+                <div>
+                  <span class="cu-ferr-emp">${esc(it.empresa)}</span>
+                  <h4>${esc(it.nome)}</h4>
+                </div>
+                ${it.codigoAberto ? `<span class="cu-ferr-open">${esc(it.licenca || 'código aberto')}</span>` : ''}
+              </header>
+
+              <div class="cu-ferr-inst">
+                <span class="cu-ferr-rot">Como instala</span>
+                ${it.comando
+                  ? `<code>${esc(it.instala)}</code>`
+                  : `<p class="cu-ferr-gui">${esc(it.instala)}</p>`}
+                <p class="cu-ferr-alt">${esc(it.instalaAlt)}</p>
+              </div>
+
+              <div class="cu-ferr-campo">
+                <span class="cu-ferr-rot">Precisa de</span>
+                <p>${txt(it.precisa)}</p>
+              </div>
+
+              <div class="cu-ferr-campo">
+                <span class="cu-ferr-rot">Alcance</span>
+                <p>${txt(it.acesso)}</p>
+              </div>
+
+              ${it.destaque ? `<p class="cu-ferr-dest">${esc(it.destaque)}</p>` : ''}
+
+              <a class="cu-link-btn" href="${esc(it.link)}" target="_blank" rel="noopener">
+                <span>Página oficial</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </article>
+          `).join('')}
+        </div>
+      </section>
+    `).join('');
+  }
+
+  /* ─── 06b · a ponte (`ollama launch`) ────────────────────── */
+
+  /* Três blocos num só: os comandos, a tabela de integrações e os planos.
+     Ficam juntos porque respondem à mesma pergunta prática — "e como eu ligo
+     o modelo na ferramenta?" — e separá-los faria o leitor montar a resposta
+     de cabeça a partir de três lugares da página. */
+  function renderPonte() {
+    const el = $('cu-ponte');
+    if (!el || !D.ponte) return;
+    const p = D.ponte;
+
+    el.innerHTML = `
+      <section class="cu-ponte" aria-labelledby="h-ponte">
+        <header class="cu-ponte-head">
+          <h3 id="h-ponte">${esc(p.titulo)}</h3>
+          <p class="cu-ponte-lede">${txt(p.lede)}</p>
+        </header>
+
+        <dl class="cu-cmds cu-ponte-cmds">
+          ${p.comandos.map(k => `
+            <div class="cu-cmd">
+              <dt><code>${esc(k.cmd)}</code></dt>
+              <dd>${txt(k.oQueFaz)}</dd>
+            </div>
+          `).join('')}
+        </dl>
+
+        <!-- Dezoito linhas de tabela são consulta, não leitura: abertas por
+             padrão elas eram quase uma tela inteira de rolagem entre o leitor
+             e os planos. Fechadas, o título já entrega o número — que é a única
+             informação que a maioria quer daqui. -->
+        <details class="cu-integs-caixa">
+          <summary>
+            <span class="cu-integs-sum">${txt(p.integracoesTitulo)}</span>
+            <span class="cu-integs-n">${p.integracoes.length} integrações</span>
+          </summary>
+          <p class="cu-ponte-nota">${txt(p.integracoesNota)}</p>
+          <ul class="cu-integs">
+            ${p.integracoes.map(i => `
+              <li class="cu-integ">
+                <code>${esc(i.id)}</code>
+                <strong>${esc(i.nome)}</strong>
+                <span>${esc(i.nota)}</span>
+              </li>
+            `).join('')}
+          </ul>
+        </details>
+
+        <h4 class="cu-ponte-h4">${txt(p.planosTitulo)}</h4>
+        <div class="cu-planos">
+          ${p.planos.map(pl => `
+            <article class="cu-plano ${pl.destaque ? 'is-destaque' : ''}">
+              <h5>${esc(pl.nome)}</h5>
+              <p class="cu-plano-preco">${esc(pl.preco)}</p>
+              <p class="cu-plano-credito">${esc(pl.credito)}</p>
+              <p class="cu-plano-det">${txt(pl.detalhe)}</p>
+            </article>
+          `).join('')}
+        </div>
+        <p class="cu-ponte-nota">${txt(p.planosExtra)}</p>
+        <p class="cu-ponte-nota cu-ponte-fonte">${txt(p.planosNota)}</p>
+
+        <p class="cu-licao cu-ponte-fecho">${p.fecho}</p>
+      </section>
+    `;
+  }
+
+  /* No celular o catálogo ocupava 8,8 telas de rolagem — 45% da página — para
+     entregar material de consulta. Aqui cada família passa a mostrar o primeiro
+     cartão e um botão com a contagem do resto. No desktop nada muda: lá as
+     famílias cabem em três colunas e a leitura é horizontal. */
+  function colapsarCatalogoNoCelular() {
+    const mq = window.matchMedia('(max-width: 760px)');
+    const grades = [...document.querySelectorAll('.cu-fam-grid')];
+    if (!grades.length) return;
+
+    function aplicar() {
+      grades.forEach(g => {
+        const cards = [...g.children].filter(c => c.classList.contains('cu-ferr'));
+        const btnAntigo = g.parentElement.querySelector('.cu-mais');
+        if (btnAntigo) btnAntigo.remove();
+        cards.forEach(c => c.hidden = false);
+
+        if (!mq.matches || cards.length < 3) return;
+
+        cards.slice(1).forEach(c => c.hidden = true);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cu-mais';
+        btn.textContent = `Mostrar as outras ${cards.length - 1} ferramentas`;
+        btn.addEventListener('click', () => {
+          cards.forEach(c => c.hidden = false);
+          btn.remove();
+        });
+        g.insertAdjacentElement('afterend', btn);
+      });
+    }
+
+    aplicar();
+    /* addEventListener em MediaQueryList é o caminho moderno; addListener é a
+       reserva para Safari antigo, onde o outro simplesmente não existe. */
+    if (mq.addEventListener) mq.addEventListener('change', aplicar);
+    else if (mq.addListener) mq.addListener(aplicar);
+  }
+
+  /* ─── 07 · segurança ─────────────────────────────────────── */
+
+  function renderSeguranca() {
+    const el = $('cu-seg');
+    if (!el) return;
+    el.innerHTML = D.seguranca.map((s, i) => `
+      <article class="cu-seg-item">
+        <span class="cu-seg-n">${String(i + 1).padStart(2, '0')}</span>
+        <div>
+          <h3>${txt(s.titulo)}</h3>
+          <p>${txt(s.texto)}</p>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  /* ─── 05 · tutoriais em texto (o caminho sem simulação) ──── */
+
+  function renderPlano() {
+    const el = $('cu-plain-body');
+    if (!el) return;
+    el.innerHTML = D.tutoriais.map(t => `
+      <section class="cu-plain-tut">
+        <h3>${esc(t.nome)} <span>· ${esc(t.legenda)}</span></h3>
+        <ol>
+          ${t.passos.map(p => `
+            <li>
+              <strong>${esc(p.titulo)}</strong>
+              <p>${txt(p.explicacao)}</p>
+              ${p.prompt ? `<p class="cu-plain-nota"><strong>A tarefa dada ao agente:</strong> ${txt(p.prompt)}</p>` : ''}
+              ${p.cmd ? `<pre><code>${esc(p.cmd)}</code></pre>` : ''}
+              ${p.dialogo ? `<ul>${(p.dialogo.linhas || []).map(l => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
+              ${p.navegador ? `<p class="cu-plain-url">${esc(p.navegador.url)}</p>` : ''}
+              ${p.diff ? `<pre><code>${(p.diff.linhas || []).map(l => esc((l.t === 'mais' ? '+ ' : l.t === 'menos' ? '- ' : '  ') + l.v)).join('\n')}</code></pre>` : ''}
+              ${p.nota ? `<p class="cu-plain-nota">${txt(p.nota)}</p>` : ''}
+            </li>
+          `).join('')}
+        </ol>
+        <p class="cu-plain-fecho">${txt(t.fecho)}</p>
+      </section>
+    `).join('');
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     05 · O SIMULADOR
+     ═══════════════════════════════════════════════════════════
+     Uma tela de computador de mentira com um tutorial de verdade
+     dentro. A brincadeira visual tem função: quem nunca abriu um
+     terminal trava no primeiro `$`, e uma janela obviamente falsa
+     deixa esse primeiro passo sem consequência — não há como
+     quebrar nada aqui.
+
+     O roteiro (passo, explicação, botão) mora FORA da moldura, em
+     HTML normal, com botões de verdade. Assim o teclado e o leitor
+     de tela operam o tutorial sem precisar entender a simulação. */
+
+  const os = {
+    tutorial: null,   // objeto do tutorial aberto
+    passo: 0,         // índice do passo corrente
+    fase: 'pronto',   // 'pronto' → 'rodando' → 'feito'
+    timers: [],
+    rapido: semMovimento
+  };
+
+  function limparTimers() {
+    os.timers.forEach(clearTimeout);
+    os.timers = [];
+  }
+
+  function agenda(fn, ms) {
+    os.timers.push(setTimeout(fn, ms));
+  }
+
+  const ICONES = {
+    terminal: '<rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="M7 9.5l3 2.5-3 2.5"/><path d="M12.5 15h4.5"/>',
+    janela: '<rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="M2.5 9h19"/><circle cx="6" cy="6.5" r="0.6" fill="currentColor"/>',
+    leiame: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/>'
+  };
+
+  function svgIcone(nome, tam) {
+    return `<svg width="${tam}" height="${tam}" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONES[nome] || ICONES.janela}</svg>`;
+  }
+
+  function renderDesktop() {
+    const desk = $('cu-desk');
+    if (!desk) return;
+
+    /* O ícone usa `nomeCurto` quando existe: numa célula de 84px, "Ollama Cloud
+       + launch" quebraria em três linhas e empurraria os outros ícones. O nome
+       inteiro continua no roteiro e no menu Iniciar, onde há largura. */
+    const itens = D.tutoriais.map(t => ({
+      id: t.id, nome: t.nomeCurto || t.nome, icone: t.icone, legenda: t.legenda
+    })).concat([{ id: 'leiame', nome: 'Leia-me.txt', icone: 'leiame', legenda: 'O que é esta tela' }]);
+
+    desk.innerHTML = itens.map(it => `
+      <button type="button" class="cu-icone" data-abrir="${esc(it.id)}"
+              title="${esc(it.legenda)}">
+        <span class="cu-icone-fig">${svgIcone(it.icone, 26)}</span>
+        <span class="cu-icone-txt">${esc(it.nome)}</span>
+      </button>
+    `).join('');
+
+    desk.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-abrir]');
+      if (!btn) return;
+      abrir(btn.dataset.abrir);
+    });
+  }
+
+  function renderStartMenu() {
+    const menu = $('cu-startmenu');
+    const start = $('cu-start');
+    if (!menu || !start) return;
+
+    menu.innerHTML = `
+      <div class="cu-sm-faixa" aria-hidden="true">Tutoriais</div>
+      <div class="cu-sm-lista">
+        ${D.tutoriais.map(t => `
+          <button type="button" class="cu-sm-item" data-abrir="${esc(t.id)}">
+            ${svgIcone(t.icone, 18)}
+            <span><strong>${esc(t.nome)}</strong><em>${esc(t.legenda)}</em></span>
+          </button>
+        `).join('')}
+        <button type="button" class="cu-sm-item" data-abrir="leiame">
+          ${svgIcone('leiame', 18)}
+          <span><strong>Leia-me.txt</strong><em>O que é esta tela</em></span>
+        </button>
+      </div>
+    `;
+
+    start.addEventListener('click', () => {
+      const aberto = !menu.hidden;
+      menu.hidden = aberto;
+      start.setAttribute('aria-expanded', String(!aberto));
+      start.classList.toggle('is-on', !aberto);
+    });
+
+    menu.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-abrir]');
+      if (!btn) return;
+      menu.hidden = true;
+      start.setAttribute('aria-expanded', 'false');
+      start.classList.remove('is-on');
+      abrir(btn.dataset.abrir);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (menu.hidden) return;
+      if (e.target.closest('#cu-startmenu') || e.target.closest('#cu-start')) return;
+      menu.hidden = true;
+      start.setAttribute('aria-expanded', 'false');
+      start.classList.remove('is-on');
+    });
+  }
+
+  function relogio() {
+    const el = $('cu-clock');
+    if (!el) return;
+    const t = () => {
+      const d = new Date();
+      el.textContent = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+    };
+    t();
+    setInterval(t, 30000);
+  }
+
+  function abrir(id) {
+    limparTimers();
+    if (id === 'leiame') {
+      os.tutorial = null;
+      os.fase = 'pronto';
+      pintarJanela({
+        tipo: 'leiame',
+        titulo: 'Leia-me.txt'
+      });
+      pintarTaskbar('Leia-me.txt');
+      pintarRoteiro();
+      return;
+    }
+    const t = D.tutoriais.find(x => x.id === id);
+    if (!t) return;
+    os.tutorial = t;
+    os.passo = 0;
+    os.fase = 'pronto';
+    pintarPasso();
+  }
+
+  function fechar() {
+    limparTimers();
+    os.tutorial = null;
+    os.fase = 'pronto';
+    $('cu-windows').innerHTML = '';
+    pintarTaskbar(null);
+    pintarRoteiro();
+  }
+
+  /* Uma janela por vez. Um gerenciador de janelas de verdade seria uma
+     brincadeira mais fiel e um tutorial pior: o leitor precisa saber, sem
+     pensar, onde está o passo atual. */
+  function pintarJanela(cfg) {
+    const wrap = $('cu-windows');
+    if (!wrap) return;
+
+    let corpo = '';
+    if (cfg.tipo === 'terminal') {
+      corpo = `<div class="cu-win-term" id="cu-win-term">${cfg.linhas}</div>`;
+    } else if (cfg.tipo === 'navegador') {
+      const n = cfg.nav;
+      corpo = `
+        <div class="cu-win-nav">
+          <div class="cu-nav-barra">
+            <span class="cu-nav-botoes" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="cu-nav-url">${esc(n.url)}</span>
+          </div>
+          <div class="cu-nav-pagina">
+            <h5>${esc(n.titulo)}</h5>
+            <p>${esc(n.texto)}</p>
+            <ul>${n.opcoes.map((o, i) => `<li class="${i === 0 ? 'is-sel' : ''}">${esc(o)}</li>`).join('')}</ul>
+            <span class="cu-nav-btn">${esc(n.botao)}</span>
+          </div>
+        </div>`;
+    } else if (cfg.tipo === 'diff') {
+      /* O diff é a coisa que a janela faz melhor que o terminal: a aprovação
+         vira leitura, com a linha que sai e a linha que entra uma embaixo da
+         outra. O sinal (+/-) vem antes da cor, para o caso de daltonismo e
+         para quem copia o texto. */
+      const d = cfg.diff;
+      corpo = `
+        <div class="cu-win-diff">
+          <div class="cu-diff-barra">
+            <span class="cu-diff-arq">${esc(d.arquivo)}</span>
+            <span class="cu-diff-cont">${d.linhas.filter(l => l.t === 'mais').length} adições · ${d.linhas.filter(l => l.t === 'menos').length} remoção</span>
+          </div>
+          <div class="cu-diff-corpo">
+            ${d.linhas.map(l => `
+              <div class="cu-diff-l cu-diff-${esc(l.t)}"><span class="cu-diff-s">${l.t === 'mais' ? '+' : l.t === 'menos' ? '−' : ' '}</span><code>${esc(l.v)}</code></div>
+            `).join('')}
+          </div>
+          <div class="cu-diff-bts">
+            ${d.botoes.map((b, i) => `<span class="cu-dlg-btn ${i === 0 ? 'is-primario' : ''}">${esc(b)}</span>`).join('')}
+          </div>
+        </div>`;
+    } else if (cfg.tipo === 'dialogo') {
+      const g = cfg.dlg;
+      corpo = `
+        <div class="cu-win-dlg">
+          <h5>${esc(g.titulo)}</h5>
+          <ul>${g.linhas.map(l => `<li>${esc(l)}</li>`).join('')}</ul>
+          <span class="cu-dlg-btn">${esc(g.botao)}</span>
+        </div>`;
+    } else {
+      corpo = `
+        <div class="cu-win-dlg cu-win-leiame">
+          <h5>O que é esta tela</h5>
+          <p>Um computador de brincadeira, com a cara dos anos 2000. Ele existe para que o
+             primeiro contato com o terminal aconteça num lugar onde nada pode dar errado.</p>
+          <p>Os comandos são reais e foram testados. As saídas são reconstituições fiéis —
+             não são gravações, e nada aqui executa de verdade.</p>
+          <p>Quando você rodar no seu computador, a tela vai ser parecida com esta. Essa é a ideia.</p>
+        </div>`;
+    }
+
+    wrap.innerHTML = `
+      <div class="cu-win ${cfg.tipo === 'terminal' ? 'is-term' : ''}">
+        <div class="cu-win-bar">
+          <span class="cu-win-titulo">${esc(cfg.titulo)}</span>
+          <span class="cu-win-bts" aria-hidden="true">
+            <i class="cu-wb">_</i><i class="cu-wb">□</i>
+          </span>
+          <button type="button" class="cu-wb cu-wb-x" id="cu-win-x" aria-label="Fechar a janela">×</button>
+        </div>
+        ${corpo}
+      </div>
+    `;
+
+    const x = $('cu-win-x');
+    if (x) x.addEventListener('click', fechar);
+  }
+
+  function pintarTaskbar(nome) {
+    const el = $('cu-task-items');
+    if (!el) return;
+    el.innerHTML = nome ? `<span class="cu-task-item">${esc(nome)}</span>` : '';
+  }
+
+  function blocoDoPasso(p) {
+    const bloco = [];
+    if (p.prompt) bloco.push(linhaTerminal({ t: 'pedido', v: p.prompt }));
+    if (p.cmd) bloco.push(linhaTerminal({ t: 'cmd', v: p.cmd }));
+    (p.saida || []).forEach(l => bloco.push(linhaTerminal(l)));
+    return bloco.join('');
+  }
+
+  function linhasDoPasso(p) {
+    /* O scrollback é derivado, não acumulado: são os blocos de todos os
+       passos de terminal anteriores ao corrente. É o que dá a sensação de
+       uma sessão contínua — e, derivando do índice do passo, "voltar" não
+       precisa adivinhar quantos blocos desfazer: cada re-render já sai
+       certo, mesmo cruzando passos que não são de terminal. */
+    let html = os.tutorial.passos.slice(0, os.passo)
+      .filter(pp => pp.janela === 'terminal')
+      .map(blocoDoPasso).join('');
+    if (p.prompt) html += linhaTerminal({ t: 'pedido', v: p.prompt });
+    html += `<div class="cu-t-linha" id="cu-t-atual"><span class="cu-t-ps">$</span><code id="cu-t-cmd"></code><span class="cu-cursor" id="cu-cursor"></span></div>`;
+    html += `<div id="cu-t-saida"></div>`;
+    return html;
+  }
+
+  function pintarPasso() {
+    const t = os.tutorial;
+    if (!t) return;
+    const p = t.passos[os.passo];
+
+    if (p.janela === 'terminal') {
+      pintarJanela({ tipo: 'terminal', titulo: 'Terminal — bash', linhas: linhasDoPasso(p) });
+    } else if (p.janela === 'navegador') {
+      pintarJanela({ tipo: 'navegador', titulo: 'Navegador', nav: p.navegador });
+    } else if (p.janela === 'diff') {
+      pintarJanela({ tipo: 'diff', titulo: 'Revisão — ' + p.diff.arquivo, diff: p.diff });
+    } else {
+      pintarJanela({ tipo: 'dialogo', titulo: p.dialogo.titulo, dlg: p.dialogo });
+    }
+
+    pintarTaskbar(t.nome);
+    pintarRoteiro();
+
+    const term = $('cu-win-term');
+    if (term) term.scrollTop = term.scrollHeight;
+  }
+
+  function executar() {
+    const t = os.tutorial;
+    if (!t) return;
+    const p = t.passos[os.passo];
+
+    /* Passo que não é comando (navegador, caixa de diálogo) não tem o que
+       executar: o botão dele já é "avancei". */
+    if (p.janela !== 'terminal') {
+      avancar();
+      return;
+    }
+
+    os.fase = 'rodando';
+    pintarRoteiro();
+
+    const alvo = $('cu-t-cmd');
+    const cursor = $('cu-cursor');
+    const saida = $('cu-t-saida');
+    const term = $('cu-win-term');
+    if (!alvo || !saida) { terminarPasso(); return; }
+
+    const cmd = p.cmd || '';
+
+    const imprimirSaida = () => {
+      if (cursor) cursor.remove();
+      const linhas = p.saida || [];
+      const passoMs = os.rapido ? 0 : 55;
+      linhas.forEach((l, i) => {
+        agenda(() => {
+          saida.insertAdjacentHTML('beforeend', linhaTerminal(l));
+          if (term) term.scrollTop = term.scrollHeight;
+          if (i === linhas.length - 1) terminarPasso();
+        }, passoMs * i);
+      });
+      if (!linhas.length) terminarPasso();
+    };
+
+    if (os.rapido) {
+      alvo.textContent = cmd;
+      imprimirSaida();
+      return;
+    }
+
+    /* Velocidade de digitação: rápida o bastante para não entediar, lenta o
+       bastante para o olho acompanhar o comando sendo montado — que é o
+       ponto pedagógico da animação. Comandos longos aceleram para o total
+       nunca passar de ~1,4 s. */
+    const porChar = Math.max(12, Math.min(38, 1400 / Math.max(cmd.length, 1)));
+    let i = 0;
+    const teclar = () => {
+      i++;
+      alvo.textContent = cmd.slice(0, i);
+      if (term) term.scrollTop = term.scrollHeight;
+      if (i < cmd.length) {
+        agenda(teclar, porChar);
+      } else {
+        agenda(imprimirSaida, 260);
+      }
+    };
+    agenda(teclar, 120);
+  }
+
+  function terminarPasso() {
+    const t = os.tutorial;
+    if (!t) return;
+    /* Nada de push em pilha nenhuma: o passo congelado entra no scrollback
+       por derivação, no próximo pintarPasso — como numa sessão de verdade. */
+    os.fase = 'feito';
+    pintarRoteiro();
+  }
+
+  function avancar() {
+    const t = os.tutorial;
+    if (!t) return;
+    if (os.passo >= t.passos.length - 1) {
+      os.fase = 'fim';
+      pintarRoteiro();
+      return;
+    }
+    os.passo++;
+    os.fase = 'pronto';
+    pintarPasso();
+  }
+
+  function voltar() {
+    const t = os.tutorial;
+    if (!t || os.passo === 0) return;
+    limparTimers();
+    os.passo--;
+    os.fase = 'pronto';
+    pintarPasso();
+  }
+
+  /* O roteiro é o painel de controle do tutorial — e o único lugar onde há
+     botões de verdade. Ele fica fora da moldura de propósito: a simulação é
+     ilustração, a operação é HTML comum. */
+  let focoNoRoteiro = false;
+
+  function pintarRoteiro() {
+    const el = $('cu-roteiro');
+    if (!el) return;
+
+    const t = os.tutorial;
+
+    if (!t) {
+      el.innerHTML = `
+        <p class="cu-rot-vazio">
+          Escolha um tutorial na área de trabalho acima — ou pelo botão <strong>Iniciar</strong>.
+        </p>`;
+      /* Quem não vê a janelinha fica sabendo, também, que fechou. */
+      const vazio = $('cu-roteiro-vivo');
+      if (vazio) vazio.textContent = 'Nenhum tutorial aberto.';
+      focoNoRoteiro = false;
+      return;
+    }
+
+    const p = t.passos[os.passo];
+    const fim = os.fase === 'fim';
+    const ultimo = os.passo === t.passos.length - 1;
+
+    let acao = '';
+    if (fim) {
+      acao = `<button type="button" class="cu-rot-btn" data-acao="fechar">Concluir e fechar</button>`;
+    } else if (p.janela !== 'terminal') {
+      acao = `<button type="button" class="cu-rot-btn" data-acao="avancar">${esc((p.dialogo && p.dialogo.botao) || (p.navegador && p.navegador.botao) || (p.diff && p.diff.botoes && p.diff.botoes[0]) || 'Continuar')}</button>`;
+    } else if (os.fase === 'pronto') {
+      acao = `<button type="button" class="cu-rot-btn" data-acao="executar">Executar o comando</button>`;
+    } else if (os.fase === 'rodando') {
+      acao = `<button type="button" class="cu-rot-btn is-esperando" disabled>rodando…</button>`;
+    } else {
+      acao = `<button type="button" class="cu-rot-btn" data-acao="avancar">${ultimo ? 'Terminar' : 'Próximo passo'}</button>`;
+    }
+
+    /* Re-render por innerHTML destrói o botão que o teclado estava apertando:
+       sem devolver o foco, cada passo do tutorial manda o usuário de volta
+       pro começo da página. O alvo pode não existir ainda (a fase 'rodando'
+       só tem botão desabilitado), então a lembrança persiste até dar. */
+    focoNoRoteiro = focoNoRoteiro || el.contains(document.activeElement);
+
+    el.innerHTML = `
+      <div class="cu-rot-topo">
+        <span class="cu-rot-passo">${fim ? 'fim' : `passo ${os.passo + 1} de ${t.passos.length}`}</span>
+        <span class="cu-rot-tut">${esc(t.nome)}</span>
+        <span class="cu-rot-min">~${t.minutos} min no total</span>
+      </div>
+
+      ${fim ? `
+        <h3 class="cu-rot-titulo">Tutorial concluído</h3>
+        <p class="cu-rot-exp">${txt(t.fecho)}</p>
+      ` : `
+        <h3 class="cu-rot-titulo">${esc(p.titulo)}</h3>
+        <p class="cu-rot-exp">${txt(p.explicacao)}</p>
+        ${p.cmd ? `
+          <div class="cu-rot-cmd">
+            <code>${esc(p.cmd)}</code>
+            <button type="button" class="cu-copiar" data-acao="copiar" data-cmd="${esc(p.cmd)}">copiar</button>
+          </div>` : ''}
+        ${os.fase === 'feito' && p.nota ? `<p class="cu-rot-nota">${txt(p.nota)}</p>` : ''}
+      `}
+
+      <div class="cu-rot-acoes">
+        ${acao}
+        ${os.passo > 0 && !fim ? '<button type="button" class="cu-rot-sec" data-acao="voltar">Passo anterior</button>' : ''}
+        <button type="button" class="cu-rot-sec" data-acao="sair">Sair do tutorial</button>
+        <label class="cu-rot-rapido">
+          <input type="checkbox" ${os.rapido ? 'checked' : ''} data-acao="rapido">
+          sem animação
+        </label>
+      </div>
+    `;
+
+    /* Estado do tutorial anunciado a quem não vê a janelinha. */
+    const vivo = $('cu-roteiro-vivo');
+    if (vivo) {
+      vivo.textContent = fim
+        ? `${t.nome}: tutorial concluído.`
+        : `${t.nome}, passo ${os.passo + 1} de ${t.passos.length}: ${p.titulo}.`;
+    }
+
+    if (focoNoRoteiro) {
+      const alvo = el.querySelector('.cu-rot-btn:not([disabled])');
+      if (alvo) {
+        alvo.focus();
+        focoNoRoteiro = false;
+      }
+    }
+  }
+
+  function ligarRoteiro() {
+    const el = $('cu-roteiro');
+    if (!el) return;
+
+    el.addEventListener('click', (e) => {
+      const alvo = e.target.closest('[data-acao]');
+      if (!alvo) return;
+      const acao = alvo.dataset.acao;
+
+      if (acao === 'executar') executar();
+      else if (acao === 'avancar') avancar();
+      else if (acao === 'voltar') voltar();
+      else if (acao === 'sair' || acao === 'fechar') fechar();
+      else if (acao === 'copiar') copiar(alvo);
+    });
+
+    el.addEventListener('change', (e) => {
+      const alvo = e.target.closest('[data-acao="rapido"]');
+      if (!alvo) return;
+      os.rapido = alvo.checked;
+    });
+  }
+
+  function copiar(btn) {
+    const cmd = btn.dataset.cmd || '';
+    const ok = () => {
+      const antes = btn.textContent;
+      btn.textContent = 'copiado';
+      btn.classList.add('is-ok');
+      setTimeout(() => { btn.textContent = antes; btn.classList.remove('is-ok'); }, 1600);
+    };
+    const naoDeu = () => {
+      const antes = btn.textContent;
+      btn.textContent = 'não deu';
+      setTimeout(() => { btn.textContent = antes; }, 1600);
+    };
+    /* Reserva para navegador antigo, contexto sem HTTPS e iframe sem
+       permissão de clipboard — dentro do embed do Observatório a API
+       existe mas nega, e é aqui que ela precisa ser tentada de novo. */
+    const reserva = () => {
+      const ta = document.createElement('textarea');
+      ta.value = cmd;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'absolute';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      let foi = false;
+      try { foi = document.execCommand('copy'); } catch (_) { /* sem alarde */ }
+      document.body.removeChild(ta);
+      return foi;
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(cmd).then(ok, () => {
+        if (!reserva()) naoDeu();
+      });
+      return;
+    }
+    if (!reserva()) naoDeu();
+  }
+
+  /* ─── partida ────────────────────────────────────────────── */
+
+  function init() {
+    if (!D) {
+      console.error('COMO_USAR_DATA não foi carregado.');
+      return;
+    }
+
+    const upd = $('cu-updated');
+    if (upd) upd.textContent = fmtDataCurta(D.updatedAt) || '—';
+
+    renderVocabulario();
+    renderTabs();
+    renderLicoes();
+    ligarTabs();
+    pintarCenario();
+    renderGrafico();
+    renderContraponto();
+    renderPermanencia();
+    renderFerramentas();
+    renderFamilias();
+    colapsarCatalogoNoCelular();
+    renderPonte();
+    renderSeguranca();
+    renderPlano();
+
+    /* O roteiro é injetado por script logo abaixo da moldura: sem JS não há
+       tutorial interativo nenhum, e um painel de controle órfão no HTML só
+       confundiria quem cair aqui com o script bloqueado. */
+    const osEl = $('cu-os');
+    if (osEl) {
+      const roteiro = document.createElement('div');
+      roteiro.className = 'cu-rot';
+      roteiro.id = 'cu-roteiro';
+      const vivo = document.createElement('p');
+      vivo.className = 'sr-only';
+      vivo.id = 'cu-roteiro-vivo';
+      vivo.setAttribute('role', 'status');
+      vivo.setAttribute('aria-live', 'polite');
+      osEl.appendChild(roteiro);
+      osEl.appendChild(vivo);
+    }
+
+    renderDesktop();
+    renderStartMenu();
+    relogio();
+    ligarRoteiro();
+    pintarRoteiro();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
