@@ -734,14 +734,18 @@
      deixa esse primeiro passo sem consequência — não há como
      quebrar nada aqui.
 
-     O roteiro (passo, explicação, botão) mora FORA da moldura, em
-     HTML normal, com botões de verdade. Assim o teclado e o leitor
-     de tela operam o tutorial sem precisar entender a simulação. */
+     O guia acontece DENTRO da tela, em pop-ups ancorados ao que
+     explicam, e os comandos são digitados de verdade num input real.
+     O painel abaixo da moldura continua existindo com as mesmas
+     ações — é o caminho de teclado e de leitor de tela. */
 
   const os = {
     tutorial: null,   // objeto do tutorial aberto
     passo: 0,         // índice do passo corrente
-    fase: 'pronto',   // 'pronto' → 'rodando' → 'feito'
+    fase: 'guia',     // 'guia' → 'digitando' → 'rodando' → 'feito' → 'fim'
+    erro: null,       // recado do último Enter errado
+    guiaMin: false,   // o balão foi encolhido pela pessoa
+    jaInteragiu: false, // já houve clique: só então damos foco ao input
     timers: [],
     rapido: semMovimento
   };
@@ -859,24 +863,30 @@
         titulo: 'Leia-me.txt'
       });
       pintarTaskbar('Leia-me.txt');
-      pintarRoteiro();
+      os.fase = 'guia';
+      pintarBalao();
       return;
     }
     const t = D.tutoriais.find(x => x.id === id);
     if (!t) return;
     os.tutorial = t;
     os.passo = 0;
-    os.fase = 'pronto';
+    os.fase = 'guia';
+    os.erro = null;
+    os.guiaMin = false;
+    os.jaInteragiu = true;
     pintarPasso();
   }
 
   function fechar() {
     limparTimers();
     os.tutorial = null;
-    os.fase = 'pronto';
+    os.fase = 'guia';
+    os.erro = null;
+    os.guiaMin = false;
     $('cu-windows').innerHTML = '';
     pintarTaskbar(null);
-    pintarRoteiro();
+    pintarBalao();
   }
 
   /* Uma janela por vez. Um gerenciador de janelas de verdade seria uma
@@ -901,7 +911,7 @@
             <h5>${esc(n.titulo)}</h5>
             <p>${esc(n.texto)}</p>
             <ul>${n.opcoes.map((o, i) => `<li class="${i === 0 ? 'is-sel' : ''}">${esc(o)}</li>`).join('')}</ul>
-            <span class="cu-nav-btn">${esc(n.botao)}</span>
+            <button type="button" class="cu-nav-btn cu-alvo" data-acao="avancar">${esc(n.botao)}</button>
           </div>
         </div>`;
     } else if (cfg.tipo === 'diff') {
@@ -922,7 +932,9 @@
             `).join('')}
           </div>
           <div class="cu-diff-bts">
-            ${d.botoes.map((b, i) => `<span class="cu-dlg-btn ${i === 0 ? 'is-primario' : ''}">${esc(b)}</span>`).join('')}
+            ${(d.botoes || []).map((b, i) => i === 0
+              ? `<button type="button" class="cu-dlg-btn is-primario cu-alvo" data-acao="avancar">${esc(b)}</button>`
+              : `<span class="cu-dlg-btn">${esc(b)}</span>`).join('')}
           </div>
         </div>`;
     } else if (cfg.tipo === 'dialogo') {
@@ -931,7 +943,7 @@
         <div class="cu-win-dlg">
           <h5>${esc(g.titulo)}</h5>
           <ul>${g.linhas.map(l => `<li>${esc(l)}</li>`).join('')}</ul>
-          <span class="cu-dlg-btn">${esc(g.botao)}</span>
+          <button type="button" class="cu-dlg-btn cu-alvo" data-acao="avancar">${esc(g.botao)}</button>
         </div>`;
     } else {
       corpo = `
@@ -976,19 +988,349 @@
     return bloco.join('');
   }
 
+  /* ─── o terminal onde se digita de verdade ───────────────────
+     A linha viva é um <input> real com a cor do texto transparente, sobreposto
+     a um "espelho" que redesenha o que foi digitado caractere a caractere. O
+     input de verdade é o que dá teclado, seleção, colar e leitor de tela de
+     graça; o espelho é o que permite pintar o trecho certo de verde, o errado
+     de vermelho e o que falta em cinza — coisa que nenhum input sozinho faz.
+     Os dois ficam alinhados na mesma célula do grid, com a MESMA fonte e o
+     MESMO tamanho: se divergirem, o cursor sai do lugar. */
+  function linhaViva(p) {
+    return `
+      <div class="cu-t-linha cu-t-viva" id="cu-t-viva">
+        <span class="cu-t-ps">$</span>
+        <span class="cu-t-campo">
+          <span class="cu-t-espelho" id="cu-t-espelho" aria-hidden="true"></span>
+          <input class="cu-t-input" id="cu-t-input" type="text"
+                 autocomplete="off" autocorrect="off" autocapitalize="off"
+                 spellcheck="false" enterkeyhint="go"
+                 aria-label="Digite o comando deste passo e tecle Enter">
+        </span>
+      </div>`;
+  }
+
   function linhasDoPasso(p) {
     /* O scrollback é derivado, não acumulado: são os blocos de todos os
        passos de terminal anteriores ao corrente. É o que dá a sensação de
        uma sessão contínua — e, derivando do índice do passo, "voltar" não
-       precisa adivinhar quantos blocos desfazer: cada re-render já sai
-       certo, mesmo cruzando passos que não são de terminal. */
+       precisa adivinhar quantos blocos desfazer. */
     let html = os.tutorial.passos.slice(0, os.passo)
       .filter(pp => pp.janela === 'terminal')
       .map(blocoDoPasso).join('');
     if (p.prompt) html += linhaTerminal({ t: 'pedido', v: p.prompt });
-    html += `<div class="cu-t-linha" id="cu-t-atual"><span class="cu-t-ps">$</span><code id="cu-t-cmd"></code><span class="cu-cursor" id="cu-cursor"></span></div>`;
+    html += linhaViva(p);
     html += `<div id="cu-t-saida"></div>`;
     return html;
+  }
+
+  /* Pinta o espelho: o que bate com o comando esperado sai claro, o que
+     divergiu sai vermelho, e o resto do comando aparece em cinza à frente do
+     cursor — como a sugestão de um autocomplete. Esse cinza é o que faz a
+     pessoa conseguir digitar um `curl -fsSL …` sem decorar nada. */
+  function atualizarEspelho() {
+    const inp = $('cu-t-input');
+    const esp = $('cu-t-espelho');
+    if (!inp || !esp) return;
+    const alvo = (os.tutorial.passos[os.passo].cmd) || '';
+    const v = inp.value;
+
+    let iguais = 0;
+    while (iguais < v.length && iguais < alvo.length && v[iguais] === alvo[iguais]) iguais++;
+
+    const ok = esc(v.slice(0, iguais));
+    const ruim = esc(v.slice(iguais));
+    const falta = esc(alvo.slice(iguais));
+
+    esp.innerHTML =
+      `<span class="cu-e-ok">${ok}</span>` +
+      (ruim ? `<span class="cu-e-ruim">${ruim}</span>` : '') +
+      `<span class="cu-e-cursor"></span>` +
+      (ruim ? '' : `<span class="cu-e-falta">${falta}</span>`);
+
+    const viva = $('cu-t-viva');
+    if (viva) viva.classList.toggle('is-errado', !!ruim);
+  }
+
+  function ligarTerminal() {
+    const inp = $('cu-t-input');
+    if (!inp) return;
+
+    inp.addEventListener('input', atualizarEspelho);
+    inp.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      submeter();
+    });
+    atualizarEspelho();
+    /* Foco só quando a pessoa já está olhando para a tela: focar durante a
+       rolagem da página arrastaria a viewport até aqui sem ela pedir. */
+    if (os.jaInteragiu) inp.focus();
+  }
+
+  function submeter() {
+    const inp = $('cu-t-input');
+    if (!inp || os.fase !== 'guia') return;
+    const p = os.tutorial.passos[os.passo];
+    const digitado = inp.value.trim();
+    const alvo = (p.cmd || '').trim();
+
+    if (!digitado) return;
+
+    if (digitado === alvo) { rodar(); return; }
+
+    /* Errou: o terminal responde como um terminal responderia. Nada de
+       "tente de novo" — a mensagem é a que a pessoa vai ver de verdade, e é
+       parte do que a tela está ensinando. */
+    const primeiro = digitado.split(/\s+/)[0];
+    const primeiroAlvo = alvo.split(/\s+/)[0];
+    const erro = primeiro !== primeiroAlvo
+      ? `bash: ${primeiro}: command not found`
+      : `${primeiroAlvo}: erro de sintaxe — confira o trecho em vermelho acima`;
+
+    /* A tentativa errada entra ANTES da linha viva, não na área de saída:
+       senão o comando certo — que substitui a linha viva, acima dela — apareceria
+       no histórico antes do erro que veio primeiro, e a sessão contaria a
+       história ao contrário. */
+    const viva = $('cu-t-viva');
+    if (viva) {
+      viva.insertAdjacentHTML('beforebegin',
+        linhaTerminal({ t: 'cmd', v: digitado }) + linhaTerminal({ t: 'err', v: erro }));
+      inp.value = '';
+      atualizarEspelho();
+      const term = $('cu-win-term');
+      if (term) term.scrollTop = term.scrollHeight;
+    }
+    os.erro = primeiro !== primeiroAlvo
+      ? 'O primeiro pedaço do comando não confere — é ele que diz qual programa rodar.'
+      : 'O começo está certo; o que diverge está marcado em vermelho na linha.';
+    pintarBalao();
+    anunciar(erro);
+  }
+
+  /* Digita sozinho, caractere a caractere, e roda. É a saída para quem está
+     no celular (digitar `curl -fsSL …` num teclado de vidro é castigo), para
+     quem usa leitor de tela e para quem só quer ver o resto. */
+  function digitarPorMim() {
+    const inp = $('cu-t-input');
+    const p = os.tutorial.passos[os.passo];
+    if (!inp || !p.cmd || os.fase !== 'guia') return;
+    const cmd = p.cmd;
+
+    if (os.rapido) {
+      inp.value = cmd;
+      atualizarEspelho();
+      rodar();
+      return;
+    }
+
+    os.fase = 'digitando';
+    pintarBalao();
+    const porChar = Math.max(10, Math.min(34, 1200 / Math.max(cmd.length, 1)));
+    let i = 0;
+    const teclar = () => {
+      i++;
+      inp.value = cmd.slice(0, i);
+      atualizarEspelho();
+      if (i < cmd.length) agenda(teclar, porChar);
+      else agenda(() => { os.fase = 'guia'; rodar(); }, 220);
+    };
+    agenda(teclar, 90);
+  }
+
+  /* ─── rodar o comando ───────────────────────────────────── */
+  function rodar() {
+    const t = os.tutorial;
+    if (!t) return;
+    const p = t.passos[os.passo];
+
+    os.fase = 'rodando';
+    os.erro = null;
+
+    /* A linha viva vira linha fixa: o input some e o comando fica no
+       histórico, exatamente como num terminal de verdade. */
+    const viva = $('cu-t-viva');
+    if (viva) viva.outerHTML = linhaTerminal({ t: 'cmd', v: p.cmd || '' });
+
+    pintarBalao();
+
+    const saida = $('cu-t-saida');
+    const term = $('cu-win-term');
+    const linhas = p.saida || [];
+    const passoMs = os.rapido ? 0 : 60;
+
+    if (!saida || !linhas.length) { terminarPasso(); return; }
+
+    linhas.forEach((l, i) => {
+      agenda(() => {
+        saida.insertAdjacentHTML('beforeend', linhaTerminal(l));
+        if (term) term.scrollTop = term.scrollHeight;
+        if (i === linhas.length - 1) terminarPasso();
+      }, passoMs * i);
+    });
+  }
+
+  function terminarPasso() {
+    if (!os.tutorial) return;
+    os.fase = 'feito';
+    pintarBalao();
+    const p = os.tutorial.passos[os.passo];
+    anunciar('Comando concluído. ' + (p.nota || 'Passo ' + (os.passo + 1) + ' pronto.'));
+  }
+
+  function avancar() {
+    const t = os.tutorial;
+    if (!t) return;
+    limparTimers();
+    if (os.passo >= t.passos.length - 1) {
+      os.fase = 'fim';
+      pintarBalao();
+      anunciar('Tutorial concluído.');
+      return;
+    }
+    os.passo++;
+    os.fase = 'guia';
+    os.erro = null;
+    os.jaInteragiu = true;
+    pintarPasso();
+  }
+
+  function voltar() {
+    const t = os.tutorial;
+    if (!t || os.passo === 0) return;
+    limparTimers();
+    os.passo--;
+    os.fase = 'guia';
+    os.erro = null;
+    pintarPasso();
+  }
+
+  /* ─── o balão: o guia mora DENTRO da tela ────────────────────
+     Antes a explicação ficava num painel abaixo da moldura, e o efeito era o
+     de uma legenda: a pessoa lia embaixo e agia em cima. Como pop-up ancorado
+     ao elemento de que fala, o guia vira parte da cena — que é como tutorial
+     de programa de verdade funciona.
+     O painel de fora não sumiu: virou o caminho acessível, com os mesmos
+     botões, para quem navega por teclado ou leitor de tela. */
+  function pintarBalao() {
+    const el = $('cu-balao');
+    if (!el) return;
+    const t = os.tutorial;
+
+    if (!t) {
+      el.hidden = true;
+      el.innerHTML = '';
+      const tl = $('cu-os-screen');
+      if (tl) tl.classList.remove('cu-guia-esq', 'cu-guia-dir');
+      pintarRoteiro();
+      return;
+    }
+
+    const p = t.passos[os.passo];
+    const fim = os.fase === 'fim';
+    const ultimo = os.passo === t.passos.length - 1;
+    const ancora = fim ? 'centro' : (p.janela === 'terminal' ? 'terminal' : 'janela');
+
+    el.hidden = false;
+    el.className = 'cu-balao is-' + ancora + (os.guiaMin ? ' is-min' : '');
+
+    /* A cena cede espaço ao guia em vez de ficar embaixo dele: sem isto o
+       balão tapava justamente a margem esquerda do terminal, onde começa
+       cada linha de comando. */
+    const tela = $('cu-os-screen');
+    if (tela) {
+      const esq = !os.guiaMin && ancora === 'terminal';
+      const dir = !os.guiaMin && ancora === 'janela';
+      tela.classList.toggle('cu-guia-esq', esq);
+      tela.classList.toggle('cu-guia-dir', dir);
+    }
+
+    if (os.guiaMin) {
+      el.innerHTML = `<button type="button" class="cu-balao-abrir" data-acao="guia-abrir"
+        aria-label="Reabrir o guia do tutorial">?</button>`;
+      return;
+    }
+
+    let corpo, acoes;
+
+    if (fim) {
+      corpo = `
+        <h4 class="cu-balao-t">Tutorial concluído</h4>
+        <p class="cu-balao-p">${txt(t.fecho)}</p>`;
+      acoes = `
+        <button type="button" class="cu-balao-btn" data-acao="fechar">Fechar</button>
+        <button type="button" class="cu-balao-sec" data-acao="reiniciar">Fazer de novo</button>`;
+    } else {
+      const precisaDigitar = p.janela === 'terminal' && os.fase === 'guia';
+      const rodando = os.fase === 'rodando' || os.fase === 'digitando';
+
+      corpo = `
+        <h4 class="cu-balao-t">${esc(p.titulo)}</h4>
+        <p class="cu-balao-p">${txt(p.explicacao)}</p>
+        ${precisaDigitar ? `
+          <div class="cu-balao-cmd">
+            <span class="cu-balao-rot">digite no terminal</span>
+            <code>${esc(p.cmd)}</code>
+          </div>` : ''}
+        ${os.erro ? `<p class="cu-balao-erro">${txt(os.erro)}</p>` : ''}
+        ${os.fase === 'feito' && p.nota ? `<p class="cu-balao-nota">${txt(p.nota)}</p>` : ''}`;
+
+      if (rodando) {
+        acoes = `<span class="cu-balao-esperando">rodando…</span>`;
+      } else if (precisaDigitar) {
+        acoes = `
+          <button type="button" class="cu-balao-btn" data-acao="digitar">Digitar por mim</button>
+          <span class="cu-balao-dica">ou digite você e tecle <kbd>Enter</kbd></span>`;
+      } else if (os.fase === 'guia') {
+        /* Passo de janela: a ação é clicar no botão simulado, que está
+           piscando dentro da própria janela. */
+        acoes = `<span class="cu-balao-dica">clique em <strong>${esc(rotuloDoAlvo(p))}</strong> na janela</span>`;
+      } else {
+        acoes = `<button type="button" class="cu-balao-btn" data-acao="avancar">${ultimo ? 'Terminar' : 'Próximo passo'}</button>`;
+      }
+    }
+
+    el.innerHTML = `
+      <div class="cu-balao-topo">
+        <span class="cu-balao-passo">${fim ? 'fim' : (os.passo + 1) + ' de ' + t.passos.length}</span>
+        <span class="cu-balao-tut">${esc(t.nomeCurto || t.nome)}</span>
+        <button type="button" class="cu-balao-x" data-acao="guia-min" aria-label="Encolher o guia">–</button>
+      </div>
+      ${corpo}
+      <div class="cu-balao-acoes">${acoes}</div>
+      ${!fim ? `<div class="cu-balao-nav">
+        ${os.passo > 0 ? '<button type="button" class="cu-balao-sec" data-acao="voltar">Voltar</button>' : ''}
+        <button type="button" class="cu-balao-sec" data-acao="fechar">Sair</button>
+      </div>` : ''}`;
+
+    medirBalao();
+    pintarRoteiro();
+  }
+
+  /* No celular o balão é uma faixa no rodapé da tela, e a janela precisa
+     recuar exatamente a altura dele — senão o pop-up cobre justamente o botão
+     que ele está mandando clicar, e o passo fica impossível. A altura muda com
+     o texto de cada passo, então é medida, não chutada. */
+  function medirBalao() {
+    const el = $('cu-balao');
+    const tela = $('cu-os-screen');
+    if (!el || !tela) return;
+    requestAnimationFrame(() => {
+      const h = (!el.hidden && !os.guiaMin) ? el.offsetHeight : 0;
+      tela.style.setProperty('--cu-balao-h', h + 'px');
+    });
+  }
+
+  function rotuloDoAlvo(p) {
+    if (p.dialogo) return p.dialogo.botao;
+    if (p.navegador) return p.navegador.botao;
+    if (p.diff && p.diff.botoes) return p.diff.botoes[0];
+    return 'Continuar';
+  }
+
+  function anunciar(txtMsg) {
+    const vivo = $('cu-roteiro-vivo');
+    if (vivo) vivo.textContent = txtMsg;
   }
 
   function pintarPasso() {
@@ -1001,131 +1343,35 @@
     } else if (p.janela === 'navegador') {
       pintarJanela({ tipo: 'navegador', titulo: 'Navegador', nav: p.navegador });
     } else if (p.janela === 'diff') {
-      pintarJanela({ tipo: 'diff', titulo: 'Revisão — ' + p.diff.arquivo, diff: p.diff });
+      pintarJanela({ tipo: 'diff', titulo: 'Revisão — ' + (p.diff && p.diff.arquivo ? p.diff.arquivo : 'arquivo'), diff: p.diff });
     } else {
-      pintarJanela({ tipo: 'dialogo', titulo: p.dialogo.titulo, dlg: p.dialogo });
+      pintarJanela({ tipo: 'dialogo', titulo: (p.dialogo && p.dialogo.titulo) || 'Aviso', dlg: p.dialogo });
     }
 
     pintarTaskbar(t.nome);
-    pintarRoteiro();
+    pintarBalao();
+
+    if (p.janela === 'terminal') ligarTerminal();
 
     const term = $('cu-win-term');
     if (term) term.scrollTop = term.scrollHeight;
+
+    anunciar(`Passo ${os.passo + 1} de ${t.passos.length}: ${p.titulo}.`);
   }
 
-  function executar() {
-    const t = os.tutorial;
-    if (!t) return;
-    const p = t.passos[os.passo];
-
-    /* Passo que não é comando (navegador, caixa de diálogo) não tem o que
-       executar: o botão dele já é "avancei". */
-    if (p.janela !== 'terminal') {
-      avancar();
-      return;
-    }
-
-    os.fase = 'rodando';
-    pintarRoteiro();
-
-    const alvo = $('cu-t-cmd');
-    const cursor = $('cu-cursor');
-    const saida = $('cu-t-saida');
-    const term = $('cu-win-term');
-    if (!alvo || !saida) { terminarPasso(); return; }
-
-    const cmd = p.cmd || '';
-
-    const imprimirSaida = () => {
-      if (cursor) cursor.remove();
-      const linhas = p.saida || [];
-      const passoMs = os.rapido ? 0 : 55;
-      linhas.forEach((l, i) => {
-        agenda(() => {
-          saida.insertAdjacentHTML('beforeend', linhaTerminal(l));
-          if (term) term.scrollTop = term.scrollHeight;
-          if (i === linhas.length - 1) terminarPasso();
-        }, passoMs * i);
-      });
-      if (!linhas.length) terminarPasso();
-    };
-
-    if (os.rapido) {
-      alvo.textContent = cmd;
-      imprimirSaida();
-      return;
-    }
-
-    /* Velocidade de digitação: rápida o bastante para não entediar, lenta o
-       bastante para o olho acompanhar o comando sendo montado — que é o
-       ponto pedagógico da animação. Comandos longos aceleram para o total
-       nunca passar de ~1,4 s. */
-    const porChar = Math.max(12, Math.min(38, 1400 / Math.max(cmd.length, 1)));
-    let i = 0;
-    const teclar = () => {
-      i++;
-      alvo.textContent = cmd.slice(0, i);
-      if (term) term.scrollTop = term.scrollHeight;
-      if (i < cmd.length) {
-        agenda(teclar, porChar);
-      } else {
-        agenda(imprimirSaida, 260);
-      }
-    };
-    agenda(teclar, 120);
-  }
-
-  function terminarPasso() {
-    const t = os.tutorial;
-    if (!t) return;
-    /* Nada de push em pilha nenhuma: o passo congelado entra no scrollback
-       por derivação, no próximo pintarPasso — como numa sessão de verdade. */
-    os.fase = 'feito';
-    pintarRoteiro();
-  }
-
-  function avancar() {
-    const t = os.tutorial;
-    if (!t) return;
-    if (os.passo >= t.passos.length - 1) {
-      os.fase = 'fim';
-      pintarRoteiro();
-      return;
-    }
-    os.passo++;
-    os.fase = 'pronto';
-    pintarPasso();
-  }
-
-  function voltar() {
-    const t = os.tutorial;
-    if (!t || os.passo === 0) return;
-    limparTimers();
-    os.passo--;
-    os.fase = 'pronto';
-    pintarPasso();
-  }
-
-  /* O roteiro é o painel de controle do tutorial — e o único lugar onde há
-     botões de verdade. Ele fica fora da moldura de propósito: a simulação é
-     ilustração, a operação é HTML comum. */
-  let focoNoRoteiro = false;
-
+  /* ─── o painel de fora: agora é o caminho acessível ───────────
+     Mesmos comandos do balão, em HTML comum e sempre visível na ordem de
+     tabulação. Quem enxerga a tela usa o pop-up; quem navega por teclado ou
+     leitor de tela tem aqui a mesma operação sem depender da cena. */
   function pintarRoteiro() {
     const el = $('cu-roteiro');
     if (!el) return;
-
     const t = os.tutorial;
 
     if (!t) {
-      el.innerHTML = `
-        <p class="cu-rot-vazio">
-          Escolha um tutorial na área de trabalho acima — ou pelo botão <strong>Iniciar</strong>.
-        </p>`;
-      /* Quem não vê a janelinha fica sabendo, também, que fechou. */
-      const vazio = $('cu-roteiro-vivo');
-      if (vazio) vazio.textContent = 'Nenhum tutorial aberto.';
-      focoNoRoteiro = false;
+      el.innerHTML = `<p class="cu-rot-vazio">
+        Escolha um tutorial na área de trabalho acima — ou pelo botão <strong>Iniciar</strong>.
+      </p>`;
       return;
     }
 
@@ -1136,29 +1382,27 @@
     let acao = '';
     if (fim) {
       acao = `<button type="button" class="cu-rot-btn" data-acao="fechar">Concluir e fechar</button>`;
-    } else if (p.janela !== 'terminal') {
-      acao = `<button type="button" class="cu-rot-btn" data-acao="avancar">${esc((p.dialogo && p.dialogo.botao) || (p.navegador && p.navegador.botao) || (p.diff && p.diff.botoes && p.diff.botoes[0]) || 'Continuar')}</button>`;
-    } else if (os.fase === 'pronto') {
-      acao = `<button type="button" class="cu-rot-btn" data-acao="executar">Executar o comando</button>`;
-    } else if (os.fase === 'rodando') {
+    } else if (os.fase === 'rodando' || os.fase === 'digitando') {
       acao = `<button type="button" class="cu-rot-btn is-esperando" disabled>rodando…</button>`;
-    } else {
+    } else if (os.fase === 'feito') {
       acao = `<button type="button" class="cu-rot-btn" data-acao="avancar">${ultimo ? 'Terminar' : 'Próximo passo'}</button>`;
+    } else if (p.janela === 'terminal') {
+      acao = `<button type="button" class="cu-rot-btn" data-acao="digitar">Rodar o comando deste passo</button>`;
+    } else {
+      acao = `<button type="button" class="cu-rot-btn" data-acao="avancar">${esc(rotuloDoAlvo(p))}</button>`;
     }
 
-    /* Re-render por innerHTML destrói o botão que o teclado estava apertando:
-       sem devolver o foco, cada passo do tutorial manda o usuário de volta
-       pro começo da página. O alvo pode não existir ainda (a fase 'rodando'
-       só tem botão desabilitado), então a lembrança persiste até dar. */
-    focoNoRoteiro = focoNoRoteiro || el.contains(document.activeElement);
-
     el.innerHTML = `
+      <p class="cu-rot-porque">
+        O mesmo guia da telinha, em texto — para quem prefere ler antes de agir,
+        navega por teclado ou usa leitor de tela. Os botões daqui e os do balão
+        fazem exatamente a mesma coisa.
+      </p>
       <div class="cu-rot-topo">
         <span class="cu-rot-passo">${fim ? 'fim' : `passo ${os.passo + 1} de ${t.passos.length}`}</span>
         <span class="cu-rot-tut">${esc(t.nome)}</span>
         <span class="cu-rot-min">~${t.minutos} min no total</span>
       </div>
-
       ${fim ? `
         <h3 class="cu-rot-titulo">Tutorial concluído</h3>
         <p class="cu-rot-exp">${txt(t.fecho)}</p>
@@ -1172,57 +1416,46 @@
           </div>` : ''}
         ${os.fase === 'feito' && p.nota ? `<p class="cu-rot-nota">${txt(p.nota)}</p>` : ''}
       `}
-
       <div class="cu-rot-acoes">
         ${acao}
         ${os.passo > 0 && !fim ? '<button type="button" class="cu-rot-sec" data-acao="voltar">Passo anterior</button>' : ''}
-        <button type="button" class="cu-rot-sec" data-acao="sair">Sair do tutorial</button>
+        <button type="button" class="cu-rot-sec" data-acao="fechar">Sair do tutorial</button>
         <label class="cu-rot-rapido">
           <input type="checkbox" ${os.rapido ? 'checked' : ''} data-acao="rapido">
           sem animação
         </label>
-      </div>
-    `;
-
-    /* Estado do tutorial anunciado a quem não vê a janelinha. */
-    const vivo = $('cu-roteiro-vivo');
-    if (vivo) {
-      vivo.textContent = fim
-        ? `${t.nome}: tutorial concluído.`
-        : `${t.nome}, passo ${os.passo + 1} de ${t.passos.length}: ${p.titulo}.`;
-    }
-
-    if (focoNoRoteiro) {
-      const alvo = el.querySelector('.cu-rot-btn:not([disabled])');
-      if (alvo) {
-        alvo.focus();
-        focoNoRoteiro = false;
-      }
-    }
+      </div>`;
   }
 
-  function ligarRoteiro() {
-    const el = $('cu-roteiro');
-    if (!el) return;
+  /* Um só despachante para o balão, o painel e os botões simulados dentro das
+     janelas: as três superfícies disparam as MESMAS ações, e é isso que
+     mantém o pop-up e o caminho acessível sempre no mesmo passo. */
+  function acao(nome, alvo) {
+    if (nome === 'digitar') digitarPorMim();
+    else if (nome === 'avancar') avancar();
+    else if (nome === 'voltar') voltar();
+    else if (nome === 'sair' || nome === 'fechar') fechar();
+    else if (nome === 'reiniciar') { const id = os.tutorial && os.tutorial.id; if (id) abrir(id); }
+    else if (nome === 'copiar') copiar(alvo);
+    else if (nome === 'guia-min') { os.guiaMin = true; pintarBalao(); }
+    else if (nome === 'guia-abrir') { os.guiaMin = false; pintarBalao(); }
+  }
 
-    el.addEventListener('click', (e) => {
-      const alvo = e.target.closest('[data-acao]');
+  function ligarControles() {
+    document.addEventListener('click', (e) => {
+      const alvo = e.target.closest('#cu-roteiro [data-acao], #cu-balao [data-acao], #cu-windows [data-acao]');
       if (!alvo) return;
-      const acao = alvo.dataset.acao;
-
-      if (acao === 'executar') executar();
-      else if (acao === 'avancar') avancar();
-      else if (acao === 'voltar') voltar();
-      else if (acao === 'sair' || acao === 'fechar') fechar();
-      else if (acao === 'copiar') copiar(alvo);
+      os.jaInteragiu = true;
+      acao(alvo.dataset.acao, alvo);
     });
 
-    el.addEventListener('change', (e) => {
+    document.addEventListener('change', (e) => {
       const alvo = e.target.closest('[data-acao="rapido"]');
       if (!alvo) return;
       os.rapido = alvo.checked;
     });
   }
+
 
   function copiar(btn) {
     const cmd = btn.dataset.cmd || '';
@@ -1291,6 +1524,19 @@
     /* O roteiro é injetado por script logo abaixo da moldura: sem JS não há
        tutorial interativo nenhum, e um painel de controle órfão no HTML só
        confundiria quem cair aqui com o script bloqueado. */
+    /* O balão mora DENTRO da moldura, sobreposto à cena; o roteiro fica
+       abaixo dela. Os dois nascem por script porque, sem JS, não há tutorial
+       nenhum — e um guia órfão no HTML só confundiria quem cair aqui com o
+       script bloqueado. */
+    const tela = $('cu-os-screen');
+    if (tela) {
+      const balao = document.createElement('div');
+      balao.id = 'cu-balao';
+      balao.className = 'cu-balao';
+      balao.hidden = true;
+      tela.appendChild(balao);
+    }
+
     const osEl = $('cu-os');
     if (osEl) {
       const roteiro = document.createElement('div');
@@ -1308,8 +1554,8 @@
     renderDesktop();
     renderStartMenu();
     relogio();
-    ligarRoteiro();
-    pintarRoteiro();
+    ligarControles();
+    pintarBalao();
   }
 
   if (document.readyState === 'loading') {

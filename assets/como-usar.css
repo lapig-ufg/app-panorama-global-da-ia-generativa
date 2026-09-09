@@ -1416,6 +1416,339 @@
   to { opacity: 0; }
 }
 
+/* ─── a linha em que se digita de verdade ─── */
+
+/* Input real por cima, espelho colorido por baixo, na MESMA célula do grid.
+   O input carrega texto transparente e só empresta o cursor; quem desenha é o
+   espelho. Fonte, tamanho e espaçamento têm de ser idênticos nos dois, senão o
+   cursor descola do caractere. */
+.cu-t-campo {
+  position: relative;
+  display: block;
+  flex: 1;
+  min-width: 0;
+}
+
+.cu-t-espelho,
+.cu-t-input {
+  font-family: var(--mono);
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: 0;
+  white-space: pre;
+}
+
+.cu-t-espelho {
+  display: block;
+  min-height: 1em;
+  pointer-events: none;
+}
+
+.cu-t-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--accent-bright);
+  outline: none;
+}
+
+/* O que já bate com o comando esperado sai claro; o que divergiu, vermelho. */
+.cu-e-ok { color: #e9e6d8; }
+.cu-e-ruim { color: #f0846c; text-decoration: underline wavy rgba(240, 132, 108, 0.6); }
+
+/* O resto do comando, em cinza, à frente do cursor: é a "sugestão" que
+   permite digitar um `curl -fsSL …` inteiro sem decorar nada — e é o que
+   transforma a digitação de obstáculo em leitura ativa. */
+.cu-e-falta { color: #55534a; }
+
+.cu-e-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 1em;
+  margin: 0 -3px 0 0;
+  background: var(--accent-bright);
+  vertical-align: text-bottom;
+  animation: cu-pisca 1.05s steps(2, start) infinite;
+}
+
+.cu-t-viva.is-errado .cu-t-ps { color: #f0846c; }
+
+/* ─── alvos clicáveis dentro da cena ─── */
+
+/* Botão simulado que a pessoa precisa mesmo clicar. O anel pulsante existe
+   porque, numa tela cheia de enfeite, nada distingue o que é decoração do que
+   é a próxima ação. */
+.cu-alvo {
+  position: relative;
+  cursor: pointer;
+  font-family: inherit;
+  animation: cu-alvo-pulso 1.9s ease-out infinite;
+}
+
+@keyframes cu-alvo-pulso {
+  0% { box-shadow: 0 0 0 0 rgba(16, 163, 127, 0.55); }
+  70% { box-shadow: 0 0 0 9px rgba(16, 163, 127, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 163, 127, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cu-alvo { animation: none; box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.5); }
+}
+
+/* ─── o balão do guia ─── */
+
+.cu-balao {
+  position: absolute;
+  z-index: 5;
+  width: min(310px, 68%);
+  padding: 13px 14px 12px;
+  background: #fffdf6;
+  border: 1px solid #0a3a8c;
+  border-radius: 10px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.4);
+  font-family: var(--sans);
+  animation: cu-balao-entra 0.28s ease-out;
+}
+
+@keyframes cu-balao-entra {
+  from { opacity: 0; transform: translateY(6px) scale(0.985); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cu-balao { animation: none; }
+}
+
+/* A seta é o que faz o balão "apontar" em vez de flutuar: ela liga a
+   explicação ao pedaço da cena de que a explicação fala. */
+.cu-balao::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #fffdf6;
+  border-left: 1px solid #0a3a8c;
+  border-bottom: 1px solid #0a3a8c;
+  transform: rotate(45deg);
+}
+
+/* A janela recua para o lado oposto ao do balão. É o que separa "guia por
+   cima da cena" de "guia ao lado da cena" — e só o segundo deixa ler as duas
+   coisas ao mesmo tempo. */
+.cu-os-screen.cu-guia-esq .cu-windows { padding-left: 348px; }
+.cu-os-screen.cu-guia-dir .cu-windows { padding-right: 340px; }
+
+.cu-balao.is-terminal { left: 16px; bottom: 46px; }
+.cu-balao.is-terminal::after { right: -7px; top: 46px; transform: rotate(-135deg); }
+
+.cu-balao.is-janela { right: 16px; bottom: 46px; }
+.cu-balao.is-janela::after { left: -7px; top: 46px; transform: rotate(45deg); }
+
+.cu-balao.is-centro {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(360px, 78%);
+}
+.cu-balao.is-centro::after { display: none; }
+
+/* Encolhido: só um "?" no canto, para quem quer ver a tela sem o guia por
+   cima. Some o balão, não o tutorial. */
+.cu-balao.is-min {
+  width: auto;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  left: auto;
+  right: 14px;
+  bottom: 46px;
+}
+.cu-balao.is-min::after { display: none; }
+
+.cu-balao-abrir {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #0a3a8c;
+  background: #fffdf6;
+  color: #1c4fae;
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.cu-balao-topo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.cu-balao-passo {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: var(--accent);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.cu-balao-tut {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cu-balao-x {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--hair);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cu-balao-t {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+  margin-bottom: 5px;
+}
+
+.cu-balao-p {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink-light);
+}
+
+.cu-balao-cmd {
+  margin-top: 9px;
+  padding: 8px 10px;
+  background: #14150f;
+  border-radius: 7px;
+  overflow-x: auto;
+}
+
+.cu-balao-rot {
+  display: block;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8a8676;
+  margin-bottom: 3px;
+}
+
+.cu-balao-cmd code {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: #cfe6a6;
+  white-space: pre;
+}
+
+.cu-balao-erro {
+  margin-top: 9px;
+  padding: 7px 10px;
+  background: rgba(163, 61, 42, 0.09);
+  border-left: 3px solid #a33d2a;
+  border-radius: 0 6px 6px 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #8c3423;
+}
+
+.cu-balao-nota {
+  margin-top: 9px;
+  padding: 8px 10px;
+  border-left: 3px solid var(--accent);
+  background: rgba(10, 115, 89, 0.06);
+  border-radius: 0 6px 6px 0;
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--ink-light);
+}
+
+.cu-balao-acoes {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 11px;
+}
+
+.cu-balao-btn {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--white);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 7px;
+  padding: 7px 13px;
+  cursor: pointer;
+}
+
+.cu-balao-btn:hover { filter: brightness(1.12); }
+
+.cu-balao-dica {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+
+.cu-balao-dica strong { color: var(--ink); }
+
+.cu-balao-dica kbd {
+  font-size: 10px;
+  padding: 1px 4px;
+}
+
+.cu-balao-esperando {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+
+.cu-balao-nav {
+  display: flex;
+  gap: 8px;
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px solid var(--hair);
+}
+
+.cu-balao-sec {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  background: transparent;
+  border: 1px solid var(--hair);
+  border-radius: 6px;
+  padding: 5px 9px;
+  cursor: pointer;
+}
+
+.cu-balao-sec:hover { color: var(--ink); border-color: var(--ink-muted); }
+
 /* ─── navegador simulado ─── */
 .cu-win-nav { background: #ffffff; }
 
@@ -1711,6 +2044,15 @@
   border: 1px solid var(--hair);
   border-radius: 12px;
   box-shadow: var(--shadow-sm);
+}
+
+.cu-rot-porque {
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  padding-bottom: 11px;
+  margin-bottom: 11px;
+  border-bottom: 1px dashed var(--hair);
 }
 
 .cu-rot-vazio {
@@ -2384,6 +2726,29 @@
   .cu-rot-rapido { margin-left: 0; }
 }
 
+@media (max-width: 760px) {
+  /* No celular o balão deixa de flutuar e ocupa a largura da tela, ancorado
+     acima da barra de tarefas: um pop-up de 310px sobre uma tela de 348px
+     esconderia justamente o terminal de que ele fala. */
+  .cu-balao,
+  .cu-balao.is-terminal,
+  .cu-balao.is-janela,
+  .cu-balao.is-centro {
+    left: 6px;
+    right: 6px;
+    bottom: 40px;
+    top: auto;
+    width: auto;
+    transform: none;
+    padding: 10px 11px;
+  }
+
+  .cu-balao::after { display: none; }
+  .cu-balao.is-min { left: auto; right: 8px; }
+
+  .cu-balao-p { font-size: 11.5px; }
+}
+
 @media (max-width: 520px) {
   .cu-licoes { grid-template-columns: repeat(2, 1fr); }
   .cu-ciclo { padding: 14px 14px 12px; }
@@ -2418,4 +2783,30 @@
    não pela piscada. */
 @media (prefers-reduced-motion: reduce) {
   .cu-cursor { animation: none; }
+}
+
+/* ═══ O RECUO DA JANELA PARA A FAIXA DO GUIA (CELULAR) ═══
+   Mora no fim do arquivo de propósito: os blocos responsivos acima escrevem
+   `padding` no atalho, e um atalho posterior apagaria um `padding-bottom`
+   declarado antes dele. A altura vem de --cu-balao-h, que o JS mede a cada
+   passo (ver medirBalao). */
+@media (max-width: 760px) {
+  /* A tela CRESCE em vez de espremer a janela. Numa tela de 340px não cabem
+     fileira de ícones (74px), janela, faixa do guia (~200px) e barra de
+     tarefas ao mesmo tempo — e espremer a janela até 60px de altura deixava o
+     botão do passo debaixo do balão, ou seja, o tutorial travava. Aqui a
+     proporção 4/3 deixa de ser regra: a altura passa a ser o que o conteúdo
+     pede, medido a cada passo. */
+  .cu-os-screen:is(.cu-guia-esq, .cu-guia-dir) {
+    aspect-ratio: auto;
+    min-height: calc(340px + var(--cu-balao-h, 140px));
+  }
+
+  .cu-os-screen.cu-guia-esq .cu-windows,
+  .cu-os-screen.cu-guia-dir .cu-windows {
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: calc(var(--cu-balao-h, 120px) + 46px);
+    align-items: flex-start;
+  }
 }
