@@ -128,18 +128,21 @@
       case 'err':  return `<div class="cu-t-linha cu-t-err"><code>${v}</code></div>`;
       case 'nota': return `<div class="cu-t-nota">${txt(l.v)}</div>`;
       case 'pedido': return `<div class="cu-t-linha cu-t-pedido"><span class="cu-t-ps">❯</span><code>${v}</code></div>`;
-      default:     return `<div class="cu-t-linha cu-t-out"><code>${v}</code></div>`;
+      /* Linha vazia é espaço de respiro que o autor do dado escreveu de
+         propósito; sem o &nbsp; o flex da linha colapsa a zero pixels. */
+      default:     return `<div class="cu-t-linha cu-t-out"><code>${v || '&nbsp;'}</code></div>`;
     }
   }
 
   function linhaChat(l) {
-    const v = esc(l.v);
     if (l.t === 'nota') return `<div class="cu-c-nota">${txt(l.v)}</div>`;
     const quem = l.t === 'voce' ? 'Você' : 'IA';
+    /* txt(), não esc(): os dados usam crases para nomes de comando — a coluna
+       do terminal converte, e a bolha de chat precisa converter igual. */
     return `
       <div class="cu-c-linha cu-c-${l.t === 'voce' ? 'voce' : 'ia'}">
         <span class="cu-c-quem">${quem}</span>
-        <p>${v}</p>
+        <p>${txt(l.v)}</p>
       </div>`;
   }
 
@@ -184,14 +187,17 @@
       tira.addEventListener('click', (e) => {
         const chip = e.target.closest('.cu-licao-chip');
         if (!chip) return;
-        irPara(+chip.dataset.i, false);
+        /* focar=true também no clique: quem ativa com Enter precisa do foco
+           de volta, senão o re-render apaga o botão e a fileira perde as
+           setas do teclado até o próximo Tab do topo da página. */
+        irPara(+chip.dataset.i, true);
       });
     }
 
     tabs.addEventListener('click', (e) => {
       const btn = e.target.closest('.cu-tab');
       if (!btn) return;
-      irPara(+btn.dataset.i, false);
+      irPara(+btn.dataset.i, true);
     });
 
     /* Setas, Home e End dentro da fileira, com tabindex móvel: é o padrão
@@ -307,18 +313,27 @@
       term: c.terminal.custo.minutos
     }));
 
+    const fmt = v => (v < 1 ? Math.round(v * 60) + ' s' : (Number.isInteger(v) ? v : v.toFixed(1).replace('.', ',')) + ' min');
+
     const L = 178, R = 64, T = 16, ALT_LINHA = 44;
     const W = 720;
     const H = T + dados.length * ALT_LINHA + 34;
-    const maxX = 32;
+
+    /* O eixo nasce dos dados, não de um número fixo: um cenário futuro com
+       mais de 32 min colocaria o ponto para fora do viewBox e o SVG o
+       cortaria em silêncio. Nunca menor que 32 (a geometria de hoje não
+       muda), mas cresce com o que vier a existir no arquivo de dados. */
+    const maxDados = Math.max(0, ...dados.flatMap(d => [d.chat, d.term]));
+    const maxX = Math.max(32, Math.ceil(maxDados / 10) * 10);
     const x = m => L + (m / maxX) * (W - L - R);
 
-    const grades = [0, 10, 20, 30];
+    const passo = maxX <= 40 ? 10 : maxX / 4;
+    const grades = [];
+    for (let g = 0; g < maxX; g += passo) grades.push(g);
 
     const linhas = dados.map((d, i) => {
       const y = T + i * ALT_LINHA + ALT_LINHA / 2;
       const xc = x(d.chat), xt = x(d.term);
-      const fmt = v => (v < 1 ? Math.round(v * 60) + ' s' : (Number.isInteger(v) ? v : v.toFixed(1).replace('.', ',')) + ' min');
 
       /* Cada número fica do lado de FORA do seu próprio ponto, para os dois
          nunca se encontrarem no meio. Quando não cabe — ponto colado no zero,
@@ -388,7 +403,7 @@
           <table>
             <thead><tr><th>Tarefa</th><th>Na aba</th><th>Com terminal</th></tr></thead>
             <tbody>
-              ${dados.map(d => `<tr><td>${esc(d.nome)}</td><td>${d.chat} min</td><td>${d.term} min</td></tr>`).join('')}
+              ${dados.map(d => `<tr><td>${esc(d.nome)}</td><td>${fmt(d.chat)}</td><td>${fmt(d.term)}</td></tr>`).join('')}
             </tbody>
           </table>
         </details>
@@ -696,10 +711,11 @@
             <li>
               <strong>${esc(p.titulo)}</strong>
               <p>${txt(p.explicacao)}</p>
+              ${p.prompt ? `<p class="cu-plain-nota"><strong>A tarefa dada ao agente:</strong> ${txt(p.prompt)}</p>` : ''}
               ${p.cmd ? `<pre><code>${esc(p.cmd)}</code></pre>` : ''}
-              ${p.dialogo ? `<ul>${p.dialogo.linhas.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
+              ${p.dialogo ? `<ul>${(p.dialogo.linhas || []).map(l => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
               ${p.navegador ? `<p class="cu-plain-url">${esc(p.navegador.url)}</p>` : ''}
-              ${p.diff ? `<pre><code>${p.diff.linhas.map(l => esc((l.t === 'mais' ? '+ ' : l.t === 'menos' ? '- ' : '  ') + l.v)).join('\n')}</code></pre>` : ''}
+              ${p.diff ? `<pre><code>${(p.diff.linhas || []).map(l => esc((l.t === 'mais' ? '+ ' : l.t === 'menos' ? '- ' : '  ') + l.v)).join('\n')}</code></pre>` : ''}
               ${p.nota ? `<p class="cu-plain-nota">${txt(p.nota)}</p>` : ''}
             </li>
           `).join('')}
@@ -726,7 +742,6 @@
     tutorial: null,   // objeto do tutorial aberto
     passo: 0,         // índice do passo corrente
     fase: 'pronto',   // 'pronto' → 'rodando' → 'feito'
-    scrollback: [],   // linhas já impressas no terminal simulado
     timers: [],
     rapido: semMovimento
   };
@@ -838,6 +853,7 @@
     limparTimers();
     if (id === 'leiame') {
       os.tutorial = null;
+      os.fase = 'pronto';
       pintarJanela({
         tipo: 'leiame',
         titulo: 'Leia-me.txt'
@@ -851,7 +867,6 @@
     os.tutorial = t;
     os.passo = 0;
     os.fase = 'pronto';
-    os.scrollback = [];
     pintarPasso();
   }
 
@@ -859,7 +874,6 @@
     limparTimers();
     os.tutorial = null;
     os.fase = 'pronto';
-    os.scrollback = [];
     $('cu-windows').innerHTML = '';
     pintarTaskbar(null);
     pintarRoteiro();
@@ -954,10 +968,23 @@
     el.innerHTML = nome ? `<span class="cu-task-item">${esc(nome)}</span>` : '';
   }
 
+  function blocoDoPasso(p) {
+    const bloco = [];
+    if (p.prompt) bloco.push(linhaTerminal({ t: 'pedido', v: p.prompt }));
+    if (p.cmd) bloco.push(linhaTerminal({ t: 'cmd', v: p.cmd }));
+    (p.saida || []).forEach(l => bloco.push(linhaTerminal(l)));
+    return bloco.join('');
+  }
+
   function linhasDoPasso(p) {
-    /* O scrollback acumula os passos anteriores: é o que dá a sensação de uma
-       sessão contínua, e não de sete telas soltas. */
-    let html = os.scrollback.join('');
+    /* O scrollback é derivado, não acumulado: são os blocos de todos os
+       passos de terminal anteriores ao corrente. É o que dá a sensação de
+       uma sessão contínua — e, derivando do índice do passo, "voltar" não
+       precisa adivinhar quantos blocos desfazer: cada re-render já sai
+       certo, mesmo cruzando passos que não são de terminal. */
+    let html = os.tutorial.passos.slice(0, os.passo)
+      .filter(pp => pp.janela === 'terminal')
+      .map(blocoDoPasso).join('');
     if (p.prompt) html += linhaTerminal({ t: 'pedido', v: p.prompt });
     html += `<div class="cu-t-linha" id="cu-t-atual"><span class="cu-t-ps">$</span><code id="cu-t-cmd"></code><span class="cu-cursor" id="cu-cursor"></span></div>`;
     html += `<div id="cu-t-saida"></div>`;
@@ -1051,16 +1078,8 @@
   function terminarPasso() {
     const t = os.tutorial;
     if (!t) return;
-    const p = t.passos[os.passo];
-
-    /* Congela o passo no scrollback para que o próximo comando apareça
-       embaixo dele, como numa sessão de verdade. */
-    const bloco = [];
-    if (p.prompt) bloco.push(linhaTerminal({ t: 'pedido', v: p.prompt }));
-    if (p.cmd) bloco.push(linhaTerminal({ t: 'cmd', v: p.cmd }));
-    (p.saida || []).forEach(l => bloco.push(linhaTerminal(l)));
-    os.scrollback.push(bloco.join(''));
-
+    /* Nada de push em pilha nenhuma: o passo congelado entra no scrollback
+       por derivação, no próximo pintarPasso — como numa sessão de verdade. */
     os.fase = 'feito';
     pintarRoteiro();
   }
@@ -1083,7 +1102,6 @@
     if (!t || os.passo === 0) return;
     limparTimers();
     os.passo--;
-    os.scrollback = os.scrollback.slice(0, Math.max(0, os.scrollback.length - 1));
     os.fase = 'pronto';
     pintarPasso();
   }
@@ -1091,6 +1109,8 @@
   /* O roteiro é o painel de controle do tutorial — e o único lugar onde há
      botões de verdade. Ele fica fora da moldura de propósito: a simulação é
      ilustração, a operação é HTML comum. */
+  let focoNoRoteiro = false;
+
   function pintarRoteiro() {
     const el = $('cu-roteiro');
     if (!el) return;
@@ -1102,6 +1122,10 @@
         <p class="cu-rot-vazio">
           Escolha um tutorial na área de trabalho acima — ou pelo botão <strong>Iniciar</strong>.
         </p>`;
+      /* Quem não vê a janelinha fica sabendo, também, que fechou. */
+      const vazio = $('cu-roteiro-vivo');
+      if (vazio) vazio.textContent = 'Nenhum tutorial aberto.';
+      focoNoRoteiro = false;
       return;
     }
 
@@ -1113,7 +1137,7 @@
     if (fim) {
       acao = `<button type="button" class="cu-rot-btn" data-acao="fechar">Concluir e fechar</button>`;
     } else if (p.janela !== 'terminal') {
-      acao = `<button type="button" class="cu-rot-btn" data-acao="avancar">${esc((p.dialogo && p.dialogo.botao) || (p.navegador && p.navegador.botao) || (p.diff && p.diff.botoes[0]) || 'Continuar')}</button>`;
+      acao = `<button type="button" class="cu-rot-btn" data-acao="avancar">${esc((p.dialogo && p.dialogo.botao) || (p.navegador && p.navegador.botao) || (p.diff && p.diff.botoes && p.diff.botoes[0]) || 'Continuar')}</button>`;
     } else if (os.fase === 'pronto') {
       acao = `<button type="button" class="cu-rot-btn" data-acao="executar">Executar o comando</button>`;
     } else if (os.fase === 'rodando') {
@@ -1121,6 +1145,12 @@
     } else {
       acao = `<button type="button" class="cu-rot-btn" data-acao="avancar">${ultimo ? 'Terminar' : 'Próximo passo'}</button>`;
     }
+
+    /* Re-render por innerHTML destrói o botão que o teclado estava apertando:
+       sem devolver o foco, cada passo do tutorial manda o usuário de volta
+       pro começo da página. O alvo pode não existir ainda (a fase 'rodando'
+       só tem botão desabilitado), então a lembrança persiste até dar. */
+    focoNoRoteiro = focoNoRoteiro || el.contains(document.activeElement);
 
     el.innerHTML = `
       <div class="cu-rot-topo">
@@ -1161,6 +1191,14 @@
         ? `${t.nome}: tutorial concluído.`
         : `${t.nome}, passo ${os.passo + 1} de ${t.passos.length}: ${p.titulo}.`;
     }
+
+    if (focoNoRoteiro) {
+      const alvo = el.querySelector('.cu-rot-btn:not([disabled])');
+      if (alvo) {
+        alvo.focus();
+        focoNoRoteiro = false;
+      }
+    }
   }
 
   function ligarRoteiro() {
@@ -1187,28 +1225,41 @@
   }
 
   function copiar(btn) {
-    const txt = btn.dataset.cmd || '';
+    const cmd = btn.dataset.cmd || '';
     const ok = () => {
       const antes = btn.textContent;
       btn.textContent = 'copiado';
       btn.classList.add('is-ok');
       setTimeout(() => { btn.textContent = antes; btn.classList.remove('is-ok'); }, 1600);
     };
+    const naoDeu = () => {
+      const antes = btn.textContent;
+      btn.textContent = 'não deu';
+      setTimeout(() => { btn.textContent = antes; }, 1600);
+    };
+    /* Reserva para navegador antigo, contexto sem HTTPS e iframe sem
+       permissão de clipboard — dentro do embed do Observatório a API
+       existe mas nega, e é aqui que ela precisa ser tentada de novo. */
+    const reserva = () => {
+      const ta = document.createElement('textarea');
+      ta.value = cmd;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'absolute';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      let foi = false;
+      try { foi = document.execCommand('copy'); } catch (_) { /* sem alarde */ }
+      document.body.removeChild(ta);
+      return foi;
+    };
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(txt).then(ok, () => {});
+      navigator.clipboard.writeText(cmd).then(ok, () => {
+        if (!reserva()) naoDeu();
+      });
       return;
     }
-    /* Reserva para navegador antigo e para contexto sem HTTPS, onde a API de
-       área de transferência simplesmente não existe. */
-    const ta = document.createElement('textarea');
-    ta.value = txt;
-    ta.setAttribute('readonly', '');
-    ta.style.position = 'absolute';
-    ta.style.left = '-9999px';
-    document.body.appendChild(ta);
-    ta.select();
-    try { document.execCommand('copy'); ok(); } catch (_) { /* sem alarde */ }
-    document.body.removeChild(ta);
+    if (!reserva()) naoDeu();
   }
 
   /* ─── partida ────────────────────────────────────────────── */

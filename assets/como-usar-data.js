@@ -226,7 +226,7 @@ const COMO_USAR_DATA = {
         { cmd: "echo \"$f  ->  $novo\"", oQueFaz: "O ensaio geral. Mesmo laço, mesma lógica, sem tocar em nada — o único jeito honesto de revisar uma operação destrutiva antes dela acontecer." }
       ],
 
-      licao: "O ganho não foi escrever o pipeline: o chat também escreve. O ganho foi <strong>testar o pipeline num arquivo</strong>, ver o `C?PIA`, e consertar antes que 340 nomes fossem para o brejo."
+      licao: "O ganho não foi escrever o pipeline: o chat também escreve. O ganho foi <strong>testar o pipeline num arquivo</strong>, ver o <code>C?PIA</code>, e consertar antes que 340 nomes fossem para o brejo."
     },
 
     {

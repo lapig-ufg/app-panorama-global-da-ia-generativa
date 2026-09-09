@@ -240,18 +240,18 @@ body {
 }
 
 /* ─── NAVEGAÇÃO DE SEÇÕES ───
-   Três colunas iguais ocupando a largura toda do cabeçalho. A régua de antes
+   Quatro colunas iguais ocupando a largura toda do cabeçalho. A régua de antes
    era um grupo de pastilhas de 383px encostado no canto esquerdo de uma faixa
    de 1500px: três botõezinhos e um campo vazio. O vazio não era um problema de
    alinhamento — era sintoma de uma navegação subdimensionada para o peso que
    ela tem. Ao dar a cada seção a pergunta que ela responde (o texto que antes
    vivia escondido no `title=`, invisível no celular), cada item precisa de
-   largura, e três itens largos consomem a fileira inteira sozinhos.
+   largura, e quatro itens largos consomem a fileira inteira sozinhos.
 
-   Os rótulos são perguntas porque as três seções são destinos diferentes, não
+   Os rótulos são perguntas porque as quatro seções são destinos diferentes, não
    filtros do mesmo dado: "Régua" era jargão interno que não dizia nada a quem
    chegava de fora. */
-/* SEM recuo lateral aqui: as três colunas vão de canto a canto da página. A
+/* SEM recuo lateral aqui: as quatro colunas vão de canto a canto da página. A
    goteira vira padding INTERNO do primeiro e do último item, então o texto
    continua no prumo dos logos, mas a célula (e a barra verde que marca a seção
    aberta) alcança a borda.
@@ -282,9 +282,10 @@ body {
   transition: background 0.16s ease;
 }
 
-/* A goteira mora nas pontas da fileira, não no contêiner. `:first-child` e
-   `:last-child` têm especificidade maior que `.ps-link`, então continuam
-   valendo mesmo quando os media queries reescrevem o atalho `padding`. */
+/* A goteira mora nas pontas da fileira, não no contêiner. Nota: o degrau de
+   2x2 (abaixo de 1400px) reescreve o padding com regras `:nth-child` da MESMA
+   especificidade, mais abaixo no arquivo — lá são elas que mandam; estas
+   valem na fileira de uma linha, acima de 1400px e no modo incorporado. */
 .ps-link:first-child {
   padding-left: var(--gutter);
 }
@@ -299,9 +300,9 @@ body {
   border-left: 1px solid var(--hair);
 }
 
-/* Os três ícones ficam em verde, não só o da seção aberta. Antes os dois
+/* Os quatro ícones ficam em verde, não só o da seção aberta. Antes os três
    inativos eram cinza sobre bege e a fileira parecia meio apagada — como se
-   duas das três respostas estivessem desligadas. */
+   três das quatro respostas estivessem desligadas. */
 .ps-icon {
   flex-shrink: 0;
   display: inline-flex;
@@ -344,7 +345,7 @@ body {
   transition: color 0.16s ease;
 }
 
-/* O ponto de interrogação em verde: um sinal pequeno, repetido três vezes, de
+/* O ponto de interrogação em verde: um sinal pequeno, repetido quatro vezes, de
    que a fileira é feita de perguntas — e não de nomes de seção. */
 .ps-mark {
   color: var(--accent);
@@ -361,7 +362,8 @@ body {
   text-overflow: ellipsis;
 }
 
-/* Rótulo curto, só no celular — a pergunta inteira não cabe num terço de 390px. */
+/* Rótulo curto, só no celular — a fileira dobra em 2x2 bem antes deste ponto,
+   e mesmo assim a pergunta inteira não cabe em metade de 390px. */
 .ps-short {
   display: none;
 }
@@ -1068,7 +1070,7 @@ body {
 
    Esta página não tem rodapé: numa tela em que a altura é o recurso escasso,
    ele custava ~50px para repetir dados que já estão no cabeçalho. Os créditos
-   e a fonte seguem no rodapé das outras duas páginas, que rolam.
+   e a fonte seguem no rodapé das outras três páginas, que rolam.
 
    O @media (min-height) é a válvula de segurança: em janelas muito baixas o
    cromo comeria a área útil inteira, então voltamos ao fluxo normal.
@@ -1648,9 +1650,14 @@ kbd {
    cabeçalho mais alta, mas ela cresce UMA vez, em degrau conhecido, em vez de
    crescer sozinha quando o texto não couber.
    O valor foi medido, não estimado: acima de 1400px nenhum dos quatro rótulos
-   entra em reticências no arranjo de quatro colunas; abaixo disso, entra. */
+   entra em reticências no arranjo de quatro colunas; abaixo disso, entra.
+
+   Nada disto vale no modo incorporado (?embed=1): lá a fileira continua de
+   UMA linha, como o site do Observatório sempre conheceu — o anfitrião não
+   pode absorver uma faixa de cabeçalho que dobra de altura, e uma aba
+   extra não deve mudar o iframe que ele hospeda. */
 @media (max-width: 1400px) {
-  .page-switch {
+  html:not(.is-embed) .page-switch {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -1658,25 +1665,25 @@ kbd {
      colunas, horizontal separando a segunda fileira da primeira. Sem isto o
      `+ .ps-link` desenharia uma borda esquerda no 3º item, que é o primeiro
      da sua fileira — um risco solto no meio do nada. */
-  .ps-link + .ps-link {
+  html:not(.is-embed) .ps-link + .ps-link {
     border-left: 0;
   }
 
-  .ps-link:nth-child(even) {
+  html:not(.is-embed) .ps-link:nth-child(even) {
     border-left: 1px solid var(--hair);
   }
 
-  .ps-link:nth-child(n+3) {
+  html:not(.is-embed) .ps-link:nth-child(n+3) {
     border-top: 1px solid var(--hair);
   }
 
   /* A goteira também muda de dono: com duas colunas, quem encosta na borda
      esquerda são o 1º e o 3º; na direita, o 2º e o 4º. */
-  .ps-link:nth-child(odd) {
+  html:not(.is-embed) .ps-link:nth-child(odd) {
     padding-left: var(--gutter);
   }
 
-  .ps-link:nth-child(even) {
+  html:not(.is-embed) .ps-link:nth-child(even) {
     padding-right: var(--gutter);
   }
 }
@@ -1727,7 +1734,8 @@ kbd {
 
   .ps-short {
     display: block;
-    font-size: 12px;
+    /* O tamanho do rótulo mora no degrau de 520px, mais abaixo — ele cobre
+       esta faixa também, e um segundo valor aqui seria regra morta. */
     font-weight: 700;
     letter-spacing: -0.01em;
     line-height: 1.2;

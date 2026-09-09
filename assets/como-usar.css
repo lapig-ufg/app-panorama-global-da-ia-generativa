@@ -4,8 +4,9 @@
    colunas da comparação e o simulador de área de trabalho.
 
    Herda de styles.css (cores, tipografia, cabeçalho, abas) e de
-   guia.css (.qm-main, .qm-lede, .qm-source). O que mora aqui é só
-   o que é exclusivo desta página.
+   guia.css (.qm-main, .qm-lede). O .qm-source não existe em guia.css:
+   está definido aqui mesmo (e, com outros valores, em gratuitos.css).
+   O que mora neste arquivo é só o que é exclusivo desta página.
 
    UMA NOTA SOBRE O SIMULADOR: ele é a única parte do site que
    abandona a paleta bege/verde de propósito. A tela precisa parecer
@@ -1954,6 +1955,15 @@
 .cu-ferr.is-destaque {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* O catálogo colapsado no celular esconde os cartões com o atributo `hidden`
+   (ver colapsarCatalogoNoCelular, em como-usar.js). O `display: flex` acima é
+   regra do autor e ganha da folha do navegador ([hidden] { display: none }) —
+   o mesmo conflito que .help-popover[hidden], em styles.css, já resolvia.
+   Sem esta regra, o botão "Mostrar as outras N" aparecia sem esconder nada. */
+.cu-ferr[hidden] {
+  display: none;
 }
 
 .cu-ferr-head {

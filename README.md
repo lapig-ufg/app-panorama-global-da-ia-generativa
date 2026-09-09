@@ -16,7 +16,7 @@ Acesse a versão pública em: **https://lapig-ufg.github.io/app-panorama-global-
 
 Este repositório é **mais do que o site** — são três partes que trabalham juntas:
 
-- **Site** (`index.html` + `assets/`) — a linha do tempo, publicada no **GitHub Pages**. Lê os dados de uma planilha Google Sheets em tempo real (sem novo deploy). Junto dela vão três abas estáticas: `guia.html`, `gratuitos.html` e `como-usar.html`.
+- **Site** (`index.html` + `assets/`) — a linha do tempo, publicada no **GitHub Pages**. Lê os dados de uma planilha Google Sheets em tempo real (sem novo deploy). Junto dela vão as abas `guia.html` (interativa — os benchmarks caem de `benchmarks.json`, regenerado pelo pipeline), `gratuitos.html` e `como-usar.html` (interativa — simulador de terminal).
 - **Automação semanal** (`automation/` + `.github/workflows/auto-update.yml`) — um **cron do GitHub Actions** roda toda segunda: o Claude pesquisa lançamentos recentes na web e grava candidatos numa aba de **rascunho** (`Pendentes`) da planilha.
 - **PWA de curadoria** (`admin/`) — app instalável onde você **aprova/rejeita** os candidatos. **Só o que você aprova vai ao ar** — nada é publicado automaticamente.
 
