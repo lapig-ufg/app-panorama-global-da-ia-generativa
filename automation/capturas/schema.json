@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Captura de conversas reais em chat de navegador",
+  "description": "Forma esperada do arquivo gerado pelo briefing em automation/CAPTURA-GEMINI.md. Valide antes de entregar: um campo faltando custa uma nova rodada de captura.",
+  "type": "object",
+  "required": ["capturado_em", "modelo", "saidas_fornecidas_pelo_roteiro", "conversas"],
+  "properties": {
+    "capturado_em": {
+      "type": "string",
+      "description": "ISO 8601 com fuso, ex.: 2026-09-10T14:20:00-03:00"
+    },
+    "modelo": {
+      "type": "string",
+      "description": "Como aparece na interface, sem interpretar. Ex.: 'Gemini 3 Flash'"
+    },
+    "modelo_selecionado_manualmente": { "type": "boolean" },
+    "idioma_interface": { "type": "string" },
+    "conta": { "type": "string", "enum": ["gratuita", "paga", "nao_sei"] },
+    "executado_por": { "type": "string" },
+    "saidas_fornecidas_pelo_roteiro": {
+      "type": "boolean",
+      "description": "true quando as saídas de comando coladas vieram do roteiro e não de uma máquina real. É o que impede a página de apresentar reconstituição como medição."
+    },
+    "observacoes_gerais": { "type": "string" },
+
+    "conversas": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": [
+          "roteiro", "turnos_usuario", "parou_porque",
+          "executou_codigo", "pediu_upload",
+          "pediu_informacao_que_um_agente_leria_sozinho",
+          "transcricao"
+        ],
+        "properties": {
+          "roteiro": { "type": "integer", "minimum": 1, "maximum": 5 },
+          "titulo": { "type": "string" },
+          "url": { "type": "string" },
+          "turnos_usuario": { "type": "integer", "minimum": 1 },
+          "parou_porque": {
+            "type": "string",
+            "description": "resolvido | limite de 8 mensagens | recusou | travou | outro (descreva)"
+          },
+          "executou_codigo": {
+            "type": "boolean",
+            "description": "Rodou código num sandbox próprio. Se true, descreva o quê em notas_do_executor."
+          },
+          "pediu_upload": { "type": "boolean" },
+          "avisou_espontaneamente": {
+            "type": ["boolean", "null"],
+            "description": "Só nos roteiros 3 e 5. null nos demais. Quando não for null, cite a frase exata em notas_do_executor."
+          },
+          "pediu_informacao_que_um_agente_leria_sozinho": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "O campo que mede a tese da página. Uma entrada por pergunta feita ao usuário que um agente com acesso ao disco responderia sozinho. Array vazio é resultado válido."
+          },
+          "transcricao": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "required": ["quem", "texto"],
+              "properties": {
+                "quem": { "type": "string", "enum": ["usuario", "gemini"] },
+                "texto": {
+                  "type": "string",
+                  "description": "Literal, sem editar, sem resumir. Blocos de código entram como texto com as quebras de linha preservadas."
+                }
+              }
+            }
+          },
+          "notas_do_executor": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -172,6 +172,32 @@ e no eixo do tempo (seção 03). São sete seções (a 06 termina com um bloco e
   Se você acrescentar um passo, ele aparece nos dois lugares automaticamente. Há quatro tipos
   de janela — `terminal`, `navegador`, `dialogo` e `diff` —, declarados no campo `janela` de
   cada passo.
+
+### Como o simulador funciona por dentro
+
+A pessoa **digita os comandos de verdade**. Três peças sustentam isso, e mexer numa sem
+olhar as outras quebra o conjunto:
+
+- **A linha viva** (`linhaViva`) é um `<input>` real com `color: transparent`, sobreposto a
+  um "espelho" (`atualizarEspelho`) que redesenha o texto em três faixas: o prefixo que bate
+  com o comando esperado, o trecho que divergiu, e o resto do comando em cinza à frente do
+  cursor — a sugestão que permite digitar um `curl -fsSL …` sem decorar. **Input e espelho
+  precisam ter fonte, tamanho e espaçamento idênticos**, senão o cursor descola do caractere.
+- **Errar é parte do roteiro.** `submeter()` responde como um shell responderia
+  (`bash: <cmd>: command not found`) e insere a tentativa **antes** da linha viva — não na
+  área de saída. Se inserir depois, o comando certo aparece no histórico antes do erro que
+  veio primeiro, e a sessão conta a história ao contrário.
+- **O balão** (`pintarBalao`) é o guia dentro da cena, ancorado ao que explica. Ele adiciona
+  `cu-guia-esq`/`cu-guia-dir` à tela, e é o CSS dessas classes que faz a **janela recuar**
+  para o lado oposto. No celular o balão vira faixa no rodapé e a tela **cresce** em vez de
+  espremer a janela: `medirBalao()` publica a altura em `--cu-balao-h` a cada passo, e a
+  regra que consome essa variável mora **no fim do `como-usar.css`** de propósito — os blocos
+  responsivos anteriores escrevem `padding` no atalho e apagariam um `padding-bottom`
+  declarado antes deles.
+
+Três superfícies disparam as mesmas ações (`acao()`): o balão, os botões simulados dentro das
+janelas (`.cu-alvo`) e o painel abaixo da moldura. O painel é o caminho de teclado e de leitor
+de tela — não o elimine ao mexer no balão.
 - **Quatro dos cinco cenários moram atrás de abas.** A tira de lições acima delas existe só
   para tornar visível o que cada um ensina de diferente; ao acrescentar um cenário, escreva
   também o `licaoCurta`, senão ele entra na página como se fosse repetição do anterior.
@@ -181,6 +207,14 @@ e no eixo do tempo (seção 03). São sete seções (a 06 termina com um bloco e
   conteúdo, meça antes: `document.documentElement.scrollHeight` dividido pela altura da tela.
 - **Instaladores e planos** foram conferidos nas páginas oficiais (última checagem em
   `updatedAt`). Revalide antes de citar cotas — elas mudam com frequência.
+- **A coluna do chat é reconstituída, e isso está dito na página.** Para trocá-la por
+  transcrições reais existe um briefing pronto em
+  [automation/CAPTURA-GEMINI.md](automation/CAPTURA-GEMINI.md) — cinco roteiros com os
+  prompts literais, as respostas condicionais e as regras de não-condução, escrito para ser
+  executado por uma pessoa ou por um agente de *computer use*. A saída é validada por
+  `automation/capturas/schema.json`. Ao incorporar uma captura, **preserve a distinção entre
+  o que foi transcrito (a conversa) e o que foi fornecido pelo roteiro (as saídas de comando
+  coladas)** — é disso que depende a honestidade da comparação inteira.
 - **A lista do `ollama launch` cresce a cada versão do Ollama.** A tabela em `ponte.integracoes`
   é uma cópia verbatim do `ollama launch --help` (nomes, aliases e descrições vêm de
   `cmd/launch/registry.go` no repositório do Ollama). O texto ao lado dela manda o leitor rodar

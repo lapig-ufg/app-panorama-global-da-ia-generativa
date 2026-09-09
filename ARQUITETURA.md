@@ -558,6 +558,10 @@ panorama-llms/
 │   ├── publish.mjs                # passo 3: valida/dedup/POST
 │   ├── update-benchmarks.mjs      # cron AA → benchmarks.json (ver BENCHMARKS.md)
 │   ├── update-gratuitos.mjs       # STUB: scraper do The AI Rankings → gratuitos-data.js (ver GRATUITOS.md; sem cron)
+│   ├── CAPTURA-GEMINI.md          # briefing p/ capturar conversas REAIS de chat (pessoa ou
+│   │                              #   agente de computer use); alimenta a coluna da esquerda
+│   │                              #   da seção 02 de como-usar.html
+│   └── capturas/                  #   schema.json + as capturas entregues (JSON)
 │   ├── policy.md                  # rubrica de relevância (editável)
 │   ├── schema.json                # forma esperada do candidates.json
 │   ├── README.md, BENCHMARKS.md, GRATUITOS.md  # docs dos pipelines
