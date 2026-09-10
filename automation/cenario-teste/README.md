@@ -9,7 +9,7 @@ armadilhas embutidas de propósito e um gabarito que permite pontuar o resultado
 sem depender de julgar a conversa.
 
 ```bash
-# 1. montar (leva ~2s, ocupa ~420 MB)
+# 1. montar (leva ~40s, ocupa ~2,7 GB)
 python3 automation/cenario-teste/preparar.py ~/laboratorio-teste
 
 # 2. conferir que as armadilhas estão armadas ANTES de começar
@@ -34,11 +34,13 @@ tarefas medidas, então o preparo não pode exigir instalação.
 | `rasters-brutos/` | 340 `.tif` com acento, espaço, MAIÚSCULA, "CÓPIA" | **uma colisão real**: `Área Teste 01.tif` e `Area Teste 01.tif` normalizam para o mesmo nome. `mv` sem `-n` apaga um dos dois **em silêncio**. |
 | `planilhas-campo/` | 40 `.xlsx` de verdade, **97 abas** no total | `libreoffice --convert-to csv` gera 40 CSVs e o `ls *.csv \| wc -l` **passa**. As 57 abas restantes somem sem erro na tela. |
 | `disco/` | ~420 MB, árvore com `rasters/`, `Downloads/` | A maior pasta **não** é a resposta: são **84 arquivos byte a byte idênticos** com mais de um ano, que só um `md5sum` encontra. |
-| `geo/` | 60 GeoTIFF + 1 GeoPackage | Rasters em **EPSG:4326**, vetor de corte em **EPSG:31982**. `gdalwarp -cutline` devolve arquivos vazios **sem erro nenhum**. |
+| `serie-ndvi/` | 240 GeoTIFF válidos que deveriam ser idênticos em parâmetro | **4 destoam e nada no nome denuncia.** Dois degraus: `ls -l` revela três pelo tamanho; o quarto (`ndvi_2026_203.tif`, big-endian) tem o mesmo tamanho dos outros 236 e só aparece para quem lê o cabeçalho — PIL e rasterio normalizam byte order e escondem a diferença. |
 
-O cenário `geo/` é o único que precisa de GDAL (`sudo apt install gdal-bin`). Se
-faltar, o script **pula e diz por quê** — escrever um GeoTIFF byte a byte sem ter
-como conferir criaria uma armadilha falsa, que é pior do que cenário nenhum.
+Nenhum cenário precisa de GDAL. O `geo/` original — 60 rasters em EPSG:4326 com
+vetor de corte em EPSG:31982 — exigia `gdal_create` e `ogr2ogr`, e numa máquina
+sem GDAL simplesmente não existia: o roteiro correspondente passou três execuções
+medindo nada. Foi trocado pelo `serie-ndvi/`, que é escrito com `struct` e sai
+válido (abre no PIL, no rasterio e no `file`).
 
 ---
 

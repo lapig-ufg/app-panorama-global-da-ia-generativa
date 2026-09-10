@@ -384,49 +384,97 @@ def cenario_disco(base: Path) -> dict:
 
 
 # ═══════════════════════════════════════════════════════════════════════
-# 5 · RASTERS — precisa de GDAL; sem ele, o script avisa e pula
+# 5 · SÉRIE — 240 rasters que deveriam ser iguais, e 4 que não são
 # ═══════════════════════════════════════════════════════════════════════
-def cenario_rasters(base: Path) -> dict:
-    if not shutil.which("gdal_create") or not shutil.which("ogr2ogr"):
-        return {
-            "pasta": "geo",
-            "pulado": True,
-            "motivo": (
-                "GDAL não encontrado (gdal_create / ogr2ogr). Instale com "
-                "`sudo apt install gdal-bin` e rode o script de novo — este cenário "
-                "NÃO é gerado à mão de propósito: um GeoTIFF escrito byte a byte sem "
-                "conferência viraria uma armadilha falsa."
-            ),
-        }
+# SUBSTITUIU O CENÁRIO `geo/`, que exigia GDAL. Na máquina onde a medição de
+# 10/set/2026 rodou não havia GDAL, o cenário nunca foi gerado, e o roteiro
+# correspondente ficou medindo nada por três execuções seguidas.
+#
+# O que este cenário mantém do antigo:
+#   · é raster, que é o trabalho real de quem vai ler a página;
+#   · a armadilha é do tipo SILENCIOSO — nada no nome do arquivo denuncia, e
+#     quem confiar no nome não acha;
+#   · é o caso em que um chat de navegador NÃO CONSEGUE NEM COMEÇAR: a única
+#     resposta possível sem os arquivos é "rode este comando e me mande a
+#     saída", que é exatamente a métrica pediu_informacao_que_um_agente_leria_
+#     sozinho da captura do chat.
+#
+# O que ele ganhou: resposta verificável no disco. O antigo dependia de rodar
+# gdalinfo -stats em cada saída; este é uma contagem de arquivos numa subpasta.
+#
+# Os TIFF são VÁLIDOS de verdade — cabeçalho + IFD completo. Abrem no PIL, no
+# rasterio e no `file`. Sem isso, o agente descobriria a bagunça pelo motivo
+# errado (arquivo quebrado) em vez do certo (parâmetro diferente).
+def _tiff(largura: int, altura: int, bits: int, big_endian: bool, semente: int) -> bytes:
+    """TIFF de uma banda, sem compressão, válido e legível."""
+    import struct
+    ordem = ">" if big_endian else "<"
+    marca = b"MM" if big_endian else b"II"
+    n_bytes = largura * altura * (bits // 8)
+    dados = random.Random(semente).randbytes(n_bytes)
 
-    pasta = base / "geo"
-    (pasta / "entrada").mkdir(parents=True)
-    (pasta / "limites").mkdir(parents=True)
+    # 9 tags, 12 bytes cada, + contador (2) + ponteiro do próximo IFD (4)
+    ifd_off = 8
+    dados_off = ifd_off + 2 + 9 * 12 + 4
+    tags = [
+        (256, 3, 1, largura),      # ImageWidth
+        (257, 3, 1, altura),       # ImageLength
+        (258, 3, 1, bits),         # BitsPerSample
+        (259, 3, 1, 1),            # Compression: nenhuma
+        (262, 3, 1, 1),            # PhotometricInterpretation: BlackIsZero
+        (273, 4, 1, dados_off),    # StripOffsets
+        (277, 3, 1, 1),            # SamplesPerPixel
+        (278, 3, 1, altura),       # RowsPerStrip
+        (279, 4, 1, n_bytes),      # StripByteCounts
+    ]
+    saida = bytearray(marca + struct.pack(ordem + "HI", 42, ifd_off))
+    saida += struct.pack(ordem + "H", len(tags))
+    for tag, tipo, n, valor in tags:
+        saida += struct.pack(ordem + "HHI", tag, tipo, n)
+        # valor curto ocupa os 4 bytes, alinhado à esquerda quando é SHORT
+        saida += struct.pack(ordem + "HH", valor, 0) if tipo == 3 else struct.pack(ordem + "I", valor)
+    saida += struct.pack(ordem + "I", 0)
+    return bytes(saida) + dados
 
-    for i in range(60):
-        os.system(
-            f'gdal_create -outsize 512 512 -bands 1 -ot Int16 -a_srs EPSG:4326 '
-            f'-a_ullr -53.5 -12.0 -45.5 -19.5 -a_nodata -3000 -burn {100 + i} '
-            f'"{pasta}/entrada/mod13q1_2026_{i:03d}.tif" > /dev/null 2>&1')
 
-    # O vetor sai em EPSG:31982 — CRS DIFERENTE do dos rasters. É a armadilha.
-    geojson = pasta / "limites" / "_tmp.geojson"
-    geojson.write_text(
-        '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"nome":"Goias"},'
-        '"geometry":{"type":"Polygon","coordinates":[[[-53.2,-12.4],[-45.9,-12.4],'
-        '[-45.9,-19.3],[-53.2,-19.3],[-53.2,-12.4]]]}}]}', encoding="utf-8")
-    os.system(f'ogr2ogr -f GPKG -s_srs EPSG:4326 -t_srs EPSG:31982 '
-              f'"{pasta}/limites/go.gpkg" "{geojson}" > /dev/null 2>&1')
-    geojson.unlink(missing_ok=True)
+def cenario_serie(base: Path) -> dict:
+    pasta = base / "serie-ndvi"
+    pasta.mkdir(parents=True)
+
+    PADRAO = dict(largura=512, altura=512, bits=8, big_endian=False)
+    total = 240
+
+    # As 4 que destoam. Nenhuma se anuncia no nome: o arquivo se chama igual
+    # aos outros 236 e só o cabeçalho denuncia.
+    fora = {
+        37:  (dict(largura=256, altura=256, bits=8, big_endian=False), "metade da resolução (256x256 em vez de 512x512)"),
+        112: (dict(largura=256, altura=256, bits=8, big_endian=False), "metade da resolução (256x256 em vez de 512x512)"),
+        168: (dict(largura=512, altura=512, bits=16, big_endian=False), "16 bits por amostra em vez de 8"),
+        203: (dict(largura=512, altura=512, bits=8, big_endian=True), "byte order big-endian (MM) em vez de little-endian (II)"),
+    }
+
+    nomes_fora = []
+    for i in range(total):
+        nome = f"ndvi_2026_{i:03d}.tif"
+        cfg, motivo = fora.get(i, (PADRAO, None))
+        (pasta / nome).write_bytes(_tiff(semente=40000 + i, **cfg))
+        if motivo:
+            nomes_fora.append({"arquivo": nome, "motivo": motivo})
 
     return {
-        "pasta": "geo",
-        "rasters": 60,
-        "crs_rasters": "EPSG:4326",
-        "crs_vetor": "EPSG:31982",
+        "pasta": "serie-ndvi",
+        "arquivos": total,
+        "padrao": "512x512, 8 bits, little-endian, uma banda, sem compressão",
+        "fora_do_padrao": nomes_fora,
+        "subpasta_esperada": "fora-do-padrao",
         "armadilha": (
-            "gdalwarp -cutline com o vetor em 31982 sobre rasters em 4326 devolve "
-            "arquivos vazios, sem erro nenhum. Só um gdalinfo + ogrinfo revela."
+            f"{len(nomes_fora)} dos {total} rasters têm parâmetro diferente, e NADA no nome denuncia — "
+            "os 240 se chamam ndvi_2026_NNN.tif. A armadilha tem dois degraus, de propósito: um `ls -l` "
+            "revela TRÊS deles pelo tamanho (64 KB e 512 KB contra 256 KB), mas o quarto "
+            "(ndvi_2026_203.tif, big-endian) tem exatamente 256 KB como os outros 236 — só aparece para "
+            "quem abre o arquivo e lê o cabeçalho. Quem para no tamanho entrega 3 de 4 e acha que "
+            "terminou. É também o cenário em que um chat de navegador não consegue nem começar: sem os "
+            "arquivos, a única saída é pedir que o usuário rode o comando e cole a saída."
         ),
     }
 
@@ -458,7 +506,7 @@ def main():
 
     for nome, fn in [("fotos", cenario_fotos), ("nomes", cenario_nomes),
                      ("planilhas", cenario_planilhas), ("disco", cenario_disco),
-                     ("rasters", cenario_rasters)]:
+                     ("serie", cenario_serie)]:
         print(f"  · {nome} …", end="", flush=True)
         gab["cenarios"][nome] = fn(base)
         print(" pronto" if not gab["cenarios"][nome].get("pulado") else " PULADO (ver gabarito)")

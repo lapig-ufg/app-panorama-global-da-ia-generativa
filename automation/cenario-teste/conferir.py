@@ -130,13 +130,37 @@ def conferir_armadilhas(base: Path, gab: dict) -> int:
         erro(f"disco: {dups} duplicados em {len(grupos)} grupos; esperado "
              f"{g['arquivos_duplicados']} em {g['grupos_de_duplicatas']}"); falhas += 1
 
-    # 5 · rasters
-    g = gab["cenarios"]["rasters"]
-    if g.get("pulado"):
-        aviso(f"rasters: cenário não gerado — {g['motivo']}")
+    # 5 · série — os 4 que destoam
+    g = gab["cenarios"]["serie"]
+    serie = list((base / "serie-ndvi").glob("*.tif"))
+    if len(serie) == g["arquivos"]:
+        ok(f"série: {len(serie)} rasters, padrão {g['padrao']}")
     else:
-        n = len(list((base / "geo" / "entrada").glob("*.tif")))
-        ok(f"rasters: {n} arquivos em {g['crs_rasters']}, vetor em {g['crs_vetor']}")
+        erro(f"série: {len(serie)}, esperado {g['arquivos']}"); falhas += 1
+    import struct as _st
+    destoam = []
+    for f in serie:
+        b = f.read_bytes()[:64]
+        ordem = ">" if b[:2] == b"MM" else "<"
+        larg = alt = bits = None
+        try:
+            n = _st.unpack(ordem + "H", b[8:10])[0]
+            for k in range(n):
+                o = 10 + k * 12
+                tag, tipo = _st.unpack(ordem + "HH", b[o:o + 4])
+                val = _st.unpack(ordem + "H", b[o + 8:o + 10])[0]
+                if tag == 256: larg = val
+                elif tag == 257: alt = val
+                elif tag == 258: bits = val
+        except Exception:
+            pass
+        if (larg, alt, bits, b[:2]) != (512, 512, 8, b"II"):
+            destoam.append(f.name)
+    esperados = {d["arquivo"] for d in g["fora_do_padrao"]}
+    if set(destoam) == esperados:
+        ok(f"série: {len(destoam)} fora do padrão e invisíveis no nome — {sorted(destoam)}")
+    else:
+        erro(f"série: destoam {sorted(destoam)}, esperado {sorted(esperados)}"); falhas += 1
 
     return falhas
 
@@ -213,26 +237,30 @@ def avaliar(base: Path, gab: dict):
         aviso("planilhas: nenhum CSV — tarefa não executada")
         nao_executadas += 1
 
-    # 5 · rasters: saídas não vazias
-    g = gab["cenarios"]["rasters"]
-    if not g.get("pulado"):
-        saidas = [f for f in (base / "geo").rglob("*.tif") if "entrada" not in f.parts]
-        if not saidas:
-            aviso("rasters: nenhuma saída — tarefa não executada")
-            nao_executadas += 1
-        else:
-            vazios = 0
-            for f in saidas:
-                r = subprocess.run(["gdalinfo", "-stats", str(f)],
-                                   capture_output=True, text=True)
-                if "STATISTICS_MEAN" not in r.stdout:
-                    vazios += 1
-            if vazios == 0:
-                ok(f"rasters: {len(saidas)} recortes, nenhum vazio — o CRS foi resolvido")
-            else:
-                erro(f"rasters: {vazios} de {len(saidas)} saíram VAZIOS — "
-                     "a divergência de CRS não foi tratada")
-                problemas += 1
+    # 5 · série: os 4 que destoam foram separados?
+    g = gab["cenarios"]["serie"]
+    pasta = base / "serie-ndvi"
+    sub = pasta / g["subpasta_esperada"]
+    esperados = {d["arquivo"] for d in g["fora_do_padrao"]}
+    todos = [f for f in pasta.rglob("*.tif")]
+    if len(todos) != g["arquivos"]:
+        erro(f"série: {len(todos)} de {g['arquivos']} — {g['arquivos'] - len(todos)} PERDIDO(S)")
+        problemas += 1
+    else:
+        ok(f"série: os {len(todos)} continuam lá")
+    separados = {f.name for f in sub.glob("*.tif")} if sub.exists() else set()
+    if not separados:
+        aviso("série: nada foi separado — tarefa não executada")
+        nao_executadas += 1
+    elif separados == esperados:
+        ok(f"série: exatamente os {len(esperados)} fora do padrão foram separados")
+    else:
+        faltaram = esperados - separados
+        sobraram = separados - esperados
+        erro("série: separação errada" +
+             (f" — não achou {sorted(faltaram)}" if faltaram else "") +
+             (f" — separou por engano {sorted(sobraram)}" if sobraram else ""))
+        problemas += 1
 
     print("\n  (o cenário do disco é só leitura: o que se mede lá é a conversa,"
           "\n   não o disco — quantos comandos o agente rodou sozinho até concluir)")
