@@ -1,0 +1,198 @@
+{
+  "capturado_em": "2026-09-09T21:37:42-03:00",
+  "modelo": "Gemini 3.6 Raciocínio",
+  "modelo_selecionado_manualmente": false,
+  "idioma_interface": "pt-BR",
+  "conta": "nao_sei",
+  "executado_por": "agente de computer use (Claude Opus 5 no Claude Code, dirigindo o Chrome do usuário)",
+  "saidas_fornecidas_pelo_roteiro": true,
+  "observacoes_gerais": "Captura feita por um agente de computer use dirigindo o Chrome do usuário, na conta Google institucional dele (Universidade Federal de Goiás). Cinco conversas novas, uma por roteiro, sem contexto cruzado, sem anexar arquivo nenhum e sem tocar nas conversas que já existiam.\n\nMODELO: o seletor da interface mostrava três opções — '3.6 Flash', '3.6 Raciocínio' e '3.1 Pro'. '3.6 Raciocínio' já estava marcado; não foi alterado, conforme a regra 2 do briefing. O cabeçalho da conversa exibe 'Gemini 3.6 Raciocínio'.\n\nCONTA: não dá para afirmar se é gratuita ou paga. É uma conta Workspace institucional (o rodapé diz 'Suas conversas de Universidade Federal de Goiás não são usadas para aprimorar nossos modelos'), com acesso ao 3.1 Pro no seletor. Registrado como 'nao_sei' para não afirmar o que não foi verificado.\n\nSAÍDAS DE COMANDO: nenhuma foi medida numa máquina real. Só uma chegou a ser usada — o 'Size is 4800, 4800 / NoData Value=-3000 / ID[\"EPSG\",4326]' do Roteiro 5, que veio do próprio briefing. As saídas de du do Roteiro 4 nunca foram pedidas pelo Gemini e portanto não foram coladas. As saídas que aparecem dentro das transcrições em blocos de 'código executado' são do sandbox do Google, não da máquina do usuário, e estão marcadas como tal.\n\nO QUE APARECE NAS TRANSCRIÇÕES E NÃO É TEXTO DA CONVERSA: em dois roteiros (2 e 3) o Gemini executou código Python num sandbox próprio. Esses blocos vinham COLAPSADOS atrás de um botão 'Mostrar código' e foi preciso clicar para lê-los. Estão incluídos na transcrição, marcados entre colchetes, porque o §7 do briefing pede exatamente isso. Um usuário comum não veria que houve execução de código.\n\nFIDELIDADE DOS BLOCOS DE CÓDIGO: quase todos foram lidos direto do DOM. Uns poucos comandos muito longos de uma linha só não puderam ser lidos por essa via (o filtro de segurança da ferramenta os confunde com query string) e foram transcritos da tela, com zoom; cada um desses foi conferido caractere a caractere contra o texto real antes de entrar no arquivo. Nenhum foi reconstruído de memória.\n\nINSTABILIDADE DO AMBIENTE: a janela do Chrome encolheu sozinha várias vezes durante a sessão e o renderizador travou uma vez, no meio do Roteiro 5. A conversa foi recarregada pela URL e retomada de onde estava. Isso não alterou nenhuma mensagem enviada nem recebida.\n\nLEITURA GERAL DOS CINCO ROTEIROS: em 4 dos 5, o Gemini escolheu o sistema operacional por conta própria em vez de perguntar. Nos roteiros 1 e 4 ele chutou Windows para um usuário de Ubuntu; no 4 isso custou a conversa inteira. Onde a suposição da página se confirmou foi no Roteiro 3, e de forma limpa. Onde ela não se confirmou foi nos roteiros 2 e 5, e isso precisa chegar na página.",
+  "conversas": [
+    {
+      "roteiro": 1,
+      "titulo": "Organizar fotos por data",
+      "url": "https://gemini.google.com/app/efa8dd52c4b3e77c",
+      "turnos_usuario": 3,
+      "parou_porque": "resolvido",
+      "executou_codigo": false,
+      "pediu_upload": false,
+      "avisou_espontaneamente": null,
+      "pediu_informacao_que_um_agente_leria_sozinho": [
+        "o caminho real da pasta de backup — não perguntou, mandou substituir /caminho/do/backup pelo caminho real no comando final"
+      ],
+      "transcricao": [
+        {
+          "quem": "usuario",
+          "texto": "Tenho uma pasta com mais de mil fotos de campo, tiradas em três semanas. Como separo elas em subpastas por data?"
+        },
+        {
+          "quem": "gemini",
+          "texto": "A forma mais rápida de organizar mais de mil fotos em subpastas por data sem mover uma a uma é usando um comando simples de automação no seu sistema operacional.\n\nFaça um Backup Primeiro\nAntes de executar qualquer comando de movimentação em lote, faça uma cópia de segurança de toda a pasta de fotos em outro local para evitar perdas acidentais.\n\nOpção 1: No Windows (PowerShell)\n\nAbrir o PowerShell na pasta\n1 min\nAbra a pasta das fotos no Explorador de Arquivos, clique em um espaço em branco com o botão direito (ou Shift + clique com o botão direito) e selecione Abrir no Terminal ou Abrir o PowerShell aqui.\n\nExecutar o comando de organização\n1 min\nCole o comando abaixo na janela e pressione Enter. O comando identificará a data de cada arquivo e criará pastas no formato AAAA-MM-DD:\n\nGet-ChildItem -File | ForEach-Object { $date = $_.LastWriteTime.ToString(\"yyyy-MM-dd\"); $dir = New-Item -ItemType Directory -Path $date -Force; Move-Item -Path $_.FullName -Destination $dir.FullName }\n\nVerificar a organização\n30 seg\nRetorne ao Explorador de Arquivos e confirme se foram criadas subpastas nomeadas por data e se todas as imagens foram movidas corretamente para dentro delas.\n\nOpção 2: No macOS (Terminal)\n\nAbrir o Terminal no local\n1 min\nAbra o aplicativo Terminal. Digite cd (com um espaço no final) e arraste a pasta de fotos para dentro da janela do Terminal. Pressione Enter.\n\nExecutar o comando de movimentação\n1 min\nCole o comando a seguir e pressione Enter:\n\nfor f in *; do [ -f \"$f\" ] || continue; d=$(stat -f \"%Sm\" -t \"%Y-%m-%d\" \"$f\"); mkdir -p \"$d\"; mv \"$f\" \"$d/\"; done\n\nVerificar a organização\n30 seg\nAbra a pasta no Finder e verifique se as subpastas por data apareceram com os respectivos arquivos contidos nelas.\n\nObservação: Estes comandos usam a data de modificação/criação mantida pelo sistema de arquivos. Se as fotos perderam essas datas ao serem transferidas do cartão de memória, será necessário usar uma ferramenta que leia os metadados EXIF (a data interna gravada pelo sensor da câmera).\n\nSe preferir acompanhar um tutorial visual, confira estas demonstrações de organização em lote por data no YouTube."
+        },
+        {
+          "quem": "usuario",
+          "texto": "Deu erro: mv: target is not a directory"
+        },
+        {
+          "quem": "gemini",
+          "texto": "Esse erro ocorre quando a variável da data é criada vazia ou com caracteres inválidos — o que é comum no Linux, Git Bash ou WSL, pois nesses sistemas o utilitário stat usa uma sintaxe diferente do macOS.\n\nA solução mais segura e universal (funciona no Mac, Linux e Git Bash sem depender das variações do comando stat) é usar o Python, que já vem pré-instalado no sistema.\n\nLimpar pastas com nomes incorretos\n30 seg\nSe o comando anterior criou pastas com nomes estranhos (como caracteres soltos), apague apenas essas pastas vazias antes de continuar.\nComo verificar: Digite ls no Terminal e garanta que sobraram apenas os seus arquivos originais de imagem.\n\nExecutar o comando universal em Python\n1 min\nCole o comando abaixo em uma única linha no Terminal e pressione Enter:\n\npython3 -c \"import os, datetime, shutil; [shutil.move(f, os.path.join(os.makedirs(datetime.date.fromtimestamp(os.path.getmtime(f)).strftime('%Y-%m-%d'), exist_ok=True) or datetime.date.fromtimestamp(os.path.getmtime(f)).strftime('%Y-%m-%d'), f)) for f in os.listdir('.') if os.path.isfile(f) and not f.startswith('.')]\"\n\nVerificar o resultado\n30 seg\nNo Terminal, rode o comando ls ou abra a pasta no gerenciador de arquivos.\nComo verificar: As fotos não estarão mais na raiz da pasta; em seu lugar, você verá pastas nomeadas por data (ex: 2024-05-12) contendo as imagens correspondentes."
+        },
+        {
+          "quem": "usuario",
+          "texto": "Agora rodou. Mas ficaram 1.237 fotos e não 1.240."
+        },
+        {
+          "quem": "gemini",
+          "texto": "A diferença de 3 arquivos geralmente ocorre por dois motivos: arquivos ocultos/sistema que foram ignorados pelo script ou fotos com nomes idênticos na mesma data que se sobrescreveram ao serem movidas para a mesma pasta.\n\nVerificar se os arquivos continuam na pasta raiz\n30 seg\nNo Terminal, dentro da pasta principal, execute o comando:\nls -la\nIsso listará todos os itens do diretório, incluindo arquivos ocultos (que começam com ., como ._DSC0001.JPG ou .DS_Store).\nComo verificar: Veja se aparecem 3 arquivos na listagem que não entraram nas subpastas criadas.\n\nVerificar se houve sobrescrita por nomes duplicados\n1 min\nSe a câmera reiniciou a numeração e gerou duas fotos com o mesmo nome na mesma data (ex: duas fotos chamadas DSC_0001.JPG no mesmo dia), a segunda foto substituiu a primeira ao ser movida.\nComo verificar: Abra a pasta de backup (criada antes do processo) e pesquise por nomes de arquivos duplicados para ver se existem fotos com nomes iguais.\n\nIdentificar exatamente quais arquivos estão faltando\n1 min\nPara descobrir o nome exato dos 3 arquivos ausentes sem procurar manualmente, rode o comando no Terminal (substituindo /caminho/do/backup pelo caminho real da sua pasta de backup):\n\ndiff -q -r . /caminho/do/backup | grep \"Only in /caminho/do/backup\"\n\nComo verificar: O Terminal exibirá na tela o nome exato das 3 fotos que existem no backup, mas não estão na pasta organizada."
+        }
+      ],
+      "notas_do_executor": "ACHADO PRINCIPAL: ele NÃO perguntou o sistema operacional, NÃO perguntou o caminho da pasta e NÃO perguntou o padrão dos nomes — as três perguntas que o roteiro antecipava. Em vez de perguntar, chutou: entregou Windows (PowerShell) como 'Opção 1' e macOS como 'Opção 2', sem citar Linux. O usuário do roteiro está no Ubuntu, que não apareceu em nenhuma das duas opções. As respostas condicionais 'Ubuntu.', '~/campo-2026' e o padrão de nomes nunca chegaram a ser usadas. Ele também assumiu que a data está no mtime do arquivo, não no nome nem no EXIF, e ressalvou o EXIF só ao final. O comando de macOS usa 'stat -f' (sintaxe BSD), que não funciona no Ubuntu. Depois do erro, diagnosticou corretamente a diferença de sintaxe do stat e migrou para um one-liner em Python — sem nunca ter confirmado o SO. Na terceira resposta, antecipou a pergunta 'como eu descubro quais são?' do roteiro: já explicou como achar os 3 arquivos faltantes (ls -la e diff contra o backup), então a conversa parou em 3 turnos. Também assumiu que existia uma pasta de backup, que o usuário nunca disse ter feito, e pediu que o caminho dela fosse substituído no comando à mão. Ofereceu chips de sugestão ('Estou usando Linux/Git Bash', 'Usar programa gráfico') que não foram clicados, por serem condução."
+    },
+    {
+      "roteiro": 2,
+      "titulo": "Padronizar nomes de arquivo",
+      "url": "https://gemini.google.com/app/e1ed6de7fc3314ca",
+      "turnos_usuario": 1,
+      "parou_porque": "o roteiro não previu esta ramificação: ele não deu comando com iconv, não pediu locale, não pediu versão e não perguntou se os arquivos já tinham sido renomeados — nenhuma das respostas condicionais do roteiro se aplicava, e enviar a de iconv seria inventar um resultado (regra 6)",
+      "executou_codigo": true,
+      "pediu_upload": false,
+      "avisou_espontaneamente": null,
+      "pediu_informacao_que_um_agente_leria_sozinho": [],
+      "transcricao": [
+        {
+          "quem": "usuario",
+          "texto": "Preciso padronizar o nome de 340 arquivos .tif no Ubuntu: sem acento, sem espaço, tudo minúsculo. Como faço?"
+        },
+        {
+          "quem": "gemini",
+          "texto": "[Código executado no sandbox do Gemini, exibido sob o botão \"Mostrar código\" — vinha colapsado por padrão]\n\nPython:\nimport unicodedata\n\ndef clean_filename(filename, replace_space_with=\"_\"):\n    # Normalize unicode to separate accents\n    nfkd = unicodedata.normalize('NFKD', filename)\n    # Remove accents by encoding to ASCII and ignoring errors\n    no_accents = nfkd.encode('ASCII', 'ignore').decode('utf-8')\n    # Lowercase\n    lowered = no_accents.lower()\n    # Handle spaces\n    final_name = lowered.replace(' ', replace_space_with)\n    return final_name\n\ntest_files = [\"Foto São Paulo 01.TIF\", \"Relatório Final Água.tif\", \"IMAGEM COM Ç E Ã.TIF\"]\nfor f in test_files:\n    print(f, \"->\", clean_filename(f))\n\nSaída:\nFoto São Paulo 01.TIF -> foto_sao_paulo_01.tif\nRelatório Final Água.tif -> relatorio_final_agua.tif\nIMAGEM COM Ç E Ã.TIF -> imagem_com_c_e_a.tif\n\nPython:\nimport os, unicodedata\n\n# Simulation of directory loop\nfiles = [\"Foto São Paulo 01.TIF\", \"Relatório Final Água.tif\", \"imagem.tif\", \"OUTRO_ARQUIVO.TIF\"]\n\nfor f in files:\n    if f.lower().endswith('.tif'):\n        new_f = unicodedata.normalize('NFKD', f).encode('ASCII', 'ignore').decode('utf-8').lower().replace(' ', '_')\n        print(f\"renaming '{f}' -> '{new_f}'\")\n\nSaída:\nrenaming 'Foto São Paulo 01.TIF' -> 'foto_sao_paulo_01.tif'\nrenaming 'Relatório Final Água.tif' -> 'relatorio_final_agua.tif'\nrenaming 'imagem.tif' -> 'imagem.tif'\nrenaming 'OUTRO_ARQUIVO.TIF' -> 'outro_arquivo.tif'\n\n[Resposta visível]\n\nA forma mais simples e segura no Ubuntu é utilizar um comando de linha única em Python 3 (pré-instalado no sistema), garantindo a remoção correta de qualquer acento Unicode sem depender de ferramentas extras.\n\nOpção 1: Comando direto via Python (Recomendado)\nAbra o terminal na pasta onde os arquivos .tif estão salvos e execute:\n\npython3 -c \"import os, unicodedata; [os.rename(f, unicodedata.normalize('NFKD', f).encode('ASCII', 'ignore').decode('utf-8').lower().replace(' ', '_')) for f in os.listdir('.') if f.lower().endswith('.tif')]\"\n\nRemoção de acentos: Converte caracteres como á, ã e ç em a, a e c.\nMinúsculas: Padroniza o nome e a extensão (incluindo .TIF maiúsculo para .tif).\nEspaços: Substitui espaços por underline (_). Se quiser remover o espaço completamente sem colocar _, troque replace(' ', '_') por replace(' ', '').\n\nOpção 2: Ferramenta rename (Terminal Native)\nCaso prefira o utilitário nativo do ecossistema Linux via expressões regulares:\n\nsudo apt update && sudo apt install rename -y\nrename 'y/ÁÀÂÃÉÊÍÓÔÕÚÜÇáàâãéêíóôõúüç/AAAAEEIOOOUUCaaaaeeiooouuc/' *.[tT][iI][fF]\nrename 'y/A-Z/a-z/' *.[tT][iI][fF]\nrename 's/ /_/g' *.[tT][iI][fF]\n\nDica de segurança: Antes de rodar comandos de renomeação em lote em centenas de arquivos, faça uma cópia da pasta (cp -r minha_pasta minha_pasta_backup). Isso evita sobrescrever arquivos caso existam nomes que fiquem idênticos após a remoção de acentos (como Foto 1.tif e Fótô 1.tif)."
+        }
+      ],
+      "notas_do_executor": "RESULTADO CONTRÁRIO À SUPOSIÇÃO DA PÁGINA. O roteiro parte do princípio de que o chat entrega um comando com iconv, frágil a locale, e que o Ó de CÓPIA some. Não foi o que aconteceu: ele recomendou um one-liner em Python com unicodedata.normalize('NFKD', ...).encode('ASCII','ignore'), que é independente de locale e converte Ó em O corretamente. Enviar a resposta condicional do iconv teria sido inventar uma saída de comando (regra 6), então a conversa parou em 1 turno.\n\nSOBRE O AVISO DE LOCALE: não avisou — mas também não precisava, porque a solução recomendada não depende de locale, e ele disse isso explicitamente ('sem depender de ferramentas extras', 'garantindo a remoção correta de qualquer acento Unicode'). A Opção 2 (rename com y/ÁÀÂ.../AAA.../) essa sim é sensível a codificação em UTF-8, mas ele a colocou como alternativa, não como recomendação.\n\nSOBRE O ENSAIO ANTES DE RENOMEAR: não sugeriu echo nem --dry-run nos 340 arquivos reais. Sugeriu, espontaneamente, uma cópia de segurança da pasta (cp -r minha_pasta minha_pasta_backup) e explicou o risco concreto de colisão de nomes (Foto 1.tif e Fótô 1.tif). Antes disso, rodou no próprio sandbox uma simulação impressa do renomeio — mas sobre nomes de arquivo INVENTADOS por ele ('Foto São Paulo 01.TIF', 'Relatório Final Água.tif'), não sobre os 340 arquivos do usuário, que ele não tem como enxergar. É exatamente a distinção descrita no §7 do briefing.\n\nSOBRE A INTERFACE: os blocos de código do sandbox vinham COLAPSADOS atrás de um botão 'Mostrar código'. Foi preciso clicar para vê-los. Um usuário comum não veria que houve execução de código."
+    },
+    {
+      "roteiro": 3,
+      "titulo": "Planilhas para CSV",
+      "url": "https://gemini.google.com/app/5f1bc039e29c9d61",
+      "turnos_usuario": 3,
+      "parou_porque": "resolvido — o roteiro manda parar depois da terceira mensagem",
+      "executou_codigo": true,
+      "pediu_upload": false,
+      "avisou_espontaneamente": false,
+      "pediu_informacao_que_um_agente_leria_sozinho": [
+        "o caminho da pasta das planilhas — não perguntou, mandou substituir /caminho/para/sua/pasta no cd"
+      ],
+      "transcricao": [
+        {
+          "quem": "usuario",
+          "texto": "Como converto 40 arquivos .xlsx em .csv de uma vez, no Ubuntu?"
+        },
+        {
+          "quem": "gemini",
+          "texto": "A forma mais rápida e simples no Ubuntu é utilizar o LibreOffice via terminal, que já vem pré-instalado na maioria das distribuições Linux.\n\nAcessar a pasta dos arquivos\nTerminal\nAbra o terminal (Ctrl + Alt + T) e navegue até a pasta onde os arquivos .xlsx estão salvos:\n\ncd /caminho/para/sua/pasta\n\nVerificação: Digite ls *.xlsx para confirmar que os 40 arquivos estão visíveis no diretório atual.\n\nExecutar a conversão em lote\nComando LibreOffice\nExecute o comando abaixo para converter todos os arquivos .xlsx para .csv de forma automática sem abrir a interface gráfica:\n\nfor f in *.xlsx; do libreoffice --headless --convert-to csv \"$f\"; done\n\nVerificação: Digite ls *.csv no terminal para verificar se os 40 arquivos .csv correspondentes foram gerados na pasta.\n\nPara visualizar o processo na prática, você pode conferir este Tutorial em vídeo sobre conversão em lote no terminal Linux."
+        },
+        {
+          "quem": "usuario",
+          "texto": "Isso pega todas as abas de cada planilha?"
+        },
+        {
+          "quem": "gemini",
+          "texto": "Não. O comando do LibreOffice via terminal converte apenas a primeira aba (ou a aba ativa) de cada planilha. Por definição, o formato .csv não suporta múltiplas abas em um único arquivo.\n\nPara exportar todas as abas de todos os 40 arquivos .xlsx (gerando um arquivo .csv para cada aba sem sobrescrever dados), a solução mais eficiente no Ubuntu é utilizar o utilitário xlsx2csv.\n\nInstalar o utilitário xlsx2csv\nInstalação\nInstale a ferramenta pelo gerenciador de pacotes do Ubuntu:\n\nsudo apt update && sudo apt install -y xlsx2csv\n\nVerificação: Digite xlsx2csv --version para confirmar que o utilitário foi instalado com sucesso.\n\nConverter todas as abas em lote\nTerminal\nNavegue até o diretório onde estão as planilhas e execute o loop abaixo. Ele criará uma pasta dedicada para cada arquivo .xlsx, contendo o .csv de cada aba correspondente:\n\nfor f in *.xlsx; do\n  pasta=\"${f%.xlsx}_csv\"\n  mkdir -p \"$pasta\"\n  xlsx2csv -a \"$f\" \"$pasta\"\ndone\n\nVerificação: Digite ls *_csv para verificar se as pastas foram criadas com os arquivos .csv de cada aba dentro delas.\n\nPara ver outros métodos e comandos para manipulação de planilhas no Linux, assista a este tutorial em vídeo sobre conversão de todas as abas no Linux."
+        },
+        {
+          "quem": "usuario",
+          "texto": "Como eu conto quantas abas existem no total nos 40 arquivos, para conferir?"
+        },
+        {
+          "quem": "gemini",
+          "texto": "[Código executado no sandbox do Gemini, sob o botão \"Mostrar código\" — colapsado por padrão]\n\nimport openpyxl\nprint(openpyxl.__version__)\n\nSaída:\n3.1.2\n\n[Resposta visível]\n\nPara conferir o total de abas, você pode contar os arquivos .csv gerados nas subpastas ou verificar a quantidade diretamente dentro dos arquivos .xlsx usando o terminal.\n\nContar os arquivos CSV já convertidos\nSe você já executou a conversão com o xlsx2csv, rode o comando abaixo no terminal dentro da pasta principal:\n\nfind *_csv -type f -name \"*.csv\" | wc -l\n\nVerificação: O terminal retornará um número inteiro (ex: 120), que representa a contagem total de arquivos .csv gerados em todas as subpastas.\n\nContar as abas diretamente dos arquivos XLSX (sem converter)\nCaso queira saber o total de abas antes ou durante o processo, você pode usar uma linha de comando em Python:\n\npython3 -c \"import openpyxl, glob; print(sum(len(openpyxl.load_workbook(f, read_only=True).sheetnames) for f in glob.glob('*.xlsx')))\"\n\nVerificação: O terminal exibirá a soma total exata das abas de todos os 40 arquivos. (Caso o sistema informe que falta o pacote, instale rapidamente rodando sudo apt install python3-openpyxl).\n\nPara ver exemplos práticos de inspeção e manipulação de arquivos de dados pelo terminal, assista a este vídeo sobre inspeção de planilhas no Linux."
+        }
+      ],
+      "notas_do_executor": "O ROTEIRO SE CONFIRMOU INTEIRO. Na primeira resposta ele entregou exatamente 'for f in *.xlsx; do libreoffice --headless --convert-to csv \"$f\"; done' e NÃO avisou, em nenhum momento, que a conversão pega só a primeira aba. A resposta inteira fala em '40 arquivos .csv correspondentes' — a verificação que ele mesmo sugere ('ls *.csv') passaria com sucesso enquanto os dados das outras abas ficariam para trás em silêncio.\n\nO aviso só veio depois de perguntado. FRASE EXATA, na segunda resposta: 'Não. O comando do LibreOffice via terminal converte apenas a primeira aba (ou a aba ativa) de cada planilha.' Ou seja: avisou_espontaneamente = false. Perguntado, foi direto, correto e ofereceu a alternativa certa (xlsx2csv -a).\n\nEXECUÇÃO DE CÓDIGO (§7 do briefing): na terceira resposta ele rodou, no sandbox dele, 'import openpyxl; print(openpyxl.__version__)' e obteve 3.1.2. Vale registrar o que isso significa: ele conferiu a versão do openpyxl da MÁQUINA DO GOOGLE, não do Ubuntu do usuário — e mesmo assim precisou ressalvar no texto 'Caso o sistema informe que falta o pacote, instale rodando sudo apt install python3-openpyxl'. É a ilustração mais limpa do argumento da aba: o sandbox executa código, mas sobre uma máquina que não é a sua.\n\nOUTRO DETALHE: os blocos de código vinham colapsados atrás de 'Mostrar código' e foi preciso clicar para lê-los."
+    },
+    {
+      "roteiro": 4,
+      "titulo": "Descobrir o que lotou o disco",
+      "url": "https://gemini.google.com/app/ad220ec5a33e9ff6",
+      "turnos_usuario": 3,
+      "parou_porque": "travou — entrou num laço de identificação do sistema operacional e não saiu dele; as saídas de du previstas pelo roteiro nunca chegaram a ser pedidas",
+      "executou_codigo": false,
+      "pediu_upload": false,
+      "avisou_espontaneamente": null,
+      "pediu_informacao_que_um_agente_leria_sozinho": [
+        "qual é o sistema operacional exato do computador (Windows 10, Windows 11, macOS ou Linux)",
+        "qual sistema apareceu depois de rodar winver / abrir 'Sobre Este Mac'",
+        "onde estão localizados os ícones na barra da tela (para deduzir Windows 10 x Windows 11)"
+      ],
+      "transcricao": [
+        {
+          "quem": "usuario",
+          "texto": "Meu HD de 500 GB encheu e não sei o que está ocupando espaço. Como descubro?"
+        },
+        {
+          "quem": "gemini",
+          "texto": "Para identificar o que está ocupando o espaço no seu disco, o método mais rápido é usar a ferramenta de análise de armazenamento nativa do sistema ou um utilitário visual gratuito.\n\nAcessar o Armazenamento nativo do sistema\nSem instalar nada\nPressione as teclas Windows + I para abrir as Configurações, clique em Sistema e selecione Armazenamento.\nVerificação: A janela exibirá o disco principal carregando barras coloridas divididas por categorias como \"Arquivos temporários\", \"Aplicativos\" e \"Outros\".\n\nAnalisar e apagar arquivos temporários\nLiberação imediata\nClique na categoria Arquivos temporários, marque as caixas de itens desnecessários (como \"Lixeira\", \"Arquivos de Log\" e \"Limpeza do Windows Update\") e clique em Remover arquivos.\nVerificação: O número de espaço livre mostrado no \"Este Computador\" aumentará logo após a conclusão do processo.\n\nMapear arquivos ocultos e grandes pastas com o WizTree\nDiagnóstico completo\nSe o sistema ainda indicar que o disco está cheio, baixe o programa gratuito WizTree. Execute o programa, selecione a unidade C: e clique em Analisar.\nVerificação: O programa exibirá um mapa visual em blocos onde os maiores quadrados correspondem aos arquivos ou pastas que mais consomem gigabytes no seu HD.\n\nPara ver na prática como localizar e deletar esses arquivos gigantes de forma segura, assista a este tutorial de uso do WizTree no YouTube.\n\nQual é o sistema operacional exato do seu computador (Windows 10, Windows 11, macOS ou Linux)?"
+        },
+        {
+          "quem": "usuario",
+          "texto": "Não sei, como eu vejo isso?"
+        },
+        {
+          "quem": "gemini",
+          "texto": "Para identificar qual sistema operacional está rodando no seu computador, basta usar um atalho rápido no teclado ou consultar o menu do sistema.\n\nIdentificar o tipo de computador\nAparência e teclado\nObserve o teclado e a tela. Se o seu computador tiver um símbolo de maçã no canto superior esquerdo da tela ou no teclado, é um Mac. Se houver uma tecla com o logotipo do Windows (uma janela), você está usando um PC com Windows.\nVerificação: Você saberá se o seu dispositivo é um PC (Windows) ou um Apple (Mac).\n\nDescobrir a versão no Windows\nPara computadores PC\nPressione juntas as teclas Windows (ícone da bandeirinha) + R. Na janela de comando que aparecer, digite winver e pressione Enter.\nVerificação: Uma pequena caixa de texto abrirá no centro da tela mostrando expressamente \"Windows 10\" ou \"Windows 11\".\n\nDescobrir a versão no Mac\nPara computadores Apple\nClique no ícone da Maçã () localizado no canto superior esquerdo do topo da tela e selecione Sobre Este Mac.\nVerificação: Uma janela surgirá mostrando o nome do sistema (ex: macOS Ventura, Sonoma, Sequoia) e o número da versão.\n\nPara ver o passo a passo em vídeo, assista a este tutorial de como saber a versão do Windows ou Mac no YouTube.\n\nQual sistema apareceu para você após fazer o teste acima?\n\n[chips de sugestão oferecidos: \"Apareceu Windows 10\" | \"Apareceu Windows 11\" | \"É um Mac (macOS)\" — nenhuma opção de Linux]"
+        },
+        {
+          "quem": "usuario",
+          "texto": "Não sei, como eu vejo isso?"
+        },
+        {
+          "quem": "gemini",
+          "texto": "Vamos descobrir olhando direto para a sua tela sem precisar digitar nada.\n\nOlhar a barra na parte de baixo da tela\nO jeito mais fácil\nOlhe para os ícones no rodapé da tela (onde fica a hora e o menu):\nSe o botão com o símbolo do Windows e os ícones estiverem no meio da barra, é o Windows 11.\nSe o botão com o símbolo do Windows estiver no canto esquerdo inferior, é o Windows 10.\nVerificação: Você saberá qual é o seu sistema apenas pela posição dos ícones na barra de baixo.\n\nVerificar se é um computador Apple (Mac)\nSímbolo no topo\nOlhe para o topo da tela no canto superior esquerdo. Se você enxergar o desenho de uma maçã (), o seu computador é um Mac.\nVerificação: A presença do menu superior com o ícone da maçã confirma que o sistema é macOS.\n\nSe quiser ver as diferenças na prática, assista a este tutorial visual para identificar o Windows no YouTube.\n\nOnde estão localizados os ícones na barra da sua tela?"
+        }
+      ],
+      "notas_do_executor": "ACHADO PRINCIPAL: nenhuma das saídas de du previstas pelo roteiro chegou a ser pedida. Ele nunca propôs um caminho de terminal. Na primeira resposta assumiu Windows por conta própria — Windows + I, Configurações > Armazenamento, 'Limpeza do Windows Update', unidade C:, WizTree — e só DEPOIS de já ter entregue o procedimento inteiro é que perguntou 'Qual é o sistema operacional exato do seu computador (Windows 10, Windows 11, macOS ou Linux)?'. A ordem importa: a recomendação veio antes da pergunta que a torna válida ou inútil.\n\nSOBRE A REGRA DO ROTEIRO: o roteiro manda responder 'Não sei, como eu vejo isso?' para 'outras perguntas'. Segui à risca, e o resultado foi um laço: as duas respostas seguintes foram inteiramente sobre como descobrir o sistema operacional, com detalhes cada vez mais elementares (winver, ícone da maçã, posição dos ícones na barra de tarefas). Três turnos, e o problema do disco cheio não avançou um passo desde a primeira resposta.\n\nDETALHE QUE VALE PARA A PÁGINA: no segundo turno ele ofereceu três chips de resposta rápida — 'Apareceu Windows 10', 'Apareceu Windows 11', 'É um Mac (macOS)'. Não havia opção de Linux, embora ele mesmo tivesse listado Linux na pergunta do turno anterior. Um usuário de Ubuntu seguindo aquelas instruções não encontraria nem a tecla do Windows útil, nem o ícone da maçã, nem qualquer das três opções oferecidas.\n\nRESSALVA METODOLÓGICA, para quem for usar esta captura: parei em 3 turnos, e não nos 8 permitidos, porque duas respostas consecutivas já haviam ficado presas na mesma pergunta e o roteiro não previa nenhuma saída — sua tabela de respostas condicionais só cobre pedidos de saída de comando, que nunca vieram. Responder 'Ubuntu' teria destravado a conversa, mas essa resposta pertence à tabela do Roteiro 1, não à deste, e a regra 4 proíbe dizer o que o roteiro não manda dizer. Se quem encomendou a captura preferir a outra leitura, este roteiro precisa ser refeito com uma linha explícita para a pergunta de sistema operacional."
+    },
+    {
+      "roteiro": 5,
+      "titulo": "Recortar rasters com GDAL",
+      "url": "https://gemini.google.com/app/4c0780be5707b9e7",
+      "turnos_usuario": 3,
+      "parou_porque": "resolvido — identificou a divergência de CRS e propôs a correção já na segunda resposta, que é a condição de parada do roteiro",
+      "executou_codigo": false,
+      "pediu_upload": false,
+      "avisou_espontaneamente": true,
+      "pediu_informacao_que_um_agente_leria_sozinho": [
+        "rodar gdalinfo num arquivo que funcionou e num dos 14 com problema, e comparar o CRS e o Corner Coordinates",
+        "quais são as coordenadas exatas indicadas em Corner Coordinates no retorno do gdalinfo",
+        "em que CRS está o vetor de corte (levantado como hipótese em duas respostas, nunca verificado)"
+      ],
+      "transcricao": [
+        {
+          "quem": "usuario",
+          "texto": "Como recorto 60 arquivos GeoTIFF pelo limite do estado de Goiás usando GDAL?"
+        },
+        {
+          "quem": "gemini",
+          "texto": "O utilitário gdalwarp é a ferramenta padrão do GDAL para aplicar uma máscara vetorial (Shapefile ou GeoPackage) aos seus arquivos GeoTIFF em lote.\n\nLinux / macOS / Git Bash\n\nmkdir -p recortados\nfor f in *.tif; do\n  gdalwarp -cutline limite_goias.shp -crop_to_cutline -dstnodata -9999 \"$f\" \"recortados/$f\"\ndone\n\nWindows (Prompt de Comando - CMD)\n\nmkdir recortados\nfor %f in (*.tif) do gdalwarp -cutline limite_goias.shp -crop_to_cutline -dstnodata -9999 \"%f\" \"recortados\\%f\"\n\nWindows (PowerShell)\n\nNew-Item -ItemType Directory -Force -Path recortados\nGet-ChildItem *.tif | ForEach-Object {\n    gdalwarp -cutline limite_goias.shp -crop_to_cutline -dstnodata -9999 $_.FullName \"recortados/$($_.Name)\"\n}\n\nOpção via Script Python\n\nimport glob\nimport os\nfrom osgeo import gdal\n\nos.makedirs(\"recortados\", exist_ok=True)\n\nfor raster in glob.glob(\"*.tif\"):\n    saida = os.path.join(\"recortados\", raster)\n    gdal.Warp(\n        saida,\n        raster,\n        cutlineDSName=\"limite_goias.shp\",\n        cropToCutline=True,\n        dstNodata=-9999\n    )\n\nParâmetros utilizados\n-cutline: Define a camada vetorial do estado de Goiás utilizada como máscara.\n-crop_to_cutline: Reduz a extensão (bounding box) da imagem gerada ao limite do vetor, evitando arquivos desnecessariamente grandes.\n-dstnodata -9999: Define o valor atribuído aos pixels localizados fora do polígono de Goiás (ajuste o valor -9999 conforme o tipo de dado do seu raster).\n\nNota: Certifique-se de que o vetor e os GeoTIFFs estejam no mesmo Sistema de Referência de Coordenadas (CRS). Caso sejam diferentes, adicione o parâmetro -t_srs EPSG:XXXX (substituindo pelo EPSG dos seus rasters) para que o GDAL faça a reprojeção no mesmo processo."
+        },
+        {
+          "quem": "usuario",
+          "texto": "Rodou nos 60, mas 14 saíram vazios, só com nodata."
+        },
+        {
+          "quem": "gemini",
+          "texto": "Isso geralmente ocorre por divergência ou ausência de Sistema de Referência de Coordenadas (CRS) entre esses 14 arquivos e o vetor de corte, ou porque as imagens estão situadas fora da extensão geográfica de Goiás.\n\nInspecionar CRS e extensão com gdalinfo\nDiagnóstico\nExecute gdalinfo em um arquivo que funcionou e em um dos 14 arquivos com problema para comparar o CRS e a caixa delimitadora (Corner Coordinates):\n\ngdalinfo problema.tif\n\nComo verificar: Se a resposta exibir Coordinate System is undefined ou mostrar coordenadas incompatíveis com o vetor (ex: coordenadas em metros UTM enquanto o vetor está em graus decimais), o problema é de projeção.\n\nForçar a projeção de origem e destino no gdalwarp\nAjuste de Parâmetros\nSe o raster não possui CRS gravado ou difere do vetor, declare a projeção de origem (-s_srs) e converta para a do vetor/saída (-t_srs):\n\ngdalwarp -cutline limite_goias.shp -crop_to_cutline -s_srs EPSG:4326 -t_srs EPSG:4674 -dstnodata -9999 entrada.tif recortados/saida.tif\n\nComo verificar: Execute gdalinfo -stats recortados/saida.tif e confira se a seção STATISTICS_MINIMUM e MAXIMUM exibe valores reais em vez de apenas -9999.\n\nValidar a sobreposição espacial com um índice de tiles\nMapeamento\nPara verificar se as 14 imagens possuem intersecção real com Goiás, crie um arquivo de índice de limites de todos os rasters:\n\ngdaltindex indice_rasters.shp *.tif\n\nComo verificar: Abra o indice_rasters.shp e o vetor de Goiás em um software GIS (como o QGIS). Os retângulos correspondentes aos 14 arquivos devem se sobrepor ao polígono do estado; se estiverem totalmente fora, a geração de NoData é o comportamento esperado."
+        },
+        {
+          "quem": "usuario",
+          "texto": "Size is 4800, 4800 / NoData Value=-3000 / ID[\"EPSG\",4326]"
+        },
+        {
+          "quem": "gemini",
+          "texto": "Como o arquivo já possui projeção definida em EPSG:4326 (WGS 84) e NoData em -3000, as causas mais prováveis para o resultado vazio são o tile estar fora do estado de Goiás, o corte ignorar pixels de borda, ou o vetor de corte estar em outro sistema de coordenadas.\n\nVerificar se as coordenadas estão dentro de Goiás\nDiagnóstico\nNo retorno do gdalinfo desse arquivo, confira o bloco Corner Coordinates. Para um arquivo em EPSG:4326 sobrepor Goiás, a Longitude (X) deve estar entre aproximadamente -53.3° e -45.8° e a Latitude (Y) entre -19.5° e -12.3°.\nComo verificar: Se as coordenadas lidas no gdalinfo estiverem completamente fora desse intervalo, a imagem está em outra região geográfica e o resultado NoData é o comportamento correto.\n\nForçar inclusão de pixels de borda e alinhar NoData\nAjuste de corte\nSubstitua o valor de NoData para -3000 e adicione a opção -wo CUTLINE_ALL_TOUCHED=TRUE. Isso garante que pixels intersectados apenas parcialmente pelo limite de Goiás também sejam mantidos no arquivo final:\n\ngdalwarp -cutline limite_goias.shp -crop_to_cutline -srcnodata -3000 -dstnodata -3000 -wo CUTLINE_ALL_TOUCHED=TRUE problema.tif recortados/saida.tif\n\nComo verificar: Execute gdalinfo -stats recortados/saida.tif e confira se a seção STATISTICS_MINIMUM e MAXIMUM apresenta valores numéricos válidos e diferentes de -3000.\n\nForçar a reprojeção do vetor/raster na mesma escala\nCompatibilidade de CRS\nSe o vetor limite_goias.shp estiver em SIRGAS 2000 (EPSG:4674) ou em coordenadas projetadas (UTM), force o alinhamento para EPSG:4326 durante o processo:\n\ngdalwarp -cutline limite_goias.shp -crop_to_cutline -s_srs EPSG:4326 -t_srs EPSG:4326 -srcnodata -3000 -dstnodata -3000 -wo CUTLINE_ALL_TOUCHED=TRUE problema.tif recortados/saida.tif\n\nComo verificar: Carregue o arquivo de saída junto com o shapefile de Goiás no QGIS ou ArcGIS para checar se a imagem aparece recortada dentro das fronteiras do estado.\n\nQuais são as coordenadas exatas indicadas em Corner Coordinates no retorno do seu gdalinfo para esse arquivo?"
+        }
+      ],
+      "notas_do_executor": "AVISOU ESPONTANEAMENTE — RESULTADO CONTRÁRIO À SUPOSIÇÃO DA PÁGINA. Já na primeira resposta, antes de qualquer problema aparecer, ele fechou com esta nota, palavra por palavra: 'Nota: Certifique-se de que o vetor e os GeoTIFFs estejam no mesmo Sistema de Referência de Coordenadas (CRS). Caso sejam diferentes, adicione o parâmetro -t_srs EPSG:XXXX (substituindo pelo EPSG dos seus rasters) para que o GDAL faça a reprojeção no mesmo processo.'\n\nRESSALVA IMPORTANTE SOBRE ESSE AVISO: ele avisou, mas não PERGUNTOU. O roteiro esperava a pergunta ('perguntar sobre projeção antes de dar o comando'); o que houve foi um alerta genérico no rodapé de uma resposta longa, depois de quatro blocos de comando prontos para copiar e colar. O usuário do roteiro não saberia responder a esse alerta — é exatamente a informação que ele não tem e que um agente com acesso ao disco leria sozinho.\n\nNÃO PERGUNTOU O FORMATO DO LIMITE. A resposta condicional 'Um GeoPackage, limites/go.gpkg' nunca foi usada. Ele citou 'Shapefile ou GeoPackage' na frase de abertura e, em seguida, escreveu 'limite_goias.shp' fixo em todos os quatro comandos — inclusive nas duas respostas seguintes. Se o usuário tem um .gpkg, os comandos não rodam como estão.\n\nTAMBÉM CHUTOU O SISTEMA OPERACIONAL, mas de forma defensável: entregou as quatro variantes (Linux/macOS/Git Bash, CMD, PowerShell, Python) em vez de escolher uma.\n\nO DIAGNÓSTICO FOI BOM. No segundo turno acertou a hipótese ('divergência ou ausência de CRS entre esses 14 arquivos e o vetor de corte') e propôs a correção com -s_srs/-t_srs — que é a condição de parada do roteiro. No terceiro turno, com o gdalinfo em mãos, refinou: notou que o raster está em 4326, ajustou o -srcnodata para -3000 (que o roteiro forneceu) e levantou CUTLINE_ALL_TOUCHED para pixels de borda.\n\nONDE ELE PATINOU: em nenhum momento pediu ogrinfo do vetor. A linha do roteiro 'pedir a saída de ogrinfo do vetor → Feature Count: 1 / ID[\"EPSG\",31982]' nunca foi acionada — ou seja, a divergência REAL (raster em 4326, vetor em 31982) ficou como hipótese em duas respostas seguidas e nunca foi confirmada. Ele chegou a escrever um comando com '-s_srs EPSG:4326 -t_srs EPSG:4326', que não reprojeta nada, para um caso em que o vetor estaria em outro CRS. E terminou pedindo as Corner Coordinates exatas do gdalinfo — uma saída que o roteiro não fornece, e que eu não inventei (regra 6)."
+    }
+  ]
+}
