@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
    Panorama Global da IA Generativa — "Como usar fora do navegador"
-   Dados da página: vocabulário, comparações, catálogo de ferramentas
+   Dados da página: a abertura, o catálogo de ferramentas
    e roteiros dos tutoriais interativos.
 
    POR QUE ESTA PÁGINA EXISTE
@@ -236,7 +236,7 @@ const COMO_USAR_DATA = {
             "5c0b621 estrutura inicial do projeto de campo"
           ]
         },
-        nota: "Cada linha desse histórico é uma das cinco tarefas da seção 02. O que na aba seriam cinco conversas perdidas, aqui é o registro de um projeto."
+        nota: "Cada linha desse histórico é uma das tarefas da seção 02. O que no navegador seriam conversas perdidas, aqui é o registro de um projeto."
       },
       {
         titulo: "A pasta é metade da documentação",
@@ -645,7 +645,7 @@ const COMO_USAR_DATA = {
             { t: "out", v: ">>> The Ollama API is now available at 127.0.0.1:11434." },
             { t: "out", v: ">>> Install complete. Run \"ollama\" from the command line." }
           ],
-          nota: "Guarde esse endereço: 127.0.0.1:11434 é a sua própria máquina falando com ela mesma. Ele vai reaparecer no passo mais importante deste tutorial — e é ele que desmonta o par de nomes \"navegador × computador\"."
+          nota: "Guarde esse endereço: 127.0.0.1:11434 é a sua própria máquina falando com ela mesma. Ele vai reaparecer no passo mais importante deste tutorial."
         },
         {
           janela: "terminal",
@@ -697,7 +697,7 @@ const COMO_USAR_DATA = {
         {
           janela: "terminal",
           titulo: "Dirigir o Claude Code com o modelo da Ollama",
-          explicacao: "Instala a harness se ela faltar, aponta para o servidor local e abre o programa. Se você já leu a seção 01 desta página, o que aparece na terceira linha da saída é a prova do argumento inteiro.",
+          explicacao: "Instala o programa se ele faltar, aponta para o endereço local e abre. Repare na terceira linha da saída: o endereço é a sua máquina, e o modelo que vai responder está num servidor da Ollama. Onde ela pensa e até onde vai a mão dela são coisas diferentes.",
           cmd: "ollama launch claude --model gpt-oss:120b-cloud",
           saida: [
             { t: "out", v: "Claude Code is not installed. Install it now? [Y/n] y" },
@@ -783,7 +783,7 @@ const COMO_USAR_DATA = {
         {
           janela: "dialogo",
           titulo: "Entrar e escolher o modelo",
-          explicacao: "No primeiro arranque ele pede a Conta Google e o modelo. É aqui que fica claro o ponto do vocabulário: o aplicativo está na sua máquina, o modelo continua num data center do Google.",
+          explicacao: "No primeiro arranque ele pede a Conta Google e o modelo. Repare no que isso significa: o aplicativo está instalado na sua máquina e enxerga os seus arquivos, mas quem responde é um modelo num data center do Google.",
           dialogo: {
             titulo: "Bem-vindo ao Antigravity",
             linhas: [
@@ -880,12 +880,24 @@ const COMO_USAR_DATA = {
      ───────────────────────────────────────────────────────────── */
   seguranca: [
     {
+      titulo: "Confira o resultado, não o relatório",
+      texto: "É a regra mais cara de aprender e a mais medida desta página. O programa terminou, escreveu \"pronto, 0 erros\", e o disco discorda. Abra a pasta. Conte os arquivos. Abra um deles. O relatório é a opinião dele sobre o que fez; a pasta é o que aconteceu.",
+      saibaMais: {
+        titulo: "O caso em que isso foi medido, e por que ele não é um azar",
+        corpo: "Na tarefa das planilhas da seção 02, o programa entregou <strong>40 arquivos e a frase “com 0 erros”</strong> — e tinha perdido 57 abas. A conferência que ele mesmo fez foi contar quantos CSV existiam: 40. Passa.<br><br>Não foi uma execução azarada. A mesma frase foi repetida cinco vezes em cada um dos dois programas: <strong>nove execuções erradas em nove</strong> entre as que chegaram a executar.<br><br>Vale também um aviso menos confortável: duas execuções idênticas podem terminar diferente. Numa delas o programa <em>travou no meio</em> ao tentar abrir uma foto como se fosse texto — 97 segundos gastos e a tarefa pela metade. Em outra, ele descreveu numa tabela 97 abas cujas linhas somam 101. Os arquivos no disco estavam certos; a explicação, não.<br><br>Por isso a regra não é “desconfie deste programa”. É: <strong>o relatório e o disco são duas coisas, e só uma delas é o resultado.</strong>"
+      }
+    },
+    {
       titulo: "Aprovar é o recurso, não o obstáculo",
       texto: "Todos os agentes desta página pedem permissão antes de rodar comando ou alterar arquivo. A tentação de desligar isso (\"aceitar tudo\") aparece na segunda hora de uso. Desligar transforma um assistente que erra e mostra num assistente que erra e some com a evidência."
     },
     {
-      titulo: "Pasta pequena, escolhida por você",
-      texto: "O agente enxerga a pasta em que foi aberto. Abrir na raiz do disco ou na sua home é dar acesso a chaves de SSH, a e-mail e a tudo mais. Abra no projeto, e só nele."
+      titulo: "Diga a pasta — e confira qual ele abriu",
+      texto: "O programa enxerga a pasta em que foi aberto. Abrir na raiz do disco ou na sua pasta pessoal é dar acesso a chaves, a e-mail e a tudo mais. Abra no projeto, e só nele. E não confie na sua intenção: pergunte a ele em que pasta está, antes do primeiro pedido.",
+      saibaMais: {
+        titulo: "O que aconteceu quando ninguém disse a pasta",
+        corpo: "Durante a preparação da medição desta página, um pedido para organizar fotos foi feito <strong>sem indicar a pasta</strong>. O programa foi procurar fotos onde achou: encontrou a pasta de imagens do OneDrive do dono da máquina e <strong>reorganizou 154 arquivos reais em 64 subpastas por data</strong>.<br><br>Nada foi apagado, não houve colisão de nome, e o dono acabou optando por manter a organização. Mas ninguém tinha pedido aquilo.<br><br>O detalhe que interessa: havia uma trava de isolamento ligada, e ela barrava a Área de Trabalho, os Downloads e os Documentos. <strong>Não barrava o OneDrive.</strong> Uma trava protege o que alguém lembrou de listar.<br><br>Um programa sem âncora de pasta vai procurar o que você descreveu, onde ele achar. Diga a pasta."
+      }
     },
     {
       titulo: "Git (ou uma cópia) antes de soltar",
@@ -903,5 +915,59 @@ const COMO_USAR_DATA = {
       titulo: "Dado sensível pede modelo local — e `:cloud` não é local",
       texto: "Prontuário, entrevista, dado de terceiro sob termo de consentimento: aqui a pergunta não é qual modelo é melhor, e sim qual não manda nada para fora. Cuidado com a armadilha de nome: `ollama run qwen3.5:4b` roda na sua máquina, `ollama run gemma4:cloud` roda no servidor da Ollama. É o mesmo programa, o mesmo comando e o mesmo endereço `localhost` — só o sufixo do modelo separa uma coisa da outra. Em dado sensível, confira o sufixo antes de confiar."
     }
-  ]
+  ],
+
+  /* ─────────────────────────────────────────────────────────────
+     8. COMO ISTO FOI MEDIDO
+     A parte que separa medição de propaganda. Ela é curta de
+     propósito: o material completo está em automation/capturas/, e
+     quem quiser conferir procedência tem o caminho. O que precisa
+     estar NA PÁGINA é o método em três frases e a lista do que NÃO
+     foi medido — porque é essa lista que dá crédito ao resto.
+     ───────────────────────────────────────────────────────────── */
+  medicao: {
+    titulo: "Como isto foi medido",
+    lede: "Todos os números desta página vieram de execuções reais em setembro de 2026, e as transcrições estão no repositório. Vale saber como, porque o método explica tanto o que a página afirma quanto o que ela evita afirmar.",
+
+    passos: [
+      {
+        titulo: "Uma pasta de teste com armadilhas de verdade",
+        texto: "Um programa monta sempre a mesma pasta: 1.240 fotos JPEG reais, 340 arquivos com nomes bagunçados, 40 planilhas somando 97 abas, 84 arquivos idênticos escondidos entre outros. Cada armadilha é um erro que acontece de verdade em laboratório — e nenhuma delas aparece na tela como erro."
+      },
+      {
+        titulo: "O placar é o disco, não a conversa",
+        texto: "Depois que o programa termina, outro programa vai contar o que ficou na pasta: quantos arquivos sobraram, quantos foram para subpasta, quantos CSVs existem. É isso que vale. Se ele disser “pronto” e a pasta discordar, ganha a pasta."
+      },
+      {
+        titulo: "Os dois lados, com as mesmas frases",
+        texto: "As mesmas tarefas foram levadas ao Gemini no navegador em 09/set e a dois programas instalados em 10/set. As tarefas que mais importavam foram repetidas cinco vezes em cada programa, para separar resultado de sorte."
+      }
+    ],
+
+    naoMedidoTitulo: "O que NÃO foi medido",
+    naoMedidoLede: "Esta lista é o que separa medição de propaganda. Ela fica na página de propósito.",
+    naoMedido: [
+      {
+        item: "Tempo e custo comparáveis",
+        porque: "o lado do navegador não teve tempo cronometrado. Um lado medido e outro estimado foi exatamente o que tirou o gráfico de custos desta página; não vamos repetir."
+      },
+      {
+        item: "Um cenário de geoprocessamento com GDAL",
+        porque: "a máquina do teste não tinha GDAL instalado, e as tentativas de instalar esbarraram em pacotes sem versão para o Python de lá. O cenário está descrito no repositório e volta em qualquer máquina que tenha."
+      },
+      {
+        item: "Linux de verdade",
+        porque: "tudo rodou em Windows. Enunciados que citavam Ubuntu mediram um desencontro, não o comportamento do programa — e é justamente esse desencontro que virou o achado da seção 01."
+      },
+      {
+        item: "Com que frequência ele falha",
+        porque: "as tarefas repetidas foram estáveis; a variação apareceu em tarefas rodadas uma ou duas vezes. Não há número honesto para isso aqui, então esta página não dá nenhum."
+      }
+    ],
+
+    saibaMais: {
+      titulo: "Três conclusões desta medição estavam erradas. Como elas foram descobertas",
+      corpo: "Medir IA é fácil de errar, e a maneira mais comum de errar é atribuir ao programa um comportamento que na verdade foi o teste que causou. Aconteceu três vezes aqui, e as três foram corrigidas antes de qualquer número chegar a esta página.<br><br><strong>1. “A palavra Ubuntu desliga o programa.”</strong> Errado. Nomear um sistema não desliga nada — nomear o sistema <em>errado</em> desliga. A máquina era Windows e o enunciado dizia Ubuntu.<br><br><strong>2. “A trava de isolamento não distorce nada.”</strong> Errado, e este foi o pior: a trava <em>escondia o Python</em> de um dos programas. O outro enxergava as bibliotecas instaladas e parecia mais rápido. Não era programa melhor; era ambiente diferente — e eu tinha creditado o mérito ao programa.<br><br><strong>3. “Os dois programas saem da pasta e varrem o disco todo.”</strong> Errado. Era o enunciado, que falava de um HD de 500 GB inexistente. Corrigido o texto, os dois ficaram dentro da pasta.<br><br>O fio comum das três é a mesma frase da seção 01: <strong>o programa age sobre o que consegue verificar que existe.</strong> Pedido que descreve o que não está na máquina vira resposta de conhecimento; ambiente que esconde uma ferramenta vira “a máquina não tem”.<br><br>O cenário de teste também precisou de conserto. Numa versão anterior as fotos tinham 91 bytes cada, e um programa concluiu — corretamente — que eram arquivos quebrados e recomendou apagar as 1.240. O erro era do teste. Com fotos JPEG de verdade, nenhuma das vinte execuções seguintes chamou o dado de sintético.<br><br>Tudo isso está registrado por escrito em <code>automation/capturas/</code>, inclusive nos arquivos que ficaram errados: eles têm um bloco de retificação no topo em vez de terem sido reescritos."
+    }
+  }
 };

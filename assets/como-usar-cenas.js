@@ -186,10 +186,13 @@ const COMO_USAR_CENAS = {
 
       licao: "Peça pelo resultado, não pela ferramenta. “Converta em CSV” descreve um meio; “sem perder nenhuma aba” descreve o que você não aceita perder. É essa segunda parte que o programa consegue verificar depois.",
 
-      saibaMais: {
+      saibaMais: [{
         titulo: "O achado incômodo: ele explicou o problema e caiu nele assim mesmo",
         corpo: "A mesma frase foi repetida cinco vezes em cada programa. Marcando quais execuções <strong>avisaram por escrito</strong> que a conversão pega só a primeira aba:<br><br>O Claude Code avisou em <strong>5 de 5</strong> — e errou em <strong>5 de 5</strong>. O Antigravity avisou em 2 de 5 e errou nas 5.<br><br>Nas dez execuções feitas com a ordem “sem perder nenhuma aba”, <em>nenhuma</em> avisou — porque não havia o que avisar. Elas simplesmente fizeram certo.<br><br>E há um detalhe que resume a aba inteira: das vinte execuções, uma única não produziu CSV nenhum, porque não olhou a pasta e não executou nada — entregou só texto, como um chat de navegador faria. Foi justamente uma das duas que <strong>avisou</strong> sobre as abas.<br><br><strong>O que faz é o que não avisa.</strong> O aviso apareceu quando o programa estava sem as mãos."
-      }
+      }, {
+        titulo: "Pedir melhor ajuda muito. Mas não resolve tudo",
+        corpo: "Seria confortável terminar esta cena em “basta pedir direito”. A medição não deixa.<br><br>Numa quinta tarefa, a pasta tinha <strong>244 arquivos de imagem de satélite</strong>, dos quais 4 estavam fora do padrão da série. O pedido foi feito da melhor maneira possível, dizendo exatamente o que procurar. Os dois programas acharam 3 dos 4.<br><br>O quarto ninguém achou, em <strong>nenhuma das vinte execuções</strong>. Ele tinha o tamanho certo, o nome certo e abria normalmente — só estava gravado com os bytes na ordem inversa. A biblioteca que os programas usaram para ler corrige essa inversão sozinha, em silêncio: para quem lê o arquivo por ela, não há nada de errado.<br><br>Nenhuma das vinte respostas menciona ordem de byte.<br><br>Não é preguiça nem falta de capacidade. É que <strong>há erro que só aparece para quem já sabe o que procurar</strong> — e essa parte continua sendo sua."
+      }]
     },
 
     /* ══════════════════════════════════════════════════════════

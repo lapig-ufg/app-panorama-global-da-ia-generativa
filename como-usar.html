@@ -40,7 +40,7 @@
   <!-- Estilos -->
   <link rel="stylesheet" href="assets/styles.css?v=30">
   <link rel="stylesheet" href="assets/guia.css?v=27">
-  <link rel="stylesheet" href="assets/como-usar.css?v=7">
+  <link rel="stylesheet" href="assets/como-usar.css?v=8">
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSBR3JMT2X"></script>
@@ -191,7 +191,7 @@
     </nav>
   </header>
 
-  <!-- Sumário: a página é longa e a ordem importa (o vocabulário sustenta a
+  <!-- Sumário: a página é longa e a ordem importa (a seção 01 sustenta a
        comparação, que sustenta o catálogo). Os atalhos deixam quem já sabe
        pular direto para a instalação sem esconder a espinha do argumento. -->
   <div class="controls">
@@ -203,6 +203,7 @@
       <a class="cu-toc-link" href="#tutorial"><span class="cu-toc-n">05</span> Instalar, passo a passo</a>
       <a class="cu-toc-link" href="#catalogo"><span class="cu-toc-n">06</span> O catálogo</a>
       <a class="cu-toc-link" href="#seguranca"><span class="cu-toc-n">07</span> O que você autoriza</a>
+      <a class="cu-toc-link" href="#medicao"><span class="cu-toc-n">08</span> Como isto foi medido</a>
     </div>
   </div>
 
@@ -218,9 +219,9 @@
         <em>possa ou não</em> abrir os seus arquivos e rodar comandos.
       </p>
       <p class="cu-lede-2">
-        Abaixo: por que "navegador × computador" é um par de nomes errado, cinco tarefas de
-        laboratório resolvidas dos dois jeitos com os comandos que a IA realmente digita, o que
-        instalar, e uma tela de computador de mentira onde você faz a instalação de verdade.
+        Abaixo: a diferença explicada em duas ideias simples, quatro tarefas de laboratório
+        feitas nos dois lugares e medidas no disco, o que sobra depois, o que instalar, e uma
+        tela de computador de mentira onde você faz a instalação de verdade.
       </p>
       <p class="qm-source">
         Comandos verificados em bash/GNU coreutils (Linux) antes da publicação; onde o
@@ -467,9 +468,10 @@
         <div>
           <h2 id="h-catalogo">O catálogo</h2>
           <p class="cu-sec-sub">
-            Três famílias: duas de harnesses (onde a IA ganha mãos) e uma de motores (de onde
-            vem o modelo). A divisão repete o argumento da seção 01 — e o quadro do fim mostra
-            que, hoje, ligar uma coisa na outra é um comando só.
+            Três famílias: duas de programas que dão mãos à IA e uma de motores, de onde vem o
+            modelo. É a mesma distinção da seção 01 — onde ela pensa é uma coisa, até onde vai a
+            mão dela é outra — e o quadro do fim mostra que, hoje, ligar uma na outra é um
+            comando só.
           </p>
         </div>
       </header>
@@ -488,12 +490,32 @@
         <div>
           <h2 id="h-seguranca">O que você está autorizando</h2>
           <p class="cu-sec-sub">
-            Dar mãos à IA é dar mãos à IA. Não é aviso legal: são as seis regras que evitam os
-            acidentes que a gente já viu acontecer.
+            Dar mãos à IA é dar mãos à IA. Não é aviso legal: são as sete regras que evitam os
+            acidentes que a gente já viu acontecer — e duas delas vêm de coisas que aconteceram
+            durante a medição desta página.
           </p>
         </div>
       </header>
       <div class="cu-seg" id="cu-seg"></div>
+    </section>
+
+    <!-- ─── 08 · COMO ISTO FOI MEDIDO ────────────────────────── -->
+    <!-- Fecha a página porque é a seção que dá crédito às outras sete. A
+         lista do que NÃO foi medido fica visível de propósito: é ela que
+         separa uma página que mediu de uma página que afirma. -->
+    <section id="medicao" class="cu-section" aria-labelledby="h-medicao">
+      <header class="cu-sec-head">
+        <span class="cu-sec-n">08</span>
+        <div>
+          <h2 id="h-medicao">Como isto foi medido</h2>
+          <p class="cu-sec-sub">
+            As transcrições completas, os programas que montam a pasta de teste e os que dão o
+            placar estão todos no repositório, em <code>automation/capturas/</code> e
+            <code>automation/cenario-teste/</code>.
+          </p>
+        </div>
+      </header>
+      <div id="cu-medicao"></div>
     </section>
 
   </main>
@@ -508,9 +530,9 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="assets/como-usar-data.js?v=6"></script>
-  <script src="assets/como-usar-cenas.js?v=1"></script>
-  <script src="assets/como-usar.js?v=7"></script>
+  <script src="assets/como-usar-data.js?v=7"></script>
+  <script src="assets/como-usar-cenas.js?v=2"></script>
+  <script src="assets/como-usar.js?v=8"></script>
 </body>
 
 </html>

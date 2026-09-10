@@ -491,7 +491,7 @@
         ${placarHTML(c.placar)}
         ${viradaHTML(c)}
         <p class="cn-licao">${txt(c.licao)}</p>
-        ${c.saibaMais ? `<div class="cu-saibas">${saibaMais(c.saibaMais)}</div>` : ''}
+        ${c.saibaMais ? `<div class="cu-saibas">${[].concat(c.saibaMais).map(i => saibaMais(i)).join('')}</div>` : ''}
       </div>
 
       <p class="cn-fonte">
@@ -832,9 +832,49 @@
         <div>
           <h3>${txt(s.titulo)}</h3>
           <p>${txt(s.texto)}</p>
+          ${s.saibaMais ? saibaMais(s.saibaMais, 'cu-saiba-seg') : ''}
         </div>
       </article>
     `).join('');
+  }
+
+  /* ─── 08 · como isto foi medido ──────────────────────────── */
+
+  /* A seção que dá crédito a todas as outras. Curta de propósito: o método em
+     três frases, a lista do que NÃO foi medido, e um caminho para quem quiser
+     conferir procedência. A lista do que faltou não é modéstia — é ela que
+     separa uma página que mediu de uma página que afirma. */
+  function renderMedicao() {
+    const el = $('cu-medicao');
+    if (!el || !D.medicao) return;
+    const m = D.medicao;
+    el.innerHTML = `
+      <p class="cu-med-lede">${txt(m.lede)}</p>
+
+      <ol class="cu-metodo">
+        ${m.passos.map((p, i) => `
+          <li class="cu-metodo-p">
+            <span class="cu-metodo-n" aria-hidden="true">${i + 1}</span>
+            <div>
+              <h3>${txt(p.titulo)}</h3>
+              <p>${txt(p.texto)}</p>
+            </div>
+          </li>`).join('')}
+      </ol>
+
+      <section class="cu-naomed" aria-labelledby="h-naomed">
+        <h3 id="h-naomed">${esc(m.naoMedidoTitulo)}</h3>
+        <p class="cu-naomed-lede">${txt(m.naoMedidoLede)}</p>
+        <dl class="cu-naomed-lista">
+          ${m.naoMedido.map(n => `
+            <div class="cu-naomed-l">
+              <dt>${txt(n.item)}</dt>
+              <dd>${txt(n.porque)}</dd>
+            </div>`).join('')}
+        </dl>
+      </section>
+
+      <div class="cu-saibas">${saibaMais(m.saibaMais)}</div>`;
   }
 
   /* ─── 05 · tutoriais em texto (o caminho sem simulação) ──── */
@@ -1656,6 +1696,7 @@
     colapsarCatalogoNoCelular();
     renderPonte();
     renderSeguranca();
+    renderMedicao();
     renderPlano();
 
     /* O roteiro é injetado por script logo abaixo da moldura: sem JS não há
