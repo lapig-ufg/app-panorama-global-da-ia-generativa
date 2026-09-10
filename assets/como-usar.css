@@ -3723,9 +3723,6 @@
 
   .cn-vir-par { grid-template-columns: 1fr; gap: 10px; }
 
-  /* "O que não foi medido" empilha o item e o motivo: em duas colunas
-     estreitas o motivo quebra em cinco linhas ao lado de um título de duas. */
-  .cu-naomed-l { grid-template-columns: 1fr; gap: 3px; }
   .cn-vir-seta { justify-self: center; transform: rotate(90deg); }
 
   .cu-cmd { grid-template-columns: 1fr; gap: 5px; }
@@ -3957,3 +3954,13 @@
    ali ela é nota de rodapé de um item, não um bloco da seção. */
 .cu-saiba-seg { margin-top: 11px; }
 .cu-saiba-seg > summary { padding: 10px 13px; font-size: 12.5px; }
+
+@media (max-width: 980px) {
+  /* Empilha o item e o motivo: em duas colunas estreitas o motivo quebra em
+     cinco linhas ao lado de um título de duas — e o título, que não quebra,
+     transborda a coluna. Esta regra mora AQUI, e não no bloco responsivo lá
+     em cima, porque a definição-base de .cu-naomed-l vem depois dele no
+     arquivo: com a mesma especificidade, quem vem por último ganha. */
+  .cu-naomed-l { grid-template-columns: 1fr; gap: 3px; }
+  .cu-metodo-p { padding: 13px 14px; }
+}

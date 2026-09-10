@@ -16,7 +16,7 @@ Acesse a versão pública em: **https://lapig-ufg.github.io/app-panorama-global-
 
 Este repositório é **mais do que o site** — são três partes que trabalham juntas:
 
-- **Site** (`index.html` + `assets/`) — a linha do tempo, publicada no **GitHub Pages**. Lê os dados de uma planilha Google Sheets em tempo real (sem novo deploy). Junto dela vão as abas `guia.html` (interativa — os benchmarks caem de `benchmarks.json`, regenerado pelo pipeline), `gratuitos.html` e `como-usar.html` (interativa — simulador de terminal).
+- **Site** (`index.html` + `assets/`) — a linha do tempo, publicada no **GitHub Pages**. Lê os dados de uma planilha Google Sheets em tempo real (sem novo deploy). Junto dela vão as abas `guia.html` (interativa — os benchmarks caem de `benchmarks.json`, regenerado pelo pipeline), `gratuitos.html` e `como-usar.html` (interativa — duelo navegador × máquina e simulador de terminal).
 - **Automação semanal** (`automation/` + `.github/workflows/auto-update.yml`) — um **cron do GitHub Actions** roda toda segunda: o Claude pesquisa lançamentos recentes na web e grava candidatos numa aba de **rascunho** (`Pendentes`) da planilha.
 - **PWA de curadoria** (`admin/`) — app instalável onde você **aprova/rejeita** os candidatos. **Só o que você aprova vai ao ar** — nada é publicado automaticamente.
 
@@ -57,7 +57,7 @@ panorama-llms/
 ├── index.html              # Página principal do site (timeline)
 ├── guia.html               # "Qual modelo usar" — rankings de benchmarks (interativa)
 ├── gratuitos.html          # Catálogo de IAs gratuitas
-├── como-usar.html          # "Como usar fora do navegador" — IA no terminal (interativa)
+├── como-usar.html          # "Como usar fora do navegador" — IA instalada na máquina (interativa)
 ├── assets/
 │   ├── styles.css          # Estilos da timeline
 │   ├── data.js             # Logos, bandeiras, cores, grupos, aliases + SHEET_ID
@@ -130,22 +130,33 @@ planilha, não depende de cron e não tem pipeline. Todo o conteúdo mora em
 `assets/como-usar-data.js` — é o único arquivo a editar para atualizar a aba.
 
 Ela responde ao "como" que faltava no painel: a diferença entre conversar com a IA numa
-aba do navegador e dar a ela acesso ao terminal da máquina — no eixo de uma tarefa (seção 02)
-e no eixo do tempo (seção 03). São sete seções (a 06 termina com um bloco extra, "a ponte"):
+aba do navegador e instalá-la na máquina, com acesso aos arquivos — no eixo de uma tarefa
+(seção 02) e no eixo do tempo (seção 03). São oito seções (a 06 termina com um bloco extra,
+"a ponte"):
 
-1. **O nome disso** — por que "navegador × computador" é um par de nomes errado (o navegador
-   está no computador) e cinco pares candidatos em julgamento, com uma proposta marcada.
-2. **A diferença, em comandos** — abre com o **diagrama do ciclo** (dois SVG: à esquerda o
-   resultado só volta pela sua digitação; à direita a IA lê a própria saída) e segue com as
-   **cenas**: cinco conversas REAIS com o Gemini, capturadas em 09/set/2026, tocadas passo a
-   passo dentro de uma janela de navegador simulada. Cada cena traz o veredito (a página
-   acertou / errou / foi pior), a reconstituição do terminal para a mesma tarefa — rotulada
-   como reconstituição — e o **balanço** do que a medição mudou na própria página. Fecha com
-   a contra-seção **"onde a aba ganha"**.
+1. **A diferença, explicada** — a abertura da aba, em texto corrido antes de qualquer quadro.
+   Explica duas ideias, uma de cada vez: se a IA consegue **olhar** os seus arquivos e se ela
+   pode **mexer** neles. Cada uma traz o que foi medido (dizer "no Ubuntu" numa máquina
+   Windows leva os dois programas a **zero comandos**; dizer o sistema certo, ou não dizer
+   nada, leva a 3–15) e a regra prática que sai dali. A discussão de como CHAMAR as duas
+   coisas — que já abriu esta seção e confundia quem chegava — virou a última caixa "saiba
+   mais" daqui.
 
-   > O **gráfico de halteres** foi removido em 10/set/2026. Seus dez números eram estimativa
-   > escrita à mão, e a captura desmentiu cinco deles. As regras de CSS e `renderGrafico()`
-   > continuam no código: ele volta no dia em que houver medida de tempo real dos DOIS lados.
+   > Os dois eixos não foram inventados na mesa: saíram das doze execuções de
+   > `capturas/2026-09-10-diagnostico-so.md`, que mostraram que **olhar** e **agir** são
+   > independentes um do outro. A medição anterior confundia os dois num só.
+2. **As duas telas, lado a lado** — abre com o **diagrama do ciclo** (dois SVG: à esquerda o
+   resultado só volta pela sua digitação; à direita a IA lê a própria saída) e segue com o
+   **duelo**: quatro tarefas, cada uma tocada **nos dois lugares ao mesmo tempo** — à esquerda
+   a conversa real no Gemini (09/set), à direita os comandos reais de um programa instalado
+   (10/set). Um contador só toca as duas colunas. Quando elas terminam, aparece o **placar**:
+   o que `conferir.py` contou NO DISCO, e não o que a IA disse ter feito. Fecha com o
+   **balanço** do que a medição mudou na própria página e a contra-seção **"onde a aba ganha"**.
+
+   > O **gráfico de halteres** foi removido em 10/set/2026, e as regras de CSS e
+   > `renderGrafico()` saíram com ele em seguida. Seus dez números eram estimativa escrita à
+   > mão e a captura desmentiu cinco. Ele volta no dia em que houver medida de tempo real dos
+   > DOIS lados — reescrito, não descomentado.
 3. **O que fica depois** — o segundo eixo do argumento. A seção 02 mede uma tarefa; esta mede
    o que sobra dela: um comparativo do que resta de cada lado uma semana depois, e quatro
    mecanismos com artefato ao lado — `git log` como registro (e não só como rede), a estrutura
@@ -159,7 +170,13 @@ e no eixo do tempo (seção 03). São sete seções (a 06 termina com um bloco e
    Pi, Gemini CLI), aplicativos de desktop (Claude Desktop, ChatGPT Desktop, Antigravity) e
    motores (Ollama local e na nuvem, LM Studio, llama.cpp). Fecha com **a ponte**: o quadro do
    `ollama launch`, com as 18 integrações que ele conhece e os planos do Ollama Cloud.
-7. **O que você está autorizando** — as seis regras de segurança ao dar mãos a um agente.
+7. **O que você está autorizando** — sete regras de segurança ao dar mãos a um programa. Duas
+   vêm de coisas que aconteceram durante a medição: *confira o resultado, não o relatório*
+   (ele disse "0 erros" e o disco tinha 57 abas a menos) e *diga a pasta* (sem âncora de
+   pasta, um programa reorganizou 154 arquivos reais do OneDrive de quem testava).
+8. **Como isto foi medido** — o método em três passos, a lista do que **não** foi medido, e a
+   caixa com as três conclusões que estavam erradas e como foram descobertas. A lista do que
+   faltou fica visível de propósito: é ela que separa uma página que mediu de uma que afirma.
 
 ### Regras de manutenção
 
@@ -205,31 +222,44 @@ olhar as outras quebra o conjunto:
 Três superfícies disparam as mesmas ações (`acao()`): o balão, os botões simulados dentro das
 janelas (`.cu-alvo`) e o painel abaixo da moldura. O painel é o caminho de teclado e de leitor
 de tela — não o elimine ao mexer no balão.
-- **Quatro dos cinco cenários moram atrás de abas.** A tira de lições acima delas existe só
-  para tornar visível o que cada um ensina de diferente; ao acrescentar um cenário, escreva
-  também o `licaoCurta`, senão ele entra na página como se fosse repetição do anterior.
-- **O celular é o caso difícil.** A página tem ~22 telas de rolagem em 390px, e o catálogo é
+- **O celular é o caso difícil.** A página tem ~35 telas de rolagem em 390px, e o catálogo é
   a maior fatia. Por isso as famílias mostram um cartão e um botão nessa largura
   (`colapsarCatalogoNoCelular`) e a tabela de integrações vem fechada. Ao acrescentar
   conteúdo, meça antes: `document.documentElement.scrollHeight` dividido pela altura da tela.
 - **Instaladores e planos** foram conferidos nas páginas oficiais (última checagem em
   `updatedAt`). Revalide antes de citar cotas — elas mudam com frequência.
-- **A coluna do chat é medição; a do terminal ainda é reconstituição.** As cenas
-  (`assets/como-usar-cenas.js`) citam literalmente a captura de 09/set/2026, e
-  `node automation/valida-cenas.mjs` **falha** se qualquer citação divergir do arquivo de
-  origem — rode antes de commitar. Os blocos `marca` são a única voz do site ali dentro, e a
-  tela os desenha diferente por isso. A coluna do terminal continua escrita à mão e carrega o
-  selo "reconstituição — ainda não medida"; **não remova esse selo antes de existir uma
-  captura real do outro lado.**
+- **As duas colunas do duelo são captura, e o validador é quem garante isso.** Em
+  `assets/como-usar-cenas.js`, todo bloco `voce`, `ia`, `sandbox`, `chips` e `cmd` é trecho
+  LITERAL — falas contra a transcrição, comandos contra a lista de comandos. `node
+  automation/valida-cenas.mjs` **falha** se qualquer um divergir; rode antes de commitar. Ele
+  já pegou duas citações minhas copiadas do resumo em vez do original.
+
+  Os blocos `marca` são a única voz do site ali dentro, e a tela os desenha diferente por
+  isso. Capturas de OUTRAS execuções (`fontes.extras`) ficam num palheiro separado e só podem
+  aparecer em `saibaMais`, dizendo no texto que vieram de outra execução — senão a página
+  passa a misturar o conjunto final com rodadas que a auditoria retificou.
+
+- **O placar não vem da conversa.** Os números de `cena.placar` saem de
+  `conferir.py --avaliar`, que conta arquivos no disco depois que o programa termina. Se
+  algum dia o relatório da IA e o disco discordarem, a página publica o disco — é literalmente
+  o que a seção 07 manda o leitor fazer.
 - **Como a página mede os dois lados.** Existe um pipeline de medição, e ele é o que
   separa esta aba de um texto de opinião:
 
   | passo | onde | o que faz |
   |---|---|---|
   | 1 | [`automation/CAPTURA-GEMINI.md`](automation/CAPTURA-GEMINI.md) | briefing das 5 conversas no chat do navegador. **Feito** → `capturas/gemini-2026-09-09.json` |
-  | 2 | [`automation/cenario-teste/`](automation/cenario-teste/README.md) | gera a pasta com as armadilhas reais e **pontua** o agente pelo disco |
-  | 3 | [`automation/CAPTURA-ANTIGRAVITY.md`](automation/CAPTURA-ANTIGRAVITY.md) | briefing das mesmas 5 tarefas dentro do agente. **Pendente** |
+  | 2 | [`automation/cenario-teste/`](automation/cenario-teste/README.md) | gera a pasta com as armadilhas reais e **pontua** o programa pelo disco |
+  | 3 | [`automation/CAPTURA-ANTIGRAVITY.md`](automation/CAPTURA-ANTIGRAVITY.md) | briefing das mesmas tarefas dentro do programa instalado. **Feito** → `capturas/*-forma-agente.json` |
   | 4 | `automation/valida-cenas.mjs` | impede que uma citação da página divirja da captura |
+
+  **Comece por [`capturas/MATERIAL-PARA-A-ABA.md`](automation/capturas/MATERIAL-PARA-A-ABA.md).**
+  Ele traz os oito achados em ordem de solidez, com a evidência de cada um, como escrever
+  para iniciante e — a parte que mais importa — **o que não afirmar**. O índice de
+  procedência está em `capturas/2026-09-10-leia-me.md`: ele diz quais arquivos servem para
+  tirar número e quais não servem. Os JSON afetados por artefato de teste têm um bloco
+  `RETIFICACAO` no topo em vez de terem sido reescritos; leia-o antes de citar qualquer
+  número daquele arquivo.
 
   Os dois briefings foram escritos para serem executados por uma IA, não só por uma
   pessoa: trazem as regras de não-condução, as respostas condicionais em tabela e a
@@ -237,9 +267,9 @@ de tela — não o elimine ao mexer no balão.
   falha que os dois documentos existem para evitar.
 
   As saídas são validadas por `capturas/schema.json` (chat) e
-  `capturas/schema-antigravity.json` (agente). Ao incorporar qualquer captura,
-  **preserve a distinção entre o que foi medido e o que foi reconstituído** — é disso que
-  depende a honestidade da comparação inteira.
+  `capturas/schema-antigravity.json` (programa instalado). Ao incorporar qualquer captura,
+  **preserve a distinção entre o que foi medido e o que foi julgado** — campo preenchido por
+  opinião do executor precisa dizer isso, ou vira número na página de alguém.
 - **A lista do `ollama launch` cresce a cada versão do Ollama.** A tabela em `ponte.integracoes`
   é uma cópia verbatim do `ollama launch --help` (nomes, aliases e descrições vêm de
   `cmd/launch/registry.go` no repositório do Ollama). O texto ao lado dela manda o leitor rodar

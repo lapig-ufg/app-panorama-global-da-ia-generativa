@@ -542,11 +542,13 @@ panorama-llms/
 ├── guia.html, assets/{guia.js,benchmarks.json,guia.css}  # "Qual modelo usar" (benchmarks AA)
 ├── gratuitos.html, assets/{gratuitos.js,gratuitos-data.js,gratuitos.css}  # "IAs gratuitas"
 │                                                          #   catálogo v2; fonte: The AI Rankings
-├── como-usar.html, assets/{como-usar.js,como-usar-data.js,como-usar.css}  # "Como usar fora
-│                                  #   do navegador": IA no terminal. Estática e autocontida —
-│                                  #   sem planilha, sem cron, sem pipeline. Todo o conteúdo
-│                                  #   (comparações, catálogo, tutoriais do simulador) mora em
-│                                  #   como-usar-data.js. Ver README § "A aba Como usar".
+├── como-usar.html, assets/{como-usar.js,como-usar-data.js,como-usar-cenas.js,como-usar.css}
+│                                  # "Como usar fora do navegador": IA instalada na máquina.
+│                                  #   Estática e autocontida — sem planilha, sem cron, sem
+│                                  #   pipeline. O conteúdo redacional mora em
+│                                  #   como-usar-data.js; as CITAÇÕES das capturas ficam
+│                                  #   separadas em como-usar-cenas.js porque só elas passam
+│                                  #   pelo valida-cenas.mjs. Ver README § "A aba Como usar".
 ├── admin/                         # PWA de curadoria
 │   ├── index.html                 #   app (shell + lógica): lê via fetch CORS (?action=listar),
 │   │                              #   aprova/rejeita (POST + reconcile via listar), botão 🔍 (rodar)
@@ -559,16 +561,21 @@ panorama-llms/
 │   ├── update-benchmarks.mjs      # cron AA → benchmarks.json (ver BENCHMARKS.md)
 │   ├── update-gratuitos.mjs       # STUB: scraper do The AI Rankings → gratuitos-data.js (ver GRATUITOS.md; sem cron)
 │   ├── CAPTURA-GEMINI.md          # briefing p/ capturar conversas REAIS de chat (pessoa ou
-│   │                              #   agente de computer use); alimenta a coluna da esquerda
-│   │                              #   da seção 02 de como-usar.html — FEITO em 09/set/2026
-│   ├── CAPTURA-ANTIGRAVITY.md     # o mesmo para o OUTRO lado: as 5 tarefas dentro de um
-│   │                              #   agente de terminal, sobre arquivos de verdade. PENDENTE
-│   ├── cenario-teste/             # a pasta que o agente encontra
-│   │   ├── preparar.py            #   gera ~420 MB com as armadilhas reais (sem dependências)
-│   │   ├── conferir.py            #   confere as armadilhas antes; pontua o agente depois
+│   │                              #   agente de computer use); alimenta a coluna ESQUERDA do
+│   │                              #   duelo da seção 02 — FEITO em 09/set/2026
+│   ├── CAPTURA-ANTIGRAVITY.md     # o mesmo para o OUTRO lado: as mesmas tarefas dentro de
+│   │                              #   um programa instalado. Alimenta a coluna DIREITA do
+│   │                              #   duelo — FEITO em 10/set/2026
+│   ├── cenario-teste/             # a pasta que o programa encontra
+│   │   ├── preparar.py            #   gera ~2,7 GB com as armadilhas reais (sem dependências)
+│   │   ├── conferir.py            #   confere as armadilhas antes; pontua pelo DISCO depois
 │   │   └── README.md              #   qual é a armadilha de cada cenário
 │   ├── valida-cenas.mjs           # falha se uma citação da página divergir da captura
-│   └── capturas/                  #   schema.json, schema-antigravity.json + as entregas
+│   └── capturas/                  #   schemas + as entregas. COMECE POR MATERIAL-PARA-A-ABA.md
+│                                  #   (os oito achados, com o que NÃO afirmar) e por
+│                                  #   2026-09-10-leia-me.md (quais arquivos servem para tirar
+│                                  #   número e quais não). JSON afetado por artefato de teste
+│                                  #   traz bloco RETIFICACAO no topo — leia antes de citar.
 │   ├── policy.md                  # rubrica de relevância (editável)
 │   ├── schema.json                # forma esperada do candidates.json
 │   ├── README.md, BENCHMARKS.md, GRATUITOS.md  # docs dos pipelines
