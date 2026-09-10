@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Medição de um agente de terminal no cenário de teste",
+  "description": "Forma esperada do arquivo gerado por automation/CAPTURA-ANTIGRAVITY.md. Valide antes de entregar. O par que decide a comparação com o chat é descobriu_sozinho x perguntou_ao_usuario.",
+  "type": "object",
+  "required": ["capturado_em", "ferramenta", "modelo", "braco", "placar_bruto", "tarefas"],
+  "properties": {
+    "capturado_em": { "type": "string", "description": "ISO 8601 com fuso" },
+    "ferramenta": { "type": "string", "description": "Antigravity, Claude Code, OpenCode…" },
+    "modelo": { "type": "string", "description": "Como aparece na interface, sem interpretar" },
+    "preset_autonomia": { "type": "string" },
+    "braco": {
+      "type": "string",
+      "enum": ["A", "B"],
+      "description": "A = a mesma frase que foi ao chat (comparável). B = pedido escrito para agente."
+    },
+    "pasta_teste": { "type": "string" },
+    "gdal_disponivel": {
+      "type": "boolean",
+      "description": "false significa que o cenário 5 não existia na pasta; diga isso em observacoes_gerais."
+    },
+    "executado_por": { "type": "string" },
+    "placar_bruto": {
+      "type": "string",
+      "description": "Saída literal de conferir.py --avaliar. É o resultado objetivo; o resto é contexto."
+    },
+    "observacoes_gerais": { "type": "string" },
+
+    "tarefas": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": [
+          "roteiro", "pedido", "parou_porque", "comandos",
+          "descobriu_sozinho", "perguntou_ao_usuario",
+          "aprovacoes_pedidas", "olhou_antes", "conferiu_depois",
+          "caiu_na_armadilha", "transcricao"
+        ],
+        "properties": {
+          "roteiro": { "type": "integer", "minimum": 1, "maximum": 5 },
+          "titulo": { "type": "string" },
+          "pedido": { "type": "string", "description": "O texto colado, literal" },
+          "minutos": { "type": "number" },
+          "parou_porque": {
+            "type": "string",
+            "description": "concluiu | limite de 20 min | laço | recusado por segurança | outro (descreva)"
+          },
+          "comandos": {
+            "type": "array",
+            "description": "Todos, na ordem, literais. É a espinha da medição.",
+            "items": {
+              "type": "object",
+              "required": ["cmd", "tipo", "aprovado"],
+              "properties": {
+                "cmd": { "type": "string" },
+                "tipo": {
+                  "type": "string",
+                  "enum": ["olhar", "mexer"],
+                  "description": "olhar = ls/find/gdalinfo/head/wc. mexer = mv/rm/gdalwarp/escrita."
+                },
+                "aprovado": { "type": "boolean" }
+              }
+            }
+          },
+          "descobriu_sozinho": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Espelho de pediu_informacao_que_um_agente_leria_sozinho na captura do chat. Uma entrada por coisa que ele soube rodando um comando em vez de perguntar."
+          },
+          "perguntou_ao_usuario": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Se não for vazio, o agente também precisou adivinhar — e a tese da página fica mais fraca. Registre com cuidado."
+          },
+          "aprovacoes_pedidas": { "type": "integer", "minimum": 0 },
+          "comandos_recusados": { "type": "array", "items": { "type": "string" } },
+          "olhou_antes": {
+            "type": "boolean",
+            "description": "Rodou algo de inspeção antes do primeiro comando destrutivo?"
+          },
+          "conferiu_depois": {
+            "type": "boolean",
+            "description": "Contou, comparou ou validou o resultado depois de agir?"
+          },
+          "caiu_na_armadilha": {
+            "type": "boolean",
+            "description": "O placar do disco diz se o resultado ficou certo; este campo diz se ele VIU o problema. Dá para acertar por sorte."
+          },
+          "armadilha_do_cenario": { "type": "string" },
+          "transcricao": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "required": ["quem", "texto"],
+              "properties": {
+                "quem": { "type": "string", "enum": ["operador", "agente"] },
+                "texto": { "type": "string", "description": "Literal, sem editar" }
+              }
+            }
+          },
+          "notas_do_executor": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -221,13 +221,25 @@ de tela — não o elimine ao mexer no balão.
   tela os desenha diferente por isso. A coluna do terminal continua escrita à mão e carrega o
   selo "reconstituição — ainda não medida"; **não remova esse selo antes de existir uma
   captura real do outro lado.**
-- O briefing que gerou tudo isso está em
-  [automation/CAPTURA-GEMINI.md](automation/CAPTURA-GEMINI.md) — cinco roteiros com os
-  prompts literais, as respostas condicionais e as regras de não-condução, escrito para ser
-  executado por uma pessoa ou por um agente de *computer use*. A saída é validada por
-  `automation/capturas/schema.json`. Ao incorporar uma captura, **preserve a distinção entre
-  o que foi transcrito (a conversa) e o que foi fornecido pelo roteiro (as saídas de comando
-  coladas)** — é disso que depende a honestidade da comparação inteira.
+- **Como a página mede os dois lados.** Existe um pipeline de medição, e ele é o que
+  separa esta aba de um texto de opinião:
+
+  | passo | onde | o que faz |
+  |---|---|---|
+  | 1 | [`automation/CAPTURA-GEMINI.md`](automation/CAPTURA-GEMINI.md) | briefing das 5 conversas no chat do navegador. **Feito** → `capturas/gemini-2026-09-09.json` |
+  | 2 | [`automation/cenario-teste/`](automation/cenario-teste/README.md) | gera a pasta com as armadilhas reais e **pontua** o agente pelo disco |
+  | 3 | [`automation/CAPTURA-ANTIGRAVITY.md`](automation/CAPTURA-ANTIGRAVITY.md) | briefing das mesmas 5 tarefas dentro do agente. **Pendente** |
+  | 4 | `automation/valida-cenas.mjs` | impede que uma citação da página divirja da captura |
+
+  Os dois briefings foram escritos para serem executados por uma IA, não só por uma
+  pessoa: trazem as regras de não-condução, as respostas condicionais em tabela e a
+  condição de parada. Um executor prestativo estraga a medição sem perceber, e essa é a
+  falha que os dois documentos existem para evitar.
+
+  As saídas são validadas por `capturas/schema.json` (chat) e
+  `capturas/schema-antigravity.json` (agente). Ao incorporar qualquer captura,
+  **preserve a distinção entre o que foi medido e o que foi reconstituído** — é disso que
+  depende a honestidade da comparação inteira.
 - **A lista do `ollama launch` cresce a cada versão do Ollama.** A tabela em `ponte.integracoes`
   é uma cópia verbatim do `ollama launch --help` (nomes, aliases e descrições vêm de
   `cmd/launch/registry.go` no repositório do Ollama). O texto ao lado dela manda o leitor rodar

@@ -133,9 +133,19 @@ def conferir_armadilhas(base: Path, gab: dict) -> int:
 
 
 # ═══════════════════════════════════════════════════════════════════════
-def avaliar(base: Path, gab: dict) -> int:
+def avaliar(base: Path, gab: dict):
+    """
+    Devolve (problemas, nao_executadas).
+
+    As duas contagens são separadas porque significam coisas opostas: um
+    cenário QUEBRADO é o agente tendo errado; um cenário NÃO EXECUTADO é ele
+    não ter tentado. Somar os dois em zero fazia um agente que não fez nada
+    receber "passou em tudo" — foi o que aconteceu no primeiro ensaio deste
+    script, com a pasta recém-gerada e intocada.
+    """
     print("\nO AGENTE RESOLVEU?  (olha o disco, não a conversa)\n")
     problemas = 0
+    nao_executadas = 0
 
     # 1 · fotos: todas em subpastas por data, nenhuma perdida
     g = gab["cenarios"]["fotos"]
@@ -154,6 +164,7 @@ def avaliar(base: Path, gab: dict) -> int:
         problemas += 1
     else:
         aviso("fotos: nada foi movido — tarefa não executada")
+        nao_executadas += 1
 
     # 2 · nomes: contagem preservada apesar da colisão
     g = gab["cenarios"]["nomes"]
@@ -167,6 +178,9 @@ def avaliar(base: Path, gab: dict) -> int:
     sujos = [f.name for f in tifs if f.name != normaliza(f.name)]
     if not sujos:
         ok("nomes: todos normalizados")
+    elif len(sujos) == len(tifs):
+        aviso("nomes: nenhum arquivo foi renomeado — tarefa não executada")
+        nao_executadas += 1
     else:
         aviso(f"nomes: {len(sujos)} ainda com acento/espaço/maiúscula (ex.: {sujos[0]})")
 
@@ -184,6 +198,7 @@ def avaliar(base: Path, gab: dict) -> int:
         problemas += 1
     else:
         aviso("planilhas: nenhum CSV — tarefa não executada")
+        nao_executadas += 1
 
     # 5 · rasters: saídas não vazias
     g = gab["cenarios"]["rasters"]
@@ -191,6 +206,7 @@ def avaliar(base: Path, gab: dict) -> int:
         saidas = [f for f in (base / "geo").rglob("*.tif") if "entrada" not in f.parts]
         if not saidas:
             aviso("rasters: nenhuma saída — tarefa não executada")
+            nao_executadas += 1
         else:
             vazios = 0
             for f in saidas:
@@ -207,7 +223,7 @@ def avaliar(base: Path, gab: dict) -> int:
 
     print("\n  (o cenário do disco é só leitura: o que se mede lá é a conversa,"
           "\n   não o disco — quantos comandos o agente rodou sozinho até concluir)")
-    return problemas
+    return problemas, nao_executadas
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -221,17 +237,27 @@ def main():
     gab = json.loads(gabarito.read_text(encoding="utf-8"))
 
     modo_avaliar = "--avaliar" in sys.argv
-    n = avaliar(base, gab) if modo_avaliar else conferir_armadilhas(base, gab)
 
+    if not modo_avaliar:
+        n = conferir_armadilhas(base, gab)
+        print()
+        print(f"{VERDE}tudo certo.{FIM}" if n == 0 else f"{VERM}{n} problema(s).{FIM}")
+        sys.exit(1 if n else 0)
+
+    problemas, nao_feitas = avaliar(base, gab)
     print()
-    if n == 0:
-        print(f"{VERDE}tudo certo.{FIM}" if not modo_avaliar
-              else f"{VERDE}o agente passou em tudo que dá para verificar no disco.{FIM}")
+    if nao_feitas:
+        print(f"{AMAR}{nao_feitas} tarefa(s) NÃO FORAM EXECUTADAS.{FIM} "
+              "Isto não é aprovação: é ausência de resultado.")
+        if problemas:
+            print(f"{VERM}E {problemas} problema(s) no que foi executado.{FIM}")
+        print("Confira se o agente chegou a rodar as tarefas antes de anotar o placar.")
+    elif problemas:
+        print(f"{VERM}{problemas} problema(s).{FIM}")
+        print("Isto é resultado, não defeito do teste: registre e publique como veio.")
     else:
-        print(f"{VERM}{n} problema(s).{FIM}")
-        if modo_avaliar:
-            print("Isto é resultado, não defeito do teste: registre e publique como veio.")
-    sys.exit(1 if n and not modo_avaliar else 0)
+        print(f"{VERDE}o agente passou em tudo que dá para verificar no disco.{FIM}")
+    sys.exit(0)
 
 
 if __name__ == "__main__":

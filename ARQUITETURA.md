@@ -560,8 +560,15 @@ panorama-llms/
 │   ├── update-gratuitos.mjs       # STUB: scraper do The AI Rankings → gratuitos-data.js (ver GRATUITOS.md; sem cron)
 │   ├── CAPTURA-GEMINI.md          # briefing p/ capturar conversas REAIS de chat (pessoa ou
 │   │                              #   agente de computer use); alimenta a coluna da esquerda
-│   │                              #   da seção 02 de como-usar.html
-│   └── capturas/                  #   schema.json + as capturas entregues (JSON)
+│   │                              #   da seção 02 de como-usar.html — FEITO em 09/set/2026
+│   ├── CAPTURA-ANTIGRAVITY.md     # o mesmo para o OUTRO lado: as 5 tarefas dentro de um
+│   │                              #   agente de terminal, sobre arquivos de verdade. PENDENTE
+│   ├── cenario-teste/             # a pasta que o agente encontra
+│   │   ├── preparar.py            #   gera ~420 MB com as armadilhas reais (sem dependências)
+│   │   ├── conferir.py            #   confere as armadilhas antes; pontua o agente depois
+│   │   └── README.md              #   qual é a armadilha de cada cenário
+│   ├── valida-cenas.mjs           # falha se uma citação da página divergir da captura
+│   └── capturas/                  #   schema.json, schema-antigravity.json + as entregas
 │   ├── policy.md                  # rubrica de relevância (editável)
 │   ├── schema.json                # forma esperada do candidates.json
 │   ├── README.md, BENCHMARKS.md, GRATUITOS.md  # docs dos pipelines
