@@ -29,76 +29,114 @@ const COMO_USAR_DATA = {
   updatedAt: "2026-09-06",
 
   /* ─────────────────────────────────────────────────────────────
-     1. O PROBLEMA DE NOME
-     O leitor chega com "navegador × computador" na cabeça — e esse
-     par está errado, porque o navegador também está no computador.
-     Em vez de decretar um nome, a página mostra os três eixos que a
-     expressão confunde e coloca os candidatos em julgamento.
+     1. A DIFERENÇA, EXPLICADA
+     Esta seção existe para uma pessoa que nunca instalou nada e só
+     usa IA em aba de navegador. Ela abre EXPLICANDO, com um exemplo,
+     e não discutindo como chamar as duas coisas — essa discussão é
+     legítima, mas cabe num "saiba mais" no fim.
+
+     Os dois eixos abaixo não foram inventados na mesa: saíram de
+     doze execuções controladas em 10/set/2026, registradas em
+     automation/capturas/2026-09-10-diagnostico-so.md, que mostraram
+     que OLHAR e AGIR são independentes um do outro. A medição
+     anterior confundia os dois num só.
      ───────────────────────────────────────────────────────────── */
-  vocabulario: {
-    titulo: "Primeiro, o nome disso",
-    lede: "Quase todo mundo diz \"usar a IA no navegador\" contra \"usar a IA no computador\". O par é intuitivo e é falso: o navegador está no computador. Pior, ele mistura três perguntas diferentes — e é por isso que a conversa trava.",
+  abertura: {
+    titulo: "A diferença, explicada",
+
+    lede: "Você já usa IA. Provavelmente numa aba do navegador: abre o site, escreve o que precisa, lê a resposta, copia o que serve. Esta aba é sobre o outro jeito — <strong>instalar a IA no seu computador e deixar que ela abra os seus arquivos</strong>.",
+
+    /* Os parágrafos de abertura. Texto corrido de propósito: a versão
+       anterior desta seção era um quadro comparativo, e o leitor
+       chegava na seção 02 sem ter entendido o que estava comparando. */
+    paragrafos: [
+      "A diferença entre os dois não é a inteligência do modelo. Pode ser exatamente o mesmo modelo nos dois lugares — e nesta página, em boa parte dos testes, foi.",
+      "A diferença são duas coisas bem concretas: <strong>se ela consegue olhar</strong> os seus arquivos, e <strong>se ela pode mexer</strong> neles. As duas mudam o que você precisa escrever no pedido — e mudam em direções opostas, que é o que costuma confundir.",
+      "Vale a pena entender uma de cada vez."
+    ],
 
     eixos: [
       {
-        pergunta: "Onde o modelo pensa?",
-        esquerda: "Num data center, longe de você.",
-        direita: "Num data center — o mesmo.",
-        veredito: "Não é aqui que está a diferença.",
-        nota: "Claude Code, Codex CLI, OpenCode e Antigravity rodam NA sua máquina, mas o modelo continua na nuvem. O caso que mais desmonta o par de nomes é o do Ollama Cloud: a harness é configurada para falar com `http://localhost:11434` — um endereço local, de verdade, na sua máquina — e o modelo que responde está num data center. O endereço é local; o pensamento, não. Modelo dentro do computador, mesmo, só quando você baixa os pesos (`ollama pull`) e roda sem `:cloud`."
+        n: 1,
+        nome: "Olhar",
+        pergunta: "Ela consegue ver os seus arquivos?",
+
+        navegador: {
+          titulo: "No navegador, não",
+          texto: "Ela não enxerga nada do seu computador. Nada mesmo. Por isso <strong>você</strong> precisa contar: qual é o seu sistema, onde fica a pasta, quantos arquivos são, quais programas você tem instalados. Ela responde com o que você contou.",
+          consequencia: "Se você contar errado, a resposta vem errada — e nem você nem ela têm como perceber."
+        },
+
+        instalada: {
+          titulo: "Instalada, sim",
+          texto: "Ela roda um comando, lê a lista de arquivos, mede o tamanho de cada pasta, abre um arquivo para ver o que tem dentro. Você não precisa contar nada disso.",
+          consequencia: "E não adianta contar: se o que você disser não bater com o que está no disco, ela acredita em você e para de olhar."
+        },
+
+        medida: {
+          chamada: "O que a medição mostrou",
+          texto: "Fizemos o mesmo pedido de três jeitos, numa máquina <strong>Windows</strong>, em doze execuções:",
+          linhas: [
+            { pedido: "“…no Ubuntu”", valor: "0 comandos", detalhe: "os dois programas responderam de cabeça, sem abrir um arquivo sequer", bom: false },
+            { pedido: "“…no Windows”", valor: "5 a 12 comandos", detalhe: "foram olhar", bom: true },
+            { pedido: "sem citar sistema", valor: "3 a 15 comandos", detalhe: "foram olhar", bom: true }
+          ],
+          conclusao: "Dizer o sistema <em>não</em> atrapalha. Dizer o sistema <strong>errado</strong> atrapalha muito — porque a IA conclui, com razão, que os arquivos da sua pergunta não são os que estão ali na frente dela."
+        },
+
+        regra: "No navegador, descreva a sua máquina. No programa instalado, não precisa — e descrever errado piora."
       },
+
       {
-        pergunta: "O que a IA enxerga?",
-        esquerda: "Só o que você colar ou anexar na conversa.",
-        direita: "Os arquivos, os nomes, os tamanhos, as datas, a saída dos programas.",
-        veredito: "É AQUI que está a diferença.",
-        nota: "Uma pasta com 1.240 fotos não cabe num anexo. Cabe num `ls`."
-      },
-      {
-        pergunta: "Quem executa?",
-        esquerda: "Você. A IA descreve; a mão é sua.",
-        direita: "Ela — e você aprova, comando a comando.",
-        veredito: "É AQUI também.",
-        nota: "Executar não é só poupar digitação: é o que permite à IA ver o resultado e corrigir sozinha o próximo passo."
+        n: 2,
+        nome: "Agir",
+        pergunta: "Ela pode mexer nos seus arquivos?",
+
+        navegador: {
+          titulo: "No navegador, não",
+          texto: "Ela escreve o comando; a mão é sua. Você copia, cola no seu terminal, aperta enter, olha o que aconteceu e volta para contar.",
+          consequencia: "Quem confere o resultado é sempre você. Se você não conferir, ninguém confere."
+        },
+
+        instalada: {
+          titulo: "Instalada, sim — com a sua autorização",
+          texto: "Ela executa o comando e <strong>lê a saída</strong>. Se der errado, ela vê o erro e tenta outro caminho, sem precisar te perguntar. Cada comando que mexe em alguma coisa aparece na tela para você aprovar antes de rodar.",
+          consequencia: "Isso é mais do que poupar digitação: é ela poder corrigir o próprio passo seguinte."
+        },
+
+        medida: {
+          chamada: "O que a medição mostrou",
+          texto: "Com o sistema certo no pedido, o que decidiu se ela <em>executava</em> ou só <em>explicava</em> foi a forma da frase:",
+          linhas: [
+            { pedido: "“Como eu faço para…?”", valor: "explicou", detalhe: "os dois programas olharam a pasta, montaram o plano e pararam", bom: null },
+            { pedido: "“Faça isto nesta pasta.”", valor: "executou", detalhe: "os dois foram até o fim", bom: null }
+          ],
+          conclusao: "Nenhum dos dois é errado. Perguntar é útil quando você ainda está decidindo; mandar é útil quando já decidiu. Só é bom saber qual dos dois você está fazendo."
+        },
+
+        regra: "Pergunta faz ela explicar. Ordem faz ela executar. As duas coisas são úteis — em momentos diferentes."
       }
     ],
 
-    tese: "Os dois eixos que importam são o mesmo eixo: <strong>alcance</strong>. Não é onde a IA está — é até onde vai a mão dela. Por isso preferimos um par que fale do que ela FAZ, e não de onde ela mora.",
+    /* A frase que junta os dois eixos e que, segundo a auditoria da
+       medição, explica também os três erros que a própria medição
+       cometeu. Ver automation/capturas/2026-09-10-auditoria-de-artefatos.md */
+    fecho: {
+      titulo: "A regra que junta as duas",
+      frase: "Ela age sobre o que consegue verificar que existe.",
+      texto: "É o mesmo princípio nos dois eixos. Se o pedido descreve algo que não está na máquina — um sistema que não é o seu, um disco que não é esse, uma pasta que não existe —, ela sai do modo “vou olhar” e volta para o modo “vou responder do que eu sei”. E ela está certa em fazer isso: você disse que era outra coisa."
+    },
 
-    candidatos: [
+    saibaMais: [
       {
-        par: "IA de conversa × IA de execução",
-        recomendado: true,
-        aFavor: "Nomeia o que muda (quem faz o trabalho), não o lugar. Funciona para leigo e para técnico, e cabe em legenda de gráfico.",
-        contra: "\"Execução\" pode soar mais autônomo do que é: na prática você aprova cada passo."
+        titulo: "A diferença é o acesso, não o modelo — e dá para ligar e desligar",
+        corpo: "Isto apareceu por acidente na medição, e virou a demonstração mais limpa da página inteira.<br><br>O programa que usamos precisa de uma opção para receber a pasta de trabalho. Sem essa opção, ele abre numa pasta interna dele, vazia. Com ela, abre na sua pasta.<br><br>Rodamos os cinco pedidos <strong>sem</strong> essa opção. Resultado: <strong>zero comandos</strong> nos cinco, e respostas que ficaram indistinguíveis das do chat de navegador.<br><br>Mesmo programa, mesmo modelo, mesma pergunta, mesmo computador. A única coisa que mudou foi ele conseguir ou não ver o disco — e isso bastou para transformar um lado no outro. É por isso que esta página fala em <em>alcance</em>, e não em <em>inteligência</em>."
       },
       {
-        par: "navegador × computador",
-        recomendado: false,
-        aFavor: "É como as pessoas já falam.",
-        contra: "Falso: o navegador está no computador. E erra os casos de fronteira — o Antigravity é um app instalado que usa modelo na nuvem."
-      },
-      {
-        par: "IA sem mãos × IA com mãos",
-        recomendado: false,
-        aFavor: "Memorável, ótimo em aula e em fala. Explica sozinho.",
-        contra: "Informal demais para eixo de gráfico e para texto acadêmico."
-      },
-      {
-        par: "IA em caixa-de-areia × IA com acesso ao sistema",
-        recomendado: false,
-        aFavor: "Tecnicamente é o mais preciso: a aba do navegador é literalmente um sandbox.",
-        contra: "Exige explicar \"sandbox\" antes de explicar a IA. Perde o público que a página quer alcançar."
-      },
-      {
-        par: "chat × agente",
-        recomendado: false,
-        aFavor: "É o jargão que a indústria já usa.",
-        contra: "\"Agente\" virou palavra-ônibus: já existe agente rodando dentro do navegador. O par deixou de separar as duas coisas."
+        titulo: "E como se chama isso, afinal?",
+        corpo: "Quase todo mundo diz “usar IA no navegador” contra “usar IA no computador”. O par é intuitivo e é falso, porque o navegador também está no computador.<br><br>Pior: ele erra os casos de fronteira. O Antigravity é um programa instalado na sua máquina, mas o modelo que responde está num data center. E com o Ollama Cloud o programa é configurado para falar com <code>http://localhost:11434</code> — um endereço local, de verdade, na sua máquina — enquanto o modelo pensa num servidor da empresa. O endereço é local; o pensamento, não.<br><br>Nesta página usamos <strong>“no navegador”</strong> e <strong>“instalada na máquina”</strong> porque é como as pessoas falam, e porque o que separa os dois não é onde o modelo pensa: é <strong>até onde vai a mão dele</strong>. Se fosse para escolher um par mais preciso, seria <em>IA de conversa × IA de execução</em>; se fosse para escolher o que ensina mais rápido, <em>IA sem mãos × IA com mãos</em>. Nenhum dos três é oficial, e esta escolha é uma proposta, não uma decisão."
       }
-    ],
-
-    emAberto: "Este quadro é uma proposta, não uma decisão. Se \"IA de execução\" não pegar, o segundo lugar aqui é \"IA com mãos\" — que ensina mais rápido e envelhece pior."
+    ]
   },
 
   /* ─────────────────────────────────────────────────────────────

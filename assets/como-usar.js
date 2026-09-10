@@ -66,54 +66,104 @@
   const semMovimento = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ─── 01 · vocabulário ───────────────────────────────────── */
+  /* ─── caixa "saiba mais" ─────────────────────────────────── */
 
-  function renderVocabulario() {
-    const v = D.vocabulario;
+  /* Uma só implementação para a página inteira. O pedido era manter a
+     superfície curta sem jogar fora o material rico da medição: tudo que é
+     detalhe entra aqui, fechado, e quem quiser abre. `<details>` faz isso
+     sozinho — sem JavaScript, funciona com teclado, e o Ctrl+F do navegador
+     encontra o texto de dentro. */
+  function saibaMais(item, extra) {
+    return `
+      <details class="cu-saiba${extra ? ' ' + extra : ''}">
+        <summary><span class="cu-saiba-rot">Saiba mais</span>${esc(item.titulo)}</summary>
+        <div class="cu-saiba-corpo">${item.corpo}</div>
+      </details>
+    `;
+  }
 
-    const lede = $('cu-vocab-lede');
-    if (lede) lede.textContent = v.lede;
+  /* ─── 01 · a diferença, explicada ────────────────────────── */
 
-    const eixos = $('cu-eixos');
+  /* Esta seção abre a aba. Ela existe para quem nunca instalou nada e só usa
+     IA em aba de navegador — por isso é a única da página escrita em texto
+     corrido antes de qualquer quadro. A versão anterior abria discutindo como
+     CHAMAR as duas coisas, e o leitor chegava na comparação sem ter entendido
+     o que estava sendo comparado. A discussão de nome não sumiu: virou a
+     última caixa fechada daqui. */
+
+  function ladoEixo(lado, classe, rotulo) {
+    return `
+      <div class="cu-lado ${classe}">
+        <span class="cu-lado-rot">${esc(rotulo)}</span>
+        <h4 class="cu-lado-tit">${esc(lado.titulo)}</h4>
+        <p class="cu-lado-txt">${lado.texto}</p>
+        <p class="cu-lado-cons">${lado.consequencia}</p>
+      </div>
+    `;
+  }
+
+  function medidaEixo(m) {
+    const linhas = m.linhas.map(l => `
+      <li class="cu-med-linha${l.bom === true ? ' is-bom' : l.bom === false ? ' is-ruim' : ''}">
+        <span class="cu-med-pedido">${txt(l.pedido)}</span>
+        <span class="cu-med-valor">${txt(l.valor)}</span>
+        <span class="cu-med-det">${txt(l.detalhe)}</span>
+      </li>
+    `).join('');
+
+    return `
+      <div class="cu-medida">
+        <span class="cu-medida-rot">${esc(m.chamada)}</span>
+        <p class="cu-medida-txt">${m.texto}</p>
+        <ul class="cu-med-linhas">${linhas}</ul>
+        <p class="cu-medida-conc">${m.conclusao}</p>
+      </div>
+    `;
+  }
+
+  function renderAbertura() {
+    const a = D.abertura;
+
+    const lede = $('cu-ab-lede');
+    if (lede) lede.innerHTML = a.lede;
+
+    const prosa = $('cu-ab-prosa');
+    if (prosa) prosa.innerHTML = a.paragrafos.map(p => `<p>${p}</p>`).join('');
+
+    const eixos = $('cu-ab-eixos');
     if (eixos) {
-      eixos.innerHTML = v.eixos.map((e, i) => `
-        <article class="cu-eixo ${i === 0 ? 'is-nao' : 'is-sim'}">
-          <h3 class="cu-eixo-q">${esc(e.pergunta)}</h3>
-          <div class="cu-eixo-par">
-            <div class="cu-eixo-lado">
-              <span class="cu-eixo-rot">Numa aba do navegador</span>
-              <p>${esc(e.esquerda)}</p>
+      eixos.innerHTML = a.eixos.map(e => `
+        <article class="cu-eixo" id="cu-eixo-${e.n}">
+          <header class="cu-eixo-head">
+            <span class="cu-eixo-n" aria-hidden="true">${e.n}</span>
+            <div class="cu-eixo-tit">
+              <h3>${esc(e.nome)}</h3>
+              <p class="cu-eixo-q">${esc(e.pergunta)}</p>
             </div>
-            <div class="cu-eixo-lado">
-              <span class="cu-eixo-rot">Com acesso ao terminal</span>
-              <p>${esc(e.direita)}</p>
-            </div>
-          </div>
-          <p class="cu-eixo-ver">${esc(e.veredito)}</p>
-          <p class="cu-eixo-nota">${txt(e.nota)}</p>
-        </article>
-      `).join('');
-    }
-
-    const tese = $('cu-tese');
-    if (tese) tese.innerHTML = v.tese;
-
-    const nomes = $('cu-nomes');
-    if (nomes) {
-      nomes.innerHTML = v.candidatos.map(c => `
-        <article class="cu-nome ${c.recomendado ? 'is-rec' : ''}">
-          <header class="cu-nome-head">
-            <h4>${esc(c.par)}</h4>
-            ${c.recomendado ? '<span class="cu-nome-badge">nossa proposta</span>' : ''}
           </header>
-          <p class="cu-nome-pro"><span>A favor</span>${txt(c.aFavor)}</p>
-          <p class="cu-nome-con"><span>Contra</span>${txt(c.contra)}</p>
+          <div class="cu-eixo-par">
+            ${ladoEixo(e.navegador, 'is-nav', 'No navegador')}
+            ${ladoEixo(e.instalada, 'is-maq', 'Instalada na máquina')}
+          </div>
+          ${medidaEixo(e.medida)}
+          <p class="cu-eixo-regra">${e.regra}</p>
         </article>
       `).join('');
     }
 
-    const aberto = $('cu-aberto');
-    if (aberto) aberto.textContent = v.emAberto;
+    const fecho = $('cu-ab-fecho');
+    if (fecho) {
+      fecho.innerHTML = `
+        <div class="cu-fecho">
+          <span class="cu-fecho-rot">${esc(a.fecho.titulo)}</span>
+          <p class="cu-fecho-frase">${esc(a.fecho.frase)}</p>
+          <p class="cu-fecho-txt">${a.fecho.texto}</p>
+        </div>
+      `;
+    }
+
+    const saiba = $('cu-ab-saiba');
+    if (saiba) saiba.innerHTML = a.saibaMais.map(i => saibaMais(i)).join('');
   }
 
   /* ─── transcrições ───────────────────────────────────────── */
@@ -1782,7 +1832,7 @@
     const upd = $('cu-updated');
     if (upd) upd.textContent = fmtDataCurta(D.updatedAt) || '—';
 
-    renderVocabulario();
+    renderAbertura();
     renderCenas();
     ligarCenas();
     renderBalanco();

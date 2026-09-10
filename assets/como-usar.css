@@ -120,168 +120,364 @@
   color: var(--ink);
 }
 
-/* ═══ 01 · VOCABULÁRIO ═══ */
+/* ═══ 01 · A DIFERENÇA, EXPLICADA ═══ */
 
-/* Os três eixos ficam lado a lado porque o argumento é comparativo: só se vê
-   que dois deles apontam para o mesmo lugar quando estão no mesmo campo de
-   visão. Em coluna, viram três afirmações soltas. */
+/* Esta seção é a única da página escrita em texto corrido antes de qualquer
+   quadro. É de propósito: ela abre a aba para quem nunca instalou nada, e a
+   versão anterior — três cards comparativos logo de cara — mandava o leitor
+   comparar antes de ter entendido o que era cada lado.
+   Largura de medida de leitura, não de card: 68ch. */
+.cu-prosa {
+  max-width: 68ch;
+  margin-bottom: 26px;
+}
+
+.cu-prosa p {
+  font-size: 15px;
+  line-height: 1.68;
+  color: var(--ink);
+  margin-bottom: 13px;
+}
+
+.cu-prosa p:last-child { margin-bottom: 0; }
+.cu-prosa strong { font-weight: 700; color: var(--ink); }
+
+/* Os dois eixos ficam EMPILHADOS, não lado a lado. Lado a lado eles viram
+   um quadro comparativo de novo — e o ponto é justamente que são duas ideias
+   independentes, para entender uma de cada vez. */
 .cu-eixos {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  grid-template-columns: 1fr;
+  gap: 18px;
 }
 
 .cu-eixo {
-  padding: 16px 16px 14px;
+  padding: 20px 22px 18px;
   background: var(--white);
   border: 1px solid var(--hair);
-  border-radius: 12px;
+  border-radius: 14px;
   box-shadow: var(--shadow-xs);
 }
 
-.cu-eixo-q {
-  font-size: 14.5px;
-  font-weight: 700;
-  letter-spacing: -0.014em;
-  color: var(--ink);
-  margin-bottom: 12px;
+.cu-eixo-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-bottom: 16px;
 }
 
+.cu-eixo-n {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--white);
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.cu-eixo-tit { min-width: 0; }
+
+.cu-eixo-tit h3 {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.cu-eixo-q {
+  margin-top: 3px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-light);
+}
+
+/* Os dois lados do eixo. Aqui SIM lado a lado: são a mesma pergunta com duas
+   respostas, e o contraste é o conteúdo. */
 .cu-eixo-par {
   display: grid;
-  gap: 10px;
-  padding-bottom: 12px;
-  margin-bottom: 10px;
-  border-bottom: 1px dashed var(--hair);
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
 }
 
-.cu-eixo-rot {
+.cu-lado {
+  min-width: 0;
+  padding: 14px 15px;
+  border-radius: 11px;
+  border: 1px solid var(--hair);
+}
+
+/* O lado do navegador em papel neutro; o lado instalado com o verde da casa.
+   A cor aqui NÃO diz "bom" e "ruim" — diz "aqui" e "ali". A seção 02 mostra
+   o lado verde errando feio. */
+.cu-lado.is-nav { background: var(--paper); }
+
+.cu-lado.is-maq {
+  background: linear-gradient(to bottom, var(--white) 55%, rgba(10, 115, 89, 0.05));
+  border-color: rgba(10, 115, 89, 0.3);
+}
+
+.cu-lado-rot {
   display: block;
   font-family: var(--mono);
   font-size: 9.5px;
   text-transform: uppercase;
   letter-spacing: 0.07em;
   color: var(--ink-muted);
-  margin-bottom: 3px;
+  margin-bottom: 6px;
 }
 
-.cu-eixo-lado p {
-  font-size: 12.5px;
-  line-height: 1.5;
-  color: var(--ink-light);
-}
+.cu-lado.is-maq .cu-lado-rot { color: var(--accent); }
 
-.cu-eixo-ver {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--ink-muted);
-  margin-bottom: 7px;
-}
-
-/* O eixo que NÃO explica a diferença é marcado em cinza; os dois que explicam,
-   em verde. É o resumo da seção inteira lido de relance. */
-.cu-eixo.is-sim .cu-eixo-ver { color: var(--accent); }
-
-.cu-eixo.is-sim {
-  border-color: rgba(10, 115, 89, 0.32);
-  background: linear-gradient(to bottom, var(--white) 60%, rgba(10, 115, 89, 0.045));
-}
-
-.cu-eixo-nota {
-  font-size: 11.5px;
-  line-height: 1.5;
-  color: var(--ink-muted);
-}
-
-.cu-tese {
-  margin: 22px 0 8px;
-  padding: 18px 20px;
-  background: var(--ink);
-  color: #f2efe6;
-  border-radius: 12px;
-  font-size: 15.5px;
-  line-height: 1.55;
-  letter-spacing: -0.012em;
-}
-
-.cu-tese strong { color: var(--accent-bright); font-weight: 700; }
-
-.cu-nomes {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 12px;
-}
-
-.cu-nome {
-  padding: 14px 15px;
-  background: var(--paper);
-  border: 1px solid var(--hair);
-  border-radius: 11px;
-}
-
-.cu-nome.is-rec {
-  background: var(--white);
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-soft);
-}
-
-.cu-nome-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.cu-nome-head h4 {
-  font-size: 13.5px;
+.cu-lado-tit {
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: -0.014em;
   color: var(--ink);
+  margin-bottom: 6px;
 }
 
-.cu-nome-badge {
+.cu-lado-txt {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-light);
+}
+
+.cu-lado-cons {
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px dashed var(--hair);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+/* O bloco de medição. Fundo escuro porque é o único pedaço da seção que traz
+   número de experimento — e o leitor precisa saber, de relance, quando a
+   página está afirmando e quando está mostrando o que mediu. */
+.cu-medida {
+  padding: 16px 18px 14px;
+  background: var(--ink);
+  border-radius: 12px;
+  color: #e9e5da;
+}
+
+.cu-medida-rot {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-bright);
+  margin-bottom: 8px;
+}
+
+.cu-medida-txt {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #e9e5da;
+  margin-bottom: 11px;
+}
+
+.cu-med-linhas {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 12px;
+  list-style: none;
+}
+
+/* Três colunas: o que foi pedido, o que aconteceu, e a leitura. A do meio
+   é a que o olho procura, então é ela que ganha a fonte mono e o peso. */
+.cu-med-linha {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.75fr) minmax(0, 1.5fr);
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.cu-med-pedido {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #f4f1e8;
+}
+
+.cu-med-valor {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: #cfc9bb;
+}
+
+.cu-med-linha.is-bom .cu-med-valor { color: var(--accent-bright); }
+.cu-med-linha.is-ruim .cu-med-valor { color: #ffb4a2; }
+
+.cu-med-det {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: #a8a196;
+}
+
+.cu-medida-conc {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #d6d1c5;
+  padding-top: 11px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.cu-medida-conc strong { color: #f4f1e8; }
+
+/* A regra prática de cada eixo. É a frase que a pessoa leva embora, então
+   ela é a única coisa da seção em corpo grande fora dos títulos. */
+.cu-eixo-regra {
+  margin-top: 15px;
+  padding-left: 14px;
+  border-left: 3px solid var(--accent);
+  font-size: 15px;
+  line-height: 1.55;
+  letter-spacing: -0.012em;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.cu-fecho {
+  margin-top: 22px;
+  padding: 20px 22px;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: 14px;
+}
+
+.cu-fecho-rot {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  margin-bottom: 8px;
+}
+
+.cu-fecho-frase {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.022em;
+  line-height: 1.25;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.cu-fecho-txt {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink-light);
+  max-width: 72ch;
+}
+
+/* ─── CAIXAS "SAIBA MAIS" (a página inteira usa estas) ───
+   O pedido era: superfície curta e objetiva, sem jogar fora o material rico
+   da medição. A resposta é esta caixa. Fechada por padrão, um clique para
+   abrir, e o Ctrl+F do navegador acha o texto de dentro mesmo fechada. */
+.cu-saibas {
+  display: grid;
+  gap: 9px;
+  margin-top: 22px;
+}
+
+.cu-saiba {
+  border: 1px solid var(--hair);
+  border-radius: 11px;
+  background: var(--white);
+  overflow: hidden;
+}
+
+.cu-saiba > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 13px 16px;
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  list-style: none;
+  transition: background 0.15s ease;
+}
+
+.cu-saiba > summary::-webkit-details-marker { display: none; }
+.cu-saiba > summary:hover { background: var(--paper); }
+
+.cu-saiba > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.cu-saiba-rot {
   flex-shrink: 0;
   font-family: var(--mono);
   font-size: 9px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--white);
-  background: var(--accent);
-  padding: 3px 6px;
+  letter-spacing: 0.07em;
+  color: var(--accent);
+  border: 1px solid var(--accent-soft);
+  background: var(--accent-soft);
+  padding: 3px 7px;
   border-radius: 5px;
 }
 
-.cu-nome-pro,
-.cu-nome-con {
-  font-size: 11.5px;
-  line-height: 1.5;
-  color: var(--ink-light);
-  margin-bottom: 6px;
+/* A seta é ::after no summary, não um caractere no HTML: assim ela nunca
+   entra na seleção de texto nem na busca da página. */
+.cu-saiba > summary::after {
+  content: "";
+  flex-shrink: 0;
+  margin-left: auto;
+  align-self: center;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--ink-muted);
+  border-bottom: 2px solid var(--ink-muted);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.18s ease;
 }
 
-.cu-nome-pro span,
-.cu-nome-con span {
-  display: block;
+.cu-saiba[open] > summary::after { transform: rotate(225deg) translate(-1px, -1px); }
+.cu-saiba[open] > summary { background: var(--paper); }
+
+.cu-saiba-corpo {
+  padding: 15px 18px 17px;
+  border-top: 1px solid var(--hair);
+  font-size: 13px;
+  line-height: 1.68;
+  color: var(--ink-light);
+  max-width: 74ch;
+}
+
+.cu-saiba-corpo strong { color: var(--ink); font-weight: 700; }
+.cu-saiba-corpo em { font-style: italic; }
+
+.cu-saiba-corpo code {
   font-family: var(--mono);
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  margin-bottom: 2px;
+  font-size: 0.9em;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: 4px;
+  padding: 1px 4px;
 }
 
-.cu-nome-pro span { color: var(--accent); }
-.cu-nome-con span { color: #a33d2a; }
-
-.cu-aberto {
-  margin-top: 14px;
-  padding: 12px 14px;
-  border-left: 3px solid var(--accent);
-  background: var(--paper);
-  font-size: 12.5px;
-  line-height: 1.55;
-  color: var(--ink-light);
-  border-radius: 0 8px 8px 0;
+@media (prefers-reduced-motion: reduce) {
+  .cu-saiba > summary,
+  .cu-saiba > summary::after { transition: none; }
 }
 
 /* ═══ 02 · COMPARAÇÃO ═══ */
@@ -3129,7 +3325,16 @@
 }
 
 @media (max-width: 980px) {
-  .cu-eixos { grid-template-columns: 1fr; }
+  /* Os dois lados de cada eixo empilham. O rótulo no topo de cada um é o que
+     mantém claro qual é qual quando eles deixam de estar lado a lado. */
+  .cu-eixo-par { grid-template-columns: 1fr; }
+
+  /* A linha de medição perde a coluna do meio e o número vai para baixo do
+     pedido, onde continua sendo a primeira coisa que o olho encontra. */
+  .cu-med-linha {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
 
   /* Abaixo desta largura a comparação lado a lado espremeria as duas colunas
      de terminal a ponto de todo comando quebrar em duas linhas — e um comando
