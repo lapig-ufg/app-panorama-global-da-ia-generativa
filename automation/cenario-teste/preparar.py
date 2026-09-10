@@ -405,14 +405,67 @@ def cenario_disco(base: Path) -> dict:
 # Os TIFF são VÁLIDOS de verdade — cabeçalho + IFD completo. Abrem no PIL, no
 # rasterio e no `file`. Sem isso, o agente descobriria a bagunça pelo motivo
 # errado (arquivo quebrado) em vez do certo (parâmetro diferente).
+# O PIXEL PRECISA PARECER NDVI. A primeira versao deste cenario enchia os
+# rasters com bytes pseudoaleatorios uniformes, e um agente percebeu na hora:
+# 'media ~127,5 e desvio ~73,9 (distribuicao uniforme -- parecem sinteticos)'.
+# NDVI real tem duas coisas que ruido branco nao tem: estrutura espacial
+# (pixels vizinhos se parecem) e concentracao na faixa de vegetacao.
+#
+# Aqui: um 'terreno' de 32x32 sorteado uma vez e interpolado para o tamanho
+# final -- isso da as manchas --, mais um deslocamento sazonal por data e um
+# punhado de pixels de ruido para que nenhum arquivo seja igual a outro. Tudo
+# deterministico e em Python puro, sem numpy: a regra do cenario e nao exigir
+# instalacao, porque instalar coisa e uma das tarefas medidas.
+_TERRENO = {}
+
+
+def _terreno(largura: int, altura: int) -> list:
+    """Campo suave em 0..255, com manchas — o mesmo para toda a serie."""
+    if (largura, altura) in _TERRENO:
+        return _TERRENO[(largura, altura)]
+    g = 32
+    r = random.Random(4242)
+    grade = [[r.randint(60, 235) for _ in range(g + 1)] for _ in range(g + 1)]
+    px = bytearray(largura * altura)
+    for y in range(altura):
+        fy = y * g / altura; y0 = int(fy); ty = fy - y0
+        lin0, lin1 = grade[y0], grade[y0 + 1]
+        base = y * largura
+        for x in range(largura):
+            fx = x * g / largura; x0 = int(fx); tx = fx - x0
+            a = lin0[x0] + (lin0[x0 + 1] - lin0[x0]) * tx
+            b = lin1[x0] + (lin1[x0 + 1] - lin1[x0]) * tx
+            px[base + x] = int(a + (b - a) * ty)
+    _TERRENO[(largura, altura)] = bytes(px)
+    return _TERRENO[(largura, altura)]
+
+
+def _pixels(largura: int, altura: int, bits: int, semente: int) -> bytes:
+    """Terreno + deslocamento sazonal + ruido esparso. Nenhum arquivo repetido."""
+    r = random.Random(semente)
+    desloc = r.randint(-28, 28)          # seca e chuva ao longo do ano
+    tabela = bytes(min(255, max(12, i + desloc)) for i in range(256))
+    px = bytearray(_terreno(largura, altura).translate(tabela))
+    for _ in range(largura * altura // 120):   # nuvem, sombra, sensor
+        px[r.randrange(len(px))] = r.randint(0, 255)
+    if bits == 8:
+        return bytes(px)
+    # 16 bits: mesma cena, escala esticada — e por isso o desvio dele aparece
+    # na faixa de valores, nao so no cabecalho
+    saida = bytearray(len(px) * 2)
+    for k, v in enumerate(px):
+        w = v * 257
+        saida[2 * k] = w & 0xFF; saida[2 * k + 1] = w >> 8
+    return bytes(saida)
+
+
 def _tiff(largura: int, altura: int, bits: int, big_endian: bool, semente: int) -> bytes:
-    """TIFF de uma banda, sem compressão, válido e legível."""
+    """TIFF de uma banda, sem compressao, valido e legivel."""
     import struct
     ordem = ">" if big_endian else "<"
     marca = b"MM" if big_endian else b"II"
-    n_bytes = largura * altura * (bits // 8)
-    dados = random.Random(semente).randbytes(n_bytes)
-
+    dados = _pixels(largura, altura, bits, semente)
+    n_bytes = len(dados)
     # 9 tags, 12 bytes cada, + contador (2) + ponteiro do próximo IFD (4)
     ifd_off = 8
     dados_off = ifd_off + 2 + 9 * 12 + 4

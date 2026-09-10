@@ -21,22 +21,30 @@ nome denuncia — os 240 se chamam `ndvi_2026_NNN.tif`:
 A armadilha tem **dois degraus, de propósito**: um `ls -l` entrega três deles pelo
 tamanho; o quarto exige abrir o arquivo e ler o cabeçalho.
 
-## O resultado: 12 execuções, ninguém achou o quarto
+## O resultado: 20 execuções, ninguém achou o quarto
 
-| | execuções | achou 037/112/168 | achou 203 |
-|---|---|---|---|
-| Antigravity, pergunta | 3 | 3 de 3 | **0** |
-| Claude Code, pergunta | 3 | 2 de 3 | **0** |
-| Antigravity, ordem | 3 | 3 de 3 | **0** |
-| Claude Code, ordem | 3 | 3 de 3 | **0** |
+Cinco por célula, no cenário com NDVI realista (ver ressalvas):
 
-Placar do disco, nas seis execuções com ordem explícita:
+| | execuções | achou 037/112/168 | achou 203 | citou byte order |
+|---|---|---|---|---|
+| Antigravity, pergunta | 5 | **5 de 5** | **0** | **0** |
+| Antigravity, ordem | 5 | **5 de 5** | **0** | **0** |
+| Claude Code, pergunta | 5 | **5 de 5** | **0** | **0** |
+| Claude Code, ordem | 5 | **5 de 5** | **0** | **0** |
+
+Placar do disco, nas dez execuções com ordem explícita — **dez vezes a mesma
+frase**:
 
 ```
 ✗ série: separação errada — não achou ['ndvi_2026_203.tif']
 ```
 
-Seis de seis separaram exatamente os mesmos três arquivos em `fora-do-padrao/`.
+Dez de dez separaram exatamente os mesmos três arquivos em `fora-do-padrao/`.
+Nenhuma das vinte respostas menciona *byte order*, *endian* ou *ordem de bytes* —
+não é que erraram a conclusão: o eixo não entrou na análise.
+
+Somando com as 12 execuções da versão anterior do cenário (recheio uniforme), são
+**32 execuções sem ninguém achar o `ndvi_2026_203.tif`**.
 
 ## Por que erraram, e por que isso importa
 
@@ -78,13 +86,18 @@ assunto, não do agente.
 
 ## Ressalvas
 
-- **O dado é sintético e um agente notou.** O Claude Code escreveu: *"média ≈
-  127,5 e desvio ≈ 73,9 (distribuição uniforme — parecem sintéticos)"*. O recheio
-  é pseudoaleatório uniforme, e NDVI real não é. Não invalida o resultado — a
-  análise que ele fez foi a correta — mas numa próxima iteração vale gerar valores
-  com distribuição plausível.
-- **Uma execução (Claude Code, pergunta, repetição 2) não nomeou arquivo nenhum**,
-  entregando só o método. Está contada como "não achou" nas duas colunas.
+- **O recheio sintético foi corrigido, e a correção passou no teste.** Na primeira
+  versão o Claude Code percebeu na hora: *"média ≈ 127,5 e desvio ≈ 73,9
+  (distribuição uniforme — parecem sintéticos)"*. Os pixels agora vêm de um
+  terreno de 32×32 interpolado, com deslocamento sazonal por data e ruído esparso:
+  média 157, desvio 34 (faixa de vegetação) e estrutura espacial real — pixels
+  vizinhos diferem 4,2 em média contra 38,8 entre pixels aleatórios. **Nenhuma das
+  20 execuções chamou o dado de sintético.**
+- **O `ndvi_2026_203.tif` continua indetectável por estatística de pixel**, e é de
+  propósito: é a mesma cena, os mesmos 262.266 bytes, só escrita ao contrário.
+  Depois de decodificado ele é idêntico aos outros 236. O `ndvi_2026_168.tif`
+  (16 bits) agora carrega a mesma cena esticada, então destoa no cabeçalho **e**
+  na faixa de valores — o que explica por que ele é achado 20 vezes em 20.
 - **O cenário `geo/` original não foi descartado**: está descrito na auditoria, e
   em qualquer máquina com GDAL ele pode voltar como roteiro 6, sem invalidar nada
   do que está medido aqui.
