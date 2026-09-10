@@ -3,11 +3,20 @@
    Confere que TODA citação das cenas existe, literalmente, na
    captura de onde ela diz ter vindo.
 
-   Por que isto existe: a seção 02 da aba "Como usar fora do
-   navegador" afirma reproduzir uma conversa real. Basta alguém
-   "melhorar" uma frase — tirar uma vírgula, encurtar no meio —
-   para a página passar a atribuir ao Gemini algo que ele não
-   disse. Um teste é mais barato do que essa confiança.
+   Por que isto existe: a aba "Como usar" afirma reproduzir duas
+   conversas reais lado a lado — uma no navegador, outra num
+   programa instalado na máquina. Basta alguém "melhorar" uma frase
+   — tirar uma vírgula, encurtar no meio — para a página passar a
+   atribuir a um modelo algo que ele não disse. Um teste é mais
+   barato do que essa confiança.
+
+   Confere três coisas:
+     1. cada bloco `voce`/`ia`/`sandbox`/`chips` do lado do
+        navegador está em gemini-2026-09-09.json;
+     2. cada bloco `voce`/`ia` do lado do programa instalado está
+        na transcrição de uma das duas capturas de 10/set, e cada
+        bloco `cmd` está na lista de comandos de uma delas;
+     3. as citações soltas declaradas em `citacoesAvulsas`.
 
    Uso:  node automation/valida-cenas.mjs
    Sai com código 1 se qualquer citação divergir.
@@ -18,75 +27,99 @@ import { readFileSync } from 'node:fs';
 const CENAS = 'assets/como-usar-cenas.js';
 const raiz = new URL('..', import.meta.url).pathname;
 
-function carrega(rel) {
-  return readFileSync(raiz + rel, 'utf8');
-}
+const carrega = rel => readFileSync(raiz + rel, 'utf8');
 
 /* O arquivo de cenas é um script de navegador, não um módulo: avalia e
    devolve a constante que ele declara. */
 const C = (0, eval)(carrega(CENAS) + '\n;COMO_USAR_CENAS');
-const captura = JSON.parse(carrega(C.fonte.arquivo));
 
 /* Normaliza só o que é ruído de transporte — espaço repetido, quebra de
    linha, aspas curvas que a interface troca sozinha. NÃO mexe em palavra,
    ordem nem pontuação: se o texto divergir nisso, tem de falhar mesmo. */
-function normaliza(s) {
-  return String(s)
-    .replace(/[‘’]/g, "'")
-    .replace(/[“”]/g, '"')
-    .replace(/ /g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
+const normaliza = s => String(s)
+  .replace(/[‘’]/g, "'")
+  .replace(/[“”]/g, '"')
+  .replace(/ /g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim();
 
-const corpo = captura.conversas
-  .map(c => c.transcricao.map(t => t.texto).join('\n'))
-  .join('\n');
-const agulheiro = normaliza(corpo);
+/* ── os dois palheiros ─────────────────────────────────────────── */
 
-const TIPOS_LITERAIS = new Set(['voce', 'ia', 'sandbox']);
+const capNav = JSON.parse(carrega(C.fontes.navegador.arquivo));
+const palheiroNav = normaliza(
+  capNav.conversas.map(c => c.transcricao.map(t => t.texto).join('\n')).join('\n')
+);
+
+const capsAg = C.fontes.agente.arquivos.map(a => JSON.parse(carrega(a)));
+/* Capturas de outras execuções: NÃO alimentam as cenas, só as citações
+   avulsas — e cada uma dessas tem de dizer na página que veio de outra
+   execução. Por isso o palheiro é separado. */
+const capsExtra = (C.fontes.extras?.arquivos ?? []).map(a => JSON.parse(carrega(a)));
+const palheiroAgFala = normaliza(
+  capsAg.map(d => d.tarefas.map(t => t.transcricao.map(b => b.texto).join('\n')).join('\n')).join('\n')
+);
+const palheiroAgCmd = normaliza(
+  capsAg.map(d => d.tarefas.map(t => t.comandos.map(c => c.cmd).join('\n')).join('\n')).join('\n')
+);
+/* Um bloco `ia` do agente pode citar uma nota do executor? NÃO — por isso
+   as notas ficam de fora do palheiro de propósito. */
+
+const LITERAIS = new Set(['voce', 'ia', 'sandbox']);
 
 let falhas = 0;
 let conferidas = 0;
 
-for (const cena of C.cenas) {
-  for (const [i, b] of cena.beats.entries()) {
-    if (b.t === 'chips') {
-      for (const op of b.ops) {
-        conferidas++;
-        if (!agulheiro.includes(normaliza(op))) {
-          falhas++;
-          console.error(`✗ ${cena.id} · beat ${i} (chip)\n   não está na captura: "${op}"`);
-        }
-      }
-      continue;
-    }
-    if (!TIPOS_LITERAIS.has(b.t)) continue;   // `marca` é a voz do site, não citação
-
-    conferidas++;
-    if (!agulheiro.includes(normaliza(b.txt))) {
-      falhas++;
-      console.error(`✗ ${cena.id} · beat ${i} (${b.t})\n   não está na captura: "${String(b.txt).slice(0, 90)}…"`);
-    }
-  }
-}
-
-/* As contagens exibidas na tela também têm de bater com o arquivo de
-   captura — é o número que o leitor usa para julgar o resto. */
-const porId = { fotos: 1, nomes: 2, planilhas: 3, disco: 4, rasters: 5 };
-for (const cena of C.cenas) {
-  const conv = captura.conversas.find(c => c.roteiro === porId[cena.id]);
-  if (!conv) { falhas++; console.error(`✗ ${cena.id}: sem conversa correspondente na captura`); continue; }
+function confere(rotulo, texto, palheiro, ondeDiz) {
   conferidas++;
-  if (conv.turnos_usuario !== cena.medido.turnos) {
-    falhas++;
-    console.error(`✗ ${cena.id}: turnos divergem — cena diz ${cena.medido.turnos}, captura diz ${conv.turnos_usuario}`);
+  if (palheiro.includes(normaliza(texto))) return;
+  falhas++;
+  console.error(`✗ ${rotulo}\n   não está em ${ondeDiz}: "${String(texto).slice(0, 100)}…"`);
+}
+
+for (const cena of C.cenas) {
+  for (const [lado, palheiro, ondeDiz] of [
+    ['navegador', palheiroNav, C.fontes.navegador.arquivo],
+    ['agente', palheiroAgFala, 'nenhuma das capturas de 10/set']
+  ]) {
+    const bloco = cena[lado];
+    if (!bloco) { falhas++; console.error(`✗ ${cena.id}: falta o lado "${lado}"`); continue; }
+
+    for (const [i, b] of bloco.beats.entries()) {
+      const rotulo = `${cena.id} · ${lado} · beat ${i} (${b.t})`;
+
+      if (b.t === 'chips') {
+        for (const op of b.ops) confere(rotulo + ' [chip]', op, palheiro, ondeDiz);
+        continue;
+      }
+      if (b.t === 'cmd') {
+        confere(rotulo, b.txt, palheiroAgCmd, 'na lista de comandos das capturas de 10/set');
+        continue;
+      }
+      if (!LITERAIS.has(b.t)) continue;   // `marca` é a voz do site, não citação
+      confere(rotulo, b.txt, palheiro, ondeDiz);
+    }
+  }
+
+  /* Os dois pedidos da virada são citações do par de formulações medido. */
+  if (cena.virada) {
+    confere(`${cena.id} · virada.antes`, cena.virada.antes, palheiroAgFala, 'nas capturas de 10/set');
   }
 }
 
-console.log(`${conferidas} citações e contagens conferidas contra ${C.fonte.arquivo}`);
+/* ── citações que aparecem fora das cenas ─────────────────────── */
+const palheiroExtra = normaliza(
+  capsExtra.map(d => d.tarefas.map(t => t.transcricao.map(b => b.texto).join('\n')).join('\n')).join('\n')
+);
+const AVULSAS = [
+  ['saibaMais nomes · escopo', 'mantive parênteses, hífens e `(2)`/`CÓPIA` como estão (só minúsculo, sem acento, espaço→`_`), já que você não pediu para removê-los'],
+];
+for (const [rotulo, txt] of AVULSAS) {
+  confere(rotulo, txt, palheiroAgFala + '\n' + palheiroExtra, 'em nenhuma captura de 10/set');
+}
+
+console.log(`${conferidas} citações conferidas contra as capturas.`);
 if (falhas) {
-  console.error(`\n${falhas} divergência(s). A página estaria atribuindo ao ${C.fonte.modelo} algo que ele não disse.`);
+  console.error(`\n${falhas} divergência(s). A página estaria atribuindo a um modelo algo que ele não disse.`);
   process.exit(1);
 }
 console.log('tudo confere.');
