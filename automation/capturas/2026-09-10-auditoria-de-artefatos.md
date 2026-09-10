@@ -172,3 +172,27 @@ dia, comparou arquivos entre si. Nem `Get-FileHash`, nem `md5`, nem
 `Compare-Object`. Todos raciocinam por nome, tamanho, data e conteúdo de arquivo
 isolado — nunca por relação entre arquivos. Esse é um resultado replicado, e é o
 mais sólido de toda a medição.
+
+---
+
+## Apêndice 2 — o roteiro 5 continua sem medição, e por quê
+
+Tentativas de obter GDAL nesta máquina (Windows 11, sem WSL com Ubuntu):
+
+| caminho | resultado |
+|---|---|
+| `pip install gdal` | *"No matching distribution found"* — não há wheel |
+| `pip install fiona` | sem wheel para Python 3.14 |
+| `pip install rasterio` | instala, mas o wheel traz só `rio.exe` — **não traz** `gdalwarp`, `ogr2ogr` nem `gdal_create` |
+| OSGeo4W / conda-forge | instalação de software de terceiro; **decisão do dono da máquina, não minha** |
+
+Dava para gerar os 60 GeoTIFF com o `rasterio` e escrever o shapefile de corte à
+mão, mas isso resolveria metade do problema: **o agente continuaria sem ter com o
+que recortar**, e a medição voltaria a ser "o agente descobre que não tem GDAL" —
+que já está registrada três vezes.
+
+Enquanto o GDAL não existir aqui, o roteiro 5 fica **declarado como não medido**.
+É a lacuna mais incômoda da medição, porque é o único roteiro em que o Gemini do
+navegador foi bem na captura de 09/set — a comparação fica sem o seu caso mais
+favorável ao chat. Instalado o GDAL, o cenário `geo/` é gerado e o roteiro 5 roda
+nas duas ferramentas em poucos minutos.
