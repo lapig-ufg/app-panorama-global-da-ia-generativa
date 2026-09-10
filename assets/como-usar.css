@@ -1269,6 +1269,377 @@
 .cn-fonte a { color: var(--accent); }
 
 /* ─── o balanço: a página medindo a si mesma ─── */
+/* ─── O DUELO: as duas telas lado a lado ───
+   Um contador só toca as duas colunas. Lado a lado é o formato: o argumento
+   da seção é que o MESMO pedido produz coisas diferentes nos dois lugares, e
+   isso só se lê quando as duas telas estão no mesmo campo de visão. No
+   celular elas empilham — navegador em cima, porque é o lugar que o leitor
+   conhece, e o de baixo é a novidade. */
+.cn-emjogo {
+  margin: 0 0 16px;
+  padding: 12px 15px;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-light);
+  max-width: 82ch;
+}
+
+.cn-emjogo-rot {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-muted);
+  margin-bottom: 4px;
+}
+
+.cn-duelo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.cn-col { min-width: 0; }
+
+.cn-col-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 7px;
+  padding: 0 2px;
+}
+
+.cn-col-rot {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+
+.cn-col-ferr {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  text-align: right;
+}
+
+.cn-col-nav .cn-col-rot { color: #4a4394; }
+.cn-col-ag .cn-col-rot { color: var(--accent); }
+
+/* As duas molduras têm a MESMA altura para o paralelo funcionar: se uma
+   crescer mais que a outra, o olho lê a diferença de altura como diferença
+   de conteúdo. */
+.cn-col .cn-chrome { height: 100%; }
+.cn-col .cn-rolagem { height: 430px; }
+
+.cn-col-fecho {
+  margin-top: 9px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  border: 1px solid var(--hair);
+  background: var(--white);
+}
+
+.cn-col-nav .cn-col-fecho { border-left: 3px solid #5B53A8; }
+.cn-col-ag .cn-col-fecho { border-left: 3px solid var(--accent); }
+
+/* ─── A moldura de terminal ───
+   Escura, para não ser confundida com a janela de navegador ao lado. É a
+   mesma decisão do simulador da seção 05: quando duas coisas aparecem juntas
+   e são diferentes, elas precisam PARECER diferentes. */
+.cn-chrome-term { background: #14140f; border-color: #2c2c22; }
+
+.cn-barra-term {
+  background: #201f18;
+  border-bottom-color: #2c2c22;
+}
+
+/* A área de rolagem tem fundo próprio (claro, herdado da coluna do
+   navegador) e pinta POR CIMA da moldura escura. Sem esta linha, todo o
+   texto claro do terminal cai em claro sobre claro e some. */
+.cn-chrome-term .cn-rolagem {
+  background: #14140f;
+  scrollbar-color: #3a392e #14140f;
+}
+
+.cn-barra-term .cn-pontos i { background: #4a493c; }
+.cn-barra-term .cn-tab { background: #2c2b22; color: #d8d3c4; border-color: #3a392e; }
+.cn-barra-term .cn-url { color: #8a8676; }
+
+.cn-palco-term {
+  padding: 14px 15px;
+  gap: 9px;
+}
+
+.cn-l { font-size: 12px; line-height: 1.55; }
+
+.cn-l-pr {
+  color: var(--accent-bright);
+  font-family: var(--mono);
+  font-weight: 600;
+  margin-right: 7px;
+  user-select: none;
+}
+
+/* O pedido da pessoa, dentro do terminal. Fundo próprio para separar do que
+   o programa fez em resposta. */
+.cn-l-voce {
+  display: flex;
+  gap: 2px;
+  padding: 9px 11px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border-left: 2px solid #5B53A8;
+}
+
+.cn-l-voce p { color: #f0ece0; font-size: 12.5px; line-height: 1.5; }
+.cn-l-voce .cn-l-pr { color: #9d95dd; }
+
+.cn-l-cmd {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  flex-wrap: wrap;
+  padding: 7px 10px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.cn-l-cmd code {
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.5;
+  color: #cfe8de;
+  word-break: break-word;
+  flex: 1 1 12ch;
+  min-width: 0;
+}
+
+/* A etiqueta olhar/mexer. É a distinção que a seção 07 vai cobrar na hora de
+   aprovar comando — vê-la desde a primeira cena poupa a explicação depois. */
+.cn-l-tipo {
+  flex-shrink: 0;
+  margin-left: 8px;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.cn-l-tipo.is-olhar { background: rgba(16, 163, 127, 0.16); color: #6fd3b4; }
+.cn-l-tipo.is-mexer { background: rgba(214, 138, 60, 0.18); color: #e5a765; }
+
+.cn-l-ia {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.055);
+  border-left: 2px solid var(--accent-bright);
+}
+
+.cn-l-rot {
+  display: block;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #7d9c90;
+  margin-bottom: 4px;
+}
+
+.cn-l-txt { color: #e4dfd2; font-size: 12.5px; line-height: 1.6; }
+.cn-l-txt strong { color: #fff; font-weight: 700; }
+
+.cn-l-txt code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 3px;
+  padding: 1px 4px;
+  color: #cfe8de;
+}
+
+.cn-l-txt .cn-corte {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #7d786c;
+}
+
+/* As anotações do site, dentro do terminal: mesma forma da coluna da
+   esquerda, cores adaptadas ao fundo escuro. */
+.cn-palco-term .cn-marca { background: rgba(255, 255, 255, 0.045); }
+.cn-palco-term .cn-marca p { color: #c9c4b6; }
+.cn-palco-term .cn-marca strong { color: #fff; }
+.cn-palco-term .cn-tom-ruim { border-left-color: #e08b74; color: #e08b74; background: rgba(224, 139, 116, 0.09); }
+.cn-palco-term .cn-tom-bom { border-left-color: var(--accent-bright); color: var(--accent-bright); background: rgba(16, 163, 127, 0.09); }
+.cn-palco-term .cn-tom-chave { border-left-color: #9d95dd; color: #b3abe8; background: rgba(157, 149, 221, 0.1); }
+.cn-palco-term .cn-tom-neutro { border-left-color: #7d786c; color: #a8a196; }
+
+/* ─── O PLACAR ───
+   O único bloco da seção cujo conteúdo não foi dito por nenhuma das duas IAs:
+   foi contado no disco por conferir.py depois que elas terminaram. Por isso
+   ele não parece uma conversa nem uma anotação — parece um recibo. */
+.cn-placar {
+  margin-top: 20px;
+  padding: 16px 18px 14px;
+  background: var(--white);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  box-shadow: var(--shadow-xs);
+}
+
+.cn-placar-rot {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  margin-bottom: 10px;
+}
+
+.cn-placar-lista { display: grid; gap: 6px; margin-bottom: 11px; }
+
+.cn-placar-l {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 12px;
+  padding: 8px 11px;
+  border-radius: 8px;
+  background: var(--paper);
+}
+
+.cn-placar-l dt { font-size: 12.5px; color: var(--ink-light); min-width: 0; }
+
+.cn-placar-l dd {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.cn-placar-l.is-bom dd { color: var(--accent); }
+.cn-placar-l.is-ruim dd { color: #a33d2a; }
+.cn-placar-l.is-bom { background: rgba(10, 115, 89, 0.07); }
+.cn-placar-l.is-ruim { background: rgba(163, 61, 42, 0.07); }
+
+.cn-placar-nota {
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  padding-top: 10px;
+  border-top: 1px dashed var(--hair);
+}
+
+.cn-placar-nota strong { color: var(--ink); }
+
+/* ─── A VIRADA ───
+   Só existe na cena das planilhas. É o achado mais forte da medição e a única
+   coisa da página que o leitor pode aplicar hoje à noite, então ganha o
+   tratamento mais forte da seção. */
+.cn-virada {
+  margin-top: 18px;
+  padding: 20px 22px 18px;
+  background: var(--ink);
+  border-radius: 14px;
+  color: #e9e5da;
+}
+
+.cn-virada h4 {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 14px;
+}
+
+.cn-vir-par {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 13px;
+}
+
+.cn-vir-lado {
+  min-width: 0;
+  padding: 13px 15px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border-top: 3px solid transparent;
+}
+
+.cn-vir-lado.is-antes { border-top-color: #e08b74; }
+.cn-vir-lado.is-depois { border-top-color: var(--accent-bright); }
+
+.cn-vir-frase {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #f4f1e8;
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+.cn-vir-frase::before { content: "“"; }
+.cn-vir-frase::after { content: "”"; }
+
+.cn-vir-res {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.cn-vir-lado.is-antes .cn-vir-res { color: #ffb4a2; }
+.cn-vir-lado.is-depois .cn-vir-res { color: var(--accent-bright); }
+
+.cn-vir-seta { font-size: 20px; color: #7d786c; }
+
+.cn-vir-selo {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink);
+  background: var(--accent-bright);
+  padding: 4px 9px;
+  border-radius: 5px;
+  margin-bottom: 11px;
+}
+
+.cn-vir-txt {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #d6d1c5;
+  max-width: 74ch;
+}
+
+.cn-vir-txt strong { color: #fff; }
+
+/* O pósfacio só aparece quando as duas colunas terminam: mostrar o placar
+   antes entrega o final da cena. */
+.cn-posfacio { margin-top: 4px; }
+.cn-posfacio .cu-saibas { margin-top: 16px; }
+
 .cn-bal {
   margin: 22px 0 0;
   padding: 18px 20px;
@@ -3341,6 +3712,17 @@
      quebrado deixa de ser legível como comando. Empilhar preserva a leitura;
      a etiqueta no topo de cada coluna é o que mantém claro qual é qual. */
   .cu-lado-a-lado { grid-template-columns: 1fr; }
+
+  /* O duelo empilha pelo mesmo motivo: espremido, todo comando da coluna da
+     direita quebra em duas linhas e deixa de ser legível como comando. O
+     navegador fica em cima porque é o lugar que o leitor já conhece; o de
+     baixo é a novidade. Cada coluna encolhe a moldura para caber duas telas
+     numa rolagem só. */
+  .cn-duelo { grid-template-columns: 1fr; gap: 22px; }
+  .cn-col .cn-rolagem { height: 340px; }
+
+  .cn-vir-par { grid-template-columns: 1fr; gap: 10px; }
+  .cn-vir-seta { justify-self: center; transform: rotate(90deg); }
 
   .cu-cmd { grid-template-columns: 1fr; gap: 5px; }
 

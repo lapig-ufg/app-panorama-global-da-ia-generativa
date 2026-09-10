@@ -379,7 +379,8 @@
     return Math.min(2200, Math.max(620, 340 + n * 7));
   }
 
-  function beatHTML(b, revelando) {
+  /* Beats do lado do NAVEGADOR: bolhas de conversa. */
+  function beatNav(b, revelando) {
     const cls = revelando ? ' is-entrando' : '';
     switch (b.t) {
       case 'voce':
@@ -410,47 +411,98 @@
     }
   }
 
+  /* Beats do lado INSTALADO: linhas de terminal.
+     A etiqueta olhar/mexer em cada comando não é enfeite — é a distinção que
+     a seção 07 vai cobrar. Um comando que só lê e um que altera o disco
+     recebem tratamentos diferentes na hora de aprovar, e ver a diferença
+     desde a primeira cena poupa a explicação depois. */
+  function beatAg(b, revelando) {
+    const cls = revelando ? ' is-entrando' : '';
+    switch (b.t) {
+      case 'voce':
+        return `<div class="cn-l cn-l-voce${cls}"><span class="cn-l-pr" aria-hidden="true">&rsaquo;</span><p>${txt(b.txt)}</p></div>`;
+      case 'cmd':
+        return `<div class="cn-l cn-l-cmd${cls}">
+          <span class="cn-l-pr" aria-hidden="true">$</span>
+          <code>${esc(b.txt)}${b.corte ? ' …' : ''}</code>
+          <span class="cn-l-tipo is-${esc(b.tipo)}">${b.tipo === 'mexer' ? 'mexe no disco' : 'só lê'}</span>
+        </div>`;
+      case 'ia':
+        return `<div class="cn-l cn-l-ia${cls}">
+          <span class="cn-l-rot" aria-hidden="true">resposta</span>
+          <div class="cn-l-txt">${txt(b.txt)}${b.corte ? '<span class="cn-corte">resposta cortada aqui</span>' : ''}</div>
+        </div>`;
+      case 'marca':
+        return `<div class="cn-marca cn-tom-${esc(b.tom)}${cls}"><span class="cn-marca-p" aria-hidden="true"></span><p>${b.txt}</p></div>`;
+      default:
+        return '';
+    }
+  }
+
+  /* O duelo toca UM contador para os dois lados: no passo k, cada lado revela
+     o seu k-ésimo beat, se ainda tiver um. Os dois roteiros foram escritos
+     com contagens próximas de propósito, para que os momentos correspondentes
+     caiam mais ou menos na mesma altura da tela. */
+  function cenaMax() {
+    const c = cenaAtual();
+    return Math.max(c.navegador.beats.length, c.agente.beats.length);
+  }
+
   function cenaPintar(revelado) {
     const c = cenaAtual();
-    const palco = $('cn-palco');
-    if (!palco) return;
-    palco.innerHTML = c.beats.slice(0, cena.b)
-      .map((b, i) => beatHTML(b, revelado === i)).join('');
-    const rol = $('cn-rolagem');
-    if (rol) rol.scrollTop = rol.scrollHeight;
+
+    const pinta = (idPalco, idRol, beats, fn) => {
+      const palco = $(idPalco);
+      if (!palco) return;
+      palco.innerHTML = beats.slice(0, cena.b).map((b, i) => fn(b, revelado === i)).join('');
+      const rol = $(idRol);
+      if (rol) rol.scrollTop = rol.scrollHeight;
+    };
+
+    pinta('cn-palco-nav', 'cn-rol-nav', c.navegador.beats, beatNav);
+    pinta('cn-palco-ag', 'cn-rol-ag', c.agente.beats, beatAg);
+
+    /* O fecho de cada coluna só aparece quando aquela coluna acabou: é a
+       conclusão daquele lado, e mostrá-la antes entrega o final. */
+    const fim = cena.b >= cenaMax();
+    document.querySelectorAll('#cu-cenas .cn-col-fecho').forEach(el => { el.hidden = !fim; });
+    const posf = $('cn-posfacio');
+    if (posf) posf.hidden = !fim;
+
     cenaPintarControles();
   }
 
   function cenaPintarControles() {
-    const c = cenaAtual();
+    const total = cenaMax();
     const el = $('cn-controles');
     if (!el) return;
-    const fim = cena.b >= c.beats.length;
+    const fim = cena.b >= total;
     el.innerHTML = `
       <button type="button" class="cn-bt cn-bt-play" data-cn="${fim ? 'reiniciar' : (cena.tocando ? 'pausar' : 'tocar')}">
-        ${fim ? '↺ Ver de novo' : (cena.tocando ? '❚❚ Pausar' : '▶ Tocar a conversa')}
+        ${fim ? '↺ Ver de novo' : (cena.tocando ? '❚❚ Pausar' : '▶ Tocar as duas telas')}
       </button>
       <button type="button" class="cn-bt cn-bt-sec" data-cn="passo" ${fim ? 'disabled' : ''}>Passo a passo</button>
       <button type="button" class="cn-bt cn-bt-sec" data-cn="tudo" ${fim ? 'disabled' : ''}>Mostrar tudo</button>
       <span class="cn-prog" aria-hidden="true">
-        <span class="cn-prog-tr" style="width:${Math.round((cena.b / c.beats.length) * 100)}%"></span>
+        <span class="cn-prog-tr" style="width:${Math.round((Math.min(cena.b, total) / total) * 100)}%"></span>
       </span>
-      <span class="cn-conta">${Math.min(cena.b, c.beats.length)} / ${c.beats.length}</span>`;
+      <span class="cn-conta">${Math.min(cena.b, total)} / ${total}</span>`;
   }
 
   function cenaPasso() {
     const c = cenaAtual();
-    if (cena.b >= c.beats.length) { cenaPausar(); return; }
-    const b = c.beats[cena.b];
+    if (cena.b >= cenaMax()) { cenaPausar(); return; }
+    const par = [c.navegador.beats[cena.b], c.agente.beats[cena.b]].filter(Boolean);
     cena.b++;
     cenaPintar(cena.b - 1);
-    if (cena.tocando) cenaAgenda(cenaPasso, cenaDuracao(b));
+    /* O passo dura o tempo do lado mais longo: se o comando da direita some
+       antes de a bolha da esquerda ser lida, o paralelo se perde. */
+    if (cena.tocando) cenaAgenda(cenaPasso, Math.max(...par.map(cenaDuracao), 0));
   }
 
   function cenaTocar() {
     cenaLimpar();
-    const c = cenaAtual();
-    if (cena.b >= c.beats.length) { cena.b = 0; }
+    if (cena.b >= cenaMax()) { cena.b = 0; }
     cena.tocando = true;
     cenaPasso();
   }
@@ -464,7 +516,7 @@
   function cenaTudo() {
     cenaLimpar();
     cena.tocando = false;
-    cena.b = cenaAtual().beats.length;
+    cena.b = cenaMax();
     cenaPintar(-1);
   }
 
@@ -476,94 +528,126 @@
     renderCenas();
   }
 
-  const SELO = {
-    confirmou: { r: 'a página acertou', c: 'ok' },
-    refutou:   { r: 'a página errou',   c: 'erro' },
-    pior:      { r: 'foi pior que a página dizia', c: 'pior' }
-  };
+  /* O placar. Sai da conversa e vai para o disco: é o único lugar da seção
+     onde o que está escrito não foi dito por nenhuma das duas IAs, e sim
+     contado por conferir.py depois que elas terminaram. */
+  function placarHTML(p) {
+    if (!p) return '';
+    return `
+      <section class="cn-placar" aria-label="${esc(p.titulo)}">
+        <span class="cn-placar-rot">${esc(p.titulo)}</span>
+        <dl class="cn-placar-lista">
+          ${p.linhas.map(l => `
+            <div class="cn-placar-l${l.bom === true ? ' is-bom' : l.bom === false ? ' is-ruim' : ''}">
+              <dt>${txt(l.rotulo)}</dt>
+              <dd>${txt(l.valor)}</dd>
+            </div>`).join('')}
+        </dl>
+        <p class="cn-placar-nota">${p.nota}</p>
+      </section>`;
+  }
+
+  /* A virada só existe na cena das planilhas, e é o achado mais forte da
+     medição inteira: mesma pasta, mesmo programa, mesmo dia — muda a frase,
+     muda o resultado. Ganha um bloco próprio porque é a única coisa da
+     página que o leitor pode aplicar hoje à noite. */
+  function viradaHTML(c) {
+    if (!c.virada) return '';
+    const v = c.virada;
+    return `
+      <section class="cn-virada" aria-labelledby="h-vir-${esc(c.id)}">
+        <h4 id="h-vir-${esc(c.id)}">${esc(c.viradaTitulo)}</h4>
+        <div class="cn-vir-par">
+          <div class="cn-vir-lado is-antes">
+            <p class="cn-vir-frase">${esc(v.antes)}</p>
+            <p class="cn-vir-res">${txt(v.antesResultado)}</p>
+          </div>
+          <span class="cn-vir-seta" aria-hidden="true">→</span>
+          <div class="cn-vir-lado is-depois">
+            <p class="cn-vir-frase">${esc(v.depois)}</p>
+            <p class="cn-vir-res">${txt(v.depoisResultado)}</p>
+          </div>
+        </div>
+        <span class="cn-vir-selo">${esc(v.selo)}</span>
+        <p class="cn-vir-txt">${v.texto}</p>
+      </section>`;
+  }
+
+  function colunaHTML(lado, cfg) {
+    return `
+      <div class="cn-col cn-col-${cfg.classe}">
+        <header class="cn-col-head">
+          <span class="cn-col-rot">${esc(cfg.rotulo)}</span>
+          <span class="cn-col-ferr">${esc(cfg.ferramenta)}</span>
+        </header>
+        ${cfg.chrome}
+        <p class="cn-col-fecho" hidden>${txt(lado.fecho)}</p>
+      </div>`;
+  }
 
   function renderCenas() {
     const el = $('cu-cenas');
     if (!el || typeof CENAS === 'undefined') return;
     const c = cenaAtual();
-    const selo = SELO[c.vereditoTipo] || SELO.confirmou;
+    const F = CENAS.fontes;
+
+    const chromeNav = `
+      <!-- A moldura de navegador não é enfeite: a seção compara "dentro da
+           aba" com "fora dela", e mostrar a barra de endereço à vista é o
+           jeito mais curto de dizer onde estamos. -->
+      <div class="cn-chrome">
+        <div class="cn-barra">
+          <span class="cn-pontos" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="cn-tab">Gemini</span>
+          <span class="cn-url">gemini.google.com</span>
+        </div>
+        <div class="cn-rolagem" id="cn-rol-nav"><div class="cn-palco" id="cn-palco-nav"></div></div>
+      </div>`;
+
+    const chromeAg = `
+      <div class="cn-chrome cn-chrome-term">
+        <div class="cn-barra cn-barra-term">
+          <span class="cn-pontos" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="cn-tab">${esc(c.agente.ferramenta)}</span>
+          <span class="cn-url">C:\\Users\\amara\\laboratorio-teste</span>
+        </div>
+        <div class="cn-rolagem" id="cn-rol-ag"><div class="cn-palco cn-palco-term" id="cn-palco-ag"></div></div>
+      </div>`;
 
     el.innerHTML = `
-      <div class="cn-abas" role="tablist" aria-label="Escolher a conversa">
+      <div class="cn-abas" role="tablist" aria-label="Escolher a tarefa">
         ${CENAS.cenas.map((x, i) => `
           <button type="button" role="tab" class="cn-aba ${i === cena.i ? 'is-active' : ''}"
                   data-cn="ir" data-i="${i}" tabindex="${i === cena.i ? '0' : '-1'}"
                   aria-selected="${i === cena.i}">${esc(x.aba)}</button>`).join('')}
       </div>
 
-      <h3 class="cn-titulo">${esc(c.titulo)}</h3>
-      <p class="cn-ctx">${txt(c.contexto)}</p>
+      <h3 class="cn-titulo">${esc(c.pergunta)}</h3>
+      <p class="cn-emjogo"><span class="cn-emjogo-rot">O que está em jogo</span>${txt(c.emJogo)}</p>
 
-      <div class="cn-quadro">
-        <!-- A moldura de navegador não é enfeite: a seção inteira compara
-             "dentro da aba" com "fora dela", e mostrar a aba com a barra de
-             endereço à vista é o jeito mais curto de dizer onde estamos. -->
-        <div class="cn-chrome">
-          <div class="cn-barra">
-            <span class="cn-pontos" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span class="cn-tab">Gemini</span>
-            <span class="cn-url">gemini.google.com</span>
-          </div>
-          <div class="cn-rolagem" id="cn-rolagem">
-            <div class="cn-palco" id="cn-palco"></div>
-          </div>
-        </div>
-        <div class="cn-controles" id="cn-controles"></div>
+      <div class="cn-duelo">
+        ${colunaHTML(c.navegador, { classe: 'nav', rotulo: 'No navegador', ferramenta: F.navegador.rotulo, chrome: chromeNav })}
+        ${colunaHTML(c.agente, { classe: 'ag', rotulo: 'Instalado na máquina', ferramenta: c.agente.ferramenta, chrome: chromeAg })}
       </div>
 
-      <div class="cn-veredito cn-v-${esc(c.vereditoTipo)}">
-        <span class="cn-selo cn-selo-${selo.c}">${esc(selo.r)}</span>
-        <p>${c.veredito}</p>
+      <div class="cn-controles" id="cn-controles"></div>
+
+      <div class="cn-posfacio" id="cn-posfacio" hidden>
+        ${placarHTML(c.placar)}
+        ${viradaHTML(c)}
+        <p class="cn-licao">${txt(c.licao)}</p>
+        ${c.saibaMais ? `<div class="cu-saibas">${saibaMais(c.saibaMais)}</div>` : ''}
       </div>
-
-      <p class="cn-licao">${txt(c.licao)}</p>
-
-      ${painelTerminal(c.id)}
 
       <p class="cn-fonte">
-        Conversa real, capturada em ${esc(CENAS.fonte.data.split('-').reverse().join('/'))} no
-        <strong>${esc(CENAS.fonte.modelo)}</strong>. ${esc(c.medido.turnos)} mensagem${c.medido.turnos > 1 ? 's' : ''} do
-        usuário · ${esc(c.medido.desfecho)}. Todo texto em balão é citação literal —
-        <a href="${esc(CENAS.fonte.arquivo)}">a transcrição completa está no repositório</a>.
+        As duas colunas são capturas reais. À esquerda, ${esc(F.navegador.rotulo)} em ${esc(F.navegador.data)};
+        à direita, ${esc(c.agente.ferramenta)} em ${esc(F.agente.data)}, numa pasta de teste montada para isto.
+        Todo texto em balão e todo comando é citação literal, conferida por
+        <code>automation/valida-cenas.mjs</code> — <a href="automation/capturas/">as transcrições completas
+        estão no repositório</a>.
       </p>`;
 
     cenaPintar(-1);
-  }
-
-  /* O outro lado da mesma tarefa. Continua sendo RECONSTITUIÇÃO — e agora que
-     a coluna da esquerda é uma captura real, o rótulo aqui deixou de ser
-     escrúpulo e virou necessidade: sem ele a seção compara uma medição com
-     uma suposição sem dizer qual é qual. */
-  function painelTerminal(id) {
-    const c = (D.cenarios || []).find(x => x.id === id);
-    if (!c) return '';
-    return `
-      <section class="cn-term-lado" aria-labelledby="h-tl-${esc(id)}">
-        <header class="cn-tl-head">
-          <h4 id="h-tl-${esc(id)}">O mesmo pedido, com acesso ao terminal</h4>
-          <span class="cn-tl-selo">reconstituição — ainda não medida</span>
-        </header>
-        <p class="cn-tl-aviso">
-          Esta coluna não veio de captura nenhuma: foi escrita à mão, com comandos que
-          <em>foram executados</em> antes de entrar na página, mas fora de uma sessão real de
-          agente. Enquanto a conversa ao lado é uma medição, esta é uma expectativa — e a
-          próxima captura é justamente a dela.
-        </p>
-        <div class="cu-term">${c.terminal.transcricao.map(linhaTerminal).join('')}</div>
-        <h5 class="cu-cmd-h">Os comandos, um por um</h5>
-        <dl class="cu-cmds">
-          ${c.comandos.map(k => `
-            <div class="cu-cmd">
-              <dt><code>${esc(k.cmd)}</code></dt>
-              <dd>${txt(k.oQueFaz)}</dd>
-            </div>`).join('')}
-        </dl>
-      </section>`;
   }
 
   function renderBalanco() {
