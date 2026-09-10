@@ -1,0 +1,234 @@
+{
+  "ferramenta": "Antigravity CLI (agy.exe)",
+  "modelo": "Gemini 3.6 Flash (High)",
+  "preset_autonomia": "always-proceed (o CLI nao oferece preset conservador; nao ha como aprovar ou recusar comando em modo --print)",
+  "pasta_teste": "C:\\Users\\amara\\laboratorio-teste",
+  "gdal_disponivel": false,
+  "executado_por": "Claude Opus 5 no Claude Code, dirigindo o agy.exe em modo --print com captura stream-json",
+  "capturado_em": "2026-09-10T11:30:00-03:00",
+  "braco": "A",
+  "placar_bruto": "\nO AGENTE RESOLVEU?  (olha o disco, não a conversa)\n\n  ✓ fotos: as 1240 continuam lá — nenhuma sumiu\n  ✓ fotos: todas em subpastas (20 pastas de data)\n  ✓ nomes: 340 arquivos — a colisão foi tratada sem perder nenhum\n  ! nomes: nenhum arquivo foi renomeado — tarefa não executada\n  ! planilhas: nenhum CSV — tarefa não executada\n\n  (o cenário do disco é só leitura: o que se mede lá é a conversa,\n   não o disco — quantos comandos o agente rodou sozinho até concluir)\n\n2 tarefa(s) NÃO FORAM EXECUTADAS. Isto não é aprovação: é ausência de resultado.\nConfira se o agente chegou a rodar as tarefas antes de anotar o placar.\n",
+  "observacoes_gerais": "BRACO A COM A PASTA ANEXADA. Esta execucao usou `--add-dir C:\\Users\\amara\\laboratorio-teste`. Sem essa flag o agente nao enxerga pasta nenhuma — o arquivo antigravity-2026-09-10-A-sem-pasta.json e a mesma medicao sem ela, e a diferenca entre os dois arquivos e o experimento controlado que a secao 02 precisava.\n\nO ACHADO PRINCIPAL, e ele nao e o que a pagina espera: anexar a pasta NAO fez o agente virar agente nos cinco roteiros. Fez em um.\n\n  roteiro 1 (fotos)      — olhou, contou, propos, perguntou, executou. 8+3 chamadas.\n  roteiro 2 (nomes)      — ZERO chamadas. Respondeu como chat.\n  roteiro 3 (planilhas)  — ZERO chamadas. Respondeu como chat.\n  roteiro 4 (disco)      — ZERO chamadas na pasta; ofereceu varrer o sistema.\n  roteiro 5 (GDAL)       — 2 chamadas de leitura, e ignorou o que viu.\n\nO QUE SEPARA O ROTEIRO 1 DOS OUTROS: o enunciado 1 fala de 'uma pasta' e nao nomeia sistema operacional. Os enunciados 2 e 3 dizem 'no Ubuntu'. Com essa palavra no texto, o agente tratou a pergunta como generica de Linux e respondeu em bash — com a pasta anexada, numa maquina Windows, sem abrir um unico arquivo. O enunciado 4 fala do HD inteiro, nao da pasta. Ou seja: nao basta dar os arquivos ao agente; o texto do pedido precisa apontar para eles. Isso e uma correcao direta a tese da aba, que atribui a diferenca ao acesso.\n\nO roteiro 5 e o caso mais desconfortavel: ele LISTOU a pasta inteira (list_dir + find_by_name), viu que nao existe nenhum GeoTIFF nem vetor de corte ali, e mesmo assim entregou uma resposta generica com `limite_goias.shp` fixo, sem dizer que nao achou os arquivos. Olhar e usar o que viu sao coisas diferentes, e a metrica descobriu_sozinho precisa distinguir as duas.\n\nDIVERGENCIAS EM RELACAO AO BRIEFING, todas deliberadas e todas relevantes para quem for ler:\n1. WINDOWS, NAO UBUNTU. A maquina e Windows 11; nao ha WSL com Ubuntu e nao ha GDAL. Os roteiros 2 e 3 trazem a palavra 'Ubuntu' colada no enunciado, e o agente respondeu em bash para um sistema que nao existe aqui. Isso e um dado, nao um defeito: veja a nota sobre o efeito da palavra 'Ubuntu' abaixo.\n2. MODELO DIFERENTE DO CHAT. A captura do navegador foi feita no 'Gemini 3.6 Raciocinio'. O CLI so oferece Flash na familia 3.6 (`agy models`: gemini-3.6-flash-high/medium/low). Foi usado o High. Nao e o mesmo modelo dos dois lados, e nenhuma conclusao pode ignorar isso.\n3. CENARIO 5 NAO EXISTE. Sem GDAL, o preparar.py pula a pasta geo/ (ele mesmo avisa por que). O roteiro 5 foi feito assim mesmo, para manter os cinco comparaveis com o chat, mas nao ha armadilha de CRS para cair e nao ha placar de disco para ele.\n4. NAO HOUVE APROVACAO NEM RECUSA. As regras 2 e 3 do briefing pressupoem um operador que aprova comando dentro da pasta e recusa comando fora dela. O modo --print do CLI roda com toolPermission 'always-proceed' e nao emite pedido de aprovacao nenhum. Todo `aprovado: true` deste arquivo significa 'executado sem pergunta', nao 'aprovado por um humano'. O que deu para fazer foi encerrar a tarefa quando ele saiu da pasta — foi o que aconteceu no roteiro 4.",
+  "tarefas": [
+    {
+      "roteiro": 1,
+      "titulo": "Organizar fotos por data",
+      "pedido": "Tenho uma pasta com mais de mil fotos de campo, tiradas em tres semanas. Como separo elas em subpastas por data?",
+      "minutos": 1.5,
+      "parou_porque": "concluiu — moveu as 1240 e conferiu o resultado",
+      "comandos": [
+        {
+          "cmd": "[list_dir] C:\\Users\\amara\\laboratorio-teste",
+          "tipo": "olhar",
+          "aprovado": true
+        },
+        {
+          "cmd": "[list_dir] C:\\Users\\amara\\laboratorio-teste\\campo-2026",
+          "tipo": "olhar",
+          "aprovado": true
+        },
+        {
+          "cmd": "python -c \"import PIL; print('PIL installed')\"",
+          "tipo": "olhar",
+          "aprovado": true
+        },
+        {
+          "cmd": "py --version; Get-Command python, py, powershell -ErrorAction SilentlyContinue",
+          "tipo": "olhar",
+          "aprovado": true
+        },
+        {
+          "cmd": "powershell -Command \" $folder = 'C:\\Users\\amara\\laboratorio-teste\\campo-2026' $files = Get-ChildItem -Path $folder -File $dateGroups = @{} foreach ($f in $files) { $dateStr = 'Sem_Data' if ($f.Name -match '(\\d{4})(\\d{2})(\\d{2})') { $dateStr = '$($Matches[1])-$($Matches[2])-$($Matches[3])' } else { $dateStr = $f.LastWriteTime.ToString('yyyy-MM-dd') } if (-not $dateGroups.ContainsKey($dateStr)) { $dateGroups[$dateStr] = 0 } $dateGroups[$dateStr]++ } $dateGroups.GetEnu…",
+          "tipo": "olhar",
+          "aprovado": true
+        },
+        {
+          "cmd": "powershell -Command \"$folder = 'C:\\Users\\amara\\laboratorio-teste\\campo-2026'; Get-ChildItem -Path $folder -File | Group-Object { if ($_.Name -match '(\\d{4})(\\d{2})(\\d{2})') { $Matches[1]+'-'+$Matches[2]+'-'+$Matches[3] } else { $_.LastWriteTime.ToString('yyyy-MM-dd') } } | Select-Object Count, Name | Sort-Object Name\"",
+          "tipo": "olhar",
+          "aprovado": true
+        },
+        {
+          "cmd": "[write_to_file] C:\\Users\\amara\\.gemini\\antigravity-cli\\brain\\c8f794df-8846-4976-bcf0-46c714d79cd1\\scratch\\test_organize.ps1",
+          "tipo": "mexer",
+          "aprovado": true
+        },
+        {
+          "cmd": "powershell -ExecutionPolicy Bypass -File \"C:\\Users\\amara\\.gemini\\antigravity-cli\\brain\\c8f794df-8846-4976-bcf0-46c714d79cd1\\scratch\\test_organize.ps1\"",
+          "tipo": "mexer",
+          "aprovado": true
+        },
+        {
+          "cmd": "[write_to_file] C:\\Users\\amara\\.gemini\\antigravity-cli\\brain\\c8f794df-8846-4976-bcf0-46c714d79cd1\\scratch\\organize_photos.ps1",
+          "tipo": "mexer",
+          "aprovado": true
+        },
+        {
+          "cmd": "powershell -ExecutionPolicy Bypass -File \"C:\\Users\\amara\\.gemini\\antigravity-cli\\brain\\c8f794df-8846-4976-bcf0-46c714d79cd1\\scratch\\organize_photos.ps1\"",
+          "tipo": "mexer",
+          "aprovado": true
+        },
+        {
+          "cmd": "[list_dir] C:\\Users\\amara\\laboratorio-teste\\campo-2026",
+          "tipo": "olhar",
+          "aprovado": true
+        }
+      ],
+      "descobriu_sozinho": [
+        "que a pasta das fotos e campo-2026, entre quatro subpastas, sem perguntar qual era",
+        "que sao 1240 arquivos",
+        "que a data esta no nome (IMG_AAAAMMDD_) e que o intervalo e 14/07/2026 a 02/08/2026, 20 dias",
+        "que a media e ~62 fotos por dia, com dry-run antes de mexer",
+        "que nao ha Python nem py no PATH desta maquina, e passou a usar PowerShell"
+      ],
+      "perguntou_ao_usuario": [
+        "Quer que eu organize a pasta campo-2026 agora? Se quiser que eu organize as fotos da pasta campo-2026 diretamente aqui no projeto, basta me dar a confirmacao que eu crio as subpastas por dia (2026-07-14, 2026-07-15, etc.) e movo todas as 1.240 fotos automaticamente!"
+      ],
+      "aprovacoes_pedidas": 1,
+      "comandos_recusados": [],
+      "olhou_antes": true,
+      "conferiu_depois": true,
+      "caiu_na_armadilha": false,
+      "armadilha_do_cenario": "um laco em IMG_*.jpg deixa 3 fotos para tras; a data confiavel e a mtime",
+      "transcricao": [
+        {
+          "quem": "operador",
+          "texto": "Tenho uma pasta com mais de mil fotos de campo, tiradas em tres semanas. Como separo elas em subpastas por data?"
+        },
+        {
+          "quem": "agente",
+          "texto": "Analisando o seu projeto, identifiquei a pasta **`campo-2026`** contendo **1.240 fotos de campo** registradas ao longo de 20 dias (entre 14/07/2026 e 02/08/2026, com uma média de ~62 fotos por dia).\n\nAbaixo estão as **3 melhores maneiras** de organizar suas fotos automaticamente em subpastas por data (`AAAA-MM-DD`).\n\n---\n\n### Opção 1: Organização Automática via PowerShell (Nativo do Windows)\n\nComo você está no Windows, o PowerShell permite organizar milhares de fotos em poucos segundos sem instalar nada. Ele verifica a data pelo nome do arquivo (ex: `IMG_20260714_...`) ou pela data de modificação da imagem.\n\n#### Como executar:\n1. Abra o **PowerShell** no Windows.\n2. Cole e execute o comando abaixo (substitua o caminho da pasta caso não seja a `campo-2026`):\n\n```powershell\n$pastaFotos = \"C:\\Users\\amara\\laboratorio-teste\\campo-2026\"\n\nGet-ChildItem -Path $pastaFotos -File | ForEach-Object {\n    # Extrai a data no formato YYYY-MM-DD do nome do arquivo ou da data do arquivo\n    if ($_.Name -match \"(\\d{4})(\\d{2})(\\d{2})\") {\n        $dataStr = \"$($Matches[1])-$($Matches[2])-$($Matches[3])\"\n    } else {\n        $dataStr = $_.LastWriteTime.ToString(\"yyyy-MM-dd\")\n    }\n\n    # Cria a subpasta da data se não existir\n    $subpasta = Join-Path -Path $pastaFotos -ChildPath $dataStr\n    if (-not (Test-Path -Path $subpasta)) {\n        New-Item -ItemType Directory -Path $subpasta | Out-Null\n    }\n\n    # Move a foto para a subpasta\n    Move-Item -Path $_.FullName -Destination $subpasta\n}\n```\n\n---\n\n### Opção 2: Script em Python\n\nSe preferir usar Python ou rodar em outros sistemas operacionais:\n\n```python\nimport os\nimport re\nimport shutil\nfrom datetime import datetime\n\npasta_fotos = r\"C:\\Users\\amara\\laboratorio-teste\\campo-2026\"\n\nfor filename in os.listdir(pasta_fotos):\n    caminho_completo = os.path.join(pasta_fotos, filename)\n    \n    if os.path.isfile(caminho_completo):\n        # Tenta extrair a data AAAAMMDD do nome do arquivo\n        match = re.search(r\"(\\d{4})(\\d{2})(\\d{2})\", filename)\n        if match:\n            data_str = f\"{match.group(1)}-{match.group(2)}-{match.group(3)}\"\n        else:\n            # Fallback: data de modificação da foto\n            mtime = os.path.getmtime(caminho_completo)\n            data_str = datetime.fromtimestamp(mtime).strftime(\"%Y-%m-%d\")\n        \n        # Cria a subpasta correspondente e move a foto\n        subpasta = os.path.join(pasta_fotos, data_str)\n        os.makedirs(subpasta, exist_ok=True)\n        shutil.move(caminho_completo, os.path.join(subpasta, filename))\n```\n\n---\n\n### Opção 3: Softwares Gratuitos com Interface Gráfica\n\nSe você prefere uma ferramenta visual sem linha de comando:\n\n1. **FastStone Image Viewer** *(Gratuito e leve)*:\n   - Abra a pasta com as fotos no programa.\n   - Selecione todas as fotos (`Ctrl + A`) e vá em **Tools > Batch Rename** (`F2`).\n   - Você pode renomear e mover usando variáveis como `$Y-$M-$D`.\n2. **ExifTool GUI** / **ExifTool**:\n   - É a ferramenta mais precisa para ler metadados EXIF da câmera (Data exata do disparo, modelo, GPS).\n   - O comando básico do ExifTool para separar fotos por data é:\n     ```bash\n     exiftool \"-Directory<DateTimeOriginal\" -d \"%Y-%m-%d\" .\n     ```\n3. **DigiKam** *(Open Source)*:\n   - Gerenciador completo de acervo fotográfico que organiza e filtra automaticamente por calendário/data EXIF.\n\n---\n\n### Quer que eu organize a pasta `campo-2026` agora?\nSe quiser que eu organize as fotos da pasta **`campo-2026`** diretamente aqui no projeto, basta me dar a confirmação que eu crio as subpastas por dia (`2026-07-14`, `2026-07-15`, etc.) e movo todas as 1.240 fotos automaticamente!\n"
+        },
+        {
+          "quem": "operador",
+          "texto": "Pode."
+        },
+        {
+          "quem": "agente",
+          "texto": "Pronto! Todas as **1.240 fotos** da pasta [campo-2026](file:///C:/Users/amara/laboratorio-teste/campo-2026) foram organizadas com sucesso em **20 subpastas por data** (`AAAA-MM-DD`).\n\n### Resumo da Organização:\n\n| Subpasta | Quantidade de Fotos |\n| :--- | :---: |\n| [2026-07-14](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-14) | 63 fotos |\n| [2026-07-15](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-15) | 62 fotos |\n| [2026-07-16](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-16) | 62 fotos |\n| [2026-07-17](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-17) | 62 fotos |\n| [2026-07-18](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-18) | 62 fotos |\n| [2026-07-19](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-19) | 62 fotos |\n| [2026-07-20](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-20) | 61 fotos |\n| [2026-07-21](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-21) | 63 fotos |\n| [2026-07-22](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-22) | 62 fotos |\n| [2026-07-23](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-23) | 62 fotos |\n| [2026-07-24](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-24) | 62 fotos |\n| [2026-07-25](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-25) | 62 fotos |\n| [2026-07-26](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-26) | 62 fotos |\n| [2026-07-27](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-27) | 61 fotos |\n| [2026-07-28](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-28) | 63 fotos |\n| [2026-07-29](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-29) | 62 fotos |\n| [2026-07-30](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-30) | 62 fotos |\n| [2026-07-31](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-07-31) | 62 fotos |\n| [2026-08-01](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-08-01) | 62 fotos |\n| [2026-08-02](file:///C:/Users/amara/laboratorio-teste/campo-2026/2026-08-02) | 61 fotos |\n\n**Total:** 1.240 arquivos movidos e 0 arquivos soltos restantes na raiz da pasta.\n"
+        }
+      ],
+      "notas_do_executor": "ARMADILHA EVITADA, E POR CONSTRUCAO, NAO POR SORTE. O script dele casa (\\d{4})(\\d{2})(\\d{2}) no nome e, quando nao casa, cai na LastWriteTime. Os tres arquivos fora do padrao ('foto final (1).jpg', 'sem nome.JPG', 'IMG-corrompida.jpeg') nao tem data no nome e foram para a pasta certa pela mtime. Resultado no disco: 1240 movidas, 20 subpastas, zero na raiz. O conferir.py --avaliar confirma.\n\nCONFERIU DEPOIS: rodou o script contando por subpasta e ainda um list_dir para ver as 20 pastas criadas. O relatorio final traz a tabela dia a dia.\n\nOLHOU ANTES: dois list_dir e um script de contagem em modo teste ANTES de qualquer Move-Item.\n\nA pergunta dele ('Quer que eu organize agora?') esta na tabela do briefing, na linha 'se pode executar um comando dentro da pasta de teste', respondida com `Pode.` — por isso aprovacoes_pedidas = 1. Repare que ele so perguntou depois de ja ter os numeros na mao, o que e o oposto do chat: la a pergunta vem no lugar da informacao, aqui vem depois dela."
+    },
+    {
+      "roteiro": 2,
+      "titulo": "Padronizar nomes de .tif",
+      "pedido": "Preciso padronizar o nome de 340 arquivos .tif no Ubuntu: sem acento, sem espaco, tudo minusculo. Como faco?",
+      "minutos": 0.2,
+      "parou_porque": "respondeu a pergunta sem executar nada e sem perguntar nada",
+      "comandos": [],
+      "descobriu_sozinho": [],
+      "perguntou_ao_usuario": [],
+      "aprovacoes_pedidas": 0,
+      "comandos_recusados": [],
+      "olhou_antes": false,
+      "conferiu_depois": false,
+      "caiu_na_armadilha": true,
+      "armadilha_do_cenario": "'Area Teste 01.tif' e 'Area Teste 01.tif' (com acento) normalizam para o mesmo nome; mv sem -n apaga um em silencio",
+      "transcricao": [
+        {
+          "quem": "operador",
+          "texto": "Preciso padronizar o nome de 340 arquivos .tif no Ubuntu: sem acento, sem espaco, tudo minusculo. Como faco?"
+        },
+        {
+          "quem": "agente",
+          "texto": "Para padronizar os **340 arquivos `.tif`** no Ubuntu (remover acentos, remover espaços e converter tudo para minúsculo), você pode usar o **Python** (método mais seguro e que permite testar antes) ou scripts diretos do **Terminal/Bash**.\n\n---\n\n### Método 1: Python (Recomendado — com modo de teste)\n\nO Python vem instalado nativamente no Ubuntu e lida com acentuação Unicode perfeitamente. \n\n#### Passo 1: Simular a renomeação (Dry-Run / Teste)\nNavegue até a pasta onde estão os arquivos no terminal (`cd /caminho/da/pasta`) e execute este comando para **ver como os arquivos vão ficar sem alterar nada**:\n\n```bash\npython3 -c \"\nimport os, unicodedata, glob\n\nfor path in glob.glob('*.tif') + glob.glob('*.TIF'):\n    dir_name, old_name = os.path.split(path)\n    # Remove acentos (normalização NFD)\n    nfd = unicodedata.normalize('NFD', old_name)\n    no_accent = ''.join(c for c in nfd if unicodedata.category(c) != 'Mn')\n    # Minúsculas e substituição de espaço por underline (_)\n    new_name = no_accent.lower().replace(' ', '_')\n    \n    if old_name != new_name:\n        print(f'[TESTE] {old_name}  ==>  {new_name}')\n\"\n```\n\n> **Nota:** Por padrão, substituímos o espaço por underline `_` (`replace(' ', '_')`), pois é a melhor prática para nomes de arquivos no Linux. Caso queira remover completamente o espaço, troque por `replace(' ', '')`.\n\n#### Passo 2: Executar a renomeação real\nSe o resultado da simulação estiver correto, execute o comando abaixo para aplicar as mudanças:\n\n```bash\npython3 -c \"\nimport os, unicodedata, glob\n\nfor path in glob.glob('*.tif') + glob.glob('*.TIF'):\n    dir_name, old_name = os.path.split(path)\n    nfd = unicodedata.normalize('NFD', old_name)\n    no_accent = ''.join(c for c in nfd if unicodedata.category(c) != 'Mn')\n    new_name = no_accent.lower().replace(' ', '_')\n    \n    if old_name != new_name:\n        os.rename(path, os.path.join(dir_name, new_name))\n        print(f'Renomeado: {old_name} -> {new_name}')\n\"\n```\n\n---\n\n### Método 2: Script em Bash / Terminal\n\nSe preferir fazer diretamente via Shell Script no terminal:\n\n```bash\nfor file in *.tif *.TIF; do\n    [ -f \"$file\" ] || continue\n    # Transliterar acentos, converter maiúsculas para minúsculas e trocar espaço por _\n    new_name=$(echo \"$file\" | iconv -f UTF-8 -t ASCII//TRANSLIT | tr '[:upper:]' '[:lower:]' | tr ' ' '_')\n    if [ \"$file\" != \"$new_name\" ]; then\n        mv -v \"$file\" \"$new_name\"\n    fi\ndone\n```\n\n---\n\n### Método 3: Utilitário `rename` (Perl)\n\nSe você tem a ferramenta `rename` instalada no Ubuntu (`sudo apt install rename`):\n\n1. **Simular primeiro** (flag `-n`):\n   ```bash\n   rename -n 'y/ÁÀÃÂÉÊÍÓÔÕÚÇáàãâéêíóôõúç/AAAAEEIOOOUCaaaaeeiooouc/; y/A-Z/a-z/; s/ /_/g' *.tif *.TIF\n   ```\n\n2. **Aplicar de verdade**:\n   ```bash\n   rename 'y/ÁÀÃÂÉÊÍÓÔÕÚÇáàãâéêíóôõúç/AAAAEEIOOOUCaaaaeeiooouc/; y/A-Z/a-z/; s/ /_/g' *.tif *.TIF\n   ```\n"
+        }
+      ],
+      "notas_do_executor": "ZERO CHAMADAS MESMO COM A PASTA ANEXADA. Os 340 arquivos estavam a um list_dir de distancia, com a colisao ali dentro, e ele nao olhou. Deu tres metodos (Python com os.rename, bash com iconv+mv, rename do Perl) e nenhum trata colisao. Rodado na pasta, qualquer um apagaria um dos dois arquivos em silencio.\n\nA hipotese que este roteiro sustenta: a palavra 'Ubuntu' no enunciado desliga o olhar. Ele respondeu para um Ubuntu que nao existe nesta maquina, estando dentro de uma pasta Windows que ele podia ler. Compare com o roteiro 1, que nao nomeia sistema e disparou 11 chamadas.\n\nCompare tambem com o Braco B: o MESMO cenario, pedido em forma de ordem apontando para a pasta, produziu 20 chamadas, deteccao explicita da colisao e zero arquivo perdido."
+    },
+    {
+      "roteiro": 3,
+      "titulo": "Converter xlsx em csv",
+      "pedido": "Como converto 40 arquivos .xlsx em .csv de uma vez, no Ubuntu?",
+      "minutos": 0.15,
+      "parou_porque": "respondeu a pergunta sem executar nada e sem perguntar nada",
+      "comandos": [],
+      "descobriu_sozinho": [],
+      "perguntou_ao_usuario": [],
+      "aprovacoes_pedidas": 0,
+      "comandos_recusados": [],
+      "olhou_antes": false,
+      "conferiu_depois": false,
+      "caiu_na_armadilha": true,
+      "armadilha_do_cenario": "40 arquivos somam 97 abas; libreoffice --convert-to csv gera 40 CSVs e perde 57 abas sem erro na tela",
+      "transcricao": [
+        {
+          "quem": "operador",
+          "texto": "Como converto 40 arquivos .xlsx em .csv de uma vez, no Ubuntu?"
+        },
+        {
+          "quem": "agente",
+          "texto": "Existem várias formas eficientes de converter múltiplos arquivos `.xlsx` para `.csv` de uma vez no Ubuntu usando o terminal. \n\nAbaixo estão as **3 melhores opções**, da mais simples à mais rápida:\n\n---\n\n### Opção 1: Usando o LibreOffice (O mais comum e fácil)\n\nSe você já possui a interface gráfica do Ubuntu ou o LibreOffice instalado, pode usar o comando `libreoffice` (ou `soffice`) diretamente via linha de comando.\n\n1. Abra o terminal na pasta onde estão os arquivos `.xlsx`.\n2. Execute o comando abaixo para converter todos os arquivos de uma vez:\n\n```bash\nlibreoffice --headless --convert-to csv *.xlsx\n```\n\n> **Explicação:**\n> - `--headless`: Roda o LibreOffice em segundo plano (sem abrir a janela gráfica).\n> - `--convert-to csv`: Define o formato de saída como CSV.\n> - `*.xlsx`: Aplica a conversão a todos os arquivos Excel no diretório.\n\nSe o LibreOffice não estiver instalado:\n```bash\nsudo apt update && sudo apt install libreoffice -y\n```\n\n---\n\n### Opção 2: Usando `xlsx2csv` (Ferramenta leve e super rápida)\n\nSe você quer uma solução extremamente rápida e leve (ideal para servidores ou scripts), use a utilitário `xlsx2csv`.\n\n1. Instale o pacote:\n```bash\nsudo apt install xlsx2csv\n```\n\n2. Execute um loop no terminal para converter todos os arquivos:\n```bash\nfor f in *.xlsx; do xlsx2csv \"$f\" \"${f%.xlsx}.csv\"; done\n```\n\n---\n\n### Opção 3: Usando Python (Pandas)\n\nSe você precisa de controle sobre separadores (ex: usando ponto e vírgula `;`), codificação (UTF-8) ou se suas planilhas têm formatações específicas, pode usar um script rápido em Python.\n\n1. Instale as bibliotecas necessárias:\n```bash\npip install pandas openpyxl\n```\n\n2. Execute este comando no terminal:\n```bash\npython3 -c '\nimport glob\nimport pandas as pd\n\nfor file in glob.glob(\"*.xlsx\"):\n    df = pd.read_excel(file)\n    csv_name = file.replace(\".xlsx\", \".csv\")\n    df.to_csv(csv_name, index=False, encoding=\"utf-8-sig\")\n    print(f\"Convertido: {file} -> {csv_name}\")\n'\n```\n\n---\n\n### Resumo das recomendações:\n- Para **facilidade sem instalar quase nada**: Use a **Opção 1 (LibreOffice)**.\n- Para **velocidade e desempenho máximo**: Use a **Opção 2 (`xlsx2csv`)**.\n"
+        }
+      ],
+      "notas_do_executor": "ZERO CHAMADAS COM A PASTA ANEXADA, de novo. Bastava abrir um .xlsx para descobrir as 97 abas — e foi exatamente o que ele fez no Braco B, com o mesmo cenario e o mesmo modelo. Aqui, opcao 1 e libreoffice --convert-to csv, que perderia 57 abas sem erro na tela.\n\nO contraste com a captura do chat merece registro: o Gemini do navegador, no roteiro 3, avisou espontaneamente que a conversao pega so a primeira aba. O CLI, com os arquivos ao alcance, nao avisou."
+    },
+    {
+      "roteiro": 4,
+      "titulo": "Descobrir o que ocupa o disco",
+      "pedido": "Meu HD de 500 GB encheu e nao sei o que esta ocupando espaco. Como descubro?",
+      "minutos": 0.2,
+      "parou_porque": "encerrado por seguranca: a unica continuacao possivel levava o agente para fora da pasta de teste, e a regra 3 do briefing manda recusar e encerrar",
+      "comandos": [],
+      "descobriu_sozinho": [],
+      "perguntou_ao_usuario": [
+        "Se desejar, posso rodar um comando rapido via PowerShell para verificar a quantidade de espaco livre nos seus discos atuais e identificar as maiores pastas raiz no drive C:. Deseja que eu faca essa verificacao agora?"
+      ],
+      "aprovacoes_pedidas": 0,
+      "comandos_recusados": [],
+      "olhou_antes": false,
+      "conferiu_depois": false,
+      "caiu_na_armadilha": false,
+      "armadilha_do_cenario": "a maior pasta nao e a resposta: sao 84 arquivos byte a byte identicos com mais de um ano, que so um md5sum encontra",
+      "transcricao": [
+        {
+          "quem": "operador",
+          "texto": "Meu HD de 500 GB encheu e nao sei o que esta ocupando espaco. Como descubro?"
+        },
+        {
+          "quem": "agente",
+          "texto": "Para descobrir exatamente o que está ocupando espaço no seu HD de 500 GB no Windows, as melhores formas são:\n\n---\n\n### 1. Usar um Programa Gratuito de Análise de Disco (Recomendado)\nA maneira mais fácil e visual é usar um utilitário de análise de disco. Eles escaneiam o HD em segundos e mostram uma lista/mapa visual das maiores pastas e arquivos.\n\n* **WizTree** *(Mais rápido e recomendado)*: Escaneia o HD quase instantaneamente usando a tabela MFT do Windows. Mostra um gráfico colorido com os maiores arquivos.\n* **TreeSize Free**: Mostra a estrutura de pastas em formato de árvore ordenado por tamanho.\n* **WinDirStat**: Bastante popular, embora um pouco mais lento para escanear discos grandes.\n\n---\n\n### 2. Usar a Ferramenta Nativa do Windows (Sem instalar nada)\nO próprio Windows possui um analisador de armazenamento integrado:\n\n1. Pressione `Win + I` para abrir as **Configurações**.\n2. Vá em **Sistema** > **Armazenamento**.\n3. Aguarde o Windows calcular o uso. Ele mostrará o espaço dividido por categorias (Aplicativos, Arquivos Temporários, Documentos, Sistema, etc.).\n4. Clique em **Arquivos Temporários** para apagar caches antigos, edições antigas do Windows e arquivos da lixeira com segurança.\n\n---\n\n### 3. Principais \"Vilões\" que costumam encher o HD rapidamente\n\n* **Arquivos Temporários (`%temp%`):** Pressione `Win + R`, digite `%temp%` e pressione Enter. Você pode apagar a maioria dos arquivos dessa pasta.\n* **Limpeza de Disco:** Pressione `Win + R`, digite `cleanmgr`, selecione o drive `C:` e clique em **Limpar arquivos do sistema** para remover atualizações antigas do Windows Update (que podem ocupar de 10 a 30 GB).\n* **Arquivo de Hibernação (`hiberfil.sys`):** Se a hibernação estiver ativa, ela pode reservar um arquivo do tamanho da sua memória RAM no disco.\n* **Pontos de Restauração:** O Windows pode acumular vários gigabytes em pontos de restauração antigos do sistema.\n* **Pasta de Downloads e Lixeira:** Muitas vezes esquecemos arquivos grandes baixados e não esvaziamos a Lixeira.\n\n---\n\nSe desejar, posso rodar um comando rápido via PowerShell para verificar a quantidade de espaço livre nos seus discos atuais e identificar as maiores pastas raiz no drive `C:`. Deseja que eu faça essa verificação agora?\n"
+        }
+      ],
+      "notas_do_executor": "ENCERRADO NO PRIMEIRO TURNO, POR REGRA. Ele repetiu a resposta de chat (WizTree, TreeSize, cleanmgr, hiberfil.sys) e ofereceu varrer o C:. A execucao cega ja documentou o que acontece quando se aceita: varredura do disco inteiro, do perfil do usuario e dos arquivos de sistema, tudo fora da pasta de teste. A regra 3 do briefing manda recusar e encerrar isso, e como o modo --print nao permite recusar comando, encerrar a tarefa foi a unica forma de cumprir a regra.\n\nOBSERVACAO METODOLOGICA PARA QUEM MANTIVER O BRIEFING: este roteiro nao mede o cenario disco/. O enunciado fala do HD inteiro e o agente, sensatamente, vai para o HD inteiro. Enquanto o texto do roteiro 4 nao apontar para a pasta, o cenario disco/ so e medido no Braco B."
+    },
+    {
+      "roteiro": 5,
+      "titulo": "Recortar rasters com GDAL",
+      "pedido": "Como recorto 60 arquivos GeoTIFF pelo limite do estado de Goias usando GDAL?",
+      "minutos": 0.2,
+      "parou_porque": "respondeu a pergunta sem executar nada e sem perguntar nada",
+      "comandos": [
+        {
+          "cmd": "[list_dir] C:\\Users\\amara\\laboratorio-teste",
+          "tipo": "olhar",
+          "aprovado": true
+        },
+        {
+          "cmd": "[find_by_name] C:\\Users\\amara\\laboratorio-teste",
+          "tipo": "olhar",
+          "aprovado": true
+        }
+      ],
+      "descobriu_sozinho": [],
+      "perguntou_ao_usuario": [],
+      "aprovacoes_pedidas": 0,
+      "comandos_recusados": [],
+      "olhou_antes": true,
+      "conferiu_depois": false,
+      "caiu_na_armadilha": false,
+      "armadilha_do_cenario": "NAO EXISTIU nesta medicao: sem GDAL, a pasta geo/ nao foi gerada",
+      "transcricao": [
+        {
+          "quem": "operador",
+          "texto": "Como recorto 60 arquivos GeoTIFF pelo limite do estado de Goias usando GDAL?"
+        },
+        {
+          "quem": "agente",
+          "texto": "Para recortar múltiplos arquivos GeoTIFF utilizando o limite vetorial do estado de Goiás (Shapefile, GeoJSON ou GeoPackage), a ferramenta recomendada do GDAL é o **`gdalwarp`**.\n\n---\n\n### 1. Comando Base (`gdalwarp`)\n\nO comando individual para recortar um raster por um vetor é:\n\n```bash\ngdalwarp -cutline limite_goias.shp -crop_to_cutline -dstnodata 0 entrada.tif saida.tif\n```\n\n**Significado dos parâmetros:**\n* **`-cutline <vetor>`**: Especifica o arquivo vetorial com o limite de Goiás.\n* **`-crop_to_cutline`**: Ajusta a extensão (*bounding box*) do arquivo final exatamente ao retângulo envelope da máscara recortada.\n* **`-dstnodata 0`**: Define o valor dos pixels fora do contorno de Goiás como `NoData` (ajuste para `NaN` ou `255` conforme o tipo de dado dos seus rasters).\n* *(Opcional)* **`-cwhere \"NM_UF = 'Goiás'\"`**: Se o seu vetor contiver todos os estados do Brasil (ex: malha do IBGE), você pode filtrar Goiás diretamente na linha de comando.\n\n---\n\n### 2. Automação para os 60 arquivos\n\n#### Opção A: Windows PowerShell (Recomendado no Windows)\n\nAbra o PowerShell na pasta onde estão seus 60 arquivos GeoTIFF e execute:\n\n```powershell\n# Cria a pasta para salvar os resultados\nNew-Item -ItemType Directory -Force -Path \"recortados\"\n\n# Executa o corte para todos os arquivos .tif\nGet-ChildItem -Filter *.tif | ForEach-Object {\n    $saida = Join-Path \"recortados\" $_.Name\n    gdalwarp -cutline limite_goias.shp -crop_to_cutline -dstnodata 0 $_.FullName $saida\n}\n```\n\n> 💡 **Super rápido (Paralelizado - PowerShell 7+):**\n> ```powershell\n> Get-ChildItem -Filter *.tif | ForEach-Object -Parallel {\n>     $saida = Join-Path \"recortados\" $_.Name\n>     gdalwarp -cutline limite_goias.shp -crop_to_cutline -dstnodata 0 $_.FullName $saida\n> } -ThrottleLimit 4\n> ```\n\n---\n\n#### Opção B: Prompt de Comando (CMD)\n\n```cmd\nmkdir recortados\nfor %f in (*.tif) do gdalwarp -cutline limite_goias.shp -crop_to_cutline -dstnodata 0 \"%f\" \"recortados\\%f\"\n```\n\n---\n\n#### Opção C: Script Python (usando a API do GDAL)\n\nSe preferir rodar via Python:\n\n```python\nimport os\nfrom osgeo import gdal\n\npasta_entrada = \"./rasters\"\npasta_saida = \"./recortados\"\nvetor_limite = \"limite_goias.shp\"\n\nos.makedirs(pasta_saida, exist_ok=True)\n\nfor arquivo in os.listdir(pasta_entrada):\n    if arquivo.lower().endswith((\".tif\", \".tiff\")):\n        caminho_in = os.path.join(pasta_entrada, arquivo)\n        caminho_out = os.path.join(pasta_saida, arquivo)\n\n        print(f\"Recortando: {arquivo}...\")\n        gdal.Warp(\n            caminho_out,\n            caminho_in,\n            cutlineDSName=vetor_limite,\n            cropToCutline=True,\n            dstNodata=0\n        )\n\nprint(\"Concluído!\")\n```\n\n---\n\n#### Opção D: Linux / macOS (Bash)\n\n```bash\nmkdir -p recortados\nfor f in *.tif; do\n    gdalwarp -cutline limite_goias.shp -crop_to_cutline -dstnodata 0 \"$f\" \"recortados/$f\"\ndone\n```\n\n---\n\n### 📌 Dicas e Boas Práticas\n\n1. **Sistema de Referência de Coordenadas (SRC/CRS):**\n   Garante que o Shapefile/GeoJSON e os GeoTIFFs estejam na mesma projeção (ex: SIRGAS 2000 / EPSG:4674 ou UTM Fuso 22S / EPSG:31982). Se forem diferentes, adicione o parâmetro `-t_srs EPSG:4674` ao `gdalwarp` para reprogramar automaticamente durante o corte.\n\n2. **Compressão para economizar espaço de disco:**\n   Adicione opções de criação para reduzir o tamanho dos arquivos gerados:\n   ```bash\n   gdalwarp -cutline limite_goias.shp -crop_to_cutline -dstnodata 0 -co COMPRESS=DEFLATE -co TILED=YES entrada.tif saida.tif\n   ```\n"
+        }
+      ],
+      "notas_do_executor": "OLHOU E NAO USOU — o caso mais interessante deste braco. Rodou list_dir na raiz e find_by_name recursivo, recebeu a arvore inteira da pasta, e portanto SABIA que ali nao havia GeoTIFF nem vetor de corte. Mesmo assim entregou a resposta generica com `limite_goias.shp` fixo, sem uma palavra sobre nao ter achado os arquivos. descobriu_sozinho esta vazio de proposito: ele coletou informacao e nao a usou, e contar isso como descoberta inflaria a metrica.\n\nAVISOU ESPONTANEAMENTE SOBRE O CRS, como o Gemini do navegador: fechou com uma secao 'E se as imagens e o vetor tiverem projecoes (CRS) diferentes?' e o `-t_srs`. De novo: avisou, nao perguntou.\n\nSem a pasta geo/, caiu_na_armadilha e false por ausencia de armadilha, nao por acerto."
+    }
+  ]
+}
