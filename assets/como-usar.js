@@ -22,6 +22,7 @@
   'use strict';
 
   const D = typeof COMO_USAR_DATA !== 'undefined' ? COMO_USAR_DATA : null;
+  const CENAS = typeof COMO_USAR_CENAS !== 'undefined' ? COMO_USAR_CENAS : null;
 
   /* ─── utilidades ─────────────────────────────────────────── */
 
@@ -283,6 +284,281 @@
         <p class="cu-licao">${c.licao}</p>
       </div>
     `;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     02b · AS CENAS — a conversa real, reproduzida
+     ═══════════════════════════════════════════════════════════
+     Antes esta seção era uma transcrição estática que eu tinha
+     escrito à mão. Agora é a reprodução de uma conversa que
+     aconteceu de verdade (ver automation/capturas/), tocada passo
+     a passo dentro de uma janela de navegador simulada.
+
+     Por que animar: o argumento da seção é sobre TEMPO e sobre
+     ORDEM — a recomendação que chega antes da pergunta que a
+     valida, a conferência que passa enquanto o dado se perde. Num
+     bloco de texto parado, ordem é só posição na página; tocando,
+     ela vira sequência, que é o que ela realmente é.
+
+     Os blocos `marca` são a voz do site. Tudo o mais é citação
+     literal, conferida por automation/valida-cenas.mjs. */
+
+  const cena = {
+    i: 0,          // qual cena
+    b: 0,          // qual beat já foi revelado (exclusivo)
+    tocando: false,
+    timers: [],
+    rapido: semMovimento
+  };
+
+  function cenaLimpar() {
+    cena.timers.forEach(clearTimeout);
+    cena.timers = [];
+  }
+
+  function cenaAgenda(fn, ms) { cena.timers.push(setTimeout(fn, ms)); }
+
+  function cenaAtual() { return CENAS.cenas[cena.i]; }
+
+  /* Cada beat dura o tempo de ser lido, não um valor fixo: uma bolha de
+     duas linhas e um bloco de comando de oito não podem passar na mesma
+     velocidade. O piso evita que beats curtos pisquem. */
+  function cenaDuracao(b) {
+    if (cena.rapido) return 0;
+    const n = (b.txt || (b.ops || []).join(' ') || '').length;
+    return Math.min(2200, Math.max(620, 340 + n * 7));
+  }
+
+  function beatHTML(b, revelando) {
+    const cls = revelando ? ' is-entrando' : '';
+    switch (b.t) {
+      case 'voce':
+        return `<div class="cn-msg cn-voce${cls}"><div class="cn-bolha">${txt(b.txt)}</div></div>`;
+      case 'ia':
+        return `<div class="cn-msg cn-ia${cls}">
+          <span class="cn-av" aria-hidden="true"></span>
+          <div class="cn-bolha">${txt(b.txt)}${b.corte ? '<span class="cn-corte">resposta cortada aqui</span>' : ''}</div>
+        </div>`;
+      case 'sandbox':
+        /* Colapsado, como vinha na tela: o briefing registrou que os blocos
+           de código executado ficavam atrás de um botão "Mostrar código", e
+           que um usuário comum não veria que houve execução. Reproduzir isso
+           fechado é parte do que a cena tem a dizer. */
+        return `<div class="cn-msg cn-ia${cls}">
+          <span class="cn-av" aria-hidden="true"></span>
+          <details class="cn-sandbox">
+            <summary>Mostrar código <span>executado no sandbox do Gemini</span></summary>
+            <pre><code>${esc(b.txt)}</code></pre>
+          </details>
+        </div>`;
+      case 'chips':
+        return `<div class="cn-chips${cls}">${b.ops.map(o => `<span class="cn-chip">${esc(o)}</span>`).join('')}</div>`;
+      case 'marca':
+        return `<div class="cn-marca cn-tom-${esc(b.tom)}${cls}"><span class="cn-marca-p" aria-hidden="true"></span><p>${b.txt}</p></div>`;
+      default:
+        return '';
+    }
+  }
+
+  function cenaPintar(revelado) {
+    const c = cenaAtual();
+    const palco = $('cn-palco');
+    if (!palco) return;
+    palco.innerHTML = c.beats.slice(0, cena.b)
+      .map((b, i) => beatHTML(b, revelado === i)).join('');
+    const rol = $('cn-rolagem');
+    if (rol) rol.scrollTop = rol.scrollHeight;
+    cenaPintarControles();
+  }
+
+  function cenaPintarControles() {
+    const c = cenaAtual();
+    const el = $('cn-controles');
+    if (!el) return;
+    const fim = cena.b >= c.beats.length;
+    el.innerHTML = `
+      <button type="button" class="cn-bt cn-bt-play" data-cn="${fim ? 'reiniciar' : (cena.tocando ? 'pausar' : 'tocar')}">
+        ${fim ? '↺ Ver de novo' : (cena.tocando ? '❚❚ Pausar' : '▶ Tocar a conversa')}
+      </button>
+      <button type="button" class="cn-bt cn-bt-sec" data-cn="passo" ${fim ? 'disabled' : ''}>Passo a passo</button>
+      <button type="button" class="cn-bt cn-bt-sec" data-cn="tudo" ${fim ? 'disabled' : ''}>Mostrar tudo</button>
+      <span class="cn-prog" aria-hidden="true">
+        <span class="cn-prog-tr" style="width:${Math.round((cena.b / c.beats.length) * 100)}%"></span>
+      </span>
+      <span class="cn-conta">${Math.min(cena.b, c.beats.length)} / ${c.beats.length}</span>`;
+  }
+
+  function cenaPasso() {
+    const c = cenaAtual();
+    if (cena.b >= c.beats.length) { cenaPausar(); return; }
+    const b = c.beats[cena.b];
+    cena.b++;
+    cenaPintar(cena.b - 1);
+    if (cena.tocando) cenaAgenda(cenaPasso, cenaDuracao(b));
+  }
+
+  function cenaTocar() {
+    cenaLimpar();
+    const c = cenaAtual();
+    if (cena.b >= c.beats.length) { cena.b = 0; }
+    cena.tocando = true;
+    cenaPasso();
+  }
+
+  function cenaPausar() {
+    cenaLimpar();
+    cena.tocando = false;
+    cenaPintarControles();
+  }
+
+  function cenaTudo() {
+    cenaLimpar();
+    cena.tocando = false;
+    cena.b = cenaAtual().beats.length;
+    cenaPintar(-1);
+  }
+
+  function cenaIr(i) {
+    cenaLimpar();
+    cena.i = (i + CENAS.cenas.length) % CENAS.cenas.length;
+    cena.b = 0;
+    cena.tocando = false;
+    renderCenas();
+  }
+
+  const SELO = {
+    confirmou: { r: 'a página acertou', c: 'ok' },
+    refutou:   { r: 'a página errou',   c: 'erro' },
+    pior:      { r: 'foi pior que a página dizia', c: 'pior' }
+  };
+
+  function renderCenas() {
+    const el = $('cu-cenas');
+    if (!el || typeof CENAS === 'undefined') return;
+    const c = cenaAtual();
+    const selo = SELO[c.vereditoTipo] || SELO.confirmou;
+
+    el.innerHTML = `
+      <div class="cn-abas" role="tablist" aria-label="Escolher a conversa">
+        ${CENAS.cenas.map((x, i) => `
+          <button type="button" role="tab" class="cn-aba ${i === cena.i ? 'is-active' : ''}"
+                  data-cn="ir" data-i="${i}" tabindex="${i === cena.i ? '0' : '-1'}"
+                  aria-selected="${i === cena.i}">${esc(x.aba)}</button>`).join('')}
+      </div>
+
+      <h3 class="cn-titulo">${esc(c.titulo)}</h3>
+      <p class="cn-ctx">${txt(c.contexto)}</p>
+
+      <div class="cn-quadro">
+        <!-- A moldura de navegador não é enfeite: a seção inteira compara
+             "dentro da aba" com "fora dela", e mostrar a aba com a barra de
+             endereço à vista é o jeito mais curto de dizer onde estamos. -->
+        <div class="cn-chrome">
+          <div class="cn-barra">
+            <span class="cn-pontos" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="cn-tab">Gemini</span>
+            <span class="cn-url">gemini.google.com</span>
+          </div>
+          <div class="cn-rolagem" id="cn-rolagem">
+            <div class="cn-palco" id="cn-palco"></div>
+          </div>
+        </div>
+        <div class="cn-controles" id="cn-controles"></div>
+      </div>
+
+      <div class="cn-veredito cn-v-${esc(c.vereditoTipo)}">
+        <span class="cn-selo cn-selo-${selo.c}">${esc(selo.r)}</span>
+        <p>${c.veredito}</p>
+      </div>
+
+      <p class="cn-licao">${txt(c.licao)}</p>
+
+      ${painelTerminal(c.id)}
+
+      <p class="cn-fonte">
+        Conversa real, capturada em ${esc(CENAS.fonte.data.split('-').reverse().join('/'))} no
+        <strong>${esc(CENAS.fonte.modelo)}</strong>. ${esc(c.medido.turnos)} mensagem${c.medido.turnos > 1 ? 's' : ''} do
+        usuário · ${esc(c.medido.desfecho)}. Todo texto em balão é citação literal —
+        <a href="${esc(CENAS.fonte.arquivo)}">a transcrição completa está no repositório</a>.
+      </p>`;
+
+    cenaPintar(-1);
+  }
+
+  /* O outro lado da mesma tarefa. Continua sendo RECONSTITUIÇÃO — e agora que
+     a coluna da esquerda é uma captura real, o rótulo aqui deixou de ser
+     escrúpulo e virou necessidade: sem ele a seção compara uma medição com
+     uma suposição sem dizer qual é qual. */
+  function painelTerminal(id) {
+    const c = (D.cenarios || []).find(x => x.id === id);
+    if (!c) return '';
+    return `
+      <section class="cn-term-lado" aria-labelledby="h-tl-${esc(id)}">
+        <header class="cn-tl-head">
+          <h4 id="h-tl-${esc(id)}">O mesmo pedido, com acesso ao terminal</h4>
+          <span class="cn-tl-selo">reconstituição — ainda não medida</span>
+        </header>
+        <p class="cn-tl-aviso">
+          Esta coluna não veio de captura nenhuma: foi escrita à mão, com comandos que
+          <em>foram executados</em> antes de entrar na página, mas fora de uma sessão real de
+          agente. Enquanto a conversa ao lado é uma medição, esta é uma expectativa — e a
+          próxima captura é justamente a dela.
+        </p>
+        <div class="cu-term">${c.terminal.transcricao.map(linhaTerminal).join('')}</div>
+        <h5 class="cu-cmd-h">Os comandos, um por um</h5>
+        <dl class="cu-cmds">
+          ${c.comandos.map(k => `
+            <div class="cu-cmd">
+              <dt><code>${esc(k.cmd)}</code></dt>
+              <dd>${txt(k.oQueFaz)}</dd>
+            </div>`).join('')}
+        </dl>
+      </section>`;
+  }
+
+  function renderBalanco() {
+    const el = $('cu-balanco');
+    if (!el || typeof CENAS === 'undefined') return;
+    const b = CENAS.balanco;
+    el.innerHTML = `
+      <section class="cn-bal" aria-labelledby="h-bal">
+        <h3 id="h-bal">${esc(b.titulo)}</h3>
+        <p class="cn-bal-lede">${txt(b.lede)}</p>
+        <ul class="cn-bal-lista">
+          ${b.itens.map(i => `
+            <li>
+              <span class="cn-bal-antes">${txt(i.antes)}</span>
+              <span class="cn-bal-seta" aria-hidden="true">→</span>
+              <span class="cn-bal-depois">${txt(i.depois)}</span>
+            </li>`).join('')}
+        </ul>
+        <p class="cn-bal-fecho">${b.fecho}</p>
+      </section>`;
+  }
+
+  function ligarCenas() {
+    document.addEventListener('click', (e) => {
+      const alvo = e.target.closest('#cu-cenas [data-cn]');
+      if (!alvo) return;
+      const a = alvo.dataset.cn;
+      if (a === 'tocar') cenaTocar();
+      else if (a === 'pausar') cenaPausar();
+      else if (a === 'reiniciar') { cena.b = 0; cenaTocar(); }
+      else if (a === 'passo') { cenaPausar(); cenaPasso(); }
+      else if (a === 'tudo') cenaTudo();
+      else if (a === 'ir') cenaIr(+alvo.dataset.i);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      const abas = e.target.closest('#cu-cenas .cn-aba');
+      if (!abas) return;
+      const mapa = { ArrowRight: cena.i + 1, ArrowLeft: cena.i - 1, Home: 0, End: CENAS.cenas.length - 1 };
+      if (!(e.key in mapa)) return;
+      e.preventDefault();
+      cenaIr(mapa[e.key]);
+      const nova = document.querySelector('#cu-cenas .cn-aba.is-active');
+      if (nova) nova.focus();
+    });
   }
 
   /* ─── 02c · o gráfico dos custos ─────────────────────────── */
@@ -1507,11 +1783,9 @@
     if (upd) upd.textContent = fmtDataCurta(D.updatedAt) || '—';
 
     renderVocabulario();
-    renderTabs();
-    renderLicoes();
-    ligarTabs();
-    pintarCenario();
-    renderGrafico();
+    renderCenas();
+    ligarCenas();
+    renderBalanco();
     renderContraponto();
     renderPermanencia();
     renderFerramentas();

@@ -136,9 +136,16 @@ e no eixo do tempo (seção 03). São sete seções (a 06 termina com um bloco e
 1. **O nome disso** — por que "navegador × computador" é um par de nomes errado (o navegador
    está no computador) e cinco pares candidatos em julgamento, com uma proposta marcada.
 2. **A diferença, em comandos** — abre com o **diagrama do ciclo** (dois SVG: à esquerda o
-   resultado só volta pela sua digitação; à direita a IA lê a própria saída), seguido de cinco
-   tarefas de laboratório resolvidas dos dois jeitos, um **gráfico de halteres** com as dez
-   medidas de tempo e a contra-seção **"onde a aba ganha"**.
+   resultado só volta pela sua digitação; à direita a IA lê a própria saída) e segue com as
+   **cenas**: cinco conversas REAIS com o Gemini, capturadas em 09/set/2026, tocadas passo a
+   passo dentro de uma janela de navegador simulada. Cada cena traz o veredito (a página
+   acertou / errou / foi pior), a reconstituição do terminal para a mesma tarefa — rotulada
+   como reconstituição — e o **balanço** do que a medição mudou na própria página. Fecha com
+   a contra-seção **"onde a aba ganha"**.
+
+   > O **gráfico de halteres** foi removido em 10/set/2026. Seus dez números eram estimativa
+   > escrita à mão, e a captura desmentiu cinco deles. As regras de CSS e `renderGrafico()`
+   > continuam no código: ele volta no dia em que houver medida de tempo real dos DOIS lados.
 3. **O que fica depois** — o segundo eixo do argumento. A seção 02 mede uma tarefa; esta mede
    o que sobra dela: um comparativo do que resta de cada lado uma semana depois, e quatro
    mecanismos com artefato ao lado — `git log` como registro (e não só como rede), a estrutura
@@ -207,8 +214,14 @@ de tela — não o elimine ao mexer no balão.
   conteúdo, meça antes: `document.documentElement.scrollHeight` dividido pela altura da tela.
 - **Instaladores e planos** foram conferidos nas páginas oficiais (última checagem em
   `updatedAt`). Revalide antes de citar cotas — elas mudam com frequência.
-- **A coluna do chat é reconstituída, e isso está dito na página.** Para trocá-la por
-  transcrições reais existe um briefing pronto em
+- **A coluna do chat é medição; a do terminal ainda é reconstituição.** As cenas
+  (`assets/como-usar-cenas.js`) citam literalmente a captura de 09/set/2026, e
+  `node automation/valida-cenas.mjs` **falha** se qualquer citação divergir do arquivo de
+  origem — rode antes de commitar. Os blocos `marca` são a única voz do site ali dentro, e a
+  tela os desenha diferente por isso. A coluna do terminal continua escrita à mão e carrega o
+  selo "reconstituição — ainda não medida"; **não remova esse selo antes de existir uma
+  captura real do outro lado.**
+- O briefing que gerou tudo isso está em
   [automation/CAPTURA-GEMINI.md](automation/CAPTURA-GEMINI.md) — cinco roteiros com os
   prompts literais, as respostas condicionais e as regras de não-condução, escrito para ser
   executado por uma pessoa ou por um agente de *computer use*. A saída é validada por

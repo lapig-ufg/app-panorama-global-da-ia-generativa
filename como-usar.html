@@ -40,7 +40,7 @@
   <!-- Estilos -->
   <link rel="stylesheet" href="assets/styles.css?v=30">
   <link rel="stylesheet" href="assets/guia.css?v=27">
-  <link rel="stylesheet" href="assets/como-usar.css?v=6">
+  <link rel="stylesheet" href="assets/como-usar.css?v=7">
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSBR3JMT2X"></script>
@@ -255,9 +255,10 @@
         <div>
           <h2 id="h-comparacao">A diferença, em comandos</h2>
           <p class="cu-sec-sub">
-            Cinco tarefas reais de laboratório, cada uma resolvida dos dois jeitos.
-            À esquerda, a conversa numa aba. À direita, a mesma frase dita a um agente com
-            acesso ao terminal — com os comandos que ele digita e o motivo de cada um.
+            Cinco tarefas de laboratório, cada uma levada primeiro ao Gemini numa aba do
+            navegador. <strong>As conversas abaixo aconteceram de verdade</strong> — foram
+            capturadas em 9 de setembro de 2026 e cada balão é citação literal. Toque para
+            vê-las acontecer; a ordem em que as coisas foram ditas é metade do argumento.
           </p>
         </div>
       </header>
@@ -352,18 +353,20 @@
         </defs>
       </svg>
 
-      <!-- A tira de lições existe porque 4 dos 5 cenários moram atrás de abas
-           que a maioria não clica: sem ela, 80% do trabalho desta seção fica
-           invisível. Cada item diz o que aquela tarefa ensina de DIFERENTE, e
-           clicar troca a aba. -->
-      <div class="cu-licoes" id="cu-licoes" aria-hidden="true"></div>
+      <!-- AS CENAS: a conversa real, tocada passo a passo.
+           Entram antes da comparação porque são a prova; o que vem depois é
+           a leitura dela. Todo balão aqui é citação literal de uma captura
+           feita em 09/set/2026 — ver automation/CAPTURA-GEMINI.md. -->
+      <div id="cu-cenas"></div>
+      <div id="cu-balanco"></div>
 
-      <div class="cu-tabs" id="cu-cenario-tabs" role="tablist" aria-label="Escolher a tarefa"></div>
-      <div id="cu-cenario-painel"></div>
-
-      <!-- O gráfico fecha a seção com as dez medidas juntas. Separadas, uma por
-           aba, elas nunca formam a comparação que justificam. -->
-      <div id="cu-grafico"></div>
+      <!-- A comparação inteira vive dentro de #cu-cenas: escolher a tarefa lá
+           troca a conversa real E a reconstituição do terminal ao mesmo tempo.
+           Antes havia três fileiras de abas para as mesmas cinco tarefas — a
+           tira de lições, as abas de cenário e as abas de cena — e o gráfico de
+           custos, cujos dez números eram estimativa minha e cinco deles foram
+           desmentidos pela captura de 09/set. O balanço logo acima diz isso com
+           dados; o gráfico dizia o contrário sem nenhum. -->
 
       <div id="cu-contraponto"></div>
     </section>
@@ -498,7 +501,8 @@
 
   <!-- Scripts -->
   <script src="assets/como-usar-data.js?v=6"></script>
-  <script src="assets/como-usar.js?v=6"></script>
+  <script src="assets/como-usar-cenas.js?v=1"></script>
+  <script src="assets/como-usar.js?v=7"></script>
 </body>
 
 </html>

@@ -739,7 +739,447 @@
 
 .cu-licao-chip.is-active .cu-licao-txt { color: var(--ink); }
 
-/* ═══ 02c · O GRÁFICO DOS CUSTOS ═══ */
+/* ═══ 02b · AS CENAS (a conversa real, tocada) ═══ */
+
+.cn-abas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.cn-aba {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-light);
+  background: var(--white);
+  border: 1px solid var(--hair);
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.cn-aba:hover { border-color: #5B53A8; color: #4a4394; }
+.cn-aba.is-active { background: #5B53A8; border-color: #5B53A8; color: #fff; }
+
+.cn-titulo {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+}
+
+.cn-ctx {
+  margin: 6px 0 14px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  max-width: 80ch;
+}
+
+/* ─── a moldura de navegador ─── */
+.cn-quadro {
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+
+.cn-barra {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: #e8e5dc;
+  border-bottom: 1px solid var(--hair);
+}
+
+.cn-pontos { display: flex; gap: 5px; }
+.cn-pontos i { width: 9px; height: 9px; border-radius: 50%; background: #c3bfb2; }
+
+.cn-tab {
+  padding: 3px 12px;
+  background: var(--white);
+  border-radius: 6px 6px 0 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-light);
+}
+
+.cn-url {
+  flex: 1;
+  padding: 3px 10px;
+  background: var(--white);
+  border: 1px solid #d4d0c3;
+  border-radius: 20px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-muted);
+}
+
+/* Altura fixa com rolagem interna: a conversa cresce enquanto toca, e sem
+   uma altura estável a página inteira pularia a cada beat revelado. */
+.cn-rolagem {
+  height: 400px;
+  overflow-y: auto;
+  background: var(--paper);
+  scroll-behavior: smooth;
+}
+
+.cn-palco { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+
+/* ─── as mensagens ─── */
+.cn-msg { display: flex; gap: 9px; align-items: flex-start; }
+.cn-voce { justify-content: flex-end; }
+
+.cn-bolha {
+  max-width: 74%;
+  padding: 10px 13px;
+  border-radius: 12px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.cn-voce .cn-bolha {
+  background: #ece9f7;
+  border: 1px solid #d5cff0;
+  color: var(--ink);
+  border-bottom-right-radius: 3px;
+}
+
+.cn-ia .cn-bolha {
+  background: var(--white);
+  border: 1px solid var(--hair);
+  color: var(--ink-light);
+  border-bottom-left-radius: 3px;
+}
+
+.cn-av {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  margin-top: 3px;
+  border-radius: 50%;
+  background: conic-gradient(from 200deg, #4285f4, #9b72cb, #d96570, #4285f4);
+}
+
+.cn-corte {
+  display: block;
+  margin-top: 7px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+/* O bloco de código executado vem FECHADO, como vinha na tela do Gemini.
+   Reproduzir isso aberto contaria uma história diferente da que aconteceu:
+   quem usa não vê que houve execução. */
+.cn-sandbox {
+  max-width: 74%;
+  background: #14150f;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.cn-sandbox > summary {
+  padding: 9px 12px;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #cfe6a6;
+  list-style: none;
+}
+
+.cn-sandbox > summary::-webkit-details-marker { display: none; }
+.cn-sandbox > summary::before { content: '▸ '; }
+.cn-sandbox[open] > summary::before { content: '▾ '; }
+.cn-sandbox > summary span { font-weight: 400; color: #8a8676; }
+
+.cn-sandbox pre {
+  margin: 0;
+  padding: 0 12px 11px;
+  overflow-x: auto;
+}
+
+.cn-sandbox code {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: #e9e6d8;
+  white-space: pre;
+}
+
+.cn-chips { display: flex; flex-wrap: wrap; gap: 7px; padding-left: 31px; }
+
+.cn-chip {
+  padding: 6px 11px;
+  border: 1px solid #d5cff0;
+  border-radius: 16px;
+  background: var(--white);
+  font-size: 11.5px;
+  color: #4a4394;
+}
+
+/* ─── a marca: a voz do site dentro da cena ───
+   Precisa ser inconfundivelmente OUTRA coisa que os balões, senão o leitor
+   atribui ao Gemini uma frase que quem escreveu fomos nós. Por isso: fora do
+   fluxo das bolhas, com filete lateral e tipografia do site. */
+.cn-marca {
+  display: flex;
+  gap: 9px;
+  margin: 2px 0 2px 8px;
+  padding: 10px 13px;
+  border-left: 3px solid var(--ink-muted);
+  background: var(--paper-tint);
+  border-radius: 0 9px 9px 0;
+}
+
+.cn-marca p { font-size: 12px; line-height: 1.55; color: var(--ink-light); }
+.cn-marca strong { color: var(--ink); }
+
+.cn-marca-p {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  margin-top: 1px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+}
+
+.cn-tom-ruim { border-left-color: #a33d2a; color: #a33d2a; background: rgba(163, 61, 42, 0.06); }
+.cn-tom-bom { border-left-color: var(--accent); color: var(--accent); background: rgba(10, 115, 89, 0.06); }
+.cn-tom-chave { border-left-color: #5B53A8; color: #4a4394; background: rgba(91, 83, 168, 0.07); }
+.cn-tom-neutro { border-left-color: var(--ink-muted); color: var(--ink-muted); }
+
+/* A entrada é curta de propósito: o que precisa ser percebido é que ALGO
+   novo chegou, não a animação em si. */
+.is-entrando { animation: cn-entra 0.32s ease-out; }
+
+@keyframes cn-entra {
+  from { opacity: 0; transform: translateY(9px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-entrando { animation: none; }
+  .cn-rolagem { scroll-behavior: auto; }
+}
+
+/* ─── controles do player ─── */
+.cn-controles {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  padding: 11px 14px;
+  border-top: 1px solid var(--hair);
+  background: var(--white);
+}
+
+.cn-bt {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.cn-bt-play { background: #5B53A8; border-color: #5B53A8; color: #fff; }
+.cn-bt-play:hover { filter: brightness(1.12); }
+
+.cn-bt-sec {
+  background: var(--white);
+  border-color: var(--hair);
+  color: var(--ink-light);
+  font-weight: 600;
+}
+
+.cn-bt-sec:hover:not(:disabled) { border-color: var(--ink-muted); color: var(--ink); }
+.cn-bt-sec:disabled { opacity: 0.4; cursor: default; }
+
+.cn-prog {
+  flex: 1;
+  min-width: 60px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--hair);
+  overflow: hidden;
+}
+
+.cn-prog-tr { display: block; height: 100%; background: #5B53A8; transition: width 0.25s ease; }
+
+.cn-conta {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── veredito e fonte ─── */
+.cn-veredito {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 13px 15px;
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  background: var(--white);
+}
+
+.cn-veredito p { font-size: 12.5px; line-height: 1.55; color: var(--ink-light); }
+
+.cn-selo {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 8px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.cn-selo-ok { background: rgba(10, 115, 89, 0.12); color: var(--accent); }
+.cn-selo-erro { background: rgba(91, 83, 168, 0.14); color: #4a4394; }
+.cn-selo-pior { background: rgba(163, 61, 42, 0.12); color: #a33d2a; }
+
+.cn-licao {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--accent);
+  background: var(--paper);
+  border-radius: 0 9px 9px 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-light);
+}
+
+.cn-fonte {
+  margin-top: 10px;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.cn-fonte a { color: var(--accent); }
+
+/* ─── o balanço: a página medindo a si mesma ─── */
+.cn-bal {
+  margin: 22px 0 0;
+  padding: 18px 20px;
+  background: var(--ink);
+  border-radius: 12px;
+  color: #d8d4c4;
+}
+
+.cn-bal h3 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.cn-bal-lede { font-size: 12.5px; line-height: 1.6; color: #a9a598; margin-bottom: 14px; }
+
+.cn-bal-lista { list-style: none; display: grid; gap: 9px; }
+
+.cn-bal-lista li {
+  display: grid;
+  grid-template-columns: 1fr 18px 1fr;
+  gap: 8px;
+  align-items: baseline;
+  padding-bottom: 9px;
+  border-bottom: 1px solid rgba(233, 230, 216, 0.12);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.cn-bal-antes { color: #8a8676; text-decoration: line-through; text-decoration-color: rgba(163, 61, 42, 0.7); }
+.cn-bal-seta { color: #55534a; text-align: center; }
+.cn-bal-depois { color: #e9e6d8; }
+
+.cn-bal-fecho {
+  margin-top: 14px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: #d8d4c4;
+}
+
+.cn-bal-fecho strong { color: var(--accent-bright); }
+
+@media (max-width: 760px) {
+  .cn-rolagem { height: 340px; }
+  .cn-bolha, .cn-sandbox { max-width: 88%; }
+  .cn-bal-lista li { grid-template-columns: 1fr; gap: 3px; }
+  .cn-bal-seta { display: none; }
+  .cn-bal-antes { font-size: 11.5px; }
+}
+
+/* ─── o outro lado, dentro da mesma cena ─── */
+
+/* Fundo de papel e não branco: a coluna do terminal precisa ler como um
+   bloco SEPARADO da conversa capturada acima dela, senão as duas viram uma
+   coisa só e o selo de "reconstituição" perde o alcance. */
+.cn-term-lado {
+  margin-top: 18px;
+  padding: 16px 18px;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+}
+
+.cn-tl-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.cn-tl-head h4 {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+}
+
+.cn-tl-selo {
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #8c3423;
+  background: rgba(163, 61, 42, 0.1);
+  border: 1px dashed rgba(163, 61, 42, 0.4);
+  padding: 3px 7px;
+  border-radius: 5px;
+}
+
+.cn-tl-aviso {
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  margin-bottom: 12px;
+  max-width: 84ch;
+}
+
+.cn-term-lado .cu-term { border-radius: 10px; }
+
+.cn-term-lado .cu-cmd-h {
+  margin: 16px 0 9px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ═══ 02c · O GRÁFICO DOS CUSTOS (removido da página) ═══
+   As regras abaixo ficam porque o gráfico ainda é gerado por renderGrafico()
+   e pode voltar assim que houver medida de tempo real dos dois lados. Hoje
+   não há: os dez números eram estimativa, e cinco foram desmentidos. */
 
 .cu-graf {
   margin: 22px 0 0;
