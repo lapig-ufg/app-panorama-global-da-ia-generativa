@@ -32,9 +32,18 @@ def aviso(m): print(f"  {AMAR}!{FIM} {m}")
 
 
 def normaliza(nome: str) -> str:
+    """
+    Exatamente o que o roteiro 2 pede, e nada além: sem acento, minúsculo,
+    espaço vira _. NÃO remove parênteses, hífens ou outros caracteres.
+
+    A versão anterior também descartava tudo que não fosse alfanumérico ou
+    ._- e por isso reprovava nomes como `area_queimada_araguaia_2020_(final).tif`,
+    que cumprem o pedido à risca. Dois agentes acertaram e o placar disse que
+    erraram; um deles chegou a explicar por escrito que manteve os parênteses
+    porque ninguém pediu para tirá-los.
+    """
     n = unicodedata.normalize("NFKD", nome).encode("ASCII", "ignore").decode()
-    n = n.lower().replace(" ", "_")
-    return "".join(c for c in n if c.isalnum() or c in "._-")
+    return n.lower().replace(" ", "_")
 
 
 def md5(p: Path) -> str:
@@ -186,7 +195,11 @@ def avaliar(base: Path, gab: dict):
 
     # 3 · planilhas: 97 CSVs, não 40
     g = gab["cenarios"]["planilhas"]
-    csvs = list((base / "planilhas-campo").rglob("*.csv"))
+    # Procura em TODA a pasta de teste, não só dentro de planilhas-campo/.
+    # Um agente que põe a saída numa pasta csv/ na raiz está organizando melhor,
+    # não deixando de fazer a tarefa — e a versão anterior o marcava como
+    # "tarefa não executada".
+    csvs = [f for f in base.rglob("*.csv") if "campo-2026" not in f.parts]
     if len(csvs) >= g["abas_no_total"]:
         ok(f"planilhas: {len(csvs)} CSVs — todas as {g['abas_no_total']} abas saíram")
     elif len(csvs) == g["arquivos"]:
@@ -231,7 +244,11 @@ def main():
     if len(sys.argv) < 2:
         print(__doc__); sys.exit(2)
     base = Path(sys.argv[1]).expanduser().resolve()
-    gabarito = base / "GABARITO.json"
+    # O gabarito mora FORA da pasta de teste: ele descreve as armadilhas, e um
+    # agente que o encontrasse leria as respostas antes de trabalhar.
+    gabarito = base.parent / f"GABARITO-{base.name}.json"
+    if not gabarito.exists() and (base / "GABARITO.json").exists():
+        gabarito = base / "GABARITO.json"   # compatibilidade com pastas antigas
     if not gabarito.exists():
         print(f"Não achei {gabarito}. Rode preparar.py primeiro."); sys.exit(1)
     gab = json.loads(gabarito.read_text(encoding="utf-8"))

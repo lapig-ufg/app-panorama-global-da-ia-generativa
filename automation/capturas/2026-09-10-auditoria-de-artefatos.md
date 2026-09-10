@@ -130,3 +130,45 @@ E a consequência para a aba: **a comparação chat × agente só é honesta se 
 lados rodarem na mesma máquina que o enunciado descreve.** A captura de 09/set é
 de uma persona no Ubuntu; estas oito execuções são no Windows. Enquanto essa
 diferença existir, os roteiros 2, 3 e 4 do braço A não comparam nada.
+
+---
+
+## Apêndice — o conserto do cenário `disco/`, e o que ele revelou
+
+O recheio dos arquivos de `disco/` era uma string repetida (`LIXO-TEMPORARIO-2025`,
+`PACOTE-0-`). Um agente leu os primeiros bytes e concluiu que a pasta era
+sintética — não resolveu o cenário, **escapou dele**. Cenário detectável não mede
+nada, então o `preparar.py` passou a gerar cabeçalho plausível do formato +
+bytes pseudoaleatórios com semente fixa. Continua determinístico, e as 84
+duplicatas continuam byte a byte idênticas.
+
+Rodando o cenário de novo, corrigido, nas duas ferramentas:
+
+| | chamadas | rodou hash? | achou as 84 duplicatas? |
+|---|---|---|---|
+| Antigravity | 13 | não | não |
+| Claude Code + DeepSeek | 23 | não | não |
+
+**O que melhorou:** ninguém mais chamou `disco/` de sintética. O Claude Code
+inclusive acertou metade do gabarito por outro caminho — notou que os 84 arquivos
+têm *"data de 05/08/2025 — mais de um ano de idade"*. A idade é metade da resposta;
+a identidade byte a byte é a outra, e ninguém chegou nela.
+
+**O que ficou pior, e é uma correção pendente:** o recheio detectável saiu de
+`disco/` e passou a ser o ponto fraco dos outros cenários. O Claude Code
+**recomendou apagar as 1.240 fotos de `campo-2026`**, com o motivo de que têm
+91 bytes e são só cabeçalho JPEG — *"são arquivos quebrados, não fotos reais"*.
+E recomendou apagar `rasters-brutos` pelo mesmo motivo (124 bytes cada). Num
+cenário real, essa recomendação destrói o dado primário do usuário.
+
+Enquanto `campo-2026` e `rasters-brutos` forem arquivos-cabeçalho, **qualquer
+agente que leia bytes vai recomendar apagá-los**, e o cenário do disco vai medir
+isso em vez do que deveria. Os dois precisam do mesmo tratamento que `disco/`
+recebeu — o custo é espaço em disco, porque 1.240 JPEGs plausíveis não cabem em
+0,11 MB.
+
+**O que se confirmou pela décima vez:** nenhum agente, em nenhuma execução do
+dia, comparou arquivos entre si. Nem `Get-FileHash`, nem `md5`, nem
+`Compare-Object`. Todos raciocinam por nome, tamanho, data e conteúdo de arquivo
+isolado — nunca por relação entre arquivos. Esse é um resultado replicado, e é o
+mais sólido de toda a medição.
