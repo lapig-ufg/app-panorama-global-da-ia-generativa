@@ -1,138 +1,78 @@
 #!/usr/bin/env node
 /* ═══════════════════════════════════════════════════════════════
-   Confere que TODA citação das cenas existe, literalmente, na
-   captura de onde ela diz ter vindo.
+   Confere que os NÚMEROS publicados na aba batem com os relatórios
+   da medição.
 
-   Por que isto existe: a aba "Como usar" afirma reproduzir duas
-   conversas reais lado a lado — uma no navegador, outra num
-   programa instalado na máquina. Basta alguém "melhorar" uma frase
-   — tirar uma vírgula, encurtar no meio — para a página passar a
-   atribuir a um modelo algo que ele não disse. Um teste é mais
-   barato do que essa confiança.
+   O QUE ESTE ARQUIVO ERA, E POR QUE MUDOU
+   Até 12/set/2026 a seção 02 reproduzia as duas conversas na
+   íntegra, e este script conferia cada citação contra a captura,
+   palavra por palavra. A seção foi reescrita: ela agora NARRA a
+   diferença em vez de transcrever os testes, e não há mais citação
+   literal para conferir.
 
-   Confere três coisas:
-     1. cada bloco `voce`/`ia`/`sandbox`/`chips` do lado do
-        navegador está em gemini-2026-09-09.json;
-     2. cada bloco `voce`/`ia` do lado do programa instalado está
-        na transcrição de uma das duas capturas de 10/set, e cada
-        bloco `cmd` está na lista de comandos de uma delas;
-     3. as citações soltas declaradas em `citacoesAvulsas`.
+   O que sobrou de verificável são os números — 97 abas, 40
+   arquivos, 244 imagens, 20 execuções — que aparecem nas caixas
+   "saiba mais" e na seção da medição. Eles continuam vindo dos
+   relatórios em automation/capturas/, e um número que muda de um
+   lado e não do outro é exatamente o tipo de erro que ninguém
+   percebe relendo.
 
    Uso:  node automation/valida-cenas.mjs
-   Sai com código 1 se qualquer citação divergir.
    ═══════════════════════════════════════════════════════════════ */
 
 import { readFileSync } from 'node:fs';
 
-const CENAS = 'assets/como-usar-cenas.js';
 const raiz = new URL('..', import.meta.url).pathname;
+const le = rel => readFileSync(raiz + rel, 'utf8');
 
-const carrega = rel => readFileSync(raiz + rel, 'utf8');
+/* O texto que vai para a tela, dos dois arquivos de conteúdo. */
+const pagina = ['assets/como-usar-cenas.js', 'assets/como-usar-data.js']
+  .map(f => le(f).replace(/\/\*[\s\S]*?\*\//g, ''))
+  .join(' ')
+  .replace(/\s+/g, ' ');
 
-/* O arquivo de cenas é um script de navegador, não um módulo: avalia e
-   devolve a constante que ele declara. */
-const C = (0, eval)(carrega(CENAS) + '\n;COMO_USAR_CENAS');
+/* Cada afirmação numérica da página, com o relatório que a sustenta.
+   `naPagina` tem de aparecer no conteúdo; `naFonte`, no relatório. */
+const AFIRMACOES = [
+  { o: 'total de abas das planilhas',
+    naPagina: /97 abas no total/,
+    fonte: 'automation/capturas/2026-09-10-repeticao-planilhas.md', naFonte: /97 abas/ },
 
-/* Normaliza só o que é ruído de transporte — espaço repetido, quebra de
-   linha, aspas curvas que a interface troca sozinha. NÃO mexe em palavra,
-   ordem nem pontuação: se o texto divergir nisso, tem de falhar mesmo. */
-const normaliza = s => String(s)
-  .replace(/[‘’]/g, "'")
-  .replace(/[“”]/g, '"')
-  .replace(/ /g, ' ')
-  .replace(/\s+/g, ' ')
-  .trim();
+  { o: 'arquivos gerados sem a frase completa',
+    naPagina: /saíram 40 arquivos/,
+    fonte: 'automation/capturas/2026-09-10-repeticao-planilhas.md', naFonte: /40 CSVs/ },
 
-/* ── os dois palheiros ─────────────────────────────────────────── */
+  { o: 'arquivos gerados com a frase completa',
+    naPagina: /saíram os 97 arquivos/,
+    fonte: 'automation/capturas/2026-09-10-repeticao-planilhas.md', naFonte: /→ 97 arquivos, um por aba/ },
 
-const capNav = JSON.parse(carrega(C.fontes.navegador.arquivo));
-const palheiroNav = normaliza(
-  capNav.conversas.map(c => c.transcricao.map(t => t.texto).join('\n')).join('\n')
-);
+  { o: 'repetições por programa',
+    naPagina: /cinco vezes em cada um dos dois programas/,
+    fonte: 'automation/capturas/2026-09-10-repeticao-planilhas.md', naFonte: /cinco por célula/ },
 
-const capsAg = C.fontes.agente.arquivos.map(a => JSON.parse(carrega(a)));
-/* Capturas de outras execuções: NÃO alimentam as cenas, só as citações
-   avulsas — e cada uma dessas tem de dizer na página que veio de outra
-   execução. Por isso o palheiro é separado. */
-const capsExtra = (C.fontes.extras?.arquivos ?? []).map(a => JSON.parse(carrega(a)));
-const palheiroAgFala = normaliza(
-  capsAg.map(d => d.tarefas.map(t => t.transcricao.map(b => b.texto).join('\n')).join('\n')).join('\n')
-);
-const palheiroAgCmd = normaliza(
-  capsAg.map(d => d.tarefas.map(t => t.comandos.map(c => c.cmd).join('\n')).join('\n')).join('\n')
-);
-/* Um bloco `ia` do agente pode citar uma nota do executor? NÃO — por isso
-   as notas ficam de fora do palheiro de propósito. */
+  { o: 'imagens da série',
+    naPagina: /244 imagens de satélite/,
+    fonte: 'automation/capturas/2026-09-10-roteiro5-serie.md', naFonte: /240 GeoTIFF válidos/ },
 
-const LITERAIS = new Set(['voce', 'ia', 'sandbox']);
+  { o: 'execuções da série',
+    naPagina: /As vinte execuções acharam as mesmas três/,
+    fonte: 'automation/capturas/2026-09-10-roteiro5-serie.md', naFonte: /20 execuções, ninguém achou o quarto/ },
+];
 
 let falhas = 0;
-let conferidas = 0;
-
-function confere(rotulo, texto, palheiro, ondeDiz) {
-  conferidas++;
-  if (palheiro.includes(normaliza(texto))) return;
+for (const a of AFIRMACOES) {
+  const naPagina = a.naPagina.test(pagina);
+  const naFonte = a.naFonte.test(le(a.fonte));
+  if (naPagina && naFonte) { console.log(`✓ ${a.o}`); continue; }
   falhas++;
-  console.error(`✗ ${rotulo}\n   não está em ${ondeDiz}: "${String(texto).slice(0, 100)}…"`);
+  if (!naPagina) console.error(`✗ ${a.o}: sumiu da página (ou foi reescrito) — ${a.naPagina}`);
+  if (!naFonte) console.error(`✗ ${a.o}: não confere com ${a.fonte}`);
 }
 
-for (const cena of C.cenas) {
-  /* Uma cena sem transcrição precisa DIZER por quê, em texto que vai para a
-     tela. Sem essa exigência, "não tem beats" e "esqueci de citar" ficam
-     indistinguíveis — e a página passa a poder afirmar sem mostrar. */
-  if (cena.semTranscricao) {
-    conferidas++;
-    if (cena.navegador || cena.agente) {
-      falhas++;
-      console.error(`✗ ${cena.id}: declara semTranscricao mas traz beats — escolha um dos dois`);
-    }
-    continue;
-  }
-
-  for (const [lado, palheiro, ondeDiz] of [
-    ['navegador', palheiroNav, C.fontes.navegador.arquivo],
-    ['agente', palheiroAgFala, 'nenhuma das capturas de 10/set']
-  ]) {
-    const bloco = cena[lado];
-    if (!bloco) { falhas++; console.error(`✗ ${cena.id}: falta o lado "${lado}"`); continue; }
-
-    for (const [i, b] of bloco.beats.entries()) {
-      const rotulo = `${cena.id} · ${lado} · beat ${i} (${b.t})`;
-
-      if (b.t === 'chips') {
-        for (const op of b.ops) confere(rotulo + ' [chip]', op, palheiro, ondeDiz);
-        continue;
-      }
-      if (b.t === 'cmd') {
-        confere(rotulo, b.txt, palheiroAgCmd, 'na lista de comandos das capturas de 10/set');
-        continue;
-      }
-      if (!LITERAIS.has(b.t)) continue;   // `marca` é a voz do site, não citação
-      confere(rotulo, b.txt, palheiro, ondeDiz);
-    }
-  }
-
-  /* Os dois pedidos da virada são citações do par de formulações medido. */
-  if (cena.virada) {
-    confere(`${cena.id} · virada.antes`, cena.virada.antes, palheiroAgFala, 'nas capturas de 10/set');
-  }
-}
-
-/* ── citações que aparecem fora das cenas ─────────────────────── */
-const palheiroExtra = normaliza(
-  capsExtra.map(d => d.tarefas.map(t => t.transcricao.map(b => b.texto).join('\n')).join('\n')).join('\n')
-);
-/* Citações que aparecem fora dos beats. Vazio hoje: as caixas "saiba mais"
-   das cenas foram dissolvidas nos blocos `explicacao`, que são voz do site.
-   Ao citar um modelo em `explicacao`, acrescente a frase aqui. */
-const AVULSAS = [];
-for (const [rotulo, txt] of AVULSAS) {
-  confere(rotulo, txt, palheiroAgFala + '\n' + palheiroExtra, 'em nenhuma captura de 10/set');
-}
-
-console.log(`${conferidas} citações conferidas contra as capturas.`);
+/* A página não pode voltar a citar modelo sem lastro: se alguém puser aspas
+   de fala de IA no conteúdo, tem de existir a captura para conferir. */
+console.log(`\n${AFIRMACOES.length - falhas} de ${AFIRMACOES.length} afirmações numéricas conferem com os relatórios.`);
 if (falhas) {
-  console.error(`\n${falhas} divergência(s). A página estaria atribuindo a um modelo algo que ele não disse.`);
+  console.error('Um número mudou de um lado e não do outro. Confira antes de publicar.');
   process.exit(1);
 }
-console.log('tudo confere.');

@@ -40,7 +40,7 @@
   <!-- Estilos -->
   <link rel="stylesheet" href="assets/styles.css?v=30">
   <link rel="stylesheet" href="assets/guia.css?v=27">
-  <link rel="stylesheet" href="assets/como-usar.css?v=11">
+  <link rel="stylesheet" href="assets/como-usar.css?v=12">
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSBR3JMT2X"></script>
@@ -197,12 +197,11 @@
   <div class="controls">
     <div class="cu-toc" role="navigation" aria-label="Seções desta página">
       <a class="cu-toc-link" href="#abertura"><span class="cu-toc-n">01</span> A diferença</a>
-      <a class="cu-toc-link" href="#comparacao"><span class="cu-toc-n">02</span> As duas telas, lado a lado</a>
+      <a class="cu-toc-link" href="#comparacao"><span class="cu-toc-n">02</span> Exemplos</a>
       <a class="cu-toc-link" href="#permanencia"><span class="cu-toc-n">03</span> O que fica depois</a>
-      <a class="cu-toc-link" href="#seguranca"><span class="cu-toc-n">04</span> Antes de instalar</a>
-      <a class="cu-toc-link" href="#tutorial"><span class="cu-toc-n">05</span> Instalar, passo a passo</a>
-      <a class="cu-toc-link" href="#catalogo"><span class="cu-toc-n">06</span> O catálogo</a>
-      <a class="cu-toc-link" href="#medicao"><span class="cu-toc-n">07</span> Como isto foi medido</a>
+      <a class="cu-toc-link" href="#tutorial"><span class="cu-toc-n">04</span> Instalar, passo a passo</a>
+      <a class="cu-toc-link" href="#catalogo"><span class="cu-toc-n">05</span> O catálogo</a>
+      <a class="cu-toc-link" href="#medicao"><span class="cu-toc-n">06</span> Como isto foi medido</a>
     </div>
   </div>
 
@@ -218,9 +217,9 @@
         <em>possa ou não</em> abrir os seus arquivos e rodar comandos.
       </p>
       <p class="cu-lede-2">
-        Abaixo: a diferença explicada em duas ideias simples, cinco tarefas de laboratório feitas
-        nos dois lugares e conferidas no disco, o que sobra depois, o que você está autorizando,
-        e uma tela de computador de mentira onde você faz a instalação de verdade.
+        Abaixo: a diferença explicada em duas ideias simples, quatro perguntas de trabalho
+        respondidas nos dois lugares, o que sobra depois, o que instalar, e uma tela de
+        computador de mentira onde você faz a instalação de verdade.
       </p>
     </div>
 
@@ -249,8 +248,6 @@
 
       <div class="cu-eixos" id="cu-ab-eixos"></div>
 
-      <div id="cu-ab-fecho"></div>
-
       <!-- O que a pessoa GANHA com isso. A seção explicava o mecanismo e não
            respondia "e daí?" — vinha antes dos exemplos e saía sem dizer se
            valia a pena. -->
@@ -264,124 +261,68 @@
       <header class="cu-sec-head">
         <span class="cu-sec-n">02</span>
         <div>
-          <h2 id="h-comparacao">As duas telas, lado a lado</h2>
+          <h2 id="h-comparacao">Quatro perguntas, nos dois lugares</h2>
           <p class="cu-sec-sub">
-            Quatro tarefas de laboratório, cada uma feita <strong>nos dois lugares</strong>: à
-            esquerda a conversa no navegador, à direita o mesmo pedido para um programa
-            instalado na máquina, com acesso à pasta. <strong>As duas colunas aconteceram de
-            verdade</strong>: cada balão e cada comando é citação literal de uma captura. Toque
-            para vê-las acontecer ao mesmo tempo: a ordem em que as coisas foram feitas é
-            metade do argumento.
+            Quatro perguntas que aparecem de verdade no trabalho, respondidas
+            <strong>nos dois lugares</strong>: numa aba do navegador e num programa instalado no
+            computador. As duas colunas descrevem o que aconteceu quando fizemos isso —
+            <strong>Gemini</strong> no navegador, <strong>Antigravity</strong> no terminal, sobre
+            uma pasta com arquivos reais. O que interessa aqui é a diferença prática; os números
+            de cada teste estão nas caixas fechadas e na seção 06.
           </p>
         </div>
       </header>
 
-      <!-- O MECANISMO, ANTES DAS PROVAS.
-           As cinco transcrições abaixo são evidência de uma coisa só, e essa
-           coisa é um ciclo: quem lê a saída decide o próximo passo. Enquanto
-           isso só existia em prosa, cada cenário precisava reensinar o
-           argumento do zero. Com a figura, eles viram confirmação — que é o
-           papel que exemplo deveria ter.
+      <!-- O DESENHO, ANTES DOS EXEMPLOS.
+           O anterior eram dois fluxogramas de cinco nós numerados cada, com
+           setas cruzando entre duas colunas. Tinha informação demais para o
+           que precisa dizer, e ninguém lia os números na ordem certa.
+           Este diz uma coisa só: de que lado da linha está o trabalho. -->
+      <figure class="cu-fig">
+        <svg viewBox="0 0 620 200" class="cu-fig-svg" role="img" aria-labelledby="fig-t fig-d">
+          <title id="fig-t">Quem faz o trabalho em cada lugar</title>
+          <desc id="fig-d">No navegador, a IA escreve as instruções e você executa nos seus arquivos. Com um programa instalado, a IA propõe, você autoriza e ela mesma executa nos seus arquivos.</desc>
 
-           São dois SVG e não um: assim eles empilham no celular sem precisar
-           reescalar texto, e cada um carrega o próprio título para leitor de
-           tela. -->
-      <figure class="cu-ciclo">
-        <div class="cu-ciclo-par">
+          <!-- navegador -->
+          <text x="14" y="20" class="cu-fig-tit">No navegador</text>
+          <g class="cu-fig-no"><rect x="14" y="32" width="120" height="40" rx="9"/><text x="74" y="57">a IA escreve</text></g>
+          <g class="cu-fig-no is-voce"><rect x="178" y="32" width="120" height="40" rx="9"/><text x="238" y="57">você executa</text></g>
+          <g class="cu-fig-no is-alvo"><rect x="342" y="32" width="150" height="40" rx="9"/><text x="417" y="57">os seus arquivos</text></g>
+          <path d="M134 52 H172" class="cu-fig-seta" marker-end="url(#fs)"/>
+          <path d="M298 52 H336" class="cu-fig-seta" marker-end="url(#fs)"/>
+          <text x="506" y="57" class="cu-fig-nota">a IA nunca os vê</text>
 
-          <div class="cu-ciclo-lado">
-            <h3 class="cu-ciclo-t"><span class="cu-ciclo-tag cu-tag-chat">Na aba do navegador</span></h3>
-            <svg viewBox="0 0 380 268" class="cu-ciclo-svg" role="img" aria-labelledby="ciclo-a-t ciclo-a-d">
-              <title id="ciclo-a-t">O ciclo numa aba de navegador</title>
-              <desc id="ciclo-a-d">Você pergunta; a IA escreve um roteiro; você executa; você digita de volta o que aconteceu. O resultado só chega à IA pela sua descrição.</desc>
+          <line x1="14" y1="98" x2="606" y2="98" class="cu-fig-linha"/>
 
-              <line x1="190" y1="26" x2="190" y2="252" class="cu-cd-divisor" />
-              <text x="96" y="18" class="cu-cd-col">VOCÊ</text>
-              <text x="284" y="18" class="cu-cd-col">A IA</text>
+          <!-- instalado -->
+          <text x="14" y="126" class="cu-fig-tit">Com um programa instalado</text>
+          <g class="cu-fig-no"><rect x="14" y="138" width="120" height="40" rx="9"/><text x="74" y="163">a IA propõe</text></g>
+          <g class="cu-fig-no is-voce"><rect x="178" y="138" width="120" height="40" rx="9"/><text x="238" y="163">você autoriza</text></g>
+          <g class="cu-fig-no is-alvo"><rect x="342" y="138" width="150" height="40" rx="9"/><text x="417" y="163">os seus arquivos</text></g>
+          <path d="M134 158 H172" class="cu-fig-seta" marker-end="url(#fs)"/>
+          <path d="M298 158 H336" class="cu-fig-seta" marker-end="url(#fs)"/>
+          <path d="M417 178 V190 H74 V178" class="cu-fig-volta" marker-end="url(#fv)"/>
+          <text x="506" y="163" class="cu-fig-nota is-verde">a IA lê o resultado</text>
 
-              <g class="cu-cd-no"><rect x="22" y="32" width="148" height="34" rx="8" /><text x="96" y="53">1 · você pergunta</text></g>
-              <g class="cu-cd-no"><rect x="210" y="88" width="148" height="34" rx="8" /><text x="284" y="109">2 · escreve um roteiro</text></g>
-              <g class="cu-cd-no"><rect x="22" y="144" width="148" height="34" rx="8" /><text x="96" y="165">3 · você executa</text></g>
-              <g class="cu-cd-no"><rect x="22" y="200" width="148" height="34" rx="8" /><text x="96" y="221">4 · você conta o que deu</text></g>
-
-              <path d="M170 49 H190 Q206 49 206 66 V88" class="cu-cd-seta" marker-end="url(#pt-a)" />
-              <path d="M210 116 H190 Q174 116 174 133 V144" class="cu-cd-seta" marker-end="url(#pt-a)" />
-              <path d="M96 178 V200" class="cu-cd-seta" marker-end="url(#pt-a)" />
-              <path d="M170 217 H340 Q358 217 358 199 V122" class="cu-cd-volta cu-cd-volta-chat" marker-end="url(#pt-chat)" />
-            </svg>
-            <p class="cu-ciclo-leg">
-              A volta é a linha grossa: <strong>o resultado só chega à IA se você digitar o que viu</strong>,
-              e só o pedaço que você percebeu. Toda rodada custa duas travessias suas.
-            </p>
-          </div>
-
-          <div class="cu-ciclo-lado">
-            <h3 class="cu-ciclo-t"><span class="cu-ciclo-tag cu-tag-term">Com acesso ao terminal</span></h3>
-            <svg viewBox="0 0 380 268" class="cu-ciclo-svg" role="img" aria-labelledby="ciclo-b-t ciclo-b-d">
-              <title id="ciclo-b-t">O ciclo com acesso ao terminal</title>
-              <desc id="ciclo-b-d">Você pede uma vez e aprova; a IA propõe, executa, lê a saída e decide o próximo passo sozinha. O resultado volta inteiro, sem passar pela sua descrição.</desc>
-
-              <line x1="190" y1="26" x2="190" y2="252" class="cu-cd-divisor" />
-              <text x="96" y="18" class="cu-cd-col">VOCÊ</text>
-              <text x="284" y="18" class="cu-cd-col">A IA</text>
-
-              <g class="cu-cd-no"><rect x="22" y="32" width="148" height="34" rx="8" /><text x="96" y="53">1 · você pede</text></g>
-              <g class="cu-cd-no"><rect x="210" y="88" width="148" height="34" rx="8" /><text x="284" y="109">2 · propõe o comando</text></g>
-              <g class="cu-cd-no cu-cd-aprova"><rect x="22" y="144" width="148" height="34" rx="8" /><text x="96" y="165">3 · você aprova</text></g>
-              <g class="cu-cd-no"><rect x="210" y="144" width="148" height="34" rx="8" /><text x="284" y="165">4 · executa</text></g>
-              <g class="cu-cd-no"><rect x="210" y="200" width="148" height="34" rx="8" /><text x="284" y="221">5 · lê a saída</text></g>
-
-              <path d="M170 49 H190 Q206 49 206 66 V88" class="cu-cd-seta" marker-end="url(#pt-a)" />
-              <path d="M210 110 H190 Q174 110 174 127 V144" class="cu-cd-seta" marker-end="url(#pt-a)" />
-              <path d="M170 161 H210" class="cu-cd-seta" marker-end="url(#pt-a)" />
-              <path d="M284 178 V200" class="cu-cd-seta" marker-end="url(#pt-a)" />
-              <path d="M358 217 Q372 217 372 199 V122 Q372 106 358 106" class="cu-cd-volta cu-cd-volta-term" marker-end="url(#pt-term)" />
-            </svg>
-            <p class="cu-ciclo-leg">
-              A volta não sai do lado direito: <strong>quem lê a saída é quem escolhe o próximo comando</strong>.
-              Você entra para pedir e para aprovar, não para transcrever.
-            </p>
-          </div>
-        </div>
-
-        <figcaption class="cu-ciclo-cap">
-          É esta a diferença que as quatro tarefas abaixo medem. Repare no que a figura da direita
-          <em>não</em> promete: fechar o ciclo dá à IA a chance de descobrir que o próprio resultado
-          estava errado, não a garantia de que ela vá procurar. Na tarefa das planilhas ela fecha o
-          ciclo, confere, e a conferência passa com 57 abas já perdidas.
+          <defs>
+            <marker id="fs" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0 0 L8 4 L0 8 z" fill="#8d8877"/>
+            </marker>
+            <marker id="fv" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0 0 L8 4 L0 8 z" fill="#10a37f"/>
+            </marker>
+          </defs>
+        </svg>
+        <figcaption class="cu-fig-cap">
+          A diferença está na última seta. No navegador, o que aconteceu com os seus arquivos só
+          volta para a IA se você digitar. Com o programa instalado, ela lê o resultado e já sabe
+          qual é o próximo passo.
         </figcaption>
       </figure>
 
-      <!-- marcadores de seta compartilhados pelos dois diagramas -->
-      <svg width="0" height="0" aria-hidden="true" focusable="false" class="cu-defs">
-        <defs>
-          <marker id="pt-a" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M0 0 L8 4 L0 8 z" fill="#8d8877" />
-          </marker>
-          <marker id="pt-chat" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
-            <path d="M0 0 L8 4 L0 8 z" fill="#5B53A8" />
-          </marker>
-          <marker id="pt-term" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
-            <path d="M0 0 L8 4 L0 8 z" fill="#10a37f" />
-          </marker>
-        </defs>
-      </svg>
-
-      <!-- AS CENAS: as duas conversas reais, tocadas lado a lado.
-           Um contador só para as duas colunas: no passo k, cada lado revela o
-           seu k-ésimo beat. Todo balão e todo comando é citação literal —
-           navegador em 09/set, programa instalado em 10/set. Ver
-           automation/CAPTURA-GEMINI.md e automation/CAPTURA-ANTIGRAVITY.md. -->
-      <div id="cu-cenas"></div>
-      <div id="cu-balanco"></div>
-
-      <!-- A comparação inteira vive dentro de #cu-cenas: escolher a tarefa lá
-           troca a conversa real E a reconstituição do terminal ao mesmo tempo.
-           Antes havia três fileiras de abas para as mesmas cinco tarefas — a
-           tira de lições, as abas de cenário e as abas de cena — e o gráfico de
-           custos, cujos dez números eram estimativa minha e cinco deles foram
-           desmentidos pela captura de 09/set. O balanço logo acima diz isso com
-           dados; o gráfico dizia o contrário sem nenhum. -->
+      <!-- OS EXEMPLOS. Uma pergunta de trabalho e a diferença entre os dois
+           lugares, narrada. Os números da medição ficam nas caixas fechadas;
+           a seção 05 conta como o teste foi feito. -->      <div id="cu-cenas"></div>
 
       <div id="cu-contraponto"></div>
     </section>
@@ -402,26 +343,10 @@
       <div id="cu-permanencia"></div>
     </section>
 
-    <!-- ─── 07 · SEGURANÇA ───────────────────────────────────── -->
-    <section id="seguranca" class="cu-section" aria-labelledby="h-seguranca">
-      <header class="cu-sec-head">
-        <span class="cu-sec-n">04</span>
-        <div>
-          <h2 id="h-seguranca">Antes de instalar: o que você está autorizando</h2>
-          <p class="cu-sec-sub">
-            Esta seção vem <strong>antes</strong> do tutorial de propósito: são as sete regras que
-            evitam os acidentes que a gente já viu acontecer, e duas delas vêm de coisas que
-            aconteceram durante a medição desta página. Leia antes de instalar, não depois.
-          </p>
-        </div>
-      </header>
-      <div class="cu-seg" id="cu-seg"></div>
-    </section>
-
     <!-- ─── 05 · SIMULADOR ───────────────────────────────────── -->
     <section id="tutorial" class="cu-section" aria-labelledby="h-tutorial">
       <header class="cu-sec-head">
-        <span class="cu-sec-n">05</span>
+        <span class="cu-sec-n">04</span>
         <div>
           <h2 id="h-tutorial">Instalar, passo a passo</h2>
           <p class="cu-sec-sub">
@@ -472,7 +397,7 @@
     <!-- ─── 06 · CATÁLOGO ────────────────────────────────────── -->
     <section id="catalogo" class="cu-section" aria-labelledby="h-catalogo">
       <header class="cu-sec-head">
-        <span class="cu-sec-n">06</span>
+        <span class="cu-sec-n">05</span>
         <div>
           <h2 id="h-catalogo">O catálogo</h2>
           <p class="cu-sec-sub">
@@ -511,7 +436,7 @@
          separa uma página que mediu de uma página que afirma. -->
     <section id="medicao" class="cu-section" aria-labelledby="h-medicao">
       <header class="cu-sec-head">
-        <span class="cu-sec-n">07</span>
+        <span class="cu-sec-n">06</span>
         <div>
           <h2 id="h-medicao">Como isto foi medido</h2>
           <p class="cu-sec-sub">
@@ -537,9 +462,9 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="assets/como-usar-data.js?v=11"></script>
-  <script src="assets/como-usar-cenas.js?v=4"></script>
-  <script src="assets/como-usar.js?v=11"></script>
+  <script src="assets/como-usar-data.js?v=12"></script>
+  <script src="assets/como-usar-cenas.js?v=5"></script>
+  <script src="assets/como-usar.js?v=12"></script>
 </body>
 
 </html>

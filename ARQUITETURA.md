@@ -574,7 +574,9 @@ panorama-llms/
 │   │   ├── preparar.py            #   gera ~2,7 GB com as armadilhas reais (sem dependências)
 │   │   ├── conferir.py            #   confere as armadilhas antes; pontua pelo DISCO depois
 │   │   └── README.md              #   qual é a armadilha de cada cenário
-│   ├── valida-cenas.mjs           # falha se uma citação da página divergir da captura
+│   ├── valida-cenas.mjs           # falha se um NÚMERO publicado na aba divergir do
+│   │                              #   relatório que o sustenta (era validador de citação
+│   │                              #   literal até a seção 02 deixar de transcrever)
 │   ├── valida-escrita.mjs         # falha se os tiques de escrita de IA (travessão solto,
 │   │                              #   "não é X, é Y", ênfase vazia) voltarem a se acumular
 │   │                              #   no texto da aba. Tetos calibrados contra a versão

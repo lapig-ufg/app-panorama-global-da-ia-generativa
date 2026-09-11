@@ -514,83 +514,43 @@
   color: var(--ink);
 }
 
-/* O bloco de medição. Fundo escuro porque é o único pedaço da seção que traz
-   número de experimento — e o leitor precisa saber, de relance, quando a
-   página está afirmando e quando está mostrando o que mediu. */
-.cu-medida {
-  padding: 16px 18px 14px;
-  background: var(--ink);
-  border-radius: 12px;
-  color: #e9e5da;
+/* O lastro de cada eixo. Discreto de propósito: a prova sustenta a afirmação,
+   ela não é a afirmação. Antes aqui havia um quadro escuro com a tabela de
+   execuções, que roubava a atenção do texto e apresentava conclusão interna
+   do teste como se fosse regra geral. */
+.cu-lastro {
+  margin-bottom: 16px;
+  padding: 13px 15px;
+  background: var(--paper);
+  border-left: 3px solid var(--ink-muted);
+  border-radius: 0 9px 9px 0;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--ink-light);
+  max-width: 80ch;
 }
 
-.cu-medida-rot {
+.cu-lastro-rot {
   display: block;
   font-family: var(--mono);
-  font-size: 9.5px;
+  font-size: 9px;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--accent-bright);
-  margin-bottom: 8px;
+  letter-spacing: 0.07em;
+  color: var(--ink-muted);
+  margin-bottom: 4px;
 }
 
-.cu-medida-txt {
-  font-size: 13px;
-  line-height: 1.6;
-  color: #e9e5da;
-  margin-bottom: 11px;
+.cu-lastro strong { color: var(--ink); font-weight: 700; }
+
+.cu-lastro-link {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 12px;
+  color: var(--accent);
+  white-space: nowrap;
 }
 
-.cu-med-linhas {
-  display: grid;
-  gap: 7px;
-  margin-bottom: 12px;
-  list-style: none;
-}
-
-/* Três colunas: o que foi pedido, o que aconteceu, e a leitura. A do meio
-   é a que o olho procura, então é ela que ganha a fonte mono e o peso. */
-.cu-med-linha {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.75fr) minmax(0, 1.5fr);
-  align-items: baseline;
-  gap: 12px;
-  padding: 9px 12px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.cu-med-pedido {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #f4f1e8;
-}
-
-.cu-med-valor {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 600;
-  color: #cfc9bb;
-}
-
-.cu-med-linha.is-bom .cu-med-valor { color: var(--accent-bright); }
-.cu-med-linha.is-ruim .cu-med-valor { color: #ffb4a2; }
-
-.cu-med-det {
-  font-size: 11.5px;
-  line-height: 1.45;
-  color: #a8a196;
-}
-
-.cu-medida-conc {
-  font-size: 12.5px;
-  line-height: 1.6;
-  color: #d6d1c5;
-  padding-top: 11px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.cu-medida-conc strong { color: #f4f1e8; }
+.cu-lastro-link::after { content: " ↓"; }
 
 /* A regra prática de cada eixo. É a frase que a pessoa leva embora, então
    ela é a única coisa da seção em corpo grande fora dos títulos. */
@@ -603,40 +563,6 @@
   letter-spacing: -0.012em;
   font-weight: 600;
   color: var(--ink);
-}
-
-.cu-fecho {
-  margin-top: 22px;
-  padding: 20px 22px;
-  background: var(--paper);
-  border: 1px solid var(--hair);
-  border-radius: 14px;
-}
-
-.cu-fecho-rot {
-  display: block;
-  font-family: var(--mono);
-  font-size: 9.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink-muted);
-  margin-bottom: 8px;
-}
-
-.cu-fecho-frase {
-  font-size: 21px;
-  font-weight: 800;
-  letter-spacing: -0.022em;
-  line-height: 1.25;
-  color: var(--accent);
-  margin-bottom: 10px;
-}
-
-.cu-fecho-txt {
-  font-size: 13.5px;
-  line-height: 1.65;
-  color: var(--ink-light);
-  max-width: 72ch;
 }
 
 /* ─── CAIXAS "SAIBA MAIS" (a página inteira usa estas) ───
@@ -1524,119 +1450,77 @@
 .cn-fonte a { color: var(--accent); }
 
 /* ─── o balanço: a página medindo a si mesma ─── */
-/* ─── O EXEMPLO EM TRÊS ETAPAS ───
-   A ordem é o conteúdo: pergunta → o que cada um devolveu → por quê. Cada
-   etapa aparece com um clique, e a anterior fica. A versão anterior abria com
-   as duas transcrições tocando ao mesmo tempo, e quem passava os olhos saía
-   sem saber o que tinha acontecido — o resultado só chegava no fim. */
-.cn-exemplo {
+/* ─── OS EXEMPLOS ───
+   Uma pergunta, os dois lados narrados, o que muda e quando usar cada um.
+   O que havia aqui antes era um player de duas transcrições tocando em
+   sincronia, com placar de arquivos e etiqueta por comando. Era relatório
+   de medição, não explicação. */
+.cn-ex {
   display: grid;
-  gap: 20px;
+  gap: 18px;
 }
 
-.cn-et {
-  padding: 20px 22px 18px;
-  background: var(--white);
-  border: 1px solid var(--hair);
-  border-radius: 14px;
-  box-shadow: var(--shadow-xs);
-}
-
-.cn-et-rot {
+.cn-ex-rot {
   display: block;
   font-family: var(--mono);
   font-size: 9.5px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--ink-muted);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
-/* ── etapa 1: a pergunta ── */
-.cn-et-1 { background: var(--paper); }
+.cn-ex-pergunta {
+  padding: 20px 22px 18px;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: 14px;
+}
 
-.cn-pergunta {
-  font-size: 22px;
+.cn-ex-pergunta h3 {
+  font-size: 21px;
   font-weight: 800;
   letter-spacing: -0.022em;
-  line-height: 1.25;
+  line-height: 1.3;
   color: var(--ink);
-  margin-bottom: 13px;
-  max-width: 28ch;
+  max-width: 42ch;
 }
 
-.cn-emjogo {
-  padding: 12px 15px;
-  background: var(--white);
-  border: 1px solid var(--hair);
-  border-radius: 10px;
-  font-size: 13.5px;
-  line-height: 1.6;
-  color: var(--ink-light);
-  max-width: 78ch;
-}
-
-.cn-emjogo-rot {
-  display: block;
-  font-family: var(--mono);
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--ink-muted);
-  margin-bottom: 4px;
-}
-
-/* O aviso de eixo só existe no exemplo da série, onde as duas colunas não são
-   navegador × instalado. Ele é obrigatório ali: sem o aviso, a página estaria
-   deixando o leitor concluir a coisa errada de um quadro honesto. */
-.cn-aviso-eixo {
-  margin-top: 11px;
-  padding: 11px 14px;
-  border-left: 3px solid #5B53A8;
-  background: rgba(91, 83, 168, 0.06);
-  border-radius: 0 8px 8px 0;
-  font-size: 12.5px;
-  line-height: 1.55;
-  color: var(--ink-light);
-  max-width: 78ch;
-}
-
-/* ── etapa 2: o que cada um devolveu ── */
-.cn-res-par {
+.cn-ex-par {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
 }
 
-.cn-res {
+.cn-lado {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  padding: 15px 16px 14px;
+  padding: 18px 20px 16px;
+  background: var(--white);
   border: 1px solid var(--hair);
-  border-radius: 12px;
-  background: var(--paper);
+  border-radius: 13px;
+  box-shadow: var(--shadow-xs);
 }
 
-.cn-res.is-dir {
-  background: linear-gradient(to bottom, var(--white) 55%, rgba(10, 115, 89, 0.05));
-  border-color: rgba(10, 115, 89, 0.3);
+.cn-lado.is-maq {
+  background: linear-gradient(to bottom, var(--white) 60%, rgba(10, 115, 89, 0.045));
+  border-color: rgba(10, 115, 89, 0.28);
 }
 
-.cn-res-head { margin-bottom: 11px; }
+.cn-lado-head { margin-bottom: 11px; }
 
-.cn-res-rot {
-  display: block;
-  font-size: 13.5px;
+.cn-lado-head h4 {
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: -0.014em;
+  letter-spacing: -0.016em;
   color: var(--ink);
 }
 
-.cn-res.is-esq .cn-res-rot { color: #4a4394; }
-.cn-res.is-dir .cn-res-rot { color: var(--accent); }
+.cn-lado.is-nav .cn-lado-head h4 { color: #4a4394; }
+.cn-lado.is-maq .cn-lado-head h4 { color: var(--accent); }
 
-.cn-res-sub {
+.cn-lado-sub {
   display: block;
   margin-top: 2px;
   font-family: var(--mono);
@@ -1644,546 +1528,158 @@
   color: var(--ink-muted);
 }
 
-.cn-res-fez {
+.cn-lado-narr {
   flex: 1;
-  list-style: none;
-  display: grid;
-  gap: 7px;
-  margin-bottom: 13px;
+  font-size: 13.5px;
+  line-height: 1.68;
+  color: var(--ink-light);
+  margin-bottom: 14px;
 }
 
-.cn-res-fez li {
-  position: relative;
-  padding-left: 17px;
+/* O saldo de cada lado: o que ele resolve e o que sobra para você. Os dois
+   juntos, sempre — vantagem sem contrapartida é propaganda. */
+.cn-lado-saldo {
+  display: grid;
+  gap: 8px;
+  padding-top: 13px;
+  border-top: 1px dashed var(--hair);
+}
+
+.cn-lado-saldo > div { display: grid; gap: 2px; }
+
+.cn-lado-saldo dt {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.cn-lado-saldo .is-bom dt { color: var(--accent); }
+.cn-lado-saldo .is-lim dt { color: var(--ink-muted); }
+
+.cn-lado-saldo dd {
   font-size: 12.5px;
   line-height: 1.55;
-  color: var(--ink-light);
-}
-
-/* Marcador desenhado, não caractere: assim ele não entra na seleção de texto
-   nem é lido em voz alta pelo leitor de tela a cada item. */
-.cn-res-fez li::before {
-  content: "";
-  position: absolute;
-  left: 2px;
-  top: 7px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--ink-muted);
-}
-
-.cn-res.is-dir .cn-res-fez li::before { background: var(--accent); }
-
-/* O desfecho é o que o olho procura. É a única coisa do cartão em fonte mono
-   e em corpo grande, para poder ser lido sem ler o resto. */
-.cn-res-desf {
-  padding: 11px 13px;
-  border-radius: 9px;
-  background: var(--white);
-  border: 1px solid var(--hair);
-}
-
-.cn-res-desf-v {
-  display: block;
-  font-family: var(--mono);
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.25;
   color: var(--ink);
-  margin-bottom: 4px;
 }
 
-.cn-res-desf-n {
-  display: block;
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--ink-light);
-}
-
-.cn-res-desf.is-bom { border-color: rgba(10, 115, 89, 0.35); background: rgba(10, 115, 89, 0.06); }
-.cn-res-desf.is-bom .cn-res-desf-v { color: var(--accent); }
-.cn-res-desf.is-ruim { border-color: rgba(163, 61, 42, 0.35); background: rgba(163, 61, 42, 0.06); }
-.cn-res-desf.is-ruim .cn-res-desf-v { color: #a33d2a; }
-
-.cn-et-2 .cn-placar { margin-top: 16px; }
-
-/* ── etapa 3: a explicação ── */
-.cn-expl { max-width: 74ch; }
-
-.cn-expl p {
-  font-size: 14px;
-  line-height: 1.68;
-  color: var(--ink);
-  margin-bottom: 12px;
-}
-
-.cn-expl p:last-child { margin-bottom: 0; }
-.cn-expl strong { font-weight: 700; }
-
-.cn-expl code {
-  font-family: var(--mono);
-  font-size: 0.88em;
-  background: var(--paper);
-  border: 1px solid var(--hair);
-  border-radius: 4px;
-  padding: 1px 4px;
-}
-
-.cn-et-3 .cn-virada { margin-top: 20px; }
-
-/* O contraste dos dois casos. Só existe no exemplo da série, e é o motivo de
-   ele estar na página: um caso em que pedir melhor resolve, outro em que não. */
-.cn-contraste {
-  margin-top: 20px;
+.cn-ex-dif {
   padding: 18px 20px 16px;
-  background: var(--paper);
-  border: 1px solid var(--hair);
+  background: var(--ink);
   border-radius: 13px;
 }
 
-.cn-contraste h4 {
+.cn-ex-dif .cn-ex-rot { color: var(--accent-bright); }
+
+.cn-ex-dif p {
   font-size: 14.5px;
-  font-weight: 700;
-  letter-spacing: -0.014em;
-  color: var(--ink);
-  margin-bottom: 12px;
+  line-height: 1.7;
+  color: #e9e5da;
+  max-width: 76ch;
 }
 
-.cn-contraste-lista { display: grid; gap: 9px; margin-bottom: 13px; }
+.cn-ex-dif strong { color: #fff; }
+.cn-ex-dif em { font-style: italic; color: #f4f1e8; }
 
-.cn-contraste-l {
-  display: grid;
-  grid-template-columns: minmax(0, 0.8fr) auto minmax(0, 1.6fr);
-  align-items: baseline;
-  gap: 14px;
-  padding: 11px 13px;
-  border-radius: 9px;
-  background: var(--white);
+.cn-ex-quando {
+  padding: 16px 18px 14px;
+  background: var(--paper);
   border: 1px solid var(--hair);
+  border-radius: 12px;
 }
 
-.cn-contraste-l dt {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ink);
-}
-
-.cn-contraste-r {
-  font-family: var(--mono);
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
-.cn-contraste-l.is-bom { border-color: rgba(10, 115, 89, 0.35); }
-.cn-contraste-l.is-bom .cn-contraste-r { color: var(--accent); }
-.cn-contraste-l.is-ruim { border-color: rgba(163, 61, 42, 0.35); }
-.cn-contraste-l.is-ruim .cn-contraste-r { color: #a33d2a; }
-
-.cn-contraste-d {
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--ink-light);
-}
-
-.cn-contraste-fecho {
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--ink-light);
-  padding-top: 12px;
-  border-top: 1px dashed var(--hair);
-  max-width: 74ch;
-}
-
-.cn-contraste-fecho strong { color: var(--ink); }
-
-/* ── o botão que avança, e a íntegra ── */
-.cn-avanca { display: flex; justify-content: center; }
-.cn-avanca-sec { margin-top: -6px; }
-
-.cn-sem-transc {
-  padding: 12px 15px;
-  border: 1px dashed var(--ink-muted);
-  border-radius: 10px;
-  font-size: 12.5px;
-  line-height: 1.55;
-  color: var(--ink-muted);
-  max-width: 80ch;
-}
-
-.cn-transc {
-  padding: 18px 20px 16px;
-  background: var(--white);
-  border: 1px solid var(--hair);
-  border-radius: 14px;
-}
-
-.cn-transc-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
-.cn-transc-head h4 {
-  font-size: 14.5px;
-  font-weight: 700;
-  letter-spacing: -0.014em;
-  color: var(--ink);
-}
-
-/* ─── O DUELO: as duas telas lado a lado ───
-   Um contador só toca as duas colunas. Lado a lado é o formato: o argumento
-   da seção é que o MESMO pedido produz coisas diferentes nos dois lugares, e
-   isso só se lê quando as duas telas estão no mesmo campo de visão. No
-   celular elas empilham — navegador em cima, porque é o lugar que o leitor
-   conhece, e o de baixo é a novidade. */
-.cn-duelo {
+.cn-ex-quando dl {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
-  align-items: start;
 }
 
-.cn-col { min-width: 0; }
-
-.cn-col-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 7px;
-  padding: 0 2px;
-}
-
-.cn-col-rot {
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: -0.012em;
-  color: var(--ink);
-}
-
-.cn-col-ferr {
-  font-family: var(--mono);
-  font-size: 9.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ink-muted);
-  text-align: right;
-}
-
-.cn-col-nav .cn-col-rot { color: #4a4394; }
-.cn-col-ag .cn-col-rot { color: var(--accent); }
-
-/* As duas molduras têm a MESMA altura para o paralelo funcionar: se uma
-   crescer mais que a outra, o olho lê a diferença de altura como diferença
-   de conteúdo. */
-.cn-col .cn-chrome { height: 100%; }
-.cn-col .cn-rolagem { height: 430px; }
-
-.cn-col-fecho {
-  margin-top: 9px;
-  padding: 10px 12px;
-  border-radius: 9px;
-  font-size: 12.5px;
-  line-height: 1.55;
-  color: var(--ink);
-  border: 1px solid var(--hair);
-  background: var(--white);
-}
-
-.cn-col-nav .cn-col-fecho { border-left: 3px solid #5B53A8; }
-.cn-col-ag .cn-col-fecho { border-left: 3px solid var(--accent); }
-
-/* ─── A moldura de terminal ───
-   Escura, para não ser confundida com a janela de navegador ao lado. É a
-   mesma decisão do simulador da seção 05: quando duas coisas aparecem juntas
-   e são diferentes, elas precisam PARECER diferentes. */
-.cn-chrome-term { background: #14140f; border-color: #2c2c22; }
-
-.cn-barra-term {
-  background: #201f18;
-  border-bottom-color: #2c2c22;
-}
-
-/* A área de rolagem tem fundo próprio (claro, herdado da coluna do
-   navegador) e pinta POR CIMA da moldura escura. Sem esta linha, todo o
-   texto claro do terminal cai em claro sobre claro e some. */
-.cn-chrome-term .cn-rolagem {
-  background: #14140f;
-  scrollbar-color: #3a392e #14140f;
-}
-
-.cn-barra-term .cn-pontos i { background: #4a493c; }
-.cn-barra-term .cn-tab { background: #2c2b22; color: #d8d3c4; border-color: #3a392e; }
-.cn-barra-term .cn-url { color: #8a8676; }
-
-.cn-palco-term {
-  padding: 14px 15px;
-  gap: 9px;
-}
-
-.cn-l { font-size: 12px; line-height: 1.55; }
-
-.cn-l-pr {
-  color: var(--accent-bright);
-  font-family: var(--mono);
-  font-weight: 600;
-  margin-right: 7px;
-  user-select: none;
-}
-
-/* O pedido da pessoa, dentro do terminal. Fundo próprio para separar do que
-   o programa fez em resposta. */
-.cn-l-voce {
-  display: flex;
-  gap: 2px;
-  padding: 9px 11px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.06);
-  border-left: 2px solid #5B53A8;
-}
-
-.cn-l-voce p { color: #f0ece0; font-size: 12.5px; line-height: 1.5; }
-.cn-l-voce .cn-l-pr { color: #9d95dd; }
-
-.cn-l-cmd {
-  display: flex;
-  align-items: baseline;
-  gap: 0;
-  flex-wrap: wrap;
-  padding: 7px 10px;
-  border-radius: 7px;
-  background: rgba(255, 255, 255, 0.035);
-}
-
-.cn-l-cmd code {
-  font-family: var(--mono);
-  font-size: 11px;
-  line-height: 1.5;
-  color: #cfe8de;
-  word-break: break-word;
-  flex: 1 1 12ch;
-  min-width: 0;
-}
-
-/* A etiqueta olhar/mexer. É a distinção que a seção 07 vai cobrar na hora de
-   aprovar comando — vê-la desde a primeira cena poupa a explicação depois. */
-.cn-l-tipo {
-  flex-shrink: 0;
-  margin-left: 8px;
-  font-family: var(--mono);
-  font-size: 8.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 2px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
-}
-
-.cn-l-tipo.is-olhar { background: rgba(16, 163, 127, 0.16); color: #6fd3b4; }
-.cn-l-tipo.is-mexer { background: rgba(214, 138, 60, 0.18); color: #e5a765; }
-
-.cn-l-ia {
-  padding: 10px 12px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.055);
-  border-left: 2px solid var(--accent-bright);
-}
-
-.cn-l-rot {
-  display: block;
-  font-family: var(--mono);
-  font-size: 8.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: #7d9c90;
-  margin-bottom: 4px;
-}
-
-.cn-l-txt { color: #e4dfd2; font-size: 12.5px; line-height: 1.6; }
-.cn-l-txt strong { color: #fff; font-weight: 700; }
-
-.cn-l-txt code {
-  font-family: var(--mono);
-  font-size: 0.9em;
-  background: rgba(0, 0, 0, 0.35);
-  border-radius: 3px;
-  padding: 1px 4px;
-  color: #cfe8de;
-}
-
-.cn-l-txt .cn-corte {
-  display: block;
-  margin-top: 6px;
+.cn-ex-quando dt {
   font-family: var(--mono);
   font-size: 9px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #7d786c;
+  letter-spacing: 0.07em;
+  color: var(--ink-muted);
+  margin-bottom: 4px;
 }
 
-/* As anotações do site, dentro do terminal: mesma forma da coluna da
-   esquerda, cores adaptadas ao fundo escuro. */
-.cn-palco-term .cn-marca { background: rgba(255, 255, 255, 0.045); }
-.cn-palco-term .cn-marca p { color: #c9c4b6; }
-.cn-palco-term .cn-marca strong { color: #fff; }
-.cn-palco-term .cn-tom-ruim { border-left-color: #e08b74; color: #e08b74; background: rgba(224, 139, 116, 0.09); }
-.cn-palco-term .cn-tom-bom { border-left-color: var(--accent-bright); color: var(--accent-bright); background: rgba(16, 163, 127, 0.09); }
-.cn-palco-term .cn-tom-chave { border-left-color: #9d95dd; color: #b3abe8; background: rgba(157, 149, 221, 0.1); }
-.cn-palco-term .cn-tom-neutro { border-left-color: #7d786c; color: #a8a196; }
+.cn-ex-quando dd {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-light);
+}
 
-/* ─── O PLACAR ───
-   O único bloco da seção cujo conteúdo não foi dito por nenhuma das duas IAs:
-   foi contado no disco por conferir.py depois que elas terminaram. Por isso
-   ele não parece uma conversa nem uma anotação — parece um recibo. */
-.cn-placar {
-  margin-top: 20px;
-  padding: 16px 18px 14px;
+.cn-ex .cu-saibas { margin-top: 0; }
+
+/* ─── O DESENHO DA SEÇÃO 02 ───
+   Uma linha horizontal por modo, três caixas cada. O anterior eram dois
+   fluxogramas de cinco nós numerados com setas cruzando colunas: informação
+   demais para dizer uma coisa só. */
+.cu-fig {
+  margin: 0 0 26px;
+  padding: 20px 22px 16px;
   background: var(--white);
   border: 1px solid var(--hair);
-  border-radius: 12px;
-  box-shadow: var(--shadow-xs);
-}
-
-.cn-placar-rot {
-  display: block;
-  font-family: var(--mono);
-  font-size: 9.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink-muted);
-  margin-bottom: 10px;
-}
-
-.cn-placar-lista { display: grid; gap: 6px; margin-bottom: 11px; }
-
-.cn-placar-l {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: baseline;
-  gap: 12px;
-  padding: 8px 11px;
-  border-radius: 8px;
-  background: var(--paper);
-}
-
-.cn-placar-l dt { font-size: 12.5px; color: var(--ink-light); min-width: 0; }
-
-.cn-placar-l dd {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink);
-  white-space: nowrap;
-}
-
-.cn-placar-l.is-bom dd { color: var(--accent); }
-.cn-placar-l.is-ruim dd { color: #a33d2a; }
-.cn-placar-l.is-bom { background: rgba(10, 115, 89, 0.07); }
-.cn-placar-l.is-ruim { background: rgba(163, 61, 42, 0.07); }
-
-.cn-placar-nota {
-  font-size: 11.5px;
-  line-height: 1.55;
-  color: var(--ink-muted);
-  padding-top: 10px;
-  border-top: 1px dashed var(--hair);
-}
-
-.cn-placar-nota strong { color: var(--ink); }
-
-/* ─── A VIRADA ───
-   Só existe na cena das planilhas. É o achado mais forte da medição e a única
-   coisa da página que o leitor pode aplicar hoje à noite, então ganha o
-   tratamento mais forte da seção. */
-.cn-virada {
-  margin-top: 18px;
-  padding: 20px 22px 18px;
-  background: var(--ink);
   border-radius: 14px;
-  color: #e9e5da;
 }
 
-.cn-virada h4 {
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: #fff;
-  margin-bottom: 14px;
+.cu-fig-svg {
+  display: block;
+  width: 100%;
+  max-width: 620px;
+  height: auto;
+  margin: 0 auto;
 }
 
-.cn-vir-par {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 13px;
-}
-
-.cn-vir-lado {
-  min-width: 0;
-  padding: 13px 15px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border-top: 3px solid transparent;
-}
-
-.cn-vir-lado.is-antes { border-top-color: #e08b74; }
-.cn-vir-lado.is-depois { border-top-color: var(--accent-bright); }
-
-.cn-vir-frase {
-  font-size: 13.5px;
-  line-height: 1.5;
-  color: #f4f1e8;
-  font-style: italic;
-  margin-bottom: 8px;
-}
-
-.cn-vir-frase::before { content: "“"; }
-.cn-vir-frase::after { content: "”"; }
-
-.cn-vir-res {
-  font-family: var(--mono);
-  font-size: 12.5px;
-  font-weight: 600;
-}
-
-.cn-vir-lado.is-antes .cn-vir-res { color: #ffb4a2; }
-.cn-vir-lado.is-depois .cn-vir-res { color: var(--accent-bright); }
-
-.cn-vir-seta { font-size: 20px; color: #7d786c; }
-
-.cn-vir-selo {
-  display: inline-block;
-  font-family: var(--mono);
-  font-size: 9.5px;
+.cu-fig-tit {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  fill: var(--ink-muted);
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--ink);
-  background: var(--accent-bright);
-  padding: 4px 9px;
-  border-radius: 5px;
-  margin-bottom: 11px;
 }
 
-.cn-vir-txt {
+.cu-fig-no rect {
+  fill: var(--paper);
+  stroke: var(--hair);
+  stroke-width: 1;
+}
+
+.cu-fig-no text {
+  font-family: var(--sans);
   font-size: 13px;
-  line-height: 1.65;
-  color: #d6d1c5;
-  max-width: 74ch;
+  font-weight: 600;
+  fill: var(--ink);
+  text-anchor: middle;
 }
 
-.cn-vir-txt strong { color: #fff; }
+.cu-fig-no.is-voce rect { fill: rgba(91, 83, 168, 0.09); stroke: rgba(91, 83, 168, 0.4); }
+.cu-fig-no.is-voce text { fill: #4a4394; }
+.cu-fig-no.is-alvo rect { fill: var(--white); stroke: var(--ink-muted); stroke-dasharray: 4 3; }
 
-/* O pósfacio só aparece quando as duas colunas terminam: mostrar o placar
-   antes entrega o final da cena. */
-.cn-posfacio { margin-top: 4px; }
-.cn-posfacio .cu-saibas { margin-top: 16px; }
+.cu-fig-seta { fill: none; stroke: #8d8877; stroke-width: 1.6; }
+.cu-fig-volta { fill: none; stroke: var(--accent-bright); stroke-width: 2; }
+.cu-fig-linha { stroke: var(--hair); stroke-width: 1; }
+
+.cu-fig-nota {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-style: italic;
+  fill: var(--ink-muted);
+}
+
+.cu-fig-nota.is-verde { fill: var(--accent); font-style: normal; font-weight: 600; }
+
+.cu-fig-cap {
+  margin-top: 14px;
+  padding-top: 13px;
+  border-top: 1px solid var(--hair);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-light);
+  max-width: 80ch;
+}
 
 .cn-bal {
   margin: 22px 0 0;
@@ -4251,7 +3747,13 @@
 
   /* Os dois cartões de resultado empilham. O rótulo de cada um é o que
      mantém claro qual é qual quando deixam de estar lado a lado. */
-  .cn-res-par { grid-template-columns: 1fr; }
+  .cn-ex-par { grid-template-columns: 1fr; }
+  .cn-ex-quando dl { grid-template-columns: 1fr; gap: 11px; }
+  .cn-ex-pergunta h3 { font-size: 18px; max-width: none; }
+
+  /* O desenho perde a coluna da nota lateral: ela some, e a legenda embaixo
+     já diz a mesma coisa em texto corrido. */
+  .cu-fig-nota { display: none; }
 
   /* Os três ganhos empilham; o bloco do essencial perde a coluna dos
      números ao lado do texto e os coloca em cima. */

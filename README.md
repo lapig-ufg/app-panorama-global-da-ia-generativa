@@ -130,62 +130,48 @@ planilha, não depende de cron e não tem pipeline. Todo o conteúdo mora em
 `assets/como-usar-data.js` — é o único arquivo a editar para atualizar a aba.
 
 Ela responde ao "como" que faltava no painel: a diferença entre conversar com a IA numa
-aba do navegador e instalá-la na máquina, com acesso aos arquivos. A ordem das seções é a
-narrativa: **entender → ver a prova → o que sobra → o que você autoriza → instalar →
-referência → procedência.**
+aba do navegador e instalá-la na máquina, com acesso aos arquivos. São **seis seções**, na
+ordem da narrativa: entender → ver na prática → o que sobra → instalar → referência →
+procedência.
 
-Antes da seção 01 vem **"Comece por aqui"**: a premissa em duas frases (existem dois jeitos
-de usar IA, e este é o que muda), as três conclusões que a medição sustenta, e a procedência
-(5 tarefas · 60+ execuções · 3 programas). É a única parte da página escrita para quem
-**não** vai ler a página.
+Antes da seção 01 vem **"Comece por aqui"**: a premissa em duas frases, as três conclusões
+que a medição sustenta, e a procedência (5 tarefas · 60+ execuções · 3 programas).
 
-> **Regra ao editar este bloco:** cada frase tem de fazer sentido para quem nunca leu o
-> resto. A primeira versão abria em *"No navegador, descreva a sua máquina"* e citava
-> *"dizer no Ubuntu numa máquina Windows"* — conclusões escritas da cadeira de quem já
-> conhece os testes, e portanto frases soltas para qualquer outra pessoa. Nada de
-> vocabulário que só existe dentro da medição. Se uma frase precisa de contexto, o contexto
-> vem antes dela, não depois.
+> **Regra ao editar esse bloco:** cada frase tem de fazer sentido para quem nunca leu o
+> resto. Ele já abriu em *"No navegador, descreva a sua máquina"* e provou com *"dizer no
+> Ubuntu numa máquina Windows"* — conclusões escritas de dentro do teste, e portanto frases
+> soltas para qualquer outra pessoa.
 
-1. **A diferença, explicada** — abre em texto corrido, para quem nunca instalou nada.
-   Explica duas ideias, uma de cada vez: se a IA consegue **olhar** os seus arquivos e se
-   ela pode **mexer** neles. Cada uma traz o que foi medido (dizer "no Ubuntu" numa máquina
-   Windows leva os dois programas a **zero comandos**; o sistema certo, ou nenhum, leva a
-   3–15) e a regra prática que sai dali. Fecha com **"o que você ganha com isso"** — três
-   situações concretas e o custo ao lado, porque vantagem sem preço é propaganda.
-   A palavra *terminal* é explicada num glossário em linha, na primeira vez que aparece;
-   antes ela era usada cem blocos antes de ser definida. A discussão de como **chamar** as
-   duas coisas virou a última caixa fechada da seção.
-2. **As duas telas, lado a lado** — cinco tarefas, cada uma em **três etapas, uma por
-   clique**: a PERGUNTA, o que CADA UM DEVOLVEU (tópicos curtos, desfecho em destaque,
-   placar do disco) e só então a EXPLICAÇÃO. A conversa na íntegra é o quarto nível, atrás
-   de um botão. Abre com o **diagrama do ciclo** e fecha com o **balanço** do que a medição
-   mudou na própria página e a contra-seção **"onde a aba ganha"**.
+1. **A diferença, explicada** — texto corrido, para quem nunca instalou nada. Duas ideias,
+   uma de cada vez: se a IA consegue **olhar** os seus arquivos e se ela pode **mexer** neles.
+   Cada uma fecha com uma regra prática e uma frase de lastro que nomeia as ferramentas e
+   aponta para a seção 06. Termina em **"o que você ganha com isso"**, com o custo ao lado.
+   A palavra *terminal* é explicada num glossário em linha, na primeira vez que aparece.
+2. **Quatro perguntas, nos dois lugares** — o corpo da aba. Uma pergunta de trabalho, o que
+   cada lado faz (narrado, não transcrito), o que muda na prática e quando usar cada um.
+   Abre com um diagrama de duas linhas: quem executa, e para onde volta o resultado.
 
-   > O quinto exemplo — a série de 244 imagens — é honestamente diferente e a tela diz isso:
-   > as duas colunas são **duas formas de pedir**, não navegador × instalado. Não havia
-   > conversa de navegador equivalente, e ele não tem transcrição por execução (só o
-   > agregado das 20). O validador exige que uma cena sem transcrição **declare o motivo**
-   > em texto que vai para a tela.
-3. **O que fica depois** — o segundo eixo: `git log` como registro, a estrutura de pastas
-   como metade da documentação, o `AGENTS.md` como a única memória que sobrevive ao fim da
-   conversa, e a reprodutibilidade.
-4. **Antes de instalar: o que você está autorizando** — sete regras. Vem **antes** do
-   tutorial de propósito; estava depois, o que é a ordem errada. Duas regras vieram de
-   coisas medidas: *confira o resultado, não o relatório* (ele disse "0 erros" e o disco
-   tinha 57 abas a menos) e *diga a pasta* (sem âncora, um programa reorganizou 154
-   arquivos reais do OneDrive de quem testava).
-5. **Instalar, passo a passo** — dois tutoriais no simulador de área de trabalho, cada um
-   com **objetivo declarado** e **três atos**: Ollama Cloud + `ollama launch` e
-   **Antigravity CLI** (o `agy`, que é o programa medido na seção 02 — não o aplicativo de
-   janela). O do Antigravity termina no achado da própria medição: o mesmo comando com e
-   sem `--add-dir`, e as duas saídas lado a lado.
-6. **O catálogo** — três famílias, **fechadas por padrão**, com os nomes numa linha só no
-   resumo. Sozinho ele era 27% das palavras visíveis da página e não é leitura: é
-   referência. O **cinto de ferramentas** (o que a IA pode fazer na máquina) era uma seção
-   inteira entre o argumento e o tutorial; virou caixa fechada aqui. Fecha com **a ponte**:
-   o quadro do `ollama launch`, com as 18 integrações e os planos do Ollama Cloud.
-7. **Como isto foi medido** — o método em três passos, a lista do que **não** foi medido, e
-   a caixa com as três conclusões que estavam erradas e como foram descobertas.
+   > **Esta seção já foi um relatório de medição** — duas transcrições tocando em sincronia,
+   > contagem de arquivos, armadilha de cada cenário — e ficou técnica e chata. Em 12/set/2026
+   > passou a **narrar a diferença**; a medição virou lastro. A regra: aqui se diz o que dá
+   > para fazer de cada lado, não o que deu errado em qual execução. Os números vivem nas
+   > caixas fechadas e na seção 06.
+3. **O que fica depois** — o que sobra na semana seguinte: as ferramentas que a IA passa a
+   poder usar porque estão instaladas (`git`, bibliotecas, GDAL), a pasta como metade da
+   documentação, o arquivo de convenções como a única memória que sobrevive à conversa, e a
+   reprodutibilidade.
+4. **Instalar, passo a passo** — dois tutoriais no simulador, cada um com **objetivo
+   declarado** e **três atos**: Ollama Cloud + `ollama launch` e **Antigravity CLI** (o `agy`,
+   que é o programa medido na seção 02).
+5. **O catálogo** — três famílias, fechadas por padrão, com os nomes no resumo. Fecha com o
+   quadro do `ollama launch`.
+6. **Como isto foi medido** — o método em três passos, a lista do que **não** foi medido, e as
+   três conclusões que estavam erradas.
+
+> A seção **"Antes de instalar: o que você está autorizando"** existiu entre 11 e 12/set/2026
+> e foi removida: eram sete regras técnicas e nichadas, escritas para quem já administra a
+> própria máquina. O que precisava sobreviver sobreviveu no lugar certo — a escolha da pasta
+> é um passo do tutorial, com a explicação ao lado.
 
 ### Regras de manutenção
 
@@ -263,21 +249,14 @@ de tela — não o elimine ao mexer no balão.
   > ingenuamente: um `<p>` dentro de um `<li>` entra duas vezes.
 - **Instaladores e planos** foram conferidos nas páginas oficiais (última checagem em
   `updatedAt`). Revalide antes de citar cotas — elas mudam com frequência.
-- **As duas colunas do duelo são captura, e o validador é quem garante isso.** Em
-  `assets/como-usar-cenas.js`, todo bloco `voce`, `ia`, `sandbox`, `chips` e `cmd` é trecho
-  LITERAL — falas contra a transcrição, comandos contra a lista de comandos. `node
-  automation/valida-cenas.mjs` **falha** se qualquer um divergir; rode antes de commitar. Ele
-  já pegou duas citações minhas copiadas do resumo em vez do original.
+- **A seção 02 narra, não transcreve.** Ao editar os exemplos em
+  `assets/como-usar-cenas.js`, descreva **o que dá para fazer** de cada lado. Não conte o que
+  deu errado em qual execução, não cite transcrição e não publique placar de arquivos: isso
+  transformou a seção num relatório de medição e foi removido em 12/set/2026. Número só nas
+  caixas `saibaMais`, e todo número publicado tem de passar por `valida-cenas.mjs`.
 
-  Os blocos `marca` são a única voz do site ali dentro, e a tela os desenha diferente por
-  isso. Capturas de OUTRAS execuções (`fontes.extras`) ficam num palheiro separado e só podem
-  aparecer em `saibaMais`, dizendo no texto que vieram de outra execução — senão a página
-  passa a misturar o conjunto final com rodadas que a auditoria retificou.
 
-- **O placar não vem da conversa.** Os números de `cena.placar` saem de
-  `conferir.py --avaliar`, que conta arquivos no disco depois que o programa termina. Se
-  algum dia o relatório da IA e o disco discordarem, a página publica o disco — é literalmente
-  o que a seção 07 manda o leitor fazer.
+
 - **Como a página mede os dois lados.** Existe um pipeline de medição, e ele é o que
   separa esta aba de um texto de opinião:
 

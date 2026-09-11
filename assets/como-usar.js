@@ -156,23 +156,17 @@
     `;
   }
 
-  function medidaEixo(m) {
-    const linhas = m.linhas.map(l => `
-      <li class="cu-med-linha${l.bom === true ? ' is-bom' : l.bom === false ? ' is-ruim' : ''}">
-        <span class="cu-med-pedido">${txt(l.pedido)}</span>
-        <span class="cu-med-valor">${txt(l.valor)}</span>
-        <span class="cu-med-det">${txt(l.detalhe)}</span>
-      </li>
-    `).join('');
-
+  /* O lastro. Uma frase que diz o que vimos e nomeia as ferramentas, com o
+     caminho para quem quiser o detalhe. Aqui antes havia um quadro escuro com
+     a tabela de execuções: ele apresentava conclusão interna do teste como
+     regra geral, e quem chegava não tinha como saber do que se tratava. */
+  function lastroEixo(txtLastro) {
     return `
-      <div class="cu-medida">
-        <span class="cu-medida-rot">${esc(m.chamada)}</span>
-        <p class="cu-medida-txt">${m.texto}</p>
-        <ul class="cu-med-linhas">${linhas}</ul>
-        <p class="cu-medida-conc">${m.conclusao}</p>
-      </div>
-    `;
+      <p class="cu-lastro">
+        <span class="cu-lastro-rot">Como sabemos disso</span>
+        ${txtLastro}
+        <a class="cu-lastro-link" href="#medicao">como a medição foi feita</a>
+      </p>`;
   }
 
   function renderAbertura() {
@@ -199,21 +193,10 @@
             ${ladoEixo(e.navegador, 'is-nav', 'No navegador')}
             ${ladoEixo(e.instalada, 'is-maq', 'Instalada na máquina')}
           </div>
-          ${medidaEixo(e.medida)}
+          ${lastroEixo(e.lastro)}
           <p class="cu-eixo-regra">${e.regra}</p>
         </article>
       `).join('');
-    }
-
-    const fecho = $('cu-ab-fecho');
-    if (fecho) {
-      fecho.innerHTML = `
-        <div class="cu-fecho">
-          <span class="cu-fecho-rot">${esc(a.fecho.titulo)}</span>
-          <p class="cu-fecho-frase">${esc(a.fecho.frase)}</p>
-          <p class="cu-fecho-txt">${a.fecho.texto}</p>
-        </div>
-      `;
     }
 
     const ganho = $('cu-ab-ganho');
@@ -263,482 +246,100 @@
      números por trás foram desmentidos. Ver o balanço no fim da seção 02. */
 
   /* ═══════════════════════════════════════════════════════════
-     02b · AS CENAS — a conversa real, reproduzida
+     02 · OS EXEMPLOS
      ═══════════════════════════════════════════════════════════
-     Antes esta seção era uma transcrição estática que eu tinha
-     escrito à mão. Agora é a reprodução de uma conversa que
-     aconteceu de verdade (ver automation/capturas/), tocada passo
-     a passo dentro de uma janela de navegador simulada.
+     Uma pergunta de trabalho, e o que muda entre respondê-la numa
+     aba do navegador e num programa instalado no computador.
 
-     Por que animar: o argumento da seção é sobre TEMPO e sobre
-     ORDEM — a recomendação que chega antes da pergunta que a
-     valida, a conferência que passa enquanto o dado se perde. Num
-     bloco de texto parado, ordem é só posição na página; tocando,
-     ela vira sequência, que é o que ela realmente é.
+     Esta seção já foi um relatório de medição: duas transcrições
+     tocando em sincronia, contagem de arquivos, armadilha de cada
+     cenário. Ficou técnica e chata. Agora ela NARRA a diferença; a
+     medição continua inteira no repositório e a seção 05 conta
+     como foi feita. Os números que sobraram estão nas caixas
+     fechadas, para quem quiser. */
 
-     Os blocos `marca` são a voz do site. Tudo o mais é citação
-     literal, conferida por automation/valida-cenas.mjs. */
+  let exemploAtual = 0;
 
-  const cena = {
-    i: 0,            // qual exemplo
-    etapa: 0,        // 0 = só a pergunta · 1 = + o resultado · 2 = + a explicação
-    transcricao: false,  // a conversa inteira, que é o quarto nível e é opcional
-    b: 0,            // dentro da transcrição: qual beat já foi revelado
-    tocando: false,
-    timers: [],
-    rapido: semMovimento
-  };
-
-  const ETAPAS = 3;
-
-  function cenaLimpar() {
-    cena.timers.forEach(clearTimeout);
-    cena.timers = [];
-  }
-
-  function cenaAgenda(fn, ms) { cena.timers.push(setTimeout(fn, ms)); }
-
-  function cenaAtual() { return CENAS.cenas[cena.i]; }
-
-  /* Cada beat dura o tempo de ser lido, não um valor fixo: uma bolha de
-     duas linhas e um bloco de comando de oito não podem passar na mesma
-     velocidade. O piso evita que beats curtos pisquem. */
-  function cenaDuracao(b) {
-    if (cena.rapido) return 0;
-    const n = (b.txt || (b.ops || []).join(' ') || '').length;
-    return Math.min(2200, Math.max(620, 340 + n * 7));
-  }
-
-  /* Beats do lado do NAVEGADOR: bolhas de conversa. */
-  function beatNav(b, revelando) {
-    const cls = revelando ? ' is-entrando' : '';
-    switch (b.t) {
-      case 'voce':
-        return `<div class="cn-msg cn-voce${cls}"><div class="cn-bolha">${txt(b.txt)}</div></div>`;
-      case 'ia':
-        return `<div class="cn-msg cn-ia${cls}">
-          <span class="cn-av" aria-hidden="true"></span>
-          <div class="cn-bolha">${txt(b.txt)}${b.corte ? '<span class="cn-corte">resposta cortada aqui</span>' : ''}</div>
-        </div>`;
-      case 'sandbox':
-        /* Colapsado, como vinha na tela: o briefing registrou que os blocos
-           de código executado ficavam atrás de um botão "Mostrar código", e
-           que um usuário comum não veria que houve execução. Reproduzir isso
-           fechado é parte do que a cena tem a dizer. */
-        return `<div class="cn-msg cn-ia${cls}">
-          <span class="cn-av" aria-hidden="true"></span>
-          <details class="cn-sandbox">
-            <summary>Mostrar código <span>executado no sandbox do Gemini</span></summary>
-            <pre><code>${esc(b.txt)}</code></pre>
-          </details>
-        </div>`;
-      case 'chips':
-        return `<div class="cn-chips${cls}">${b.ops.map(o => `<span class="cn-chip">${esc(o)}</span>`).join('')}</div>`;
-      case 'marca':
-        return `<div class="cn-marca cn-tom-${esc(b.tom)}${cls}"><span class="cn-marca-p" aria-hidden="true"></span><p>${b.txt}</p></div>`;
-      default:
-        return '';
-    }
-  }
-
-  /* Beats do lado INSTALADO: linhas de terminal.
-     A etiqueta olhar/mexer em cada comando não é enfeite — é a distinção que
-     a seção 04 cobra. Um comando que só lê e um que altera o disco
-     recebem tratamentos diferentes na hora de aprovar, e ver a diferença
-     desde a primeira cena poupa a explicação depois. */
-  function beatAg(b, revelando) {
-    const cls = revelando ? ' is-entrando' : '';
-    switch (b.t) {
-      case 'voce':
-        return `<div class="cn-l cn-l-voce${cls}"><span class="cn-l-pr" aria-hidden="true">&rsaquo;</span><p>${txt(b.txt)}</p></div>`;
-      case 'cmd':
-        return `<div class="cn-l cn-l-cmd${cls}">
-          <span class="cn-l-pr" aria-hidden="true">$</span>
-          <code>${esc(b.txt)}${b.corte ? ' …' : ''}</code>
-          <span class="cn-l-tipo is-${esc(b.tipo)}">${b.tipo === 'mexer' ? 'mexe no disco' : 'só lê'}</span>
-        </div>`;
-      case 'ia':
-        return `<div class="cn-l cn-l-ia${cls}">
-          <span class="cn-l-rot" aria-hidden="true">resposta</span>
-          <div class="cn-l-txt">${txt(b.txt)}${b.corte ? '<span class="cn-corte">resposta cortada aqui</span>' : ''}</div>
-        </div>`;
-      case 'marca':
-        return `<div class="cn-marca cn-tom-${esc(b.tom)}${cls}"><span class="cn-marca-p" aria-hidden="true"></span><p>${b.txt}</p></div>`;
-      default:
-        return '';
-    }
-  }
-
-  /* O duelo toca UM contador para os dois lados: no passo k, cada lado revela
-     o seu k-ésimo beat, se ainda tiver um. Os dois roteiros foram escritos
-     com contagens próximas de propósito, para que os momentos correspondentes
-     caiam mais ou menos na mesma altura da tela. */
-  function cenaMax() {
-    const c = cenaAtual();
-    return Math.max(c.navegador.beats.length, c.agente.beats.length);
-  }
-
-  function cenaPintar(revelado) {
-    const c = cenaAtual();
-
-    const pinta = (idPalco, idRol, beats, fn) => {
-      const palco = $(idPalco);
-      if (!palco) return;
-      palco.innerHTML = beats.slice(0, cena.b).map((b, i) => fn(b, revelado === i)).join('');
-      const rol = $(idRol);
-      if (rol) rol.scrollTop = rol.scrollHeight;
-    };
-
-    pinta('cn-palco-nav', 'cn-rol-nav', c.navegador.beats, beatNav);
-    pinta('cn-palco-ag', 'cn-rol-ag', c.agente.beats, beatAg);
-
-    cenaPintarControles();
-  }
-
-  function cenaPintarControles() {
-    const total = cenaMax();
-    const el = $('cn-controles');
-    if (!el) return;
-    const fim = cena.b >= total;
-    el.innerHTML = `
-      <button type="button" class="cn-bt cn-bt-play" data-cn="${fim ? 'reiniciar' : (cena.tocando ? 'pausar' : 'tocar')}">
-        ${fim ? '↺ Ver de novo' : (cena.tocando ? '❚❚ Pausar' : '▶ Tocar as duas telas')}
-      </button>
-      <button type="button" class="cn-bt cn-bt-sec" data-cn="passo" ${fim ? 'disabled' : ''}>Passo a passo</button>
-      <button type="button" class="cn-bt cn-bt-sec" data-cn="tudo" ${fim ? 'disabled' : ''}>Mostrar tudo</button>
-      <span class="cn-prog" aria-hidden="true">
-        <span class="cn-prog-tr" style="width:${Math.round((Math.min(cena.b, total) / total) * 100)}%"></span>
-      </span>
-      <span class="cn-conta">${Math.min(cena.b, total)} / ${total}</span>`;
-  }
-
-  function cenaPasso() {
-    const c = cenaAtual();
-    if (cena.b >= cenaMax()) { cenaPausar(); return; }
-    const par = [c.navegador.beats[cena.b], c.agente.beats[cena.b]].filter(Boolean);
-    cena.b++;
-    cenaPintar(cena.b - 1);
-    /* O passo dura o tempo do lado mais longo: se o comando da direita some
-       antes de a bolha da esquerda ser lida, o paralelo se perde. */
-    if (cena.tocando) cenaAgenda(cenaPasso, Math.max(...par.map(cenaDuracao), 0));
-  }
-
-  function cenaTocar() {
-    cenaLimpar();
-    if (cena.b >= cenaMax()) { cena.b = 0; }
-    cena.tocando = true;
-    cenaPasso();
-  }
-
-  function cenaPausar() {
-    cenaLimpar();
-    cena.tocando = false;
-    cenaPintarControles();
-  }
-
-  function cenaTudo() {
-    cenaLimpar();
-    cena.tocando = false;
-    cena.b = cenaMax();
-    cenaPintar(-1);
-  }
-
-  function cenaIr(i) {
-    cenaLimpar();
-    cena.i = (i + CENAS.cenas.length) % CENAS.cenas.length;
-    /* O exemplo novo recomeça pela pergunta. Herdar a etapa do anterior
-       entregaria o resultado antes de o leitor saber o que foi perguntado —
-       que é exatamente o que esta seção foi reescrita para não fazer. */
-    cena.etapa = 0;
-    cena.transcricao = false;
-    cena.b = 0;
-    cena.tocando = false;
-    renderCenas();
-  }
-
-  /* O placar. Sai da conversa e vai para o disco: é o único lugar da seção
-     onde o que está escrito não foi dito por nenhuma das duas IAs, e sim
-     contado por conferir.py depois que elas terminaram. */
-  function placarHTML(p) {
-    if (!p) return '';
+  function ladoExemplo(l, classe) {
     return `
-      <section class="cn-placar" aria-label="${esc(p.titulo)}">
-        <span class="cn-placar-rot">${esc(p.titulo)}</span>
-        <dl class="cn-placar-lista">
-          ${p.linhas.map(l => `
-            <div class="cn-placar-l${l.bom === true ? ' is-bom' : l.bom === false ? ' is-ruim' : ''}">
-              <dt>${txt(l.rotulo)}</dt>
-              <dd>${txt(l.valor)}</dd>
-            </div>`).join('')}
-        </dl>
-        <p class="cn-placar-nota">${p.nota}</p>
-      </section>`;
-  }
-
-  /* A virada só existe na cena das planilhas, e é o achado mais forte da
-     medição inteira: mesma pasta, mesmo programa, mesmo dia — muda a frase,
-     muda o resultado. Ganha um bloco próprio porque é a única coisa da
-     página que o leitor pode aplicar hoje à noite. */
-  function viradaHTML(c) {
-    if (!c.virada) return '';
-    const v = c.virada;
-    return `
-      <section class="cn-virada" aria-labelledby="h-vir-${esc(c.id)}">
-        <h4 id="h-vir-${esc(c.id)}">${esc(c.viradaTitulo)}</h4>
-        <div class="cn-vir-par">
-          <div class="cn-vir-lado is-antes">
-            <p class="cn-vir-frase">${esc(v.antes)}</p>
-            <p class="cn-vir-res">${txt(v.antesResultado)}</p>
-          </div>
-          <span class="cn-vir-seta" aria-hidden="true">→</span>
-          <div class="cn-vir-lado is-depois">
-            <p class="cn-vir-frase">${esc(v.depois)}</p>
-            <p class="cn-vir-res">${txt(v.depoisResultado)}</p>
-          </div>
-        </div>
-        <span class="cn-vir-selo">${esc(v.selo)}</span>
-        <p class="cn-vir-txt">${v.texto}</p>
-      </section>`;
-  }
-
-  /* ═══════════════════════════════════════════════════════════
-     O EXEMPLO, EM TRÊS ETAPAS
-     ═══════════════════════════════════════════════════════════
-     A ordem foi pedida assim, e ela é o conteúdo: primeiro a
-     PERGUNTA, depois O QUE CADA LADO DEVOLVEU, e só então as
-     explicações. A versão anterior abria com as duas transcrições
-     tocando ao mesmo tempo — quem passava os olhos saía sem saber
-     o que tinha acontecido, porque o resultado só chegava no fim.
-
-     A conversa na íntegra não sumiu: virou o quarto nível, atrás
-     de um botão. Quem quer ver COMO se chegou ali, vê. */
-
-  function etapaPergunta(c) {
-    return `
-      <div class="cn-et cn-et-1">
-        <span class="cn-et-rot">A pergunta</span>
-        <h3 class="cn-pergunta">${esc(c.pergunta)}</h3>
-        <p class="cn-emjogo"><span class="cn-emjogo-rot">O que está em jogo</span>${txt(c.emJogo)}</p>
-        ${c.avisoEixo ? `<p class="cn-aviso-eixo">${c.avisoEixo}</p>` : ''}
-      </div>`;
-  }
-
-  function ladoResultado(l, classe) {
-    return `
-      <div class="cn-res ${classe}">
-        <header class="cn-res-head">
-          <span class="cn-res-rot">${esc(l.rotulo)}</span>
-          <span class="cn-res-sub">${esc(l.sub)}</span>
+      <article class="cn-lado ${classe}">
+        <header class="cn-lado-head">
+          <h4>${esc(l.rotulo)}</h4>
+          <span class="cn-lado-sub">${esc(l.sub)}</span>
         </header>
-        <ul class="cn-res-fez">
-          ${l.fez.map(f => `<li>${txt(f)}</li>`).join('')}
-        </ul>
-        <div class="cn-res-desf is-${esc(l.desfecho.tom)}">
-          <span class="cn-res-desf-v">${txt(l.desfecho.valor)}</span>
-          <span class="cn-res-desf-n">${txt(l.desfecho.nota)}</span>
-        </div>
-      </div>`;
-  }
-
-  function etapaResultado(c) {
-    return `
-      <div class="cn-et cn-et-2">
-        <span class="cn-et-rot">O que cada um devolveu</span>
-        <div class="cn-res-par">
-          ${ladoResultado(c.resultado.esquerda, 'is-esq')}
-          ${ladoResultado(c.resultado.direita, 'is-dir')}
-        </div>
-        ${placarHTML(c.placar)}
-      </div>`;
-  }
-
-  function contrasteHTML(c) {
-    if (!c.contraste) return '';
-    const k = c.contraste;
-    return `
-      <section class="cn-contraste">
-        <h4>${esc(k.titulo)}</h4>
-        <dl class="cn-contraste-lista">
-          ${k.linhas.map(l => `
-            <div class="cn-contraste-l${l.bom ? ' is-bom' : ' is-ruim'}">
-              <dt>${esc(l.caso)}</dt>
-              <dd class="cn-contraste-r">${esc(l.resposta)}</dd>
-              <dd class="cn-contraste-d">${txt(l.detalhe)}</dd>
-            </div>`).join('')}
+        <p class="cn-lado-narr">${l.narrativa}</p>
+        <dl class="cn-lado-saldo">
+          <div class="is-bom"><dt>O que ganha</dt><dd>${txt(l.bom)}</dd></div>
+          <div class="is-lim"><dt>O que fica com você</dt><dd>${txt(l.limite)}</dd></div>
         </dl>
-        <p class="cn-contraste-fecho">${k.fecho}</p>
-      </section>`;
-  }
-
-  function etapaExplicacao(c) {
-    const e = c.explicacao;
-    return `
-      <div class="cn-et cn-et-3">
-        <span class="cn-et-rot">${esc(e.titulo)}</span>
-        <div class="cn-expl">
-          ${e.paragrafos.map(p => `<p>${p}</p>`).join('')}
-        </div>
-        ${viradaHTML(c)}
-        ${contrasteHTML(c)}
-        <p class="cn-licao">${e.licao}</p>
-      </div>`;
-  }
-
-  /* O botão que leva à etapa seguinte. É um só, e o rótulo dele diz o que vem —
-     "continuar" não ensina nada a quem está decidindo se vale o clique. */
-  function etapaBotao(c) {
-    const rotulos = ['Ver o que cada um devolveu', c.explicacao ? 'Por que isso aconteceu' : null];
-    const r = rotulos[cena.etapa];
-    if (!r) return '';
-    return `<div class="cn-avanca"><button type="button" class="cn-bt cn-bt-play" data-cn="avancar">${esc(r)} →</button></div>`;
-  }
-
-  function transcricaoHTML(c) {
-    if (c.semTranscricao) {
-      return `<p class="cn-sem-transc">${txt(c.semTranscricao)}</p>`;
-    }
-    if (!cena.transcricao) {
-      return `<div class="cn-avanca cn-avanca-sec">
-        <button type="button" class="cn-bt cn-bt-sec" data-cn="transcricao">Ver as duas conversas na íntegra</button>
-      </div>`;
-    }
-
-    const chromeNav = `
-      <!-- A moldura de navegador não é enfeite: a seção compara "dentro da
-           aba" com "fora dela", e mostrar a barra de endereço à vista é o
-           jeito mais curto de dizer onde estamos. -->
-      <div class="cn-chrome">
-        <div class="cn-barra">
-          <span class="cn-pontos" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span class="cn-tab">Gemini</span>
-          <span class="cn-url">gemini.google.com</span>
-        </div>
-        <div class="cn-rolagem" id="cn-rol-nav"><div class="cn-palco" id="cn-palco-nav"></div></div>
-      </div>`;
-
-    const chromeAg = `
-      <div class="cn-chrome cn-chrome-term">
-        <div class="cn-barra cn-barra-term">
-          <span class="cn-pontos" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span class="cn-tab">${esc(c.agente.ferramenta)}</span>
-          <span class="cn-url">C:\\Users\\amara\\laboratorio-teste</span>
-        </div>
-        <div class="cn-rolagem" id="cn-rol-ag"><div class="cn-palco cn-palco-term" id="cn-palco-ag"></div></div>
-      </div>`;
-
-    return `
-      <section class="cn-transc" aria-label="As duas conversas na íntegra">
-        <header class="cn-transc-head">
-          <h4>As duas conversas, na íntegra</h4>
-          <button type="button" class="cn-bt cn-bt-sec" data-cn="fechar-transc">Fechar</button>
-        </header>
-        <div class="cn-duelo">
-          <div class="cn-col cn-col-nav">
-            <header class="cn-col-head">
-              <span class="cn-col-rot">${esc(c.resultado.esquerda.rotulo)}</span>
-              <span class="cn-col-ferr">${esc(CENAS.fontes.navegador.rotulo)}</span>
-            </header>
-            ${chromeNav}
-          </div>
-          <div class="cn-col cn-col-ag">
-            <header class="cn-col-head">
-              <span class="cn-col-rot">${esc(c.resultado.direita.rotulo)}</span>
-              <span class="cn-col-ferr">${esc(c.agente.ferramenta)}</span>
-            </header>
-            ${chromeAg}
-          </div>
-        </div>
-        <div class="cn-controles" id="cn-controles"></div>
-      </section>`;
+      </article>`;
   }
 
   function renderCenas() {
     const el = $('cu-cenas');
     if (!el || typeof CENAS === 'undefined') return;
-    const c = cenaAtual();
+    const c = CENAS.cenas[exemploAtual];
     const F = CENAS.fontes;
 
     el.innerHTML = `
       <div class="cn-abas" role="tablist" aria-label="Escolher o exemplo">
         ${CENAS.cenas.map((x, i) => `
-          <button type="button" role="tab" class="cn-aba ${i === cena.i ? 'is-active' : ''}"
-                  data-cn="ir" data-i="${i}" tabindex="${i === cena.i ? '0' : '-1'}"
-                  aria-selected="${i === cena.i}">${esc(x.aba)}</button>`).join('')}
+          <button type="button" role="tab" class="cn-aba ${i === exemploAtual ? 'is-active' : ''}"
+                  data-cn="ir" data-i="${i}" tabindex="${i === exemploAtual ? '0' : '-1'}"
+                  aria-selected="${i === exemploAtual}">${esc(x.aba)}</button>`).join('')}
       </div>
 
-      <article class="cn-exemplo">
-        ${etapaPergunta(c)}
-        ${cena.etapa >= 1 ? etapaResultado(c) : ''}
-        ${cena.etapa >= 2 ? etapaExplicacao(c) : ''}
-        ${etapaBotao(c)}
-        ${cena.etapa >= 2 ? transcricaoHTML(c) : ''}
+      <article class="cn-ex">
+        <div class="cn-ex-pergunta">
+          <span class="cn-ex-rot">A pergunta</span>
+          <h3>${esc(c.pergunta)}</h3>
+        </div>
+
+        <div class="cn-ex-par">
+          ${ladoExemplo(c.navegador, 'is-nav')}
+          ${ladoExemplo(c.instalado, 'is-maq')}
+        </div>
+
+        <div class="cn-ex-dif">
+          <span class="cn-ex-rot">O que muda, na prática</span>
+          <p>${c.diferenca}</p>
+        </div>
+
+        <div class="cn-ex-quando">
+          <span class="cn-ex-rot">Quando usar cada um</span>
+          <dl>
+            <div><dt>Navegador</dt><dd>${txt(c.quandoUsar.navegador)}</dd></div>
+            <div><dt>Programa instalado</dt><dd>${txt(c.quandoUsar.instalado)}</dd></div>
+          </dl>
+        </div>
+
+        ${c.saibaMais ? `<div class="cu-saibas">${[].concat(c.saibaMais).map(i => saibaMais(i)).join('')}</div>` : ''}
       </article>
 
       <p class="cn-fonte">
-        ${c.semTranscricao
-          ? `Medição de ${esc(F.agente.data)}, nos dois programas instalados.`
-          : `Os dois lados são captura real: ${esc(F.navegador.rotulo)} em ${esc(F.navegador.data)} e
-             ${esc(c.agente.ferramenta)} em ${esc(F.agente.data)}.`}
-        O placar foi contado no disco, não na conversa. Toda fala e todo comando da íntegra é
-        citação literal, conferida por <code>automation/valida-cenas.mjs</code> —
-        <a href="automation/capturas/">as transcrições completas e os relatórios de cada
-        campanha estão no repositório</a>.
+        As duas colunas descrevem o que aconteceu de verdade: ${esc(F.navegador.rotulo)} em
+        ${esc(F.navegador.data)} e ${esc(F.agente.rotulo)} em ${esc(F.agente.data)}, sobre uma
+        pasta com arquivos reais. <a href="#medicao">Como a medição foi feita</a>, e as
+        transcrições completas <a href="automation/capturas/">estão no repositório</a>.
       </p>`;
-
-    if (cena.transcricao && !c.semTranscricao) cenaPintar(-1);
-  }
-
-  function renderBalanco() {
-    const el = $('cu-balanco');
-    if (!el || typeof CENAS === 'undefined') return;
-    const b = CENAS.balanco;
-    el.innerHTML = `
-      <section class="cn-bal" aria-labelledby="h-bal">
-        <h3 id="h-bal">${esc(b.titulo)}</h3>
-        <p class="cn-bal-lede">${txt(b.lede)}</p>
-        <ul class="cn-bal-lista">
-          ${b.itens.map(i => `
-            <li>
-              <span class="cn-bal-antes">${txt(i.antes)}</span>
-              <span class="cn-bal-seta" aria-hidden="true">→</span>
-              <span class="cn-bal-depois">${txt(i.depois)}</span>
-            </li>`).join('')}
-        </ul>
-        <p class="cn-bal-fecho">${b.fecho}</p>
-      </section>`;
   }
 
   function ligarCenas() {
     document.addEventListener('click', (e) => {
-      const alvo = e.target.closest('#cu-cenas [data-cn]');
+      const alvo = e.target.closest('#cu-cenas [data-cn="ir"]');
       if (!alvo) return;
-      const a = alvo.dataset.cn;
-      if (a === 'tocar') cenaTocar();
-      else if (a === 'pausar') cenaPausar();
-      else if (a === 'reiniciar') { cena.b = 0; cenaTocar(); }
-      else if (a === 'passo') { cenaPausar(); cenaPasso(); }
-      else if (a === 'tudo') cenaTudo();
-      else if (a === 'ir') cenaIr(+alvo.dataset.i);
-      else if (a === 'avancar') {
-        cena.etapa = Math.min(cena.etapa + 1, ETAPAS - 1);
-        renderCenas();
-        /* Leva o olho para o bloco que acabou de aparecer. Sem isto, numa
-           tela pequena o novo conteúdo nasce abaixo da dobra e o clique
-           parece não ter feito nada. */
-        const novo = document.querySelector(`#cu-cenas .cn-et-${cena.etapa + 1}`);
-        if (novo) novo.scrollIntoView({ behavior: semMovimento ? 'auto' : 'smooth', block: 'nearest' });
-      }
-      else if (a === 'transcricao') { cena.transcricao = true; cena.b = 0; renderCenas(); cenaTudo(); }
-      else if (a === 'fechar-transc') { cenaPausar(); cena.transcricao = false; renderCenas(); }
+      exemploAtual = (+alvo.dataset.i + CENAS.cenas.length) % CENAS.cenas.length;
+      renderCenas();
     });
 
     document.addEventListener('keydown', (e) => {
-      const abas = e.target.closest('#cu-cenas .cn-aba');
-      if (!abas) return;
-      const mapa = { ArrowRight: cena.i + 1, ArrowLeft: cena.i - 1, Home: 0, End: CENAS.cenas.length - 1 };
+      if (!e.target.closest('#cu-cenas .cn-aba')) return;
+      const mapa = { ArrowRight: exemploAtual + 1, ArrowLeft: exemploAtual - 1,
+                     Home: 0, End: CENAS.cenas.length - 1 };
       if (!(e.key in mapa)) return;
       e.preventDefault();
-      cenaIr(mapa[e.key]);
+      exemploAtual = (mapa[e.key] + CENAS.cenas.length) % CENAS.cenas.length;
+      renderCenas();
       const nova = document.querySelector('#cu-cenas .cn-aba.is-active');
       if (nova) nova.focus();
     });
@@ -1011,20 +612,6 @@
 
   /* ─── 07 · segurança ─────────────────────────────────────── */
 
-  function renderSeguranca() {
-    const el = $('cu-seg');
-    if (!el) return;
-    el.innerHTML = D.seguranca.map((s, i) => `
-      <article class="cu-seg-item">
-        <span class="cu-seg-n">${String(i + 1).padStart(2, '0')}</span>
-        <div>
-          <h3>${txt(s.titulo)}</h3>
-          <p>${txt(s.texto)}</p>
-          ${s.saibaMais ? saibaMais(s.saibaMais, 'cu-saiba-seg') : ''}
-        </div>
-      </article>
-    `).join('');
-  }
 
   /* ─── 08 · como isto foi medido ──────────────────────────── */
 
@@ -1881,14 +1468,12 @@
     renderAbertura();
     renderCenas();
     ligarCenas();
-    renderBalanco();
     renderContraponto();
     renderPermanencia();
     renderFerramentas();
     renderFamilias();
     colapsarCatalogo();
     renderPonte();
-    renderSeguranca();
     renderMedicao();
     renderPlano();
 
