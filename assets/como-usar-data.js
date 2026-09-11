@@ -36,29 +36,44 @@ const COMO_USAR_DATA = {
      "achamos que é assim" precisam ser distinguíveis de relance.
      ───────────────────────────────────────────────────────────── */
   essencial: {
-    rotulo: "O essencial, em três linhas",
+    rotulo: "Comece por aqui",
+
+    /* A ARMADILHA QUE ESTE BLOCO JÁ CAIU UMA VEZ: conclusão só funciona
+       depois da premissa. A primeira versão abria em "No navegador, descreva
+       a sua máquina" e citava "dizer no Ubuntu numa máquina Windows" —
+       frases escritas da cadeira de quem já leu a página inteira e já sabe
+       o que foram os testes. Quem chega não sabe nem que existem dois jeitos
+       de usar IA.
+
+       Regra para editar daqui em diante: cada frase deste bloco tem de fazer
+       sentido para alguém que NUNCA leu o resto. Nada de vocabulário que só
+       existe dentro da medição — sem "Ubuntu", sem "zero comandos", sem "os
+       dois programas". Se precisar de contexto, o contexto vem antes. */
+    intro: "Há dois jeitos de usar inteligência artificial. No primeiro — o que quase todo mundo usa — você abre uma aba do navegador e conversa: ela responde, você copia o que serve. No segundo, você <strong>instala um programa no seu computador</strong> e ele abre os seus arquivos e trabalha neles. Esta página compara os dois, e as comparações são testes de verdade, não opinião.",
+
+    conclusoesRotulo: "Se você só ler isto, leve estas três coisas",
 
     conclusoes: [
       {
         n: "1",
-        frase: "No navegador, descreva a sua máquina. No programa instalado, não precisa — e descrever errado piora.",
-        prova: "Dizer “no Ubuntu” numa máquina Windows levou os dois programas a zero comandos. Dizer o sistema certo, ou não dizer nada: de 3 a 15."
+        frase: "No navegador, a IA não faz ideia de como é o seu computador.",
+        prova: "Ela não sabe qual sistema você usa, onde ficam os seus arquivos nem quantos são. Por isso você precisa contar — e, se contar errado, a resposta vem errada sem ninguém perceber. O programa instalado não precisa: ele vai olhar."
       },
       {
         n: "2",
         frase: "Diga o que não pode ser perdido.",
-        prova: "“Converta em CSV” devolveu 40 arquivos e perdeu 57 abas em silêncio. “Sem perder nenhuma aba” devolveu 97 — dez acertos em dez execuções."
+        prova: "Pedimos “converta estas 40 planilhas para CSV”. Vieram 40 arquivos, e 57 abas de dados sumiram sem nenhum aviso. Pedindo a mesma coisa com “sem perder nenhuma aba”, vieram os 97 arquivos certos. Repetimos dez vezes: o resultado foi sempre esse."
       },
       {
         n: "3",
         frase: "Confira o resultado, não o relatório.",
-        prova: "Ele escreveu “pronto, 0 erros” na mesma resposta em que tinha perdido as 57 abas. A conferência que ele mesmo fez passou."
+        prova: "Nesse mesmo teste, a resposta na tela dizia “pronto, 0 erros” no exato momento em que os dados já tinham se perdido. Abrir a pasta e contar os arquivos leva dez segundos, e é a única conferência que vale."
       }
     ],
 
     procedencia: {
       titulo: "De onde vêm estes números",
-      texto: "Cinco tarefas de laboratório, feitas de verdade em setembro de 2026: primeiro num chat de navegador, depois em dois programas instalados numa máquina com os arquivos na frente. As tarefas que mais importavam foram repetidas cinco vezes em cada programa. <strong>Quem diz se deu certo é a pasta no disco, não a resposta da IA.</strong>",
+      texto: "Cinco tarefas comuns de trabalho — organizar fotos, converter planilhas, descobrir o que lotou uma pasta — feitas de verdade em setembro de 2026. Primeiro num chat de navegador, depois em dois programas instalados numa máquina com os arquivos na frente. As tarefas que mais importavam foram repetidas cinco vezes em cada programa. <strong>Quem diz se deu certo é a pasta no disco, não a resposta da IA.</strong>",
       numeros: [
         { valor: "5", rotulo: "tarefas" },
         { valor: "60+", rotulo: "execuções" },

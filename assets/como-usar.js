@@ -96,6 +96,13 @@
     el.innerHTML = `
       <div class="cu-ess">
         <span class="cu-ess-rot">${esc(e.rotulo)}</span>
+
+        <!-- A premissa vem ANTES da conclusão. Sem estas duas frases, "descreva
+             a sua máquina" é conselho sobre uma coisa que o leitor ainda não
+             sabe que existe. -->
+        <p class="cu-ess-intro">${e.intro}</p>
+
+        <span class="cu-ess-sub">${esc(e.conclusoesRotulo)}</span>
         <ol class="cu-ess-lista">
           ${e.conclusoes.map(c => `
             <li class="cu-ess-item">

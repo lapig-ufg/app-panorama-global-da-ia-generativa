@@ -134,11 +134,17 @@ aba do navegador e instalá-la na máquina, com acesso aos arquivos. A ordem das
 narrativa: **entender → ver a prova → o que sobra → o que você autoriza → instalar →
 referência → procedência.**
 
-Antes da seção 01 vem **o essencial, em três linhas**: as três conclusões que a medição
-sustenta, cada uma com o número ao lado, e a procedência (5 tarefas · 60+ execuções ·
-3 programas). É a única parte da página escrita para quem **não** vai ler a página — a
-pergunta "vocês testaram mesmo?" precisa ser respondida antes de a pessoa decidir se lê
-o resto.
+Antes da seção 01 vem **"Comece por aqui"**: a premissa em duas frases (existem dois jeitos
+de usar IA, e este é o que muda), as três conclusões que a medição sustenta, e a procedência
+(5 tarefas · 60+ execuções · 3 programas). É a única parte da página escrita para quem
+**não** vai ler a página.
+
+> **Regra ao editar este bloco:** cada frase tem de fazer sentido para quem nunca leu o
+> resto. A primeira versão abria em *"No navegador, descreva a sua máquina"* e citava
+> *"dizer no Ubuntu numa máquina Windows"* — conclusões escritas da cadeira de quem já
+> conhece os testes, e portanto frases soltas para qualquer outra pessoa. Nada de
+> vocabulário que só existe dentro da medição. Se uma frase precisa de contexto, o contexto
+> vem antes dela, não depois.
 
 1. **A diferença, explicada** — abre em texto corrido, para quem nunca instalou nada.
    Explica duas ideias, uma de cada vez: se a IA consegue **olhar** os seus arquivos e se
