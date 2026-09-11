@@ -67,7 +67,7 @@ const COMO_USAR_CENAS = {
       id: "fotos",
       aba: "1.240 fotos de campo",
       pergunta: "Tenho uma pasta com mais de mil fotos de campo, tiradas em três semanas. Como separo elas em subpastas por data?",
-      emJogo: "As fotos vieram de câmeras diferentes. Três delas têm nome fora do padrão. Se o programa procurar só por “IMG_”, essas três ficam para trás — e ninguém percebe.",
+      emJogo: "As fotos vieram de câmeras diferentes. Três delas têm nome fora do padrão. Se o programa procurar só por “IMG_”, essas três ficam para trás, e ninguém percebe.",
 
       /* ── O QUE CADA LADO DEVOLVEU ──────────────────────────
          Resultado, não transcrição. A conversa inteira continua
@@ -80,11 +80,11 @@ const COMO_USAR_CENAS = {
           sub: "Gemini 3.6",
           fez: [
             "Escreveu um comando para você copiar.",
-            "Chutou que você usa Windows — você está no Ubuntu.",
+            "Chutou que você usa Windows, quando você está no Ubuntu.",
             "Você rodou, deu erro, e voltou para contar.",
             "Você percebeu que faltavam 3 fotos, e voltou de novo."
           ],
-          desfecho: { valor: "3 mensagens suas", nota: "Resolveu — com você fazendo o papel de olhos.", tom: "neutro" }
+          desfecho: { valor: "3 mensagens suas", nota: "Resolveu, com você fazendo o papel de olhos.", tom: "neutro" }
         },
         direita: {
           rotulo: "Instalado na máquina",
@@ -93,7 +93,7 @@ const COMO_USAR_CENAS = {
             "Abriu a pasta e achou as fotos sozinho, entre quatro subpastas.",
             "Contou 1.240 arquivos.",
             "Testou se a biblioteca de imagens existe nesta máquina.",
-            "Separou por data — e voltou para conferir o resultado."
+            "Separou por data e voltou para conferir o resultado."
           ],
           desfecho: { valor: "11 comandos, zero perguntas", nota: "Nenhuma foto ficou para trás.", tom: "bom" }
         }
@@ -102,9 +102,9 @@ const COMO_USAR_CENAS = {
       explicacao: {
         titulo: "O que aconteceu",
         paragrafos: [
-          "Esta é a tarefa em que o programa instalado ganha sem asterisco. Ele não precisou que ninguém dissesse quantas fotos eram, onde estavam nem qual era o sistema — foi olhar.",
-          "Três fotos tinham nome fora do padrão: <code>foto final (1).jpg</code>, <code>sem nome.JPG</code> e <code>IMG-corrompida.jpeg</code>. Um programa que procure só por arquivos começados em <code>IMG_</code> deixa as três para trás. Os dois programas instalados acharam as três — o Antigravity mandou cada uma pela data do arquivo, o Claude Code criou uma pasta <code>_sem-data</code> para você decidir depois.",
-          "No navegador, essas mesmas três viraram a frase <em>“ficaram 1.237 fotos e não 1.240”</em> — que a pessoa só pôde escrever porque foi conferir. Ele acertou o diagnóstico depois, e acertou bem. Mas quem descobriu o problema foi ela."
+          "Esta é a tarefa em que o programa instalado ganha sem asterisco. Em vez de precisar que alguém dissesse quantas fotos eram, onde estavam e qual era o sistema, ele foi olhar.",
+          "Três fotos tinham nome fora do padrão: <code>foto final (1).jpg</code>, <code>sem nome.JPG</code> e <code>IMG-corrompida.jpeg</code>. Um programa que procure só por arquivos começados em <code>IMG_</code> deixa as três para trás. Os dois programas instalados acharam as três. O Antigravity mandou cada uma pela data do arquivo; o Claude Code criou uma pasta <code>_sem-data</code> para você decidir depois.",
+          "No navegador, essas mesmas três viraram a frase <em>“ficaram 1.237 fotos e não 1.240”</em>, que a pessoa só pôde escrever porque foi conferir. Ele acertou o diagnóstico depois, e acertou bem. Mas quem descobriu o problema foi ela."
         ],
         licao: "O navegador respondeu bem. Ele só não tinha como saber quantas fotos eram, nem que três estavam fora do padrão."
       },
@@ -115,13 +115,13 @@ const COMO_USAR_CENAS = {
           { t: "ia", txt: "Antes de executar qualquer comando de movimentação em lote, faça uma cópia de segurança de toda a pasta de fotos em outro local para evitar perdas acidentais." },
           { t: "marca", tom: "bom", txt: "Começou pelo backup, sem ninguém pedir. Bom conselho." },
           { t: "ia", txt: "Opção 1: No Windows (PowerShell)" },
-          { t: "marca", tom: "ruim", txt: "Windows como opção 1, macOS como opção 2. <strong>Linux não aparece</strong> — e quem perguntou está no Ubuntu. Ele não tinha como saber: ninguém disse, e ele não pode olhar." },
+          { t: "marca", tom: "ruim", txt: "Windows como opção 1, macOS como opção 2. <strong>Linux não aparece</strong>, e quem perguntou está no Ubuntu. Ele não tinha como saber: ninguém disse, e ele não pode olhar." },
           { t: "voce", txt: "Deu erro: mv: target is not a directory" },
           { t: "ia", txt: "Esse erro ocorre quando a variável da data é criada vazia ou com caracteres inválidos" },
           { t: "marca", tom: "neutro", txt: "Diagnosticou bem e trocou por um comando em Python, que funciona. Consertou um problema que ele mesmo criou ao chutar o sistema." },
           { t: "voce", txt: "Agora rodou. Mas ficaram 1.237 fotos e não 1.240." },
           { t: "ia", txt: "A diferença de 3 arquivos geralmente ocorre por dois motivos: arquivos ocultos/sistema que foram ignorados pelo script ou fotos com nomes idênticos na mesma data que se sobrescreveram ao serem movidas para a mesma pasta." },
-          { t: "marca", tom: "chave", txt: "Quem descobriu que faltavam três fotos foi <strong>a pessoa</strong>. Ele acertou o diagnóstico depois — mas só porque alguém foi lá conferir e voltou para contar." }
+          { t: "marca", tom: "chave", txt: "Quem descobriu que faltavam três fotos foi <strong>a pessoa</strong>. Ele acertou o diagnóstico depois, mas só porque alguém foi lá conferir e voltou para contar." }
         ]
       },
 
@@ -132,7 +132,7 @@ const COMO_USAR_CENAS = {
           { t: "cmd", tipo: "olhar", txt: "[list_dir] C:\\Users\\amara\\laboratorio-teste" },
           { t: "marca", tom: "bom", txt: "Primeiro movimento: abrir a pasta. Havia quatro subpastas ali; ele identificou sozinho que as fotos estavam em <code>campo-2026</code>, e que eram 1.240. Ninguém contou isso a ele." },
           { t: "cmd", tipo: "olhar", txt: "python -c \"import PIL; print(PIL.__version__)\"" },
-          { t: "marca", tom: "chave", txt: "Testou se a biblioteca de imagens existe <em>nesta</em> máquina antes de propor usá-la. É o que o navegador não consegue fazer — lá, a frase é sempre “caso não esteja instalado, instale”." },
+          { t: "marca", tom: "chave", txt: "Testou se a biblioteca de imagens existe <em>nesta</em> máquina antes de propor usá-la. É o que o navegador não consegue fazer. Lá a frase é sempre “caso não esteja instalado, instale”." },
           { t: "ia", txt: "Isso é fundamental em fotos de campo porque a data do arquivo no computador pode mudar ao copiar, mas a data gravada pela câmera/celular não muda." },
           { t: "voce", txt: "Pode." },
           { t: "cmd", tipo: "mexer", txt: "python C:\\Users\\amara\\.gemini\\antigravity-cli\\brain\\5bd9e8ea-429d-4a67-a0c0-d96023a9b845\\scratch\\organize_photos.py" },
@@ -151,7 +151,7 @@ const COMO_USAR_CENAS = {
         nota: "Conferido por <code>conferir.py --avaliar</code>, contando arquivos no disco depois da execução. O Claude Code fez a mesma tarefa e também não perdeu nenhuma: criou 21 subpastas, sendo uma <code>_sem-data</code> para as três sem data confiável."
       },
 
-      licao: "Aqui o programa instalado ganha sem asterisco. Ele não precisou que ninguém dissesse quantas fotos eram, onde estavam nem qual era o sistema — foi olhar. E, no fim, foi conferir.",
+      licao: "Aqui o programa instalado ganha sem asterisco. Ninguém precisou dizer quantas fotos eram, onde estavam ou qual era o sistema: ele foi olhar, e no fim foi conferir.",
 
     },
 
@@ -162,7 +162,7 @@ const COMO_USAR_CENAS = {
       id: "planilhas",
       aba: "40 planilhas → CSV",
       pergunta: "Como converto 40 arquivos .xlsx em .csv de uma vez?",
-      emJogo: "Os 40 arquivos têm 97 abas no total. Um CSV só guarda uma aba. Quem converter arquivo por arquivo gera 40 CSVs, perde 57 abas — e não vê erro nenhum na tela.",
+      emJogo: "Os 40 arquivos têm 97 abas no total. Um CSV só guarda uma aba. Quem converter arquivo por arquivo gera 40 CSVs, perde 57 abas e não vê erro nenhum na tela.",
 
       eixo: "navegador × instalado",
       resultado: {
@@ -172,7 +172,7 @@ const COMO_USAR_CENAS = {
           fez: [
             "Deu o comando certo para o seu sistema.",
             "Sugeriu conferir contando quantos CSVs saíram.",
-            "Avisou que a conversão pega só a primeira aba — <strong>quando você perguntou</strong>.",
+            "Avisou que a conversão pega só a primeira aba, mas só <strong>quando você perguntou</strong>.",
             "Não podia converter nada: mandou você trocar o caminho à mão."
           ],
           desfecho: { valor: "nada convertido", nota: "Sabia do problema o tempo todo. Só não disse antes.", tom: "neutro" }
@@ -184,7 +184,7 @@ const COMO_USAR_CENAS = {
             "Achou os 40 arquivos sozinho, varrendo a árvore.",
             "Conferiu que as bibliotecas existem nesta máquina.",
             "Converteu tudo e escreveu <strong>“primeira aba”</strong> na própria explicação do que fez.",
-            "Conferiu contando os CSVs: 40. Passou."
+            "Conferiu contando os CSVs: deu 40, e passou."
           ],
           desfecho: { valor: "40 CSVs · 57 abas perdidas", nota: "E a resposta dele diz “com 0 erros”.", tom: "ruim" }
         }
@@ -194,10 +194,10 @@ const COMO_USAR_CENAS = {
         titulo: "O que aconteceu",
         paragrafos: [
           "Os 40 arquivos tinham 97 abas. Um CSV só guarda uma aba. Quem converte arquivo por arquivo gera 40 CSVs, perde 57 abas e <strong>não vê erro nenhum na tela</strong>.",
-          "O detalhe que incomoda: o Claude Code escreveu “primeira aba” na descrição do próprio método e mesmo assim entregou “0 erros”. Não foi ignorância — ninguém tinha pedido para preservar as abas, e ele não tratou a própria observação como um requisito. Repetindo a mesma frase cinco vezes em cada programa, <strong>ele avisou em 5 de 5 e errou em 5 de 5</strong>.",
-          "E a conferência que ele fez foi contar quantos CSVs existiam — exatamente a checagem que esta armadilha engana, e exatamente a que o Gemini tinha sugerido do outro lado."
+          "O detalhe que incomoda: o Claude Code escreveu “primeira aba” na descrição do próprio método e mesmo assim entregou “0 erros”. Não foi ignorância. Ninguém tinha pedido para preservar as abas, e ele não tratou a própria observação como um requisito. Repetindo a mesma frase cinco vezes em cada programa, <strong>ele avisou em 5 de 5 e errou em 5 de 5</strong>.",
+          "E a conferência que ele fez foi contar quantos CSVs existiam, que é a checagem que esta armadilha engana e a mesma que o Gemini tinha sugerido do outro lado."
         ],
-        licao: "Peça pelo resultado, não pela ferramenta. “Converta em CSV” descreve um meio; “sem perder nenhuma aba” descreve o que você não aceita perder — e é isso que o programa consegue verificar depois."
+        licao: "Peça pelo resultado, não pela ferramenta. “Converta em CSV” descreve um meio; “sem perder nenhuma aba” descreve o que você não aceita perder. Só a segunda coisa o programa consegue conferir sozinho depois."
       },
       destaque: true,
 
@@ -210,7 +210,7 @@ const COMO_USAR_CENAS = {
           { t: "marca", tom: "ruim", txt: "A conferência que ele mesmo sugere <strong>passa</strong>: 40 entraram, 40 saíram. O que ficou para trás foi o conteúdo das outras 57 abas." },
           { t: "voce", txt: "Isso pega todas as abas de cada planilha?" },
           { t: "ia", txt: "Não. O comando do LibreOffice via terminal converte apenas a primeira aba (ou a aba ativa) de cada planilha." },
-          { t: "marca", tom: "chave", txt: "Resposta certa e direta — <strong>depois de perguntado</strong>. Ele sabia o tempo todo. Só não disse antes." }
+          { t: "marca", tom: "chave", txt: "Resposta certa e direta, <strong>depois de perguntado</strong>. Ele sabia disso o tempo todo e não disse." }
         ]
       },
 
@@ -226,9 +226,9 @@ const COMO_USAR_CENAS = {
           { t: "ia", txt: "Pronto! ✅ Os **40 arquivos .xlsx** foram convertidos para `.csv` de uma vez, todos em `planilhas-campo/` (mesmo nome, extensão `.csv`), com 0 erros." },
           { t: "marca", tom: "ruim", txt: "“Com 0 erros”. Não houve erro nenhum na tela. E 57 abas acabaram de sumir." },
           { t: "ia", txt: "**Como foi feito:** um script Python que usa `pandas` para ler cada `.xlsx` (primeira aba) e salvar como CSV UTF-8, sem o índice." },
-          { t: "marca", tom: "chave", txt: "Leia de novo: <strong>“primeira aba”</strong>. Ele escreveu o problema na própria explicação do que fez — e mesmo assim entregou “0 erros”. Não foi ignorância." },
+          { t: "marca", tom: "chave", txt: "Leia de novo: <strong>“primeira aba”</strong>. Ele descreveu o problema na própria explicação do que fez, e mesmo assim entregou “0 erros”." },
           { t: "cmd", tipo: "olhar", txt: "cd \"C:/Users/amara/laboratorio-teste/planilhas-campo\" && cat campo_2019_00.csv && echo \"---\" && ls *.csv | wc -l" },
-          { t: "marca", tom: "ruim", txt: "A conferência dele foi contar quantos CSV existem. Devolve 40. <strong>Passa.</strong> É exatamente a checagem que esta armadilha engana — a mesma que o Gemini tinha sugerido no navegador." }
+          { t: "marca", tom: "ruim", txt: "A conferência dele foi contar quantos CSV existem. Devolve 40, e <strong>passa</strong>. É a checagem que esta armadilha engana, a mesma que o Gemini tinha sugerido no navegador." }
         ]
       },
 
@@ -249,7 +249,7 @@ const COMO_USAR_CENAS = {
         depois: "Converta todas as planilhas desta pasta para CSV, sem perder nenhuma aba.",
         depoisResultado: "97 arquivos, um por aba.",
         selo: "10 acertos em 10 execuções, nos dois programas",
-        texto: "Mesma pasta, mesmo programa, mesmo dia. O que mudou foi <strong>dizer o que não podia ser perdido</strong>. Não é sobre esforço: com a ordem ele roda cerca do dobro de comandos, mas o que muda o resultado é ele ir contar as abas antes de converter — e isso só acontece quando o pedido diz que elas importam."
+        texto: "Mesma pasta, mesmo programa, mesmo dia. O que mudou foi <strong>dizer o que não podia ser perdido</strong>. Não é sobre esforço: com a ordem ele roda cerca do dobro de comandos, mas o que muda o resultado é ele ir contar as abas antes de converter, e isso só acontece quando o pedido diz que elas importam."
       },
 
       licao: "Peça pelo resultado, não pela ferramenta. “Converta em CSV” descreve um meio; “sem perder nenhuma aba” descreve o que você não aceita perder. É essa segunda parte que o programa consegue verificar depois.",
@@ -263,7 +263,7 @@ const COMO_USAR_CENAS = {
       id: "disco",
       aba: "O que lotou a pasta",
       pergunta: "Minha pasta de trabalho encheu e não sei o que está ocupando espaço. Como descubro?",
-      emJogo: "A maior pasta da árvore é a das fotos de campo — o dado primário, que não pode ser apagado. A resposta certa são 84 arquivos byte a byte idênticos, escondidos numa subpasta, todos com mais de um ano.",
+      emJogo: "A maior pasta da árvore é a das fotos de campo, o dado primário que não pode ser apagado. A resposta certa são 84 arquivos byte a byte idênticos, escondidos numa subpasta, todos com mais de um ano.",
 
       eixo: "navegador × instalado",
       resultado: {
@@ -272,7 +272,7 @@ const COMO_USAR_CENAS = {
           sub: "Gemini 3.6",
           fez: [
             "Chutou que era Windows e entregou o procedimento inteiro.",
-            "Perguntou qual é o seu sistema — no fim da resposta.",
+            "Perguntou qual é o seu sistema, no fim da resposta.",
             "Ofereceu três atalhos de resposta: Windows 10, Windows 11 e Mac. Sem Linux.",
             "Gastou três mensagens tentando descobrir em que máquina você está."
           ],
@@ -294,8 +294,8 @@ const COMO_USAR_CENAS = {
       explicacao: {
         titulo: "O que aconteceu",
         paragrafos: [
-          "A resposta certa eram <strong>84 arquivos byte a byte idênticos</strong> escondidos numa subpasta, todos com mais de um ano. A maior pasta da árvore é a das fotos de campo — o dado primário, que não pode ser apagado.",
-          "Nenhum dos cinco comandos calcula a impressão digital de um arquivo. Nem <code>Get-FileHash</code>, nem <code>md5</code>, nem <code>Compare-Object</code>. Em <strong>onze execuções no dia, nos dois programas, nenhum comparou arquivos entre si</strong> — é o resultado mais repetido de toda a medição.",
+          "A resposta certa eram <strong>84 arquivos byte a byte idênticos</strong> escondidos numa subpasta, todos com mais de um ano. A maior pasta da árvore é a das fotos de campo, o dado primário que não pode ser apagado.",
+          "Nenhum dos cinco comandos calcula a impressão digital de um arquivo. Nem <code>Get-FileHash</code>, nem <code>md5</code>, nem <code>Compare-Object</code>. Em <strong>onze execuções no dia, nos dois programas, nenhum comparou arquivos entre si</strong>. É o resultado mais repetido de toda a medição.",
           "E os dois recomendaram apagar uma pasta de imagens de satélite que era produto final."
         ],
         licao: "Existe uma classe inteira de problema que ele não enxerga porque ela exige olhar <strong>dois arquivos ao mesmo tempo</strong>. Ele examina cada um com cuidado — nome, tamanho, data, conteúdo — e não pergunta se dois deles são a mesma coisa."
@@ -305,13 +305,13 @@ const COMO_USAR_CENAS = {
         beats: [
           { t: "voce", txt: "Meu HD de 500 GB encheu e não sei o que está ocupando espaço. Como descubro?" },
           { t: "ia", txt: "Pressione as teclas Windows + I para abrir as Configurações, clique em Sistema e selecione Armazenamento.", corte: true },
-          { t: "marca", tom: "ruim", txt: "Ninguém perguntou o sistema. Ele decidiu que era Windows e entregou o procedimento inteiro — atalho de teclado, programa para instalar, unidade C:." },
+          { t: "marca", tom: "ruim", txt: "Ninguém perguntou o sistema. Ele decidiu que era Windows e entregou o procedimento inteiro: atalho de teclado, programa para instalar, unidade C:." },
           { t: "ia", txt: "Qual é o sistema operacional exato do seu computador (Windows 10, Windows 11, macOS ou Linux)?" },
           { t: "marca", tom: "ruim", txt: "A pergunta veio no <em>fim</em> da resposta. Primeiro a recomendação, depois a informação que decide se ela vale alguma coisa." },
           { t: "voce", txt: "Não sei, como eu vejo isso?" },
           { t: "ia", txt: "Observe o teclado e a tela. Se o seu computador tiver um símbolo de maçã no canto superior esquerdo da tela ou no teclado, é um Mac." },
           { t: "chips", ops: ["Apareceu Windows 10", "Apareceu Windows 11", "É um Mac (macOS)"] },
-          { t: "marca", tom: "ruim", txt: "Os três atalhos de resposta oferecidos. <strong>Linux não está entre eles</strong> — e ele mesmo tinha listado Linux uma resposta antes." },
+          { t: "marca", tom: "ruim", txt: "Os três atalhos de resposta oferecidos. <strong>Linux não está entre eles</strong>, e ele mesmo tinha listado Linux uma resposta antes." },
           { t: "voce", txt: "Não sei, como eu vejo isso?" },
           { t: "marca", tom: "chave", txt: "Terceira resposta seguida sobre qual é o computador. A pergunta era sobre um disco cheio, e o disco não andou um passo." }
         ]
@@ -326,7 +326,7 @@ const COMO_USAR_CENAS = {
           { t: "ia", txt: "O tamanho total acumulado no diretório é de aproximadamente **~2,61 GB**." },
           { t: "marca", tom: "chave", txt: "Compare com o outro lado: lá, três mensagens sem sair do lugar; aqui, cinco comandos e um mapa da pasta. É a mesma pergunta." },
           { t: "marca", tom: "ruim", txt: "Mas olhe o que <strong>não</strong> aparece em nenhum dos cinco comandos: nada que compare dois arquivos entre si. Nenhum cálculo de impressão digital, nenhum <code>Compare-Object</code>." },
-          { t: "marca", tom: "ruim", txt: "Os 84 arquivos idênticos — que são a resposta do exercício — nunca foram encontrados. E ele recomendou apagar uma pasta de imagens de satélite que era produto final." }
+          { t: "marca", tom: "ruim", txt: "Os 84 arquivos idênticos, que são a resposta do exercício, nunca foram encontrados. E ele recomendou apagar uma pasta de imagens de satélite que era produto final." }
         ]
       },
 
@@ -351,7 +351,7 @@ const COMO_USAR_CENAS = {
       id: "nomes",
       aba: "340 nomes bagunçados",
       pergunta: "Preciso padronizar o nome de 340 arquivos .tif: sem acento, sem espaço, tudo minúsculo. Como faço?",
-      emJogo: "Dois arquivos da pasta se chamam “Área Teste 01.tif” e “Area Teste 01.tif”. Tirando o acento, os dois viram o mesmo nome — e um apaga o outro.",
+      emJogo: "Dois arquivos da pasta se chamam “Área Teste 01.tif” e “Area Teste 01.tif”. Tirando o acento, os dois viram o mesmo nome, e um apaga o outro.",
 
       eixo: "navegador × instalado",
       resultado: {
@@ -360,7 +360,7 @@ const COMO_USAR_CENAS = {
           sub: "Gemini 3.6",
           fez: [
             "Escreveu o código certo, e do melhor jeito possível.",
-            "Rodou o código para testar — sobre nomes que ele mesmo inventou.",
+            "Rodou o código para testar, sobre nomes que ele mesmo inventou.",
             "Explicou o risco de colisão de nomes, em tese.",
             "Sugeriu fazer cópia de segurança antes."
           ],
@@ -382,21 +382,21 @@ const COMO_USAR_CENAS = {
       explicacao: {
         titulo: "O que aconteceu",
         paragrafos: [
-          "Dois arquivos da pasta se chamam <code>Área Teste 01.tif</code> e <code>Area Teste 01.tif</code>. Tirando o acento, os dois viram o mesmo nome — e um apaga o outro.",
+          "Dois arquivos da pasta se chamam <code>Área Teste 01.tif</code> e <code>Area Teste 01.tif</code>. Tirando o acento, os dois viram o mesmo nome, e um apaga o outro.",
           "O navegador escreveu o código certo e chegou a explicar esse risco. Mas ele não podia rodá-lo nos arquivos que importavam, e é neles que o caso mora.",
-          "Os dois programas instalados acharam a colisão, e cada um escolheu uma saída: o Antigravity renomeou um dos dois com sufixo e seguiu, relatando; o Claude Code parou, explicou e perguntou como você preferia resolver — oferecendo salvar uma planilha com o mapa de antigo→novo para poder desfazer. Os dois são defensáveis. A diferença não é competência: é quanto cada um assume por conta própria."
+          "Os dois programas instalados acharam a colisão, e cada um escolheu uma saída: o Antigravity renomeou um dos dois com sufixo e seguiu, relatando; o Claude Code parou, explicou e perguntou como você preferia resolver, e ofereceu salvar uma planilha com o mapa de antigo→novo para poder desfazer. Os dois são defensáveis. A diferença não é competência: é quanto cada um assume por conta própria."
         ],
-        licao: "O código estava certo dos dois lados. O que só existe de um lado é rodá-lo nos arquivos de verdade — e descobrir ali o caso que quebra."
+        licao: "O código estava certo dos dois lados. O que só existe de um lado é rodá-lo nos arquivos de verdade e descobrir ali o caso que quebra."
       },
 
       navegador: {
         beats: [
           { t: "voce", txt: "Preciso padronizar o nome de 340 arquivos .tif no Ubuntu: sem acento, sem espaço, tudo minúsculo. Como faço?" },
           { t: "sandbox", txt: "nfkd = unicodedata.normalize('NFKD', filename)" },
-          { t: "marca", tom: "bom", txt: "Código correto, e da melhor maneira possível — normalização Unicode, que não depende da configuração de idioma do sistema." },
+          { t: "marca", tom: "bom", txt: "Código correto, e da melhor maneira possível: normalização Unicode, que não depende da configuração de idioma do sistema." },
           { t: "sandbox", txt: "Relatório Final Água.tif -> relatorio_final_agua.tif" },
-          { t: "marca", tom: "chave", txt: "Mas olhe <em>sobre o que</em> ele rodou: nomes que ele mesmo inventou. Os 340 arquivos da pessoa continuam invisíveis — e é neles que mora o par que colide." },
-          { t: "marca", tom: "neutro", txt: "Explicou o risco de colisão de nomes e sugeriu cópia de segurança antes de renomear. Não sugeriu ensaiar nos arquivos reais — não teria como." }
+          { t: "marca", tom: "chave", txt: "Mas olhe <em>sobre o que</em> ele rodou: nomes que ele mesmo inventou. Os 340 arquivos da pessoa continuam invisíveis, e é neles que mora o par que colide." },
+          { t: "marca", tom: "neutro", txt: "Explicou o risco de colisão de nomes e sugeriu cópia de segurança antes de renomear. Não sugeriu ensaiar nos arquivos reais, e não teria como." }
         ]
       },
 
@@ -420,10 +420,10 @@ const COMO_USAR_CENAS = {
           { rotulo: "Nomes normalizados", valor: "todos", bom: true },
           { rotulo: "Arquivos perdidos na colisão", valor: "nenhum", bom: true }
         ],
-        nota: "O Claude Code também achou a colisão — e escolheu <strong>parar e perguntar</strong> como a pessoa preferia resolver, oferecendo por conta própria salvar uma planilha com o mapa de antigo→novo para poder desfazer."
+        nota: "O Claude Code também achou a colisão e escolheu <strong>parar e perguntar</strong> como a pessoa preferia resolver, oferecendo por conta própria salvar uma planilha com o mapa de antigo→novo para poder desfazer."
       },
 
-      licao: "O navegador escreveu o código certo. O programa instalado rodou o mesmo código <strong>nos arquivos de verdade</strong> — e foi nos arquivos de verdade que apareceu o caso que quebra.",
+      licao: "O navegador escreveu o código certo. O programa instalado rodou o mesmo código <strong>nos arquivos de verdade</strong>, e foi ali que apareceu o caso que quebra.",
 
     },
     /* ══════════════════════════════════════════════════════════
@@ -448,10 +448,10 @@ const COMO_USAR_CENAS = {
       id: "serie",
       aba: "240 imagens de satélite",
       pergunta: "Nesta série de 244 imagens de satélite, quais arquivos estão fora do padrão?",
-      emJogo: "Quatro arquivos destoam, e nada no nome denuncia. Três são pegos por uma listagem simples: têm tamanho diferente dos outros. O quarto tem **exatamente o mesmo tamanho** dos outros 236, abre normalmente e mostra a mesma imagem — só está gravado com os bytes na ordem inversa.",
+      emJogo: "Quatro arquivos destoam, e nada no nome denuncia. Três são pegos por uma listagem simples: têm tamanho diferente dos outros. O quarto tem **exatamente o mesmo tamanho** dos outros 236, abre normalmente e mostra a mesma imagem. A única diferença é que ele foi gravado com os bytes na ordem inversa.",
 
       eixo: "duas formas de pedir",
-      avisoEixo: "Aqui as duas colunas <strong>não são</strong> navegador × instalado. São dois jeitos de fazer o mesmo pedido, os dois a programas instalados — porque é isso que este teste mede, e não havia conversa de navegador equivalente para comparar.",
+      avisoEixo: "Aqui as duas colunas <strong>não são</strong> navegador × instalado. São dois jeitos de fazer o mesmo pedido, os dois a programas instalados, porque é isso que este teste mede. Não havia conversa de navegador equivalente para comparar.",
 
       resultado: {
         esquerda: {
@@ -491,11 +491,11 @@ const COMO_USAR_CENAS = {
       explicacao: {
         titulo: "Por que ninguém achou",
         paragrafos: [
-          "Não foi preguiça. Os dois programas fizeram análise séria — o Claude Code comparou dimensões, tipo de dado, média, desvio, mínimo, máximo e contagem de zeros dos 240 arquivos.",
+          "Não foi preguiça. Os dois programas fizeram análise séria. O Claude Code comparou dimensões, tipo de dado, média, desvio, mínimo, máximo e contagem de zeros dos 240 arquivos.",
           "O problema é que <strong>a biblioteca que eles usaram para abrir as imagens corrige a ordem dos bytes sozinha</strong>, em silêncio. Depois de aberto, o arquivo devolve exatamente os mesmos números que qualquer outro da série. O desvio existe só em dois bytes no começo do arquivo, e ninguém foi lá.",
           "É o mesmo movimento do caso das planilhas, numa fatia diferente: lá a biblioteca entrega a primeira aba e o programa não pergunta se há outras; aqui ela entrega a imagem certa e ele não pergunta como o arquivo estava escrito. <strong>Todos pararam na camada em que a ferramenta já tinha resolvido o problema para eles.</strong>"
         ],
-        licao: "Pedir melhor resolve uma classe grande de erro — e não resolve outra. Nas planilhas a informação que faltava estava ao alcance dele, e o pedido fez ele ir buscar. Aqui ela estava <strong>abaixo da ferramenta que ele escolheu</strong>, e nenhuma formulação faz ele descer um nível."
+        licao: "Pedir melhor resolve uma classe grande de erro, e não resolve outra. Nas planilhas a informação que faltava estava ao alcance dele, e o pedido fez ele ir buscar. Aqui ela estava <strong>abaixo da ferramenta que ele escolheu</strong>, e nenhuma formulação faz ele descer um nível."
       },
 
       contraste: {
@@ -520,7 +520,7 @@ const COMO_USAR_CENAS = {
     itens: [
       {
         antes: "“O chat patina e precisa de sete idas e voltas”",
-        depois: "Em 4 dos 5 casos ele resolveu, em 1 a 3 mensagens. A página exagerava — e o exagero foi removido."
+        depois: "Em 4 dos 5 casos ele resolveu, em 1 a 3 mensagens. A página exagerava, e o exagero foi removido."
       },
       {
         antes: "“O programa instalado resolve o que o chat só explica”",
@@ -539,6 +539,6 @@ const COMO_USAR_CENAS = {
         depois: "Era a pergunta, não o programa. Ela descrevia um HD de 500 GB que não existia ali. Corrigido o enunciado, os dois ficaram dentro da pasta."
       }
     ],
-    fecho: "Três conclusões desta medição estavam erradas pelo mesmo motivo, e foram corrigidas antes de chegar aqui: <strong>o programa age sobre o que consegue verificar que existe</strong>. Enunciado que descreve o que não está na máquina vira resposta de conhecimento — e ele está certo em fazer isso. O registro completo, com o que foi retirado e por quê, está em <code>automation/capturas/</code>."
+    fecho: "Três conclusões desta medição estavam erradas pelo mesmo motivo, e foram corrigidas antes de chegar aqui: <strong>o programa age sobre o que consegue verificar que existe</strong>. Enunciado que descreve o que não está na máquina vira resposta de conhecimento, e ele está certo em fazer isso. O registro completo, com o que foi retirado e por quê, está em <code>automation/capturas/</code>."
   }
 };

@@ -575,6 +575,10 @@ panorama-llms/
 │   │   ├── conferir.py            #   confere as armadilhas antes; pontua pelo DISCO depois
 │   │   └── README.md              #   qual é a armadilha de cada cenário
 │   ├── valida-cenas.mjs           # falha se uma citação da página divergir da captura
+│   ├── valida-escrita.mjs         # falha se os tiques de escrita de IA (travessão solto,
+│   │                              #   "não é X, é Y", ênfase vazia) voltarem a se acumular
+│   │                              #   no texto da aba. Tetos calibrados contra a versão
+│   │                              #   anterior à limpeza de 11/set/2026.
 │   └── capturas/                  #   schemas + as entregas. COMECE POR MATERIAL-PARA-A-ABA.md
 │                                  #   (os oito achados, com o que NÃO afirmar) e por
 │                                  #   2026-09-10-leia-me.md (quais arquivos servem para tirar

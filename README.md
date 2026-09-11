@@ -231,6 +231,26 @@ olhar as outras quebra o conjunto:
 Três superfícies disparam as mesmas ações (`acao()`): o balão, os botões simulados dentro das
 janelas (`.cu-alvo`) e o painel abaixo da moldura. O painel é o caminho de teclado e de leitor
 de tela — não o elimine ao mexer no balão.
+- **Rode `node automation/valida-escrita.mjs` antes de publicar texto novo.** O texto desta
+  aba é escrito com ajuda de IA, e IA tem tiques de ritmo reconhecíveis. O mais forte é o
+  travessão usado como conector universal, na forma *"frase completa — reviravolta curta no
+  fim"*. Numa revisão de 11/set/2026 a aba tinha **148 travessões em 11.500 palavras, um a
+  cada 78** — cerca de cinco vezes a taxa de prosa técnica escrita à mão. Depois da limpeza:
+  um a cada 325.
+
+  O teste mede quatro tiques (travessão solto, contraste *"não é X, é Y"*, *"é aqui que"*,
+  advérbio de ênfase) e falha quando eles voltam a se acumular. Os tetos foram calibrados
+  contra a versão anterior à limpeza: ela reprova, a atual passa.
+
+  > **A correção não é trocar todo travessão por ponto.** Isso troca um tique por outro: o
+  > fragmento dramático de três palavras, que está na mesma lista. Reescreva a frase — vírgula,
+  > subordinação, ou corte a reviravolta quando ela não acrescenta nada. Fica permitido o
+  > travessão em aposto que tem vírgula dentro (onde a vírgula ficaria ambígua) e em par
+  > rótulo–valor.
+  >
+  > Referência: a família de skills **humanizer** ([blader](https://github.com/blader/humanizer),
+  > [jooray](https://github.com/jooray/humanizer)), que lista esses sinais.
+
 - **Meça o peso antes de acrescentar conteúdo, e meça certo.** A página tem ~5.000 palavras
   visíveis (≈25 min) e ~23 telas em 390px. O catálogo era a maior fatia e agora abre fechado
   em **todas** as larguras (`colapsarCatalogo`), com os nomes das ferramentas no resumo —

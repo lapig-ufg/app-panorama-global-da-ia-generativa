@@ -49,7 +49,7 @@ const COMO_USAR_DATA = {
        sentido para alguém que NUNCA leu o resto. Nada de vocabulário que só
        existe dentro da medição — sem "Ubuntu", sem "zero comandos", sem "os
        dois programas". Se precisar de contexto, o contexto vem antes. */
-    intro: "Há dois jeitos de usar inteligência artificial. No primeiro — o que quase todo mundo usa — você abre uma aba do navegador e conversa: ela responde, você copia o que serve. No segundo, você <strong>instala um programa no seu computador</strong> e ele abre os seus arquivos e trabalha neles. Esta página compara os dois, e as comparações são testes de verdade, não opinião.",
+    intro: "Há dois jeitos de usar inteligência artificial. No primeiro, que é o que quase todo mundo usa, você abre uma aba do navegador e conversa: ela responde, você copia o que serve. No segundo, você <strong>instala um programa no seu computador</strong> e ele abre os seus arquivos e trabalha neles. Esta página compara os dois, e as comparações são testes de verdade, não opinião.",
 
     conclusoesRotulo: "Se você só ler isto, leve estas três coisas",
 
@@ -57,7 +57,7 @@ const COMO_USAR_DATA = {
       {
         n: "1",
         frase: "No navegador, a IA não faz ideia de como é o seu computador.",
-        prova: "Ela não sabe qual sistema você usa, onde ficam os seus arquivos nem quantos são. Por isso você precisa contar — e, se contar errado, a resposta vem errada sem ninguém perceber. O programa instalado não precisa: ele vai olhar."
+        prova: "Ela não sabe qual sistema você usa, onde ficam os seus arquivos nem quantos são. Por isso você precisa contar. E se contar errado, a resposta vem errada sem ninguém perceber. O programa instalado não precisa: ele vai olhar."
       },
       {
         n: "2",
@@ -99,14 +99,14 @@ const COMO_USAR_DATA = {
   abertura: {
     titulo: "A diferença, explicada",
 
-    lede: "Você já usa IA. Provavelmente numa aba do navegador: abre o site, escreve o que precisa, lê a resposta, copia o que serve. Esta aba é sobre o outro jeito — <strong>instalar a IA no seu computador e deixar que ela abra os seus arquivos</strong>.",
+    lede: "Você já usa IA. Provavelmente numa aba do navegador: abre o site, escreve o que precisa, lê a resposta, copia o que serve. Esta aba é sobre o outro jeito: <strong>instalar a IA no seu computador e deixar que ela abra os seus arquivos</strong>.",
 
     /* Os parágrafos de abertura. Texto corrido de propósito: a versão
        anterior desta seção era um quadro comparativo, e o leitor
        chegava na seção 02 sem ter entendido o que estava comparando. */
     paragrafos: [
-      "A diferença entre os dois não é a inteligência do modelo. Pode ser exatamente o mesmo modelo nos dois lugares — e nesta página, em boa parte dos testes, foi.",
-      "A diferença são duas coisas bem concretas: <strong>se ela consegue olhar</strong> os seus arquivos, e <strong>se ela pode mexer</strong> neles. As duas mudam o que você precisa escrever no pedido — e mudam em direções opostas, que é o que costuma confundir.",
+      "A diferença entre os dois não é a inteligência do modelo. Pode ser o mesmo modelo nos dois lugares, e nesta página, em boa parte dos testes, foi.",
+      "A diferença são duas coisas bem concretas: <strong>se ela consegue olhar</strong> os seus arquivos, e <strong>se ela pode mexer</strong> neles. As duas mudam o que você precisa escrever no pedido, e mudam em direções opostas, e é isso que costuma confundir quem está começando.",
       "Vale a pena entender uma de cada vez."
     ],
 
@@ -119,7 +119,7 @@ const COMO_USAR_DATA = {
         navegador: {
           titulo: "No navegador, não",
           texto: "Ela não enxerga nada do seu computador. Nada mesmo. Por isso <strong>você</strong> precisa contar: qual é o seu sistema, onde fica a pasta, quantos arquivos são, quais programas você tem instalados. Ela responde com o que você contou.",
-          consequencia: "Se você contar errado, a resposta vem errada — e nem você nem ela têm como perceber."
+          consequencia: "Se você contar errado, a resposta vem errada, e nem você nem ela têm como perceber."
         },
 
         instalada: {
@@ -136,10 +136,10 @@ const COMO_USAR_DATA = {
             { pedido: "“…no Windows”", valor: "5 a 12 comandos", detalhe: "foram olhar", bom: true },
             { pedido: "sem citar sistema", valor: "3 a 15 comandos", detalhe: "foram olhar", bom: true }
           ],
-          conclusao: "Dizer o sistema <em>não</em> atrapalha. Dizer o sistema <strong>errado</strong> atrapalha muito — porque a IA conclui, com razão, que os arquivos da sua pergunta não são os que estão ali na frente dela."
+          conclusao: "Dizer o sistema <em>não</em> atrapalha. Dizer o sistema <strong>errado</strong> atrapalha muito, porque a IA conclui, com razão, que os arquivos da sua pergunta não são os que estão ali na frente dela."
         },
 
-        regra: "No navegador, descreva a sua máquina. No programa instalado, não precisa — e descrever errado piora."
+        regra: "No navegador, descreva a sua máquina. No programa instalado, não precisa, e descrever errado piora."
       },
 
       {
@@ -152,13 +152,13 @@ const COMO_USAR_DATA = {
           texto: "Ela escreve o comando; a mão é sua. Você copia, cola no <strong>terminal</strong>, aperta enter, olha o que aconteceu e volta para contar.",
           glossario: {
             termo: "terminal",
-            texto: "É a janela em que você <strong>digita</strong> o que quer, em vez de clicar. Todo computador tem uma, já instalada: no Windows chama-se PowerShell, no Mac e no Linux chama-se Terminal. Ela parece intimidante e não é — é só um lugar onde você escreve uma linha e aperta enter. A seção 05 desta página abre uma e faz o primeiro comando com você."
+            texto: "É a janela em que você <strong>digita</strong> o que quer, em vez de clicar. Todo computador tem uma, já instalada: no Windows chama-se PowerShell, no Mac e no Linux chama-se Terminal. Ela parece intimidante e não é: é só um lugar onde você escreve uma linha e aperta enter. A seção 05 desta página abre uma e faz o primeiro comando com você."
           },
           consequencia: "Quem confere o resultado é sempre você. Se você não conferir, ninguém confere."
         },
 
         instalada: {
-          titulo: "Instalada, sim — com a sua autorização",
+          titulo: "Instalada, sim, com a sua autorização",
           texto: "Ela executa o comando e <strong>lê a saída</strong>. Se der errado, ela vê o erro e tenta outro caminho, sem precisar te perguntar. Cada comando que mexe em alguma coisa aparece na tela para você aprovar antes de rodar.",
           consequencia: "Isso é mais do que poupar digitação: é ela poder corrigir o próprio passo seguinte."
         },
@@ -173,7 +173,7 @@ const COMO_USAR_DATA = {
           conclusao: "Nenhum dos dois é errado. Perguntar é útil quando você ainda está decidindo; mandar é útil quando já decidiu. Só é bom saber qual dos dois você está fazendo."
         },
 
-        regra: "Pergunta faz ela explicar. Ordem faz ela executar. As duas coisas são úteis — em momentos diferentes."
+        regra: "Pergunta faz ela explicar. Ordem faz ela executar. As duas coisas são úteis, em momentos diferentes."
       }
     ],
 
@@ -203,16 +203,16 @@ const COMO_USAR_DATA = {
         },
         {
           titulo: "O trabalho fica",
-          texto: "O que sobra não é uma conversa perdida entre trezentas: é um programinha no disco, numa pasta organizada, com o registro do que mudou. Na semana seguinte você roda de novo — é a seção 03 desta página."
+          texto: "O que sobra é um programinha no disco, numa pasta organizada, com o registro do que mudou. Na semana seguinte você roda de novo. É a seção 03 desta página."
         }
       ],
-      custo: "O preço é real e vale dizer: instalar leva uns quinze minutos na primeira vez, e você passa a aprovar comandos em vez de só ler respostas. Para uma dúvida avulsa, o navegador continua sendo mais rápido — a seção 02 tem um bloco só sobre isso."
+      custo: "O preço é real e vale dizer: instalar leva uns quinze minutos na primeira vez, e você passa a aprovar comandos em vez de só ler respostas. Para uma dúvida avulsa, o navegador continua sendo mais rápido. A seção 02 tem um bloco só sobre isso."
     },
 
     saibaMais: [
       {
-        titulo: "A diferença é o acesso, não o modelo — e dá para ligar e desligar",
-        corpo: "Isto apareceu por acidente na medição, e virou a demonstração mais limpa da página inteira.<br><br>O programa que usamos precisa de uma opção para receber a pasta de trabalho. Sem essa opção, ele abre numa pasta interna dele, vazia. Com ela, abre na sua pasta.<br><br>Rodamos os cinco pedidos <strong>sem</strong> essa opção. Resultado: <strong>zero comandos</strong> nos cinco, e respostas que ficaram indistinguíveis das do chat de navegador.<br><br>Mesmo programa, mesmo modelo, mesma pergunta, mesmo computador. A única coisa que mudou foi ele conseguir ou não ver o disco — e isso bastou para transformar um lado no outro. É por isso que esta página fala em <em>alcance</em>, e não em <em>inteligência</em>."
+        titulo: "A diferença é o acesso, não o modelo, e dá para ligar e desligar",
+        corpo: "Isto apareceu por acidente na medição, e virou a demonstração mais limpa da página inteira.<br><br>O programa que usamos precisa de uma opção para receber a pasta de trabalho. Sem essa opção, ele abre numa pasta interna dele, vazia. Com ela, abre na sua pasta.<br><br>Rodamos os cinco pedidos <strong>sem</strong> essa opção. Resultado: <strong>zero comandos</strong> nos cinco, e respostas que ficaram indistinguíveis das do chat de navegador.<br><br>Mesmo programa, mesmo modelo, mesma pergunta, mesmo computador. A única coisa que mudou foi ele conseguir ou não ver o disco, e isso bastou para transformar um lado no outro. É por isso que esta página fala em <em>alcance</em>, e não em <em>inteligência</em>."
       },
       {
         titulo: "E como se chama isso, afinal?",
@@ -241,7 +241,7 @@ const COMO_USAR_DATA = {
      ───────────────────────────────────────────────────────────── */
   contraponto: {
     titulo: "O outro lado: onde a aba ganha",
-    lede: "A seção acima tem quatro tarefas: o programa instalado ganha em duas, empata numa e perde feio na das planilhas. Mesmo nas que ele ganha, ele ganha por um motivo específico — havia ARQUIVO para abrir e REPETIÇÃO para automatizar. Quando a tarefa não tem nenhum dos dois, a aba do navegador costuma ganhar, e por motivos que não são consolo.",
+    lede: "A seção acima tem quatro tarefas: o programa instalado ganha em duas, empata numa e perde feio na das planilhas. Mesmo nas que ele ganha, ele ganha por um motivo específico: havia ARQUIVO para abrir e REPETIÇÃO para automatizar. Quando a tarefa não tem nenhum dos dois, a aba do navegador costuma ganhar, e por motivos que não são consolo.",
     itens: [
       {
         titulo: "Pensar em voz alta",
@@ -249,11 +249,11 @@ const COMO_USAR_DATA = {
       },
       {
         titulo: "Quando os arquivos não são seus",
-        texto: "Um PDF que chegou por e-mail, uma tabela que um colega mandou no chat, uma foto tirada agora no celular. Arrastar para a conversa leva três segundos; baixar, escolher uma pasta e abrir um agente ali leva bem mais — e não melhora a resposta."
+        texto: "Um PDF que chegou por e-mail, uma tabela que um colega mandou no chat, uma foto tirada agora no celular. Arrastar para a conversa leva três segundos; baixar, escolher uma pasta e abrir um agente ali leva bem mais, e não melhora a resposta."
       },
       {
         titulo: "Uma pergunta só",
-        texto: "Instalar um desses programas, entrar na conta e escolher o modelo custa uns 15 minutos na primeira vez. Para uma dúvida avulsa, a aba responde antes de o `npm install` terminar. O agente compensa quando a mesma tarefa volta — e é aí que ele compensa muito."
+        texto: "Instalar um desses programas, entrar na conta e escolher o modelo custa uns 15 minutos na primeira vez. Para uma dúvida avulsa, a aba responde antes de o `npm install` terminar. O agente compensa quando a mesma tarefa volta, e aí compensa muito."
       },
       {
         titulo: "Aprender fazendo",
@@ -261,7 +261,7 @@ const COMO_USAR_DATA = {
       },
       {
         titulo: "Onde você não pode instalar nada",
-        texto: "Computador de laboratório com política travada, máquina emprestada, terminal de um servidor onde você não é dono do ambiente. A aba funciona em qualquer navegador — o que, aliás, é a maior vantagem que ela tem, e nenhuma seção desta página tira isso dela."
+        texto: "Computador de laboratório com política travada, máquina emprestada, terminal de um servidor onde você não é dono do ambiente. A aba funciona em qualquer navegador, que é, aliás, a maior vantagem que ela tem. Nenhuma seção desta página tira isso dela."
       }
     ],
     fecho: "A regra prática cabe em uma linha: <strong>tem arquivo e vai repetir, instale; é conversa e é uma vez só, abra o navegador.</strong> As duas coisas convivem no mesmo dia de trabalho, e quem só usa uma das duas está pagando caro em algum dos dois lados."
@@ -281,13 +281,13 @@ const COMO_USAR_DATA = {
      ───────────────────────────────────────────────────────────── */
   permanencia: {
     titulo: "O que fica depois",
-    lede: "Tudo até aqui compara uma tarefa: quem termina antes, quem termina certo. Falta a pergunta que só aparece na segunda-feira seguinte — <strong>o que sobrou daquilo?</strong> É aqui que a distância entre os dois modos deixa de ser de minutos e passa a ser de anos.",
+    lede: "Tudo até aqui compara uma tarefa: quem termina antes, quem termina certo. Falta a pergunta que só aparece na segunda-feira seguinte: <strong>o que sobrou daquilo?</strong> A distância entre os dois modos deixa de ser de minutos e passa a ser de anos.",
 
     restaTitulo: "O que resta, uma semana depois",
     resta: {
       conversaRotulo: "De uma conversa na aba",
       conversa: [
-        { ok: false, v: "O fio da conversa — se você lembrar em qual das 300 conversas foi." },
+        { ok: false, v: "O fio da conversa, se você lembrar em qual das 300 conversas foi." },
         { ok: false, v: "O resultado, colado em algum lugar: um e-mail, um documento, a área de transferência." },
         { ok: false, v: "A lembrança de que funcionou. Não de por quê." },
         { ok: false, v: "Nada que outra pessoa consiga abrir e continuar." }
@@ -295,7 +295,7 @@ const COMO_USAR_DATA = {
       agenteRotulo: "De uma sessão com acesso aos arquivos",
       agente: [
         { ok: true, v: "O script que fez o trabalho, no disco, pronto para rodar de novo." },
-        { ok: true, v: "As pastas do jeito que ficaram — e o jeito que ficaram é a decisão registrada." },
+        { ok: true, v: "As pastas do jeito que ficaram, e o jeito que ficaram é a decisão registrada." },
         { ok: true, v: "Um commit por passo, com a mensagem dizendo o que mudou e por quê." },
         { ok: true, v: "Um arquivo de convenções que a PRÓXIMA sessão vai ler antes de agir." }
       ],
@@ -305,7 +305,7 @@ const COMO_USAR_DATA = {
     mecanismos: [
       {
         titulo: "O git deixa de ser rede e vira registro",
-        texto: "Na seção 04 o versionamento aparece como proteção — e é. Mas o ganho maior é outro: com o histórico, cada coisa que o agente fez tem uma linha com data, autor e motivo. `git diff` revisa antes de aceitar, `git log` conta o que aconteceu semanas depois, e `git revert` desfaz UM passo sem derrubar os outros. A aprovação deixa de ser um clique que some da tela e vira uma decisão auditável.",
+        texto: "Na seção 04 o versionamento aparece como proteção, e é. Mas o ganho maior é outro: com o histórico, cada coisa que o agente fez tem uma linha com data, autor e motivo. `git diff` revisa antes de aceitar, `git log` conta o que aconteceu semanas depois, e `git revert` desfaz UM passo sem derrubar os outros. A aprovação deixa de ser um clique que some da tela e vira uma decisão auditável.",
         artefato: {
           tipo: "terminal",
           linhas: [
@@ -358,7 +358,7 @@ const COMO_USAR_DATA = {
       },
       {
         titulo: "E, no fim, a reprodutibilidade",
-        texto: "Uma conversa não é um método. Se o resultado vai para um artigo, um relatório ou a tese de alguém, em algum momento vai ser preciso responder quatro perguntas — e um fio de chat não responde nenhuma delas. Uma pasta versionada responde as quatro sem esforço extra, porque as respostas foram sendo escritas enquanto o trabalho acontecia. Para trabalho publicado isso não é conveniência: é requisito.",
+        texto: "Uma conversa não é um método. Se o resultado vai para um artigo, um relatório ou a tese de alguém, em algum momento vai ser preciso responder quatro perguntas, e um fio de chat não responde nenhuma delas. Uma pasta versionada responde as quatro sem esforço extra, porque as respostas foram sendo escritas enquanto o trabalho acontecia. Para trabalho publicado, isso é requisito.",
         artefato: {
           tipo: "arvore",
           linhas: [
@@ -445,7 +445,7 @@ const COMO_USAR_DATA = {
       id: "cli",
       titulo: "Nasceram no terminal",
       subtitulo: "Você digita numa janela preta. O modelo pensa na nuvem; as mãos são locais.",
-      explicacao: "São programas que você instala e roda dentro da pasta do projeto. Enxergam os arquivos daquela pasta, executam comandos e pedem sua aprovação antes de agir — o modo de operação é sempre propor, você confirmar, ela executar, e as duas partes verem o resultado.",
+      explicacao: "São programas que você instala e roda dentro da pasta do projeto. Enxergam os arquivos daquela pasta, executam comandos e pedem sua aprovação antes de agir. O modo de operação é sempre propor, você confirmar, ela executar, e as duas partes verem o resultado.",
       itens: [
         {
           nome: "Claude Code",
@@ -500,7 +500,7 @@ const COMO_USAR_DATA = {
         comando: true,
         instalaAlt: "Windows (PowerShell): irm https://antigravity.google/cli/install.ps1 | iex · O programa instalado chama-se `agy`, não `antigravity`.",
         precisa: "Conta Google. Prévia pública, sem custo.",
-        acesso: "O mesmo agente do aplicativo de janela, no terminal: lê, escreve, roda comando e navega. Tem um modo `--print` para usar dentro de script — e nesse modo é preciso passar `--add-dir`, senão ele não enxerga a sua pasta.",
+        acesso: "O mesmo agente do aplicativo de janela, no terminal: lê, escreve, roda comando e navega. Tem um modo `--print` para usar dentro de script, e nesse modo é preciso passar `--add-dir`, senão ele não enxerga a sua pasta.",
         codigoAberto: false,
         link: "https://antigravity.google/docs/cli/install/"
       },
@@ -521,14 +521,14 @@ const COMO_USAR_DATA = {
     {
       id: "apps",
       titulo: "Aplicativos que abrem o computador",
-      subtitulo: "Janela, botão e diff. O terminal está lá dentro — em graus bem diferentes.",
+      subtitulo: "Janela, botão e diff. O terminal está lá dentro, em graus bem diferentes.",
       explicacao: "Para quem não quer viver numa janela preta. Vale ler a coluna de acesso com atenção: \"ver o terminal\" e \"usar o terminal\" são coisas diferentes, e a distância entre elas é justamente o assunto desta página.",
       itens: [
         {
           nome: "Claude Desktop (aba Code)",
           empresa: "Anthropic",
           instala: "Baixar o instalador para macOS, Windows ou Linux (apt/.deb)",
-          instalaAlt: "Já traz o Claude Code embutido — não precisa instalar Node nem a CLI à parte.",
+          instalaAlt: "Já traz o Claude Code embutido, sem precisar instalar Node nem a CLI à parte.",
           precisa: "Assinatura Pro, Max, Team ou Enterprise.",
           acesso: "Acesso local completo, com terminal integrado (Ctrl+`), revisão em diff, prévia do app e modos de permissão que vão de \"aprovo cada mudança\" a \"revejo depois\".",
           codigoAberto: false,
@@ -540,7 +540,7 @@ const COMO_USAR_DATA = {
           instala: "Aplicativo para macOS e Windows, recurso \"Work with Apps\"",
           instalaAlt: "Integra com VS Code, Xcode, JetBrains, Cursor, Terminal, iTerm2, Warp e outros.",
           precisa: "Conta ChatGPT (o recurso chegou primeiro aos planos pagos no macOS).",
-          acesso: "Assimétrico, e é o detalhe mais importante deste quadro: ele LÊ a tela do terminal (as últimas ~200 linhas da janela ativa) e aplica mudanças em editores — mas não digita no terminal por você.",
+          acesso: "Assimétrico, e é o detalhe mais importante deste quadro: ele LÊ a tela do terminal (as últimas ~200 linhas da janela ativa) e aplica mudanças em editores, mas não digita no terminal por você.",
           codigoAberto: false,
           link: "https://help.openai.com/en/articles/10119604-work-with-apps-on-macos"
         },
@@ -550,7 +550,7 @@ const COMO_USAR_DATA = {
           instala: "Baixar em antigravity.google/download (macOS, Windows, Linux)",
           instalaAlt: "Prévia pública, sem custo, com cotas generosas do Gemini 3 Pro.",
           precisa: "Conta Google.",
-          acesso: "IDE onde o agente é o elemento central: editor, terminal e navegador embutido ficam à disposição dele, com um gerenciador para tocar várias tarefas em paralelo. O mesmo agente existe em versão de terminal — o Antigravity CLI, na família acima, que é a versão medida na seção 02 e ensinada na seção 05.",
+          acesso: "IDE onde o agente é o elemento central: editor, terminal e navegador embutido ficam à disposição dele, com um gerenciador para tocar várias tarefas em paralelo. O mesmo agente existe em versão de terminal: o Antigravity CLI, na família acima, que é a versão medida na seção 02 e ensinada na seção 05.",
           codigoAberto: false,
           link: "https://antigravity.google/"
         }
@@ -559,8 +559,8 @@ const COMO_USAR_DATA = {
     {
       id: "local",
       titulo: "O motor: de onde vem o modelo",
-      subtitulo: "Quem pensa, e onde. É o único lugar da página em que \"na sua máquina\" pode ser literal — mas não é sempre.",
-      explicacao: "Nas duas famílias acima o programa é local e o modelo é remoto, sem escolha. Aqui a escolha existe, e o Ollama a coloca atrás do MESMO comando: `ollama run qwen3.5:4b` carrega os pesos do seu disco e calcula na sua CPU ou GPU; `ollama run gemma4:cloud` manda a conta para o servidor da Ollama e devolve a resposta. Nos dois casos quem atende é o mesmo processo local, na porta 11434 — o sufixo do nome do modelo é a única coisa que diz onde o pensamento aconteceu. Modelo local ganha em privacidade e em não ter fatura; modelo na nuvem ganha em tamanho, e é o que torna a assinatura interessante para trabalho de verdade.",
+      subtitulo: "Quem pensa, e onde. É o único lugar da página em que \"na sua máquina\" pode ser literal, mas não é sempre.",
+      explicacao: "Nas duas famílias acima o programa é local e o modelo é remoto, sem escolha. Aqui a escolha existe, e o Ollama a coloca atrás do MESMO comando: `ollama run qwen3.5:4b` carrega os pesos do seu disco e calcula na sua CPU ou GPU; `ollama run gemma4:cloud` manda a conta para o servidor da Ollama e devolve a resposta. Nos dois casos quem atende é o mesmo processo local, na porta 11434. O sufixo do nome do modelo é a única coisa que diz onde o pensamento aconteceu. Modelo local ganha em privacidade e em não ter fatura; modelo na nuvem ganha em tamanho, e é o que torna a assinatura interessante para trabalho de verdade.",
       itens: [
         {
           nome: "Ollama",
@@ -569,7 +569,7 @@ const COMO_USAR_DATA = {
           instala: "curl -fsSL https://ollama.com/install.sh | sh",
           comando: true,
           instalaAlt: "macOS e Windows têm instalador próprio em ollama.com/download",
-          precisa: "Para rodar local: 8 GB de RAM dão conta de um modelo de 3–4B; 16 GB abrem os de 7–9B; GPU acelera, mas não é obrigatória. Para os modelos de nuvem, nenhum requisito de máquina — só a conta.",
+          precisa: "Para rodar local: 8 GB de RAM dão conta de um modelo de 3–4B; 16 GB abrem os de 7–9B; GPU acelera, mas não é obrigatória. Para os modelos de nuvem, nenhum requisito de máquina, só a conta.",
           acesso: "Serve os dois mundos na mesma API local (127.0.0.1:11434), que todos os programas desta página sabem consumir. E `ollama launch` conecta essa API a elas sem você editar um arquivo de configuração.",
           codigoAberto: true,
           link: "https://ollama.com/download",
@@ -614,16 +614,16 @@ const COMO_USAR_DATA = {
      ───────────────────────────────────────────────────────────── */
   ponte: {
     titulo: "A ponte: um comando que liga as duas colunas",
-    lede: "Até aqui são dois problemas separados: escolher o <strong>programa que dá as mãos</strong> à IA — o que a indústria chama de <em>harness</em> — e escolher o <strong>motor</strong>, que é o modelo que pensa. Ligar um no outro sempre foi a parte chata — variável de ambiente, URL de API, arquivo de configuração por ferramenta. O `ollama launch` (a partir da versão 0.15) faz isso sozinho: instala a harness se ela não estiver instalada, aponta para o servidor local do Ollama, escolhe o modelo e abre o programa.",
+    lede: "Até aqui são dois problemas separados: escolher o <strong>programa que dá as mãos</strong> à IA — o que a indústria chama de <em>harness</em> — e escolher o <strong>motor</strong>, que é o modelo que pensa. Ligar um no outro sempre foi a parte chata: variável de ambiente, URL de API, arquivo de configuração por ferramenta. O `ollama launch` (a partir da versão 0.15) faz isso sozinho: instala a harness se ela não estiver instalada, aponta para o servidor local do Ollama, escolhe o modelo e abre o programa.",
 
     comandos: [
       {
         cmd: "ollama launch",
-        oQueFaz: "Sem argumento, abre o menu: lista as integrações que a sua versão conhece, marca as que já estão instaladas e deixa escolher o modelo. É por aqui que se começa — e é a lista real, não a tabela abaixo, que vale para a sua máquina."
+        oQueFaz: "Sem argumento, abre o menu: lista as integrações que a sua versão conhece, marca as que já estão instaladas e deixa escolher o modelo. É por aqui que se começa. A lista real, e não a tabela abaixo, é a que vale para a sua máquina."
       },
       {
         cmd: "ollama launch claude",
-        oQueFaz: "Abre o Claude Code falando com o Ollama. Se o Claude Code não estiver instalado, ele se oferece para instalar. Por baixo, o que muda é `ANTHROPIC_BASE_URL=http://localhost:11434` — a harness pensa que está falando com a Anthropic e está falando com o processo local."
+        oQueFaz: "Abre o Claude Code falando com o Ollama. Se o Claude Code não estiver instalado, ele se oferece para instalar. Por baixo, o que muda é `ANTHROPIC_BASE_URL=http://localhost:11434`. O programa pensa que está falando com a Anthropic e está falando com o processo local."
       },
       {
         cmd: "ollama launch claude --model gpt-oss:120b-cloud",
@@ -644,7 +644,7 @@ const COMO_USAR_DATA = {
     ],
 
     integracoesTitulo: "As integrações que o `ollama launch` conhece",
-    integracoesNota: "Lista do `ollama launch --help`. Ela cresce a cada versão — rode o comando sem argumento para ver a da sua.",
+    integracoesNota: "Lista do `ollama launch --help`. Ela cresce a cada versão. Rode o comando sem argumento para ver a da sua.",
     integracoes: [
       { id: "claude", nome: "Claude Code", nota: "Anthropic. Instala sozinho se faltar." },
       { id: "chatgpt", nome: "ChatGPT", nota: "Aliases: codex-app, codex-desktop, codex-gui." },
@@ -667,7 +667,7 @@ const COMO_USAR_DATA = {
     ],
 
     planosTitulo: "O que a assinatura Cloud dá",
-    planosNota: "Preços da página oficial de planos, conferidos em 6 de setembro de 2026. Os créditos não acumulam de um mês para o outro — confira antes de fechar o orçamento do laboratório.",
+    planosNota: "Preços da página oficial de planos, conferidos em 6 de setembro de 2026. Os créditos não acumulam de um mês para o outro, então confira antes de fechar o orçamento do laboratório.",
     planos: [
       {
         nome: "Free",
@@ -689,9 +689,9 @@ const COMO_USAR_DATA = {
         detalhe: "10 requisições simultâneas e acesso antecipado aos modelos novos."
       }
     ],
-    planosExtra: "Acima disso há Team (US$ 500/mês, US$ 1.000 de crédito compartilhado, faturamento centralizado) e Enterprise sob consulta, com controle de acesso a modelos e teto de gasto — que é a conversa que um laboratório com várias pessoas acaba tendo.",
+    planosExtra: "Acima disso há Team (US$ 500/mês, US$ 1.000 de crédito compartilhado, faturamento centralizado) e Enterprise sob consulta, com controle de acesso a modelos e teto de gasto, que é a conversa que um laboratório com várias pessoas acaba tendo.",
 
-    fecho: "É aqui que a tese da página fecha em uma frase: <strong>o programa e o modelo são escolhas independentes</strong>. Você pode trocar de agente sem trocar de assinatura, e trocar de modelo sem reaprender o agente. O que não muda em nenhuma das combinações é o que dá potência a todas elas — a IA continua enxergando os seus arquivos e executando comandos."
+    fecho: "A tese da página fecha em uma frase: <strong>o programa e o modelo são escolhas independentes</strong>. Você pode trocar de agente sem trocar de assinatura, e trocar de modelo sem reaprender o agente. O que não muda em nenhuma das combinações é o que dá potência a todas elas: a IA continua enxergando os seus arquivos e executando comandos."
   },
 
   /* ─────────────────────────────────────────────────────────────
@@ -708,19 +708,19 @@ const COMO_USAR_DATA = {
       nomeCurto: "Ollama Cloud",
       icone: "terminal",
       legenda: "Uma assinatura, qualquer programa",
-      resumo: "Do zero a um modelo grande dirigindo o Claude Code, o OpenCode ou o Pi — sem editar um arquivo de configuração.",
+      resumo: "Do zero a um modelo grande dirigindo o Claude Code, o OpenCode ou o Pi, sem editar um arquivo de configuração.",
       minutos: 9,
 
       /* O tutorial declara o que você terá no fim. Sem isto, a pessoa passa
          oito passos sem saber para onde está indo. */
-      objetivo: "No fim você tem um modelo grande demais para a sua máquina rodando pela assinatura da Ollama, dirigindo a ferramenta que você preferir — e sabe como trocar para um modelo local quando o dado não puder sair daí.",
+      objetivo: "No fim você tem um modelo grande demais para a sua máquina rodando pela assinatura da Ollama, dirigindo a ferramenta que você preferir. E sabe como trocar para um modelo local quando o dado não puder sair daí.",
 
       passos: [
         {
           ato: "Instalar",
           janela: "dialogo",
           titulo: "Abrir o terminal",
-          explicacao: "É a janela onde você digita comandos em vez de clicar. No Ubuntu, Ctrl+Alt+T. No macOS, Cmd+Espaço e \"Terminal\". No Windows, o PowerShell serve — mas para acompanhar este tutorial letra por letra vale ativar o WSL, que é um Linux dentro do Windows.",
+          explicacao: "É a janela onde você digita comandos em vez de clicar. No Ubuntu, Ctrl+Alt+T. No macOS, Cmd+Espaço e \"Terminal\". No Windows, o PowerShell serve, mas para acompanhar este tutorial letra por letra vale ativar o WSL, que é um Linux dentro do Windows.",
           dialogo: {
             titulo: "Onde fica o terminal",
             linhas: [
@@ -735,7 +735,7 @@ const COMO_USAR_DATA = {
           ato: "Instalar",
           janela: "terminal",
           titulo: "Instalar o Ollama",
-          explicacao: "Uma linha só. O `curl` baixa o script oficial e o `sh` executa. Antes de rodar um `curl | sh` vindo de qualquer lugar, confira que o endereço é mesmo o do site oficial — esse hábito vale para o resto da sua vida no terminal.",
+          explicacao: "Uma linha só. O `curl` baixa o script oficial e o `sh` executa. Antes de rodar um `curl | sh` vindo de qualquer lugar, confira que o endereço é mesmo o do site oficial. Esse hábito vale para o resto da sua vida no terminal.",
           cmd: "curl -fsSL https://ollama.com/install.sh | sh",
           saida: [
             { t: "out", v: ">>> Installing ollama to /usr/local" },
@@ -766,7 +766,7 @@ const COMO_USAR_DATA = {
           ato: "Ligar na conta",
           janela: "terminal",
           titulo: "Rodar um modelo que não caberia aqui",
-          explicacao: "O sufixo é tudo: `-cloud` (ou `:cloud`, nos modelos sem variante de tamanho) manda a conta para o servidor da Ollama. Repare no que NÃO acontece — não tem barra de download, porque não há nada para baixar.",
+          explicacao: "O sufixo é tudo: `-cloud` (ou `:cloud`, nos modelos sem variante de tamanho) manda a conta para o servidor da Ollama. Repare no que NÃO acontece: não tem barra de download, porque não há nada para baixar.",
           cmd: "ollama run gpt-oss:120b-cloud \"Explique em duas frases o que é o Cerrado.\"",
           saida: [
             { t: "out", v: "O Cerrado é o segundo maior bioma da América do Sul, ocupando cerca de" },
@@ -774,7 +774,7 @@ const COMO_USAR_DATA = {
             { t: "out", v: "a solos ácidos e ao fogo. É considerado um hotspot de biodiversidade e" },
             { t: "out", v: "abriga as nascentes de três das maiores bacias hidrográficas do país." }
           ],
-          nota: "120 bilhões de parâmetros responderam em segundos numa máquina que não teria memória para carregá-los. O comando é local, o processo é local, a porta é local — o pensamento aconteceu num data center."
+          nota: "120 bilhões de parâmetros responderam em segundos numa máquina que não teria memória para carregá-los. O comando é local, o processo é local, a porta é local. O pensamento aconteceu num data center."
         },
         {
           ato: "Usar",
@@ -795,7 +795,7 @@ const COMO_USAR_DATA = {
             { t: "out", v: "  copilot     Copilot CLI        GitHub's AI coding agent for the terminal" },
             { t: "out", v: "  ...         (18 no total)" }
           ],
-          nota: "A lista completa está no catálogo, na seção 06. Ela cresce a cada versão do Ollama — por isso vale rodar o comando e olhar a sua, em vez de confiar em qualquer tabela publicada (esta inclusive)."
+          nota: "A lista completa está no catálogo, na seção 06. Ela cresce a cada versão do Ollama, então vale rodar o comando e olhar a sua, em vez de confiar em qualquer tabela publicada (esta inclusive)."
         },
         {
           ato: "Usar",
@@ -814,7 +814,7 @@ const COMO_USAR_DATA = {
             { t: "out", v: "" },
             { t: "out", v: "> " }
           ],
-          nota: "`ANTHROPIC_BASE_URL=http://localhost:11434`: o programa acha que está falando com a Anthropic e está falando com o processo do Ollama, na sua máquina, que por sua vez fala com o data center. Endereço local, modelo remoto — as duas coisas ao mesmo tempo, no mesmo comando."
+          nota: "`ANTHROPIC_BASE_URL=http://localhost:11434`: o programa acha que está falando com a Anthropic e está falando com o processo do Ollama, na sua máquina, que por sua vez fala com o data center. Endereço local, modelo remoto, as duas coisas ao mesmo tempo e no mesmo comando."
         },
         {
           ato: "Usar",
@@ -836,7 +836,7 @@ const COMO_USAR_DATA = {
           ato: "Quando o dado não pode sair",
           janela: "terminal",
           titulo: "E quando o dado não pode sair",
-          explicacao: "O mesmo programa faz o contrário: sem sufixo de nuvem, os pesos vêm para o seu disco e a conta roda na sua máquina. É a opção para prontuário, entrevista e qualquer dado sob termo de consentimento — e a razão pela qual esta família existe na página.",
+          explicacao: "O mesmo programa faz o contrário: sem sufixo de nuvem, os pesos vêm para o seu disco e a conta roda na sua máquina. É a opção para prontuário, entrevista e qualquer dado sob termo de consentimento, e a razão pela qual esta família existe na página.",
           cmd: "ollama pull qwen3.5:4b && ollama run qwen3.5:4b \"Resuma este trecho de entrevista.\"",
           saida: [
             { t: "out", v: "pulling manifest" },
@@ -845,10 +845,10 @@ const COMO_USAR_DATA = {
             { t: "out", v: "" },
             { t: "out", v: "[resposta gerada localmente]" }
           ],
-          nota: "Desligue o wi-fi e rode de novo: este continua funcionando, o `:cloud` não. É o teste de uma linha que separa as duas coisas — e a única prova que vale antes de confiar um dado sensível a qualquer ferramenta desta página."
+          nota: "Desligue o wi-fi e rode de novo: este continua funcionando, o `:cloud` não. É o teste de uma linha que separa as duas coisas, e a única prova que vale antes de confiar um dado sensível a qualquer ferramenta desta página."
         }
       ],
-      fecho: "Duas conclusões, e elas não se anulam. A assinatura Cloud resolve o problema de potência: modelos grandes demais para a sua máquina, dirigindo a harness que você preferir, por um comando só. O modelo local resolve o problema de sigilo: mais fraco, sem fatura, e nada sai do disco. A escolha entre os dois é por tarefa, não de uma vez — e dá para alternar no meio do dia trocando o sufixo do modelo."
+      fecho: "Duas conclusões, e elas não se anulam. A assinatura Cloud resolve o problema de potência: modelos grandes demais para a sua máquina, dirigindo a harness que você preferir, por um comando só. O modelo local resolve o problema de sigilo: mais fraco, sem fatura, e nada sai do disco. A escolha entre os dois é por tarefa, não de uma vez, e dá para alternar no meio do dia trocando o sufixo do modelo."
     },
     {
       id: "antigravity",
@@ -856,13 +856,13 @@ const COMO_USAR_DATA = {
       nomeCurto: "Antigravity",
       icone: "janela",
       legenda: "O agente do Google, no seu terminal",
-      resumo: "Da instalação à primeira tarefa — e à armadilha que a medição desta página encontrou.",
+      resumo: "Da instalação à primeira tarefa, e à armadilha que a medição desta página encontrou.",
       minutos: 8,
 
       /* O tutorial declara o que você terá no fim. Sem isto, a pessoa passa
          oito passos sem saber para onde está indo — foi a crítica que
          motivou esta reescrita. */
-      objetivo: "No fim você tem um agente do Google rodando no seu terminal, olhando a sua pasta. E sabe a diferença entre ele enxergar os seus arquivos e não enxergar — que é a única coisa que separa os dois lados desta página inteira.",
+      objetivo: "No fim você tem um agente do Google rodando no seu terminal, olhando a sua pasta. E sabe a diferença entre ele enxergar os seus arquivos e não enxergar, que é a única coisa que separa os dois lados desta página inteira.",
 
       /* É o CLI, não o aplicativo de janela. Foi o CLI (`agy`) que a medição
          da seção 02 usou, e é ele que tem a mesma forma do tutorial do
@@ -890,7 +890,7 @@ const COMO_USAR_DATA = {
           ato: "Instalar",
           janela: "terminal",
           titulo: "Instalar",
-          explicacao: "Uma linha, como o Ollama. O instalador detecta o seu sistema e deixa um programa chamado `agy` — não `antigravity`.",
+          explicacao: "Uma linha, como o Ollama. O instalador detecta o seu sistema e deixa um programa chamado `agy`, e não `antigravity`.",
           cmd: "curl -fsSL https://antigravity.google/cli/install.sh | bash",
           saida: [
             { t: "out", v: "==> Detecting platform… linux-x64" },
@@ -899,13 +899,13 @@ const COMO_USAR_DATA = {
             { t: "out", v: "" },
             { t: "out", v: "Run 'agy' to get started." }
           ],
-          nota: "No Windows a linha é outra: `irm https://antigravity.google/cli/install.ps1 | iex`, no PowerShell. Se o terminal disser que não achou o `agy` depois de instalar, é a pasta `~/.local/bin` que não está no PATH — o próprio instalador imprime a linha que resolve."
+          nota: "No Windows a linha é outra: `irm https://antigravity.google/cli/install.ps1 | iex`, no PowerShell. Se o terminal disser que não achou o `agy` depois de instalar, é a pasta `~/.local/bin` que não está no PATH. O próprio instalador imprime a linha que resolve."
         },
         {
           ato: "Primeiro arranque",
           janela: "terminal",
           titulo: "Abrir pela primeira vez",
-          explicacao: "Sem argumento nenhum, o `agy` abre uma tela dentro do terminal. Na primeira vez ele pergunta o esquema de cores e se prefere tela cheia ou embutida — pode escolher qualquer coisa, dá para trocar depois.",
+          explicacao: "Sem argumento nenhum, o `agy` abre uma tela dentro do terminal. Na primeira vez ele pergunta o esquema de cores e se prefere tela cheia ou embutida. Pode escolher qualquer coisa, dá para trocar depois.",
           cmd: "agy",
           saida: [
             { t: "out", v: "  Antigravity CLI v1.2.0" },
@@ -913,7 +913,7 @@ const COMO_USAR_DATA = {
             { t: "out", v: "  Esquema de cores:  ● Dark   ○ Solarized   ○ Solarized Light   ○ Terminal" },
             { t: "out", v: "  Modo de tela:      ● Tela cheia   ○ Embutido" }
           ],
-          nota: "Repare que ele abriu **na pasta em que você estava**. Isso não é detalhe de conforto: é o que ele vai poder enxergar."
+          nota: "Repare que ele abriu **na pasta em que você estava**. Isso decide o que ele vai poder enxergar."
         },
         {
           ato: "Primeiro arranque",
@@ -925,7 +925,7 @@ const COMO_USAR_DATA = {
             linhas: [
               "O navegador abriu em accounts.google.com",
               "Escolha a conta e autorize o Antigravity CLI",
-              "Volte ao terminal — ele já está autenticado"
+              "Volte ao terminal: ele já está autenticado"
             ],
             botao: "Autorizei no navegador"
           },
@@ -935,7 +935,7 @@ const COMO_USAR_DATA = {
           ato: "Primeiro arranque",
           janela: "dialogo",
           titulo: "Autorizar a pasta",
-          explicacao: "Antes de qualquer coisa ele pergunta se pode ler a pasta em que foi aberto. É a pergunta mais importante do tutorial inteiro — e a resposta define todo o resto.",
+          explicacao: "Antes de qualquer coisa ele pergunta se pode ler a pasta em que foi aberto. É a pergunta mais importante do tutorial inteiro, e a resposta define todo o resto.",
           dialogo: {
             titulo: "Confiar nesta pasta?",
             linhas: [
@@ -945,13 +945,13 @@ const COMO_USAR_DATA = {
             ],
             botao: "Confiar nesta pasta"
           },
-          nota: "Abra no projeto, e só nele. Abrir na raiz do disco ou na sua pasta pessoal é dar acesso a chave de SSH, a e-mail e a tudo mais — ver a seção 04."
+          nota: "Abra no projeto, e só nele. Abrir na raiz do disco ou na sua pasta pessoal é dar acesso a chave de SSH, a e-mail e a tudo mais. Ver a seção 04."
         },
         {
           ato: "Usar",
           janela: "terminal",
           titulo: "A primeira tarefa, em português",
-          explicacao: "Você escreve o que quer. Ele olha a pasta antes de propor qualquer coisa — e é isso que o chat do navegador não consegue fazer.",
+          explicacao: "Você escreve o que quer. Ele olha a pasta antes de propor qualquer coisa, que é o que o chat do navegador não consegue fazer.",
           prompt: "Quantas fotos tem na pasta campo-2026 e de quantos dias diferentes elas são?",
           cmd: "ls campo-2026 | wc -l",
           saida: [
@@ -965,14 +965,14 @@ const COMO_USAR_DATA = {
         {
           ato: "Usar",
           janela: "terminal",
-          titulo: "O modo sem tela — e a armadilha dele",
-          explicacao: "Para rodar o agente dentro de um script existe o modo `--print`: ele responde e sai, sem abrir tela. **Neste modo ele não herda a pasta em que você está** — foi assim que a medição desta página descobriu, sem querer, a demonstração mais limpa do argumento todo.",
+          titulo: "O modo sem tela, e a armadilha dele",
+          explicacao: "Para rodar o agente dentro de um script existe o modo `--print`: ele responde e sai, sem abrir tela. **Neste modo ele não herda a pasta em que você está.** Foi assim que a medição desta página descobriu, sem querer, a demonstração mais limpa do argumento todo.",
           cmd: "agy --print \"Rode: pwd\"",
           saida: [
             { t: "out", v: "/home/voce/.antigravity/scratch" },
             { t: "nota", v: "Você está em ~/laboratorio-teste. Ele não está." }
           ],
-          nota: "Sem a pasta, os mesmos cinco pedidos da seção 02 deram **zero comandos** e respostas indistinguíveis das do chat de navegador. Mesmo programa, mesmo modelo, mesma pergunta — só muda se ele consegue ver o disco."
+          nota: "Sem a pasta, os mesmos cinco pedidos da seção 02 deram **zero comandos** e respostas indistinguíveis das do chat de navegador. Mesmo programa, mesmo modelo, mesma pergunta. Só muda se ele consegue ver o disco."
         },
         {
           ato: "Usar",
@@ -984,10 +984,10 @@ const COMO_USAR_DATA = {
             { t: "out", v: "/home/voce/laboratorio-teste" },
             { t: "nota", v: "Agora sim. A partir daqui ele enxerga os seus arquivos." }
           ],
-          nota: "Guarde este par de saídas: é a aba inteira em duas linhas. A diferença entre \"IA no navegador\" e \"IA na sua máquina\" não é o modelo nem a inteligência — é **se ela alcança o seu disco**, e isso liga e desliga numa opção de linha de comando."
+          nota: "Guarde este par de saídas: é a aba inteira em duas linhas. A diferença entre \"IA no navegador\" e \"IA na sua máquina\" não é o modelo nem a inteligência: é **se ela alcança o seu disco**, e isso liga e desliga numa opção de linha de comando."
         }
       ],
-      fecho: "Você tem o agente instalado, autenticado e apontado para uma pasta. O que fazer com ele é a seção 02 desta página — e o que NÃO deixar ele fazer é a seção 04. Se quiser dirigir este mesmo agente com outro modelo, ou usar um modelo da Ollama dentro de outra harness, o quadro do `ollama launch` no catálogo mostra como."
+      fecho: "Você tem o agente instalado, autenticado e apontado para uma pasta. O que fazer com ele é a seção 02 desta página, e o que NÃO deixar ele fazer é a seção 04. Se quiser dirigir este mesmo agente com outro modelo, ou usar um modelo da Ollama dentro de outro programa, o quadro do `ollama launch` no catálogo mostra como."
     }
   ],
 
@@ -1000,10 +1000,10 @@ const COMO_USAR_DATA = {
   seguranca: [
     {
       titulo: "Confira o resultado, não o relatório",
-      texto: "É a regra mais cara de aprender e a mais medida desta página. O programa terminou, escreveu \"pronto, 0 erros\", e o disco discorda. Abra a pasta. Conte os arquivos. Abra um deles. O relatório é a opinião dele sobre o que fez; a pasta é o que aconteceu.",
+      texto: "É a regra mais cara de aprender e a mais medida desta página. O programa terminou, escreveu \"pronto, 0 erros\", e o disco discorda. Abra a pasta, conte os arquivos, abra um deles. O relatório é a opinião dele sobre o que fez; a pasta é o que aconteceu.",
       saibaMais: {
         titulo: "O caso em que isso foi medido, e por que ele não é um azar",
-        corpo: "Na tarefa das planilhas da seção 02, o programa entregou <strong>40 arquivos e a frase “com 0 erros”</strong> — e tinha perdido 57 abas. A conferência que ele mesmo fez foi contar quantos CSV existiam: 40. Passa.<br><br>Não foi uma execução azarada. A mesma frase foi repetida cinco vezes em cada um dos dois programas: <strong>nove execuções erradas em nove</strong> entre as que chegaram a executar.<br><br>Vale também um aviso menos confortável: duas execuções idênticas podem terminar diferente. Numa delas o programa <em>travou no meio</em> ao tentar abrir uma foto como se fosse texto — 97 segundos gastos e a tarefa pela metade. Em outra, ele descreveu numa tabela 97 abas cujas linhas somam 101. Os arquivos no disco estavam certos; a explicação, não.<br><br>Por isso a regra não é “desconfie deste programa”. É: <strong>o relatório e o disco são duas coisas, e só uma delas é o resultado.</strong>"
+        corpo: "Na tarefa das planilhas da seção 02, o programa entregou <strong>40 arquivos e a frase “com 0 erros”</strong>, e tinha perdido 57 abas. A conferência que ele mesmo fez foi contar quantos CSV existiam: 40. Passa.<br><br>Não foi uma execução azarada. A mesma frase foi repetida cinco vezes em cada um dos dois programas: <strong>nove execuções erradas em nove</strong> entre as que chegaram a executar.<br><br>Vale também um aviso menos confortável: duas execuções idênticas podem terminar diferente. Numa delas o programa <em>travou no meio</em> ao tentar abrir uma foto como se fosse texto, gastando 97 segundos e deixando a tarefa pela metade. Em outra, ele descreveu numa tabela 97 abas cujas linhas somam 101. Os arquivos no disco estavam certos; a explicação, não.<br><br>Por isso a regra não é “desconfie deste programa”. É: <strong>o relatório e o disco são duas coisas, e só uma delas é o resultado.</strong>"
       }
     },
     {
@@ -1011,7 +1011,7 @@ const COMO_USAR_DATA = {
       texto: "Todos os agentes desta página pedem permissão antes de rodar comando ou alterar arquivo. A tentação de desligar isso (\"aceitar tudo\") aparece na segunda hora de uso. Desligar transforma um assistente que erra e mostra num assistente que erra e some com a evidência."
     },
     {
-      titulo: "Diga a pasta — e confira qual ele abriu",
+      titulo: "Diga a pasta, e confira qual ele abriu",
       texto: "O programa enxerga a pasta em que foi aberto. Abrir na raiz do disco ou na sua pasta pessoal é dar acesso a chaves, a e-mail e a tudo mais. Abra no projeto, e só nele. E não confie na sua intenção: pergunte a ele em que pasta está, antes do primeiro pedido.",
       saibaMais: {
         titulo: "O que aconteceu quando ninguém disse a pasta",
@@ -1020,7 +1020,7 @@ const COMO_USAR_DATA = {
     },
     {
       titulo: "Git (ou uma cópia) antes de soltar",
-      texto: "Com o histórico versionado, todo estrago tem `git diff` e tem volta. Sem ele, um `mv` bem-intencionado em 1.240 arquivos é irreversível. Se o material não é código, uma cópia da pasta resolve. Vale lembrar que aqui o versionamento é só a rede de segurança — a seção 03 mostra o que ele faz quando nada dá errado."
+      texto: "Com o histórico versionado, todo estrago tem `git diff` e tem volta. Sem ele, um `mv` bem-intencionado em 1.240 arquivos é irreversível. Se o material não é código, uma cópia da pasta resolve. Vale lembrar que aqui o versionamento é só a rede de segurança. A seção 03 mostra o que ele faz quando nada dá errado."
     },
     {
       titulo: "Comando destrutivo merece leitura",
@@ -1028,11 +1028,11 @@ const COMO_USAR_DATA = {
     },
     {
       titulo: "O que você cola no terminal é seu",
-      texto: "Vale tanto para script que veio do chat quanto para `curl | sh` copiado de um blog. Se a origem não é a página oficial do projeto, não rode. O agente com terminal reduz o vaivém de copiar e colar justamente porque testa antes — mas a responsabilidade final continua na cadeira."
+      texto: "Vale tanto para script que veio do chat quanto para `curl | sh` copiado de um blog. Se a origem não é a página oficial do projeto, não rode. O agente com terminal reduz o vaivém de copiar e colar porque testa antes, mas a responsabilidade final continua na cadeira."
     },
     {
-      titulo: "Dado sensível pede modelo local — e `:cloud` não é local",
-      texto: "Prontuário, entrevista, dado de terceiro sob termo de consentimento: aqui a pergunta não é qual modelo é melhor, e sim qual não manda nada para fora. Cuidado com a armadilha de nome: `ollama run qwen3.5:4b` roda na sua máquina, `ollama run gemma4:cloud` roda no servidor da Ollama. É o mesmo programa, o mesmo comando e o mesmo endereço `localhost` — só o sufixo do modelo separa uma coisa da outra. Em dado sensível, confira o sufixo antes de confiar."
+      titulo: "Dado sensível pede modelo local, e `:cloud` não é local",
+      texto: "Prontuário, entrevista, dado de terceiro sob termo de consentimento: aqui a pergunta não é qual modelo é melhor, e sim qual não manda nada para fora. Cuidado com a armadilha de nome: `ollama run qwen3.5:4b` roda na sua máquina, `ollama run gemma4:cloud` roda no servidor da Ollama. É o mesmo programa, o mesmo comando e o mesmo endereço `localhost`. Só o sufixo do modelo separa uma coisa da outra. Em dado sensível, confira o sufixo antes de confiar."
     }
   ],
 
@@ -1051,7 +1051,7 @@ const COMO_USAR_DATA = {
     passos: [
       {
         titulo: "Uma pasta de teste com armadilhas de verdade",
-        texto: "Um programa monta sempre a mesma pasta: 1.240 fotos JPEG reais, 340 arquivos com nomes bagunçados, 40 planilhas somando 97 abas, 84 arquivos idênticos escondidos entre outros. Cada armadilha é um erro que acontece de verdade em laboratório — e nenhuma delas aparece na tela como erro."
+        texto: "Um programa monta sempre a mesma pasta: 1.240 fotos JPEG reais, 340 arquivos com nomes bagunçados, 40 planilhas somando 97 abas, 84 arquivos idênticos escondidos entre outros. Cada armadilha é um erro que acontece de verdade em laboratório, e nenhuma delas aparece na tela como erro."
       },
       {
         titulo: "O placar é o disco, não a conversa",
@@ -1076,7 +1076,7 @@ const COMO_USAR_DATA = {
       },
       {
         item: "Linux de verdade",
-        porque: "tudo rodou em Windows. Enunciados que citavam Ubuntu mediram um desencontro, não o comportamento do programa — e é justamente esse desencontro que virou o achado da seção 01."
+        porque: "tudo rodou em Windows. Enunciados que citavam Ubuntu mediram um desencontro, não o comportamento do programa. Esse desencontro virou o achado da seção 01."
       },
       {
         item: "Com que frequência ele falha",
@@ -1086,7 +1086,7 @@ const COMO_USAR_DATA = {
 
     saibaMais: {
       titulo: "Três conclusões desta medição estavam erradas. Como elas foram descobertas",
-      corpo: "Medir IA é fácil de errar, e a maneira mais comum de errar é atribuir ao programa um comportamento que na verdade foi o teste que causou. Aconteceu três vezes aqui, e as três foram corrigidas antes de qualquer número chegar a esta página.<br><br><strong>1. “A palavra Ubuntu desliga o programa.”</strong> Errado. Nomear um sistema não desliga nada — nomear o sistema <em>errado</em> desliga. A máquina era Windows e o enunciado dizia Ubuntu.<br><br><strong>2. “A trava de isolamento não distorce nada.”</strong> Errado, e este foi o pior: a trava <em>escondia o Python</em> de um dos programas. O outro enxergava as bibliotecas instaladas e parecia mais rápido. Não era programa melhor; era ambiente diferente — e eu tinha creditado o mérito ao programa.<br><br><strong>3. “Os dois programas saem da pasta e varrem o disco todo.”</strong> Errado. Era o enunciado, que falava de um HD de 500 GB inexistente. Corrigido o texto, os dois ficaram dentro da pasta.<br><br>O fio comum das três é a mesma frase da seção 01: <strong>o programa age sobre o que consegue verificar que existe.</strong> Pedido que descreve o que não está na máquina vira resposta de conhecimento; ambiente que esconde uma ferramenta vira “a máquina não tem”.<br><br>O cenário de teste também precisou de conserto. Numa versão anterior as fotos tinham 91 bytes cada, e um programa concluiu — corretamente — que eram arquivos quebrados e recomendou apagar as 1.240. O erro era do teste. Com fotos JPEG de verdade, nenhuma das vinte execuções seguintes chamou o dado de sintético.<br><br>Tudo isso está registrado por escrito em <code>automation/capturas/</code>, inclusive nos arquivos que ficaram errados: eles têm um bloco de retificação no topo em vez de terem sido reescritos."
+      corpo: "Medir IA é fácil de errar, e a maneira mais comum de errar é atribuir ao programa um comportamento que na verdade foi o teste que causou. Aconteceu três vezes aqui, e as três foram corrigidas antes de qualquer número chegar a esta página.<br><br><strong>1. “A palavra Ubuntu desliga o programa.”</strong> Errado. Nomear um sistema não desliga nada. Nomear o sistema <em>errado</em> desliga. A máquina era Windows e o enunciado dizia Ubuntu.<br><br><strong>2. “A trava de isolamento não distorce nada.”</strong> Errado, e este foi o pior: a trava <em>escondia o Python</em> de um dos programas. O outro enxergava as bibliotecas instaladas e parecia mais rápido. Não era programa melhor; era ambiente diferente, e eu tinha creditado o mérito ao programa.<br><br><strong>3. “Os dois programas saem da pasta e varrem o disco todo.”</strong> Errado. Era o enunciado, que falava de um HD de 500 GB inexistente. Corrigido o texto, os dois ficaram dentro da pasta.<br><br>O fio comum das três é a mesma frase da seção 01: <strong>o programa age sobre o que consegue verificar que existe.</strong> Pedido que descreve o que não está na máquina vira resposta de conhecimento; ambiente que esconde uma ferramenta vira “a máquina não tem”.<br><br>O cenário de teste também precisou de conserto. Numa versão anterior as fotos tinham 91 bytes cada, e um programa concluiu, corretamente, que eram arquivos quebrados e recomendou apagar as 1.240. O erro era do teste. Com fotos JPEG de verdade, nenhuma das vinte execuções seguintes chamou o dado de sintético.<br><br>Tudo isso está registrado por escrito em <code>automation/capturas/</code>, inclusive nos arquivos que ficaram errados: eles têm um bloco de retificação no topo em vez de terem sido reescritos."
     }
   }
 };
