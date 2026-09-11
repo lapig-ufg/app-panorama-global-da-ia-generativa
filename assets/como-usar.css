@@ -1269,22 +1269,56 @@
 .cn-fonte a { color: var(--accent); }
 
 /* ─── o balanço: a página medindo a si mesma ─── */
-/* ─── O DUELO: as duas telas lado a lado ───
-   Um contador só toca as duas colunas. Lado a lado é o formato: o argumento
-   da seção é que o MESMO pedido produz coisas diferentes nos dois lugares, e
-   isso só se lê quando as duas telas estão no mesmo campo de visão. No
-   celular elas empilham — navegador em cima, porque é o lugar que o leitor
-   conhece, e o de baixo é a novidade. */
+/* ─── O EXEMPLO EM TRÊS ETAPAS ───
+   A ordem é o conteúdo: pergunta → o que cada um devolveu → por quê. Cada
+   etapa aparece com um clique, e a anterior fica. A versão anterior abria com
+   as duas transcrições tocando ao mesmo tempo, e quem passava os olhos saía
+   sem saber o que tinha acontecido — o resultado só chegava no fim. */
+.cn-exemplo {
+  display: grid;
+  gap: 20px;
+}
+
+.cn-et {
+  padding: 20px 22px 18px;
+  background: var(--white);
+  border: 1px solid var(--hair);
+  border-radius: 14px;
+  box-shadow: var(--shadow-xs);
+}
+
+.cn-et-rot {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  margin-bottom: 10px;
+}
+
+/* ── etapa 1: a pergunta ── */
+.cn-et-1 { background: var(--paper); }
+
+.cn-pergunta {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.022em;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 13px;
+  max-width: 28ch;
+}
+
 .cn-emjogo {
-  margin: 0 0 16px;
   padding: 12px 15px;
-  background: var(--paper);
+  background: var(--white);
   border: 1px solid var(--hair);
   border-radius: 10px;
-  font-size: 13px;
+  font-size: 13.5px;
   line-height: 1.6;
   color: var(--ink-light);
-  max-width: 82ch;
+  max-width: 78ch;
 }
 
 .cn-emjogo-rot {
@@ -1297,6 +1331,262 @@
   margin-bottom: 4px;
 }
 
+/* O aviso de eixo só existe no exemplo da série, onde as duas colunas não são
+   navegador × instalado. Ele é obrigatório ali: sem o aviso, a página estaria
+   deixando o leitor concluir a coisa errada de um quadro honesto. */
+.cn-aviso-eixo {
+  margin-top: 11px;
+  padding: 11px 14px;
+  border-left: 3px solid #5B53A8;
+  background: rgba(91, 83, 168, 0.06);
+  border-radius: 0 8px 8px 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink-light);
+  max-width: 78ch;
+}
+
+/* ── etapa 2: o que cada um devolveu ── */
+.cn-res-par {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.cn-res {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 15px 16px 14px;
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  background: var(--paper);
+}
+
+.cn-res.is-dir {
+  background: linear-gradient(to bottom, var(--white) 55%, rgba(10, 115, 89, 0.05));
+  border-color: rgba(10, 115, 89, 0.3);
+}
+
+.cn-res-head { margin-bottom: 11px; }
+
+.cn-res-rot {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+}
+
+.cn-res.is-esq .cn-res-rot { color: #4a4394; }
+.cn-res.is-dir .cn-res-rot { color: var(--accent); }
+
+.cn-res-sub {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-muted);
+}
+
+.cn-res-fez {
+  flex: 1;
+  list-style: none;
+  display: grid;
+  gap: 7px;
+  margin-bottom: 13px;
+}
+
+.cn-res-fez li {
+  position: relative;
+  padding-left: 17px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink-light);
+}
+
+/* Marcador desenhado, não caractere: assim ele não entra na seleção de texto
+   nem é lido em voz alta pelo leitor de tela a cada item. */
+.cn-res-fez li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink-muted);
+}
+
+.cn-res.is-dir .cn-res-fez li::before { background: var(--accent); }
+
+/* O desfecho é o que o olho procura. É a única coisa do cartão em fonte mono
+   e em corpo grande, para poder ser lido sem ler o resto. */
+.cn-res-desf {
+  padding: 11px 13px;
+  border-radius: 9px;
+  background: var(--white);
+  border: 1px solid var(--hair);
+}
+
+.cn-res-desf-v {
+  display: block;
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.cn-res-desf-n {
+  display: block;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-light);
+}
+
+.cn-res-desf.is-bom { border-color: rgba(10, 115, 89, 0.35); background: rgba(10, 115, 89, 0.06); }
+.cn-res-desf.is-bom .cn-res-desf-v { color: var(--accent); }
+.cn-res-desf.is-ruim { border-color: rgba(163, 61, 42, 0.35); background: rgba(163, 61, 42, 0.06); }
+.cn-res-desf.is-ruim .cn-res-desf-v { color: #a33d2a; }
+
+.cn-et-2 .cn-placar { margin-top: 16px; }
+
+/* ── etapa 3: a explicação ── */
+.cn-expl { max-width: 74ch; }
+
+.cn-expl p {
+  font-size: 14px;
+  line-height: 1.68;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.cn-expl p:last-child { margin-bottom: 0; }
+.cn-expl strong { font-weight: 700; }
+
+.cn-expl code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+
+.cn-et-3 .cn-virada { margin-top: 20px; }
+
+/* O contraste dos dois casos. Só existe no exemplo da série, e é o motivo de
+   ele estar na página: um caso em que pedir melhor resolve, outro em que não. */
+.cn-contraste {
+  margin-top: 20px;
+  padding: 18px 20px 16px;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: 13px;
+}
+
+.cn-contraste h4 {
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.cn-contraste-lista { display: grid; gap: 9px; margin-bottom: 13px; }
+
+.cn-contraste-l {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) auto minmax(0, 1.6fr);
+  align-items: baseline;
+  gap: 14px;
+  padding: 11px 13px;
+  border-radius: 9px;
+  background: var(--white);
+  border: 1px solid var(--hair);
+}
+
+.cn-contraste-l dt {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.cn-contraste-r {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.cn-contraste-l.is-bom { border-color: rgba(10, 115, 89, 0.35); }
+.cn-contraste-l.is-bom .cn-contraste-r { color: var(--accent); }
+.cn-contraste-l.is-ruim { border-color: rgba(163, 61, 42, 0.35); }
+.cn-contraste-l.is-ruim .cn-contraste-r { color: #a33d2a; }
+
+.cn-contraste-d {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-light);
+}
+
+.cn-contraste-fecho {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-light);
+  padding-top: 12px;
+  border-top: 1px dashed var(--hair);
+  max-width: 74ch;
+}
+
+.cn-contraste-fecho strong { color: var(--ink); }
+
+/* ── o botão que avança, e a íntegra ── */
+.cn-avanca { display: flex; justify-content: center; }
+.cn-avanca-sec { margin-top: -6px; }
+
+.cn-sem-transc {
+  padding: 12px 15px;
+  border: 1px dashed var(--ink-muted);
+  border-radius: 10px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  max-width: 80ch;
+}
+
+.cn-transc {
+  padding: 18px 20px 16px;
+  background: var(--white);
+  border: 1px solid var(--hair);
+  border-radius: 14px;
+}
+
+.cn-transc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.cn-transc-head h4 {
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+}
+
+/* ─── O DUELO: as duas telas lado a lado ───
+   Um contador só toca as duas colunas. Lado a lado é o formato: o argumento
+   da seção é que o MESMO pedido produz coisas diferentes nos dois lugares, e
+   isso só se lê quando as duas telas estão no mesmo campo de visão. No
+   celular elas empilham — navegador em cima, porque é o lugar que o leitor
+   conhece, e o de baixo é a novidade. */
 .cn-duelo {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -3719,6 +4009,16 @@
      baixo é a novidade. Cada coluna encolhe a moldura para caber duas telas
      numa rolagem só. */
   .cn-duelo { grid-template-columns: 1fr; gap: 22px; }
+
+  /* Os dois cartões de resultado empilham. O rótulo de cada um é o que
+     mantém claro qual é qual quando deixam de estar lado a lado. */
+  .cn-res-par { grid-template-columns: 1fr; }
+
+  /* O contraste perde a coluna do meio: o "sim"/"não" vai para baixo do caso,
+     onde continua sendo a primeira coisa que o olho encontra. */
+  .cn-contraste-l { grid-template-columns: 1fr; gap: 4px; }
+
+  .cn-pergunta { font-size: 19px; max-width: none; }
   .cn-col .cn-rolagem { height: 340px; }
 
   .cn-vir-par { grid-template-columns: 1fr; gap: 10px; }

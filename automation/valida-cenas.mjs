@@ -77,6 +77,18 @@ function confere(rotulo, texto, palheiro, ondeDiz) {
 }
 
 for (const cena of C.cenas) {
+  /* Uma cena sem transcrição precisa DIZER por quê, em texto que vai para a
+     tela. Sem essa exigência, "não tem beats" e "esqueci de citar" ficam
+     indistinguíveis — e a página passa a poder afirmar sem mostrar. */
+  if (cena.semTranscricao) {
+    conferidas++;
+    if (cena.navegador || cena.agente) {
+      falhas++;
+      console.error(`✗ ${cena.id}: declara semTranscricao mas traz beats — escolha um dos dois`);
+    }
+    continue;
+  }
+
   for (const [lado, palheiro, ondeDiz] of [
     ['navegador', palheiroNav, C.fontes.navegador.arquivo],
     ['agente', palheiroAgFala, 'nenhuma das capturas de 10/set']
@@ -110,9 +122,10 @@ for (const cena of C.cenas) {
 const palheiroExtra = normaliza(
   capsExtra.map(d => d.tarefas.map(t => t.transcricao.map(b => b.texto).join('\n')).join('\n')).join('\n')
 );
-const AVULSAS = [
-  ['saibaMais nomes · escopo', 'mantive parênteses, hífens e `(2)`/`CÓPIA` como estão (só minúsculo, sem acento, espaço→`_`), já que você não pediu para removê-los'],
-];
+/* Citações que aparecem fora dos beats. Vazio hoje: as caixas "saiba mais"
+   das cenas foram dissolvidas nos blocos `explicacao`, que são voz do site.
+   Ao citar um modelo em `explicacao`, acrescente a frase aqui. */
+const AVULSAS = [];
 for (const [rotulo, txt] of AVULSAS) {
   confere(rotulo, txt, palheiroAgFala + '\n' + palheiroExtra, 'em nenhuma captura de 10/set');
 }

@@ -209,12 +209,16 @@
      literal, conferida por automation/valida-cenas.mjs. */
 
   const cena = {
-    i: 0,          // qual cena
-    b: 0,          // qual beat já foi revelado (exclusivo)
+    i: 0,            // qual exemplo
+    etapa: 0,        // 0 = só a pergunta · 1 = + o resultado · 2 = + a explicação
+    transcricao: false,  // a conversa inteira, que é o quarto nível e é opcional
+    b: 0,            // dentro da transcrição: qual beat já foi revelado
     tocando: false,
     timers: [],
     rapido: semMovimento
   };
+
+  const ETAPAS = 3;
 
   function cenaLimpar() {
     cena.timers.forEach(clearTimeout);
@@ -317,13 +321,6 @@
     pinta('cn-palco-nav', 'cn-rol-nav', c.navegador.beats, beatNav);
     pinta('cn-palco-ag', 'cn-rol-ag', c.agente.beats, beatAg);
 
-    /* O fecho de cada coluna só aparece quando aquela coluna acabou: é a
-       conclusão daquele lado, e mostrá-la antes entrega o final. */
-    const fim = cena.b >= cenaMax();
-    document.querySelectorAll('#cu-cenas .cn-col-fecho').forEach(el => { el.hidden = !fim; });
-    const posf = $('cn-posfacio');
-    if (posf) posf.hidden = !fim;
-
     cenaPintarControles();
   }
 
@@ -378,6 +375,11 @@
   function cenaIr(i) {
     cenaLimpar();
     cena.i = (i + CENAS.cenas.length) % CENAS.cenas.length;
+    /* O exemplo novo recomeça pela pergunta. Herdar a etapa do anterior
+       entregaria o resultado antes de o leitor saber o que foi perguntado —
+       que é exatamente o que esta seção foi reescrita para não fazer. */
+    cena.etapa = 0;
+    cena.transcricao = false;
     cena.b = 0;
     cena.tocando = false;
     renderCenas();
@@ -428,23 +430,107 @@
       </section>`;
   }
 
-  function colunaHTML(lado, cfg) {
+  /* ═══════════════════════════════════════════════════════════
+     O EXEMPLO, EM TRÊS ETAPAS
+     ═══════════════════════════════════════════════════════════
+     A ordem foi pedida assim, e ela é o conteúdo: primeiro a
+     PERGUNTA, depois O QUE CADA LADO DEVOLVEU, e só então as
+     explicações. A versão anterior abria com as duas transcrições
+     tocando ao mesmo tempo — quem passava os olhos saía sem saber
+     o que tinha acontecido, porque o resultado só chegava no fim.
+
+     A conversa na íntegra não sumiu: virou o quarto nível, atrás
+     de um botão. Quem quer ver COMO se chegou ali, vê. */
+
+  function etapaPergunta(c) {
     return `
-      <div class="cn-col cn-col-${cfg.classe}">
-        <header class="cn-col-head">
-          <span class="cn-col-rot">${esc(cfg.rotulo)}</span>
-          <span class="cn-col-ferr">${esc(cfg.ferramenta)}</span>
-        </header>
-        ${cfg.chrome}
-        <p class="cn-col-fecho" hidden>${txt(lado.fecho)}</p>
+      <div class="cn-et cn-et-1">
+        <span class="cn-et-rot">A pergunta</span>
+        <h3 class="cn-pergunta">${esc(c.pergunta)}</h3>
+        <p class="cn-emjogo"><span class="cn-emjogo-rot">O que está em jogo</span>${txt(c.emJogo)}</p>
+        ${c.avisoEixo ? `<p class="cn-aviso-eixo">${c.avisoEixo}</p>` : ''}
       </div>`;
   }
 
-  function renderCenas() {
-    const el = $('cu-cenas');
-    if (!el || typeof CENAS === 'undefined') return;
-    const c = cenaAtual();
-    const F = CENAS.fontes;
+  function ladoResultado(l, classe) {
+    return `
+      <div class="cn-res ${classe}">
+        <header class="cn-res-head">
+          <span class="cn-res-rot">${esc(l.rotulo)}</span>
+          <span class="cn-res-sub">${esc(l.sub)}</span>
+        </header>
+        <ul class="cn-res-fez">
+          ${l.fez.map(f => `<li>${txt(f)}</li>`).join('')}
+        </ul>
+        <div class="cn-res-desf is-${esc(l.desfecho.tom)}">
+          <span class="cn-res-desf-v">${txt(l.desfecho.valor)}</span>
+          <span class="cn-res-desf-n">${txt(l.desfecho.nota)}</span>
+        </div>
+      </div>`;
+  }
+
+  function etapaResultado(c) {
+    return `
+      <div class="cn-et cn-et-2">
+        <span class="cn-et-rot">O que cada um devolveu</span>
+        <div class="cn-res-par">
+          ${ladoResultado(c.resultado.esquerda, 'is-esq')}
+          ${ladoResultado(c.resultado.direita, 'is-dir')}
+        </div>
+        ${placarHTML(c.placar)}
+      </div>`;
+  }
+
+  function contrasteHTML(c) {
+    if (!c.contraste) return '';
+    const k = c.contraste;
+    return `
+      <section class="cn-contraste">
+        <h4>${esc(k.titulo)}</h4>
+        <dl class="cn-contraste-lista">
+          ${k.linhas.map(l => `
+            <div class="cn-contraste-l${l.bom ? ' is-bom' : ' is-ruim'}">
+              <dt>${esc(l.caso)}</dt>
+              <dd class="cn-contraste-r">${esc(l.resposta)}</dd>
+              <dd class="cn-contraste-d">${txt(l.detalhe)}</dd>
+            </div>`).join('')}
+        </dl>
+        <p class="cn-contraste-fecho">${k.fecho}</p>
+      </section>`;
+  }
+
+  function etapaExplicacao(c) {
+    const e = c.explicacao;
+    return `
+      <div class="cn-et cn-et-3">
+        <span class="cn-et-rot">${esc(e.titulo)}</span>
+        <div class="cn-expl">
+          ${e.paragrafos.map(p => `<p>${p}</p>`).join('')}
+        </div>
+        ${viradaHTML(c)}
+        ${contrasteHTML(c)}
+        <p class="cn-licao">${e.licao}</p>
+      </div>`;
+  }
+
+  /* O botão que leva à etapa seguinte. É um só, e o rótulo dele diz o que vem —
+     "continuar" não ensina nada a quem está decidindo se vale o clique. */
+  function etapaBotao(c) {
+    const rotulos = ['Ver o que cada um devolveu', c.explicacao ? 'Por que isso aconteceu' : null];
+    const r = rotulos[cena.etapa];
+    if (!r) return '';
+    return `<div class="cn-avanca"><button type="button" class="cn-bt cn-bt-play" data-cn="avancar">${esc(r)} →</button></div>`;
+  }
+
+  function transcricaoHTML(c) {
+    if (c.semTranscricao) {
+      return `<p class="cn-sem-transc">${txt(c.semTranscricao)}</p>`;
+    }
+    if (!cena.transcricao) {
+      return `<div class="cn-avanca cn-avanca-sec">
+        <button type="button" class="cn-bt cn-bt-sec" data-cn="transcricao">Ver as duas conversas na íntegra</button>
+      </div>`;
+    }
 
     const chromeNav = `
       <!-- A moldura de navegador não é enfeite: a seção compara "dentro da
@@ -469,40 +555,66 @@
         <div class="cn-rolagem" id="cn-rol-ag"><div class="cn-palco cn-palco-term" id="cn-palco-ag"></div></div>
       </div>`;
 
+    return `
+      <section class="cn-transc" aria-label="As duas conversas na íntegra">
+        <header class="cn-transc-head">
+          <h4>As duas conversas, na íntegra</h4>
+          <button type="button" class="cn-bt cn-bt-sec" data-cn="fechar-transc">Fechar</button>
+        </header>
+        <div class="cn-duelo">
+          <div class="cn-col cn-col-nav">
+            <header class="cn-col-head">
+              <span class="cn-col-rot">${esc(c.resultado.esquerda.rotulo)}</span>
+              <span class="cn-col-ferr">${esc(CENAS.fontes.navegador.rotulo)}</span>
+            </header>
+            ${chromeNav}
+          </div>
+          <div class="cn-col cn-col-ag">
+            <header class="cn-col-head">
+              <span class="cn-col-rot">${esc(c.resultado.direita.rotulo)}</span>
+              <span class="cn-col-ferr">${esc(c.agente.ferramenta)}</span>
+            </header>
+            ${chromeAg}
+          </div>
+        </div>
+        <div class="cn-controles" id="cn-controles"></div>
+      </section>`;
+  }
+
+  function renderCenas() {
+    const el = $('cu-cenas');
+    if (!el || typeof CENAS === 'undefined') return;
+    const c = cenaAtual();
+    const F = CENAS.fontes;
+
     el.innerHTML = `
-      <div class="cn-abas" role="tablist" aria-label="Escolher a tarefa">
+      <div class="cn-abas" role="tablist" aria-label="Escolher o exemplo">
         ${CENAS.cenas.map((x, i) => `
           <button type="button" role="tab" class="cn-aba ${i === cena.i ? 'is-active' : ''}"
                   data-cn="ir" data-i="${i}" tabindex="${i === cena.i ? '0' : '-1'}"
                   aria-selected="${i === cena.i}">${esc(x.aba)}</button>`).join('')}
       </div>
 
-      <h3 class="cn-titulo">${esc(c.pergunta)}</h3>
-      <p class="cn-emjogo"><span class="cn-emjogo-rot">O que está em jogo</span>${txt(c.emJogo)}</p>
-
-      <div class="cn-duelo">
-        ${colunaHTML(c.navegador, { classe: 'nav', rotulo: 'No navegador', ferramenta: F.navegador.rotulo, chrome: chromeNav })}
-        ${colunaHTML(c.agente, { classe: 'ag', rotulo: 'Instalado na máquina', ferramenta: c.agente.ferramenta, chrome: chromeAg })}
-      </div>
-
-      <div class="cn-controles" id="cn-controles"></div>
-
-      <div class="cn-posfacio" id="cn-posfacio" hidden>
-        ${placarHTML(c.placar)}
-        ${viradaHTML(c)}
-        <p class="cn-licao">${txt(c.licao)}</p>
-        ${c.saibaMais ? `<div class="cu-saibas">${[].concat(c.saibaMais).map(i => saibaMais(i)).join('')}</div>` : ''}
-      </div>
+      <article class="cn-exemplo">
+        ${etapaPergunta(c)}
+        ${cena.etapa >= 1 ? etapaResultado(c) : ''}
+        ${cena.etapa >= 2 ? etapaExplicacao(c) : ''}
+        ${etapaBotao(c)}
+        ${cena.etapa >= 2 ? transcricaoHTML(c) : ''}
+      </article>
 
       <p class="cn-fonte">
-        As duas colunas são capturas reais. À esquerda, ${esc(F.navegador.rotulo)} em ${esc(F.navegador.data)};
-        à direita, ${esc(c.agente.ferramenta)} em ${esc(F.agente.data)}, numa pasta de teste montada para isto.
-        Todo texto em balão e todo comando é citação literal, conferida por
-        <code>automation/valida-cenas.mjs</code> — <a href="automation/capturas/">as transcrições completas
-        estão no repositório</a>.
+        ${c.semTranscricao
+          ? `Medição de ${esc(F.agente.data)}, nos dois programas instalados.`
+          : `Os dois lados são captura real: ${esc(F.navegador.rotulo)} em ${esc(F.navegador.data)} e
+             ${esc(c.agente.ferramenta)} em ${esc(F.agente.data)}.`}
+        O placar foi contado no disco, não na conversa. Toda fala e todo comando da íntegra é
+        citação literal, conferida por <code>automation/valida-cenas.mjs</code> —
+        <a href="automation/capturas/">as transcrições completas e os relatórios de cada
+        campanha estão no repositório</a>.
       </p>`;
 
-    cenaPintar(-1);
+    if (cena.transcricao && !c.semTranscricao) cenaPintar(-1);
   }
 
   function renderBalanco() {
@@ -536,6 +648,17 @@
       else if (a === 'passo') { cenaPausar(); cenaPasso(); }
       else if (a === 'tudo') cenaTudo();
       else if (a === 'ir') cenaIr(+alvo.dataset.i);
+      else if (a === 'avancar') {
+        cena.etapa = Math.min(cena.etapa + 1, ETAPAS - 1);
+        renderCenas();
+        /* Leva o olho para o bloco que acabou de aparecer. Sem isto, numa
+           tela pequena o novo conteúdo nasce abaixo da dobra e o clique
+           parece não ter feito nada. */
+        const novo = document.querySelector(`#cu-cenas .cn-et-${cena.etapa + 1}`);
+        if (novo) novo.scrollIntoView({ behavior: semMovimento ? 'auto' : 'smooth', block: 'nearest' });
+      }
+      else if (a === 'transcricao') { cena.transcricao = true; cena.b = 0; renderCenas(); cenaTudo(); }
+      else if (a === 'fechar-transc') { cenaPausar(); cena.transcricao = false; renderCenas(); }
     });
 
     document.addEventListener('keydown', (e) => {
