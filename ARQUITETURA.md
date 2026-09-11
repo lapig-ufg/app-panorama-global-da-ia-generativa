@@ -548,7 +548,11 @@ panorama-llms/
 │                                  #   pipeline. O conteúdo redacional mora em
 │                                  #   como-usar-data.js; as CITAÇÕES das capturas ficam
 │                                  #   separadas em como-usar-cenas.js porque só elas passam
-│                                  #   pelo valida-cenas.mjs. Ver README § "A aba Como usar".
+│                                  #   pelo valida-cenas.mjs. Sete seções, na ordem da
+│                                  #   narrativa (entender → provar → o que sobra → o que
+│                                  #   você autoriza → instalar → referência → procedência),
+│                                  #   com um resumo de três conclusões antes da primeira.
+│                                  #   Ver README § "A aba Como usar".
 ├── admin/                         # PWA de curadoria
 │   ├── index.html                 #   app (shell + lógica): lê via fetch CORS (?action=listar),
 │   │                              #   aprova/rejeita (POST + reconcile via listar), botão 🔍 (rodar)

@@ -82,6 +82,48 @@
     `;
   }
 
+  /* ─── 00 · o essencial ───────────────────────────────────── */
+
+  /* A única parte da página escrita para quem NÃO vai ler a página. Três
+     conclusões, cada uma com a evidência ao lado, e a procedência logo
+     abaixo. Fica antes da seção 01 porque a pergunta "vocês testaram
+     mesmo?" tem de ser respondida antes de a pessoa decidir se lê o resto. */
+  function renderEssencial() {
+    const el = $('cu-essencial');
+    if (!el || !D.essencial) return;
+    const e = D.essencial;
+
+    el.innerHTML = `
+      <div class="cu-ess">
+        <span class="cu-ess-rot">${esc(e.rotulo)}</span>
+        <ol class="cu-ess-lista">
+          ${e.conclusoes.map(c => `
+            <li class="cu-ess-item">
+              <span class="cu-ess-n" aria-hidden="true">${esc(c.n)}</span>
+              <div>
+                <p class="cu-ess-frase">${txt(c.frase)}</p>
+                <p class="cu-ess-prova">${txt(c.prova)}</p>
+              </div>
+            </li>`).join('')}
+        </ol>
+
+        <div class="cu-ess-proc">
+          <div class="cu-ess-nums">
+            ${e.procedencia.numeros.map(n => `
+              <div class="cu-ess-num">
+                <span class="cu-ess-num-v">${esc(n.valor)}</span>
+                <span class="cu-ess-num-r">${esc(n.rotulo)}</span>
+              </div>`).join('')}
+          </div>
+          <div class="cu-ess-proc-txt">
+            <span class="cu-ess-proc-t">${esc(e.procedencia.titulo)}</span>
+            <p>${e.procedencia.texto}
+              <a href="${esc(e.procedencia.link.href)}">${esc(e.procedencia.link.texto)}</a>.</p>
+          </div>
+        </div>
+      </div>`;
+  }
+
   /* ─── 01 · a diferença, explicada ────────────────────────── */
 
   /* Esta seção abre a aba. Ela existe para quem nunca instalou nada e só usa
@@ -97,6 +139,11 @@
         <span class="cu-lado-rot">${esc(rotulo)}</span>
         <h4 class="cu-lado-tit">${esc(lado.titulo)}</h4>
         <p class="cu-lado-txt">${lado.texto}</p>
+        ${lado.glossario ? `
+          <details class="cu-gloss">
+            <summary>O que é um ${esc(lado.glossario.termo)}?</summary>
+            <p>${lado.glossario.texto}</p>
+          </details>` : ''}
         <p class="cu-lado-cons">${lado.consequencia}</p>
       </div>
     `;
@@ -160,6 +207,23 @@
           <p class="cu-fecho-txt">${a.fecho.texto}</p>
         </div>
       `;
+    }
+
+    const ganho = $('cu-ab-ganho');
+    if (ganho && a.ganho) {
+      ganho.innerHTML = `
+        <section class="cu-ganho" aria-labelledby="h-ganho">
+          <h3 id="h-ganho">${esc(a.ganho.titulo)}</h3>
+          <p class="cu-ganho-lede">${txt(a.ganho.lede)}</p>
+          <div class="cu-ganho-itens">
+            ${a.ganho.itens.map(i => `
+              <article class="cu-ganho-i">
+                <h4>${esc(i.titulo)}</h4>
+                <p>${i.texto}</p>
+              </article>`).join('')}
+          </div>
+          <p class="cu-ganho-custo">${txt(a.ganho.custo)}</p>
+        </section>`;
     }
 
     const saiba = $('cu-ab-saiba');
@@ -272,7 +336,7 @@
 
   /* Beats do lado INSTALADO: linhas de terminal.
      A etiqueta olhar/mexer em cada comando não é enfeite — é a distinção que
-     a seção 07 vai cobrar. Um comando que só lê e um que altera o disco
+     a seção 04 cobra. Um comando que só lê e um que altera o disco
      recebem tratamentos diferentes na hora de aprovar, e ver a diferença
      desde a primeira cena poupa a explicação depois. */
   function beatAg(b, revelando) {
@@ -910,39 +974,33 @@
      entregar material de consulta. Aqui cada família passa a mostrar o primeiro
      cartão e um botão com a contagem do resto. No desktop nada muda: lá as
      famílias cabem em três colunas e a leitura é horizontal. */
-  function colapsarCatalogoNoCelular() {
-    const mq = window.matchMedia('(max-width: 760px)');
-    const grades = [...document.querySelectorAll('.cu-fam-grid')];
-    if (!grades.length) return;
+  /* O catálogo é referência, não leitura: sozinho era 30% das palavras da
+     página. Agora cada família abre fechada, com a lista dos nomes numa linha
+     só — quem procura uma ferramenta específica acha pelo nome e abre; quem
+     está lendo a página passa direto. Antes isso valia só no celular, e era
+     no computador que o catálogo mais atrapalhava a leitura. */
+  function colapsarCatalogo() {
+    document.querySelectorAll('.cu-fam-grid').forEach(g => {
+      const cards = [...g.children].filter(c => c.classList.contains('cu-ferr'));
+      if (cards.length < 2 || g.dataset.colapsado === '1') return;
+      g.dataset.colapsado = '1';
 
-    function aplicar() {
-      grades.forEach(g => {
-        const cards = [...g.children].filter(c => c.classList.contains('cu-ferr'));
-        const btnAntigo = g.parentElement.querySelector('.cu-mais');
-        if (btnAntigo) btnAntigo.remove();
-        cards.forEach(c => c.hidden = false);
+      const nomes = cards
+        .map(c => (c.querySelector('.cu-ferr-nome') || c.querySelector('h4') || {}).textContent)
+        .filter(Boolean).map(t => t.trim());
 
-        if (!mq.matches || cards.length < 3) return;
+      const cx = document.createElement('details');
+      cx.className = 'cu-fam-cx';
+      const sm = document.createElement('summary');
+      sm.innerHTML = `<span class="cu-fam-cx-n">${cards.length} ferramentas</span>` +
+                     `<span class="cu-fam-cx-l">${nomes.map(n => esc(n)).join(' · ')}</span>`;
+      cx.appendChild(sm);
 
-        cards.slice(1).forEach(c => c.hidden = true);
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'cu-mais';
-        btn.textContent = `Mostrar as outras ${cards.length - 1} ferramentas`;
-        btn.addEventListener('click', () => {
-          cards.forEach(c => c.hidden = false);
-          btn.remove();
-        });
-        g.insertAdjacentElement('afterend', btn);
-      });
-    }
-
-    aplicar();
-    /* addEventListener em MediaQueryList é o caminho moderno; addListener é a
-       reserva para Safari antigo, onde o outro simplesmente não existe. */
-    if (mq.addEventListener) mq.addEventListener('change', aplicar);
-    else if (mq.addListener) mq.addListener(aplicar);
+      g.insertAdjacentElement('beforebegin', cx);
+      cx.appendChild(g);
+    });
   }
+
 
   /* ─── 07 · segurança ─────────────────────────────────────── */
 
@@ -1812,6 +1870,7 @@
     const upd = $('cu-updated');
     if (upd) upd.textContent = fmtDataCurta(D.updatedAt) || '—';
 
+    renderEssencial();
     renderAbertura();
     renderCenas();
     ligarCenas();
@@ -1820,7 +1879,7 @@
     renderPermanencia();
     renderFerramentas();
     renderFamilias();
-    colapsarCatalogoNoCelular();
+    colapsarCatalogo();
     renderPonte();
     renderSeguranca();
     renderMedicao();

@@ -40,7 +40,7 @@
   <!-- Estilos -->
   <link rel="stylesheet" href="assets/styles.css?v=30">
   <link rel="stylesheet" href="assets/guia.css?v=27">
-  <link rel="stylesheet" href="assets/como-usar.css?v=9">
+  <link rel="stylesheet" href="assets/como-usar.css?v=10">
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSBR3JMT2X"></script>
@@ -199,11 +199,10 @@
       <a class="cu-toc-link" href="#abertura"><span class="cu-toc-n">01</span> A diferença</a>
       <a class="cu-toc-link" href="#comparacao"><span class="cu-toc-n">02</span> As duas telas, lado a lado</a>
       <a class="cu-toc-link" href="#permanencia"><span class="cu-toc-n">03</span> O que fica depois</a>
-      <a class="cu-toc-link" href="#ferramentas"><span class="cu-toc-n">04</span> O cinto de ferramentas</a>
+      <a class="cu-toc-link" href="#seguranca"><span class="cu-toc-n">04</span> Antes de instalar</a>
       <a class="cu-toc-link" href="#tutorial"><span class="cu-toc-n">05</span> Instalar, passo a passo</a>
       <a class="cu-toc-link" href="#catalogo"><span class="cu-toc-n">06</span> O catálogo</a>
-      <a class="cu-toc-link" href="#seguranca"><span class="cu-toc-n">07</span> O que você autoriza</a>
-      <a class="cu-toc-link" href="#medicao"><span class="cu-toc-n">08</span> Como isto foi medido</a>
+      <a class="cu-toc-link" href="#medicao"><span class="cu-toc-n">07</span> Como isto foi medido</a>
     </div>
   </div>
 
@@ -219,16 +218,18 @@
         <em>possa ou não</em> abrir os seus arquivos e rodar comandos.
       </p>
       <p class="cu-lede-2">
-        Abaixo: a diferença explicada em duas ideias simples, quatro tarefas de laboratório
-        feitas nos dois lugares e medidas no disco, o que sobra depois, o que instalar, e uma
-        tela de computador de mentira onde você faz a instalação de verdade.
-      </p>
-      <p class="qm-source">
-        Comandos verificados em bash/GNU coreutils (Linux) antes da publicação; onde o
-        comportamento muda no macOS ou no Windows, está dito na própria transcrição.
-        Instaladores e planos conferidos nas páginas oficiais em 6 de setembro de 2026.
+        Abaixo: a diferença explicada em duas ideias simples, cinco tarefas de laboratório feitas
+        nos dois lugares e conferidas no disco, o que sobra depois, o que você está autorizando,
+        e uma tela de computador de mentira onde você faz a instalação de verdade.
       </p>
     </div>
+
+    <!-- ─── 00 · O ESSENCIAL ─────────────────────────────────── -->
+    <!-- A única parte da página escrita para quem NÃO vai ler a página.
+         Três conclusões com a evidência ao lado, e a procedência logo
+         abaixo: "vocês testaram mesmo?" tem de ser respondido antes de a
+         pessoa decidir se lê o resto. -->
+    <div id="cu-essencial"></div>
 
     <!-- ─── 01 · A DIFERENÇA, EXPLICADA ──────────────────────── -->
     <!-- Abre a aba. Texto corrido antes de qualquer quadro, de propósito:
@@ -249,6 +250,11 @@
       <div class="cu-eixos" id="cu-ab-eixos"></div>
 
       <div id="cu-ab-fecho"></div>
+
+      <!-- O que a pessoa GANHA com isso. A seção explicava o mecanismo e não
+           respondia "e daí?" — vinha antes dos exemplos e saía sem dizer se
+           valia a pena. -->
+      <div id="cu-ab-ganho"></div>
 
       <div class="cu-saibas" id="cu-ab-saiba"></div>
     </section>
@@ -396,20 +402,20 @@
       <div id="cu-permanencia"></div>
     </section>
 
-    <!-- ─── 04 · FERRAMENTAS ─────────────────────────────────── -->
-    <section id="ferramentas" class="cu-section" aria-labelledby="h-ferramentas">
+    <!-- ─── 07 · SEGURANÇA ───────────────────────────────────── -->
+    <section id="seguranca" class="cu-section" aria-labelledby="h-seguranca">
       <header class="cu-sec-head">
         <span class="cu-sec-n">04</span>
         <div>
-          <h2 id="h-ferramentas">O cinto de ferramentas</h2>
+          <h2 id="h-seguranca">Antes de instalar: o que você está autorizando</h2>
           <p class="cu-sec-sub">
-            Tecnicamente, a diferença entre a aba e o terminal não está no modelo: é a mesma
-            rede neural nos dois lados. Está na lista de ações que ele pode pedir para executar.
-            São estes os nomes que aparecem na tela quando um agente pede a sua permissão.
+            Esta seção vem <strong>antes</strong> do tutorial de propósito: são as sete regras que
+            evitam os acidentes que a gente já viu acontecer, e duas delas vêm de coisas que
+            aconteceram durante a medição desta página. Leia antes de instalar, não depois.
           </p>
         </div>
       </header>
-      <div class="cu-tools" id="cu-tools"></div>
+      <div class="cu-seg" id="cu-seg"></div>
     </section>
 
     <!-- ─── 05 · SIMULADOR ───────────────────────────────────── -->
@@ -480,26 +486,25 @@
       </header>
       <div id="cu-familias"></div>
 
+      <!-- O cinto de ferramentas era a seção 04 e ficava entre o argumento e o
+           tutorial, quebrando a narrativa com uma lista técnica. É referência:
+           vive aqui, fechada, ao lado do resto da referência. -->
+      <details class="cu-saiba cu-saiba-larga" id="cu-ferramentas">
+        <summary><span class="cu-saiba-rot">Saiba mais</span>O que exatamente a IA pode fazer na sua máquina — o cinto de ferramentas</summary>
+        <div class="cu-saiba-corpo">
+          <p class="cu-tools-lede">
+            A diferença entre os dois lados não está no modelo: é a mesma rede neural. Está na
+            lista de ações que ele pode pedir para executar. São estes os nomes que aparecem na
+            tela quando um programa instalado pede a sua permissão.
+          </p>
+          <div class="cu-tools" id="cu-tools"></div>
+        </div>
+      </details>
+
       <!-- A ponte fecha a seção porque só faz sentido depois das duas colunas:
            primeiro o leitor vê as harnesses, depois os motores, e aí descobre
            que ligar um no outro virou um comando só. -->
       <div id="cu-ponte"></div>
-    </section>
-
-    <!-- ─── 07 · SEGURANÇA ───────────────────────────────────── -->
-    <section id="seguranca" class="cu-section" aria-labelledby="h-seguranca">
-      <header class="cu-sec-head">
-        <span class="cu-sec-n">07</span>
-        <div>
-          <h2 id="h-seguranca">O que você está autorizando</h2>
-          <p class="cu-sec-sub">
-            Dar mãos à IA é dar mãos à IA. Não é aviso legal: são as sete regras que evitam os
-            acidentes que a gente já viu acontecer — e duas delas vêm de coisas que aconteceram
-            durante a medição desta página.
-          </p>
-        </div>
-      </header>
-      <div class="cu-seg" id="cu-seg"></div>
     </section>
 
     <!-- ─── 08 · COMO ISTO FOI MEDIDO ────────────────────────── -->
@@ -508,7 +513,7 @@
          separa uma página que mediu de uma página que afirma. -->
     <section id="medicao" class="cu-section" aria-labelledby="h-medicao">
       <header class="cu-sec-head">
-        <span class="cu-sec-n">08</span>
+        <span class="cu-sec-n">07</span>
         <div>
           <h2 id="h-medicao">Como isto foi medido</h2>
           <p class="cu-sec-sub">
@@ -521,6 +526,7 @@
       <div id="cu-medicao"></div>
     </section>
 
+
   </main>
 
   <footer class="app-footer">
@@ -528,14 +534,14 @@
       Desenvolvido por Victor Amaral, <a href="https://lapig.iesa.ufg.br/" target="_blank" rel="noopener">LAPIG</a> / UFG
     </div>
     <div class="footer-meta">
-      <span>Comandos testados antes de publicar · instaladores conferidos nas páginas oficiais</span>
+      <span>Comandos verificados em bash/GNU coreutils (Linux) antes da publicação; onde o comportamento muda no macOS ou no Windows, está dito na própria transcrição. Instaladores e planos conferidos nas páginas oficiais em 6 de setembro de 2026.</span>
     </div>
   </footer>
 
   <!-- Scripts -->
-  <script src="assets/como-usar-data.js?v=8"></script>
+  <script src="assets/como-usar-data.js?v=9"></script>
   <script src="assets/como-usar-cenas.js?v=3"></script>
-  <script src="assets/como-usar.js?v=9"></script>
+  <script src="assets/como-usar.js?v=10"></script>
 </body>
 
 </html>

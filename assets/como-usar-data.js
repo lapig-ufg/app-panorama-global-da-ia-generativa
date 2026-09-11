@@ -29,6 +29,46 @@ const COMO_USAR_DATA = {
   updatedAt: "2026-09-06",
 
   /* ─────────────────────────────────────────────────────────────
+     0. O ESSENCIAL, ANTES DE TUDO
+     Fica no topo, antes da seção 01, e é a única parte da página
+     escrita para quem não vai ler a página. Três conclusões e a
+     linha que diz de onde elas vêm — porque "fizemos o teste" e
+     "achamos que é assim" precisam ser distinguíveis de relance.
+     ───────────────────────────────────────────────────────────── */
+  essencial: {
+    rotulo: "O essencial, em três linhas",
+
+    conclusoes: [
+      {
+        n: "1",
+        frase: "No navegador, descreva a sua máquina. No programa instalado, não precisa — e descrever errado piora.",
+        prova: "Dizer “no Ubuntu” numa máquina Windows levou os dois programas a zero comandos. Dizer o sistema certo, ou não dizer nada: de 3 a 15."
+      },
+      {
+        n: "2",
+        frase: "Diga o que não pode ser perdido.",
+        prova: "“Converta em CSV” devolveu 40 arquivos e perdeu 57 abas em silêncio. “Sem perder nenhuma aba” devolveu 97 — dez acertos em dez execuções."
+      },
+      {
+        n: "3",
+        frase: "Confira o resultado, não o relatório.",
+        prova: "Ele escreveu “pronto, 0 erros” na mesma resposta em que tinha perdido as 57 abas. A conferência que ele mesmo fez passou."
+      }
+    ],
+
+    procedencia: {
+      titulo: "De onde vêm estes números",
+      texto: "Cinco tarefas de laboratório, feitas de verdade em setembro de 2026: primeiro num chat de navegador, depois em dois programas instalados numa máquina com os arquivos na frente. As tarefas que mais importavam foram repetidas cinco vezes em cada programa. <strong>Quem diz se deu certo é a pasta no disco, não a resposta da IA.</strong>",
+      numeros: [
+        { valor: "5", rotulo: "tarefas" },
+        { valor: "60+", rotulo: "execuções" },
+        { valor: "3", rotulo: "programas" }
+      ],
+      link: { texto: "as transcrições e os relatórios estão no repositório", href: "automation/capturas/" }
+    }
+  },
+
+  /* ─────────────────────────────────────────────────────────────
      1. A DIFERENÇA, EXPLICADA
      Esta seção existe para uma pessoa que nunca instalou nada e só
      usa IA em aba de navegador. Ela abre EXPLICANDO, com um exemplo,
@@ -94,7 +134,11 @@ const COMO_USAR_DATA = {
 
         navegador: {
           titulo: "No navegador, não",
-          texto: "Ela escreve o comando; a mão é sua. Você copia, cola no seu terminal, aperta enter, olha o que aconteceu e volta para contar.",
+          texto: "Ela escreve o comando; a mão é sua. Você copia, cola no <strong>terminal</strong>, aperta enter, olha o que aconteceu e volta para contar.",
+          glossario: {
+            termo: "terminal",
+            texto: "É a janela em que você <strong>digita</strong> o que quer, em vez de clicar. Todo computador tem uma, já instalada: no Windows chama-se PowerShell, no Mac e no Linux chama-se Terminal. Ela parece intimidante e não é — é só um lugar onde você escreve uma linha e aperta enter. A seção 05 desta página abre uma e faz o primeiro comando com você."
+          },
           consequencia: "Quem confere o resultado é sempre você. Se você não conferir, ninguém confere."
         },
 
@@ -125,6 +169,29 @@ const COMO_USAR_DATA = {
       titulo: "A regra que junta as duas",
       frase: "Ela age sobre o que consegue verificar que existe.",
       texto: "É o mesmo princípio nos dois eixos. Se o pedido descreve algo que não está na máquina — um sistema que não é o seu, um disco que não é esse, uma pasta que não existe —, ela sai do modo “vou olhar” e volta para o modo “vou responder do que eu sei”. E ela está certa em fazer isso: você disse que era outra coisa."
+    },
+
+    /* O que a pessoa GANHA, em coisas que ela reconhece. A seção explicava
+       muito bem o mecanismo e não respondia "e daí?" — quem chegava aqui saía
+       entendendo a diferença e sem saber se valia a pena para ela. */
+    ganho: {
+      titulo: "O que você ganha com isso",
+      lede: "A diferença deixa de ser abstrata em três situações que aparecem toda semana:",
+      itens: [
+        {
+          titulo: "Tarefa com muitos arquivos",
+          texto: "Mil fotos para separar por data, quarenta planilhas para converter, trezentos nomes para padronizar. No navegador você recebe um comando e faz o trabalho; instalada, ela faz e depois confere."
+        },
+        {
+          titulo: "Você não precisa mais descrever nada",
+          texto: "Nada de “tenho uma pasta com mais ou menos mil fotos, acho que no Ubuntu”. Ela abre a pasta e conta. E o que ela responde é sobre a <em>sua</em> máquina, não sobre uma máquina genérica."
+        },
+        {
+          titulo: "O trabalho fica",
+          texto: "O que sobra não é uma conversa perdida entre trezentas: é um programinha no disco, numa pasta organizada, com o registro do que mudou. Na semana seguinte você roda de novo — é a seção 03 desta página."
+        }
+      ],
+      custo: "O preço é real e vale dizer: instalar leva uns quinze minutos na primeira vez, e você passa a aprovar comandos em vez de só ler respostas. Para uma dúvida avulsa, o navegador continua sendo mais rápido — a seção 02 tem um bloco só sobre isso."
     },
 
     saibaMais: [
@@ -171,7 +238,7 @@ const COMO_USAR_DATA = {
       },
       {
         titulo: "Uma pergunta só",
-        texto: "Instalar uma CLI, autenticar e escolher o modelo custa uns 15 minutos na primeira vez. Para uma dúvida avulsa, a aba responde antes de o `npm install` terminar. O agente compensa quando a mesma tarefa volta — e é aí que ele compensa muito."
+        texto: "Instalar um desses programas, entrar na conta e escolher o modelo custa uns 15 minutos na primeira vez. Para uma dúvida avulsa, a aba responde antes de o `npm install` terminar. O agente compensa quando a mesma tarefa volta — e é aí que ele compensa muito."
       },
       {
         titulo: "Aprender fazendo",
@@ -223,7 +290,7 @@ const COMO_USAR_DATA = {
     mecanismos: [
       {
         titulo: "O git deixa de ser rede e vira registro",
-        texto: "Na seção 07 o versionamento aparece como proteção — e é. Mas o ganho maior é outro: com o histórico, cada coisa que o agente fez tem uma linha com data, autor e motivo. `git diff` revisa antes de aceitar, `git log` conta o que aconteceu semanas depois, e `git revert` desfaz UM passo sem derrubar os outros. A aprovação deixa de ser um clique que some da tela e vira uma decisão auditável.",
+        texto: "Na seção 04 o versionamento aparece como proteção — e é. Mas o ganho maior é outro: com o histórico, cada coisa que o agente fez tem uma linha com data, autor e motivo. `git diff` revisa antes de aceitar, `git log` conta o que aconteceu semanas depois, e `git revert` desfaz UM passo sem derrubar os outros. A aprovação deixa de ser um clique que some da tela e vira uma decisão auditável.",
         artefato: {
           tipo: "terminal",
           linhas: [
@@ -488,7 +555,7 @@ const COMO_USAR_DATA = {
           comando: true,
           instalaAlt: "macOS e Windows têm instalador próprio em ollama.com/download",
           precisa: "Para rodar local: 8 GB de RAM dão conta de um modelo de 3–4B; 16 GB abrem os de 7–9B; GPU acelera, mas não é obrigatória. Para os modelos de nuvem, nenhum requisito de máquina — só a conta.",
-          acesso: "Serve os dois mundos na mesma API local (127.0.0.1:11434), que todas as harnesses desta página sabem consumir. E `ollama launch` conecta essa API a elas sem você editar um arquivo de configuração.",
+          acesso: "Serve os dois mundos na mesma API local (127.0.0.1:11434), que todos os programas desta página sabem consumir. E `ollama launch` conecta essa API a elas sem você editar um arquivo de configuração.",
           codigoAberto: true,
           link: "https://ollama.com/download",
           destaque: "É o tutorial interativo desta página."
@@ -532,7 +599,7 @@ const COMO_USAR_DATA = {
      ───────────────────────────────────────────────────────────── */
   ponte: {
     titulo: "A ponte: um comando que liga as duas colunas",
-    lede: "Até aqui são dois problemas separados: escolher a harness e escolher o motor. Ligar um no outro sempre foi a parte chata — variável de ambiente, URL de API, arquivo de configuração por ferramenta. O `ollama launch` (a partir da versão 0.15) faz isso sozinho: instala a harness se ela não estiver instalada, aponta para o servidor local do Ollama, escolhe o modelo e abre o programa.",
+    lede: "Até aqui são dois problemas separados: escolher o <strong>programa que dá as mãos</strong> à IA — o que a indústria chama de <em>harness</em> — e escolher o <strong>motor</strong>, que é o modelo que pensa. Ligar um no outro sempre foi a parte chata — variável de ambiente, URL de API, arquivo de configuração por ferramenta. O `ollama launch` (a partir da versão 0.15) faz isso sozinho: instala a harness se ela não estiver instalada, aponta para o servidor local do Ollama, escolhe o modelo e abre o programa.",
 
     comandos: [
       {
@@ -553,7 +620,7 @@ const COMO_USAR_DATA = {
       },
       {
         cmd: "ollama launch codex -- --sandbox workspace-write",
-        oQueFaz: "Tudo depois de `--` vai direto para a harness, sem o Ollama interpretar. É como se passam as opções próprias de cada ferramenta."
+        oQueFaz: "Tudo depois de `--` vai direto para o programa, sem o Ollama interpretar. É como se passam as opções próprias de cada ferramenta."
       },
       {
         cmd: "ollama launch claude --model gemma4:cloud --yes -- -p \"como este repositório funciona?\"",
@@ -609,7 +676,7 @@ const COMO_USAR_DATA = {
     ],
     planosExtra: "Acima disso há Team (US$ 500/mês, US$ 1.000 de crédito compartilhado, faturamento centralizado) e Enterprise sob consulta, com controle de acesso a modelos e teto de gasto — que é a conversa que um laboratório com várias pessoas acaba tendo.",
 
-    fecho: "É aqui que a tese da página fecha em uma frase: <strong>a harness e o modelo são escolhas independentes</strong>. Você pode trocar de agente sem trocar de assinatura, e trocar de modelo sem reaprender o agente. O que não muda em nenhuma das combinações é o que dá potência a todas elas — a IA continua enxergando os seus arquivos e executando comandos."
+    fecho: "É aqui que a tese da página fecha em uma frase: <strong>o programa e o modelo são escolhas independentes</strong>. Você pode trocar de agente sem trocar de assinatura, e trocar de modelo sem reaprender o agente. O que não muda em nenhuma das combinações é o que dá potência a todas elas — a IA continua enxergando os seus arquivos e executando comandos."
   },
 
   /* ─────────────────────────────────────────────────────────────
@@ -625,7 +692,7 @@ const COMO_USAR_DATA = {
       nome: "Ollama Cloud + launch",
       nomeCurto: "Ollama Cloud",
       icone: "terminal",
-      legenda: "Uma assinatura, qualquer harness",
+      legenda: "Uma assinatura, qualquer programa",
       resumo: "Do zero a um modelo grande dirigindo o Claude Code, o OpenCode ou o Pi — sem editar um arquivo de configuração.",
       minutos: 9,
 
@@ -698,7 +765,7 @@ const COMO_USAR_DATA = {
           ato: "Usar",
           janela: "terminal",
           titulo: "Abrir o menu do launch",
-          explicacao: "Este é o comando que muda o jogo. Sem argumento, `ollama launch` mostra as harnesses que a sua versão conhece, marca as que já estão instaladas e deixa escolher o modelo. Nada de variável de ambiente, nada de arquivo de configuração.",
+          explicacao: "Este é o comando que muda o jogo. Sem argumento, `ollama launch` mostra os programas de IA que a sua versão conhece, marca as que já estão instaladas e deixa escolher o modelo. Nada de variável de ambiente, nada de arquivo de configuração.",
           cmd: "ollama launch",
           saida: [
             { t: "out", v: "  Escolha uma integração:" },
@@ -713,7 +780,7 @@ const COMO_USAR_DATA = {
             { t: "out", v: "  copilot     Copilot CLI        GitHub's AI coding agent for the terminal" },
             { t: "out", v: "  ...         (18 no total)" }
           ],
-          nota: "A lista completa está na seção 05. Ela cresce a cada versão do Ollama — por isso vale rodar o comando e olhar a sua, em vez de confiar em qualquer tabela publicada (esta inclusive)."
+          nota: "A lista completa está no catálogo, na seção 06. Ela cresce a cada versão do Ollama — por isso vale rodar o comando e olhar a sua, em vez de confiar em qualquer tabela publicada (esta inclusive)."
         },
         {
           ato: "Usar",
@@ -732,13 +799,13 @@ const COMO_USAR_DATA = {
             { t: "out", v: "" },
             { t: "out", v: "> " }
           ],
-          nota: "`ANTHROPIC_BASE_URL=http://localhost:11434`: a harness acha que está falando com a Anthropic e está falando com o processo do Ollama, na sua máquina, que por sua vez fala com o data center. Endereço local, modelo remoto — as duas coisas ao mesmo tempo, no mesmo comando."
+          nota: "`ANTHROPIC_BASE_URL=http://localhost:11434`: o programa acha que está falando com a Anthropic e está falando com o processo do Ollama, na sua máquina, que por sua vez fala com o data center. Endereço local, modelo remoto — as duas coisas ao mesmo tempo, no mesmo comando."
         },
         {
           ato: "Usar",
           janela: "terminal",
-          titulo: "Trocar de harness sem trocar de assinatura",
-          explicacao: "A mesma conta serve qualquer uma das integrações. Aqui o Pi, que nem precisava estar instalado: o launch instala e abre. Vale igual para `ollama launch opencode`, `ollama launch codex`, `ollama launch droid`.",
+          titulo: "Trocar de programa sem trocar de assinatura",
+          explicacao: "A mesma conta serve qualquer um dos programas da lista. Aqui o Pi, que nem precisava estar instalado: o launch instala e abre. Vale igual para `ollama launch opencode`, `ollama launch codex`, `ollama launch droid`.",
           cmd: "ollama launch pi --model gpt-oss:120b-cloud",
           saida: [
             { t: "out", v: "Pi is not installed. Install it now? [Y/n] y" },
@@ -748,7 +815,7 @@ const COMO_USAR_DATA = {
             { t: "out", v: "" },
             { t: "out", v: "pi › " }
           ],
-          nota: "É este o ganho prático da assinatura: harness e modelo viram escolhas independentes. Dá para trocar de agente sem trocar de plano, e trocar de modelo sem reaprender o agente."
+          nota: "É este o ganho prático da assinatura: programa e modelo viram escolhas independentes. Dá para trocar de agente sem trocar de plano, e trocar de modelo sem reaprender o agente."
         },
         {
           ato: "Quando o dado não pode sair",
@@ -863,7 +930,7 @@ const COMO_USAR_DATA = {
             ],
             botao: "Confiar nesta pasta"
           },
-          nota: "Abra no projeto, e só nele. Abrir na raiz do disco ou na sua pasta pessoal é dar acesso a chave de SSH, a e-mail e a tudo mais — ver a seção 07."
+          nota: "Abra no projeto, e só nele. Abrir na raiz do disco ou na sua pasta pessoal é dar acesso a chave de SSH, a e-mail e a tudo mais — ver a seção 04."
         },
         {
           ato: "Usar",
@@ -905,7 +972,7 @@ const COMO_USAR_DATA = {
           nota: "Guarde este par de saídas: é a aba inteira em duas linhas. A diferença entre \"IA no navegador\" e \"IA na sua máquina\" não é o modelo nem a inteligência — é **se ela alcança o seu disco**, e isso liga e desliga numa opção de linha de comando."
         }
       ],
-      fecho: "Você tem o agente instalado, autenticado e apontado para uma pasta. O que fazer com ele é a seção 02 desta página — e o que NÃO deixar ele fazer é a seção 07. Se quiser dirigir este mesmo agente com outro modelo, ou usar um modelo da Ollama dentro de outra harness, o quadro do `ollama launch` no catálogo mostra como."
+      fecho: "Você tem o agente instalado, autenticado e apontado para uma pasta. O que fazer com ele é a seção 02 desta página — e o que NÃO deixar ele fazer é a seção 04. Se quiser dirigir este mesmo agente com outro modelo, ou usar um modelo da Ollama dentro de outra harness, o quadro do `ollama launch` no catálogo mostra como."
     }
   ],
 

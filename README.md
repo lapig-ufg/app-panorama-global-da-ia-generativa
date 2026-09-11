@@ -130,53 +130,56 @@ planilha, não depende de cron e não tem pipeline. Todo o conteúdo mora em
 `assets/como-usar-data.js` — é o único arquivo a editar para atualizar a aba.
 
 Ela responde ao "como" que faltava no painel: a diferença entre conversar com a IA numa
-aba do navegador e instalá-la na máquina, com acesso aos arquivos — no eixo de uma tarefa
-(seção 02) e no eixo do tempo (seção 03). São oito seções (a 06 termina com um bloco extra,
-"a ponte"):
+aba do navegador e instalá-la na máquina, com acesso aos arquivos. A ordem das seções é a
+narrativa: **entender → ver a prova → o que sobra → o que você autoriza → instalar →
+referência → procedência.**
 
-1. **A diferença, explicada** — a abertura da aba, em texto corrido antes de qualquer quadro.
-   Explica duas ideias, uma de cada vez: se a IA consegue **olhar** os seus arquivos e se ela
-   pode **mexer** neles. Cada uma traz o que foi medido (dizer "no Ubuntu" numa máquina
-   Windows leva os dois programas a **zero comandos**; dizer o sistema certo, ou não dizer
-   nada, leva a 3–15) e a regra prática que sai dali. A discussão de como CHAMAR as duas
-   coisas — que já abriu esta seção e confundia quem chegava — virou a última caixa "saiba
-   mais" daqui.
+Antes da seção 01 vem **o essencial, em três linhas**: as três conclusões que a medição
+sustenta, cada uma com o número ao lado, e a procedência (5 tarefas · 60+ execuções ·
+3 programas). É a única parte da página escrita para quem **não** vai ler a página — a
+pergunta "vocês testaram mesmo?" precisa ser respondida antes de a pessoa decidir se lê
+o resto.
 
-   > Os dois eixos não foram inventados na mesa: saíram das doze execuções de
-   > `capturas/2026-09-10-diagnostico-so.md`, que mostraram que **olhar** e **agir** são
-   > independentes um do outro. A medição anterior confundia os dois num só.
-2. **As duas telas, lado a lado** — abre com o **diagrama do ciclo** (dois SVG: à esquerda o
-   resultado só volta pela sua digitação; à direita a IA lê a própria saída) e segue com o
-   **duelo**: quatro tarefas, cada uma tocada **nos dois lugares ao mesmo tempo** — à esquerda
-   a conversa real no Gemini (09/set), à direita os comandos reais de um programa instalado
-   (10/set). Um contador só toca as duas colunas. Quando elas terminam, aparece o **placar**:
-   o que `conferir.py` contou NO DISCO, e não o que a IA disse ter feito. Fecha com o
-   **balanço** do que a medição mudou na própria página e a contra-seção **"onde a aba ganha"**.
+1. **A diferença, explicada** — abre em texto corrido, para quem nunca instalou nada.
+   Explica duas ideias, uma de cada vez: se a IA consegue **olhar** os seus arquivos e se
+   ela pode **mexer** neles. Cada uma traz o que foi medido (dizer "no Ubuntu" numa máquina
+   Windows leva os dois programas a **zero comandos**; o sistema certo, ou nenhum, leva a
+   3–15) e a regra prática que sai dali. Fecha com **"o que você ganha com isso"** — três
+   situações concretas e o custo ao lado, porque vantagem sem preço é propaganda.
+   A palavra *terminal* é explicada num glossário em linha, na primeira vez que aparece;
+   antes ela era usada cem blocos antes de ser definida. A discussão de como **chamar** as
+   duas coisas virou a última caixa fechada da seção.
+2. **As duas telas, lado a lado** — cinco tarefas, cada uma em **três etapas, uma por
+   clique**: a PERGUNTA, o que CADA UM DEVOLVEU (tópicos curtos, desfecho em destaque,
+   placar do disco) e só então a EXPLICAÇÃO. A conversa na íntegra é o quarto nível, atrás
+   de um botão. Abre com o **diagrama do ciclo** e fecha com o **balanço** do que a medição
+   mudou na própria página e a contra-seção **"onde a aba ganha"**.
 
-   > O **gráfico de halteres** foi removido em 10/set/2026, e as regras de CSS e
-   > `renderGrafico()` saíram com ele em seguida. Seus dez números eram estimativa escrita à
-   > mão e a captura desmentiu cinco. Ele volta no dia em que houver medida de tempo real dos
-   > DOIS lados — reescrito, não descomentado.
-3. **O que fica depois** — o segundo eixo do argumento. A seção 02 mede uma tarefa; esta mede
-   o que sobra dela: um comparativo do que resta de cada lado uma semana depois, e quatro
-   mecanismos com artefato ao lado — `git log` como registro (e não só como rede), a estrutura
-   de pastas como metade da documentação, o `AGENTS.md` como a única memória do agente que
-   sobrevive ao fim da conversa, e a reprodutibilidade.
-4. **O cinto de ferramentas** — Bash, ler, escrever, buscar, rodar código, web, MCP.
-5. **Instalar, passo a passo** — um simulador de área de trabalho estilo anos 2000 com dois
-   tutoriais interativos: **Ollama Cloud + `ollama launch`** (assinar, rodar um modelo grande
-   sem baixar nada e usá-lo para dirigir Claude Code, Pi ou OpenCode) e **Antigravity**.
-6. **O catálogo** — três famílias: harnesses de terminal (Claude Code, Codex CLI, OpenCode,
-   Pi, Gemini CLI), aplicativos de desktop (Claude Desktop, ChatGPT Desktop, Antigravity) e
-   motores (Ollama local e na nuvem, LM Studio, llama.cpp). Fecha com **a ponte**: o quadro do
-   `ollama launch`, com as 18 integrações que ele conhece e os planos do Ollama Cloud.
-7. **O que você está autorizando** — sete regras de segurança ao dar mãos a um programa. Duas
-   vêm de coisas que aconteceram durante a medição: *confira o resultado, não o relatório*
-   (ele disse "0 erros" e o disco tinha 57 abas a menos) e *diga a pasta* (sem âncora de
-   pasta, um programa reorganizou 154 arquivos reais do OneDrive de quem testava).
-8. **Como isto foi medido** — o método em três passos, a lista do que **não** foi medido, e a
-   caixa com as três conclusões que estavam erradas e como foram descobertas. A lista do que
-   faltou fica visível de propósito: é ela que separa uma página que mediu de uma que afirma.
+   > O quinto exemplo — a série de 244 imagens — é honestamente diferente e a tela diz isso:
+   > as duas colunas são **duas formas de pedir**, não navegador × instalado. Não havia
+   > conversa de navegador equivalente, e ele não tem transcrição por execução (só o
+   > agregado das 20). O validador exige que uma cena sem transcrição **declare o motivo**
+   > em texto que vai para a tela.
+3. **O que fica depois** — o segundo eixo: `git log` como registro, a estrutura de pastas
+   como metade da documentação, o `AGENTS.md` como a única memória que sobrevive ao fim da
+   conversa, e a reprodutibilidade.
+4. **Antes de instalar: o que você está autorizando** — sete regras. Vem **antes** do
+   tutorial de propósito; estava depois, o que é a ordem errada. Duas regras vieram de
+   coisas medidas: *confira o resultado, não o relatório* (ele disse "0 erros" e o disco
+   tinha 57 abas a menos) e *diga a pasta* (sem âncora, um programa reorganizou 154
+   arquivos reais do OneDrive de quem testava).
+5. **Instalar, passo a passo** — dois tutoriais no simulador de área de trabalho, cada um
+   com **objetivo declarado** e **três atos**: Ollama Cloud + `ollama launch` e
+   **Antigravity CLI** (o `agy`, que é o programa medido na seção 02 — não o aplicativo de
+   janela). O do Antigravity termina no achado da própria medição: o mesmo comando com e
+   sem `--add-dir`, e as duas saídas lado a lado.
+6. **O catálogo** — três famílias, **fechadas por padrão**, com os nomes numa linha só no
+   resumo. Sozinho ele era 27% das palavras visíveis da página e não é leitura: é
+   referência. O **cinto de ferramentas** (o que a IA pode fazer na máquina) era uma seção
+   inteira entre o argumento e o tutorial; virou caixa fechada aqui. Fecha com **a ponte**:
+   o quadro do `ollama launch`, com as 18 integrações e os planos do Ollama Cloud.
+7. **Como isto foi medido** — o método em três passos, a lista do que **não** foi medido, e
+   a caixa com as três conclusões que estavam erradas e como foram descobertas.
 
 ### Regras de manutenção
 
@@ -222,10 +225,16 @@ olhar as outras quebra o conjunto:
 Três superfícies disparam as mesmas ações (`acao()`): o balão, os botões simulados dentro das
 janelas (`.cu-alvo`) e o painel abaixo da moldura. O painel é o caminho de teclado e de leitor
 de tela — não o elimine ao mexer no balão.
-- **O celular é o caso difícil.** A página tem ~35 telas de rolagem em 390px, e o catálogo é
-  a maior fatia. Por isso as famílias mostram um cartão e um botão nessa largura
-  (`colapsarCatalogoNoCelular`) e a tabela de integrações vem fechada. Ao acrescentar
-  conteúdo, meça antes: `document.documentElement.scrollHeight` dividido pela altura da tela.
+- **Meça o peso antes de acrescentar conteúdo, e meça certo.** A página tem ~5.000 palavras
+  visíveis (≈25 min) e ~23 telas em 390px. O catálogo era a maior fatia e agora abre fechado
+  em **todas** as larguras (`colapsarCatalogo`), com os nomes das ferramentas no resumo —
+  antes isso valia só no celular, e era no computador que ele mais atrapalhava a leitura.
+
+  > **Armadilha de medição:** dentro de um `<details>` fechado o Chromium **não** aplica
+  > `display: none`, então `offsetParent` continua resolvendo e um contador baseado nele
+  > soma o texto escondido — foi assim que eu cheguei a "43 minutos" quando eram 25. Meça
+  > com `innerText`, que respeita o `<details>`. E não some `querySelectorAll('p, li, dd')`
+  > ingenuamente: um `<p>` dentro de um `<li>` entra duas vezes.
 - **Instaladores e planos** foram conferidos nas páginas oficiais (última checagem em
   `updatedAt`). Revalide antes de citar cotas — elas mudam com frequência.
 - **As duas colunas do duelo são captura, e o validador é quem garante isso.** Em

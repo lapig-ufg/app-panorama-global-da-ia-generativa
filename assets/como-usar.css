@@ -120,6 +120,235 @@
   color: var(--ink);
 }
 
+/* ═══ 00 · O ESSENCIAL ═══
+   O bloco do topo, para quem não vai ler a página. Fundo escuro porque ele
+   precisa se distinguir de tudo que vem depois: é conclusão, não argumento. */
+.cu-ess {
+  margin: 0 0 34px;
+  padding: 24px 26px 22px;
+  background: var(--ink);
+  border-radius: 16px;
+  color: #e9e5da;
+}
+
+.cu-ess-rot {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--accent-bright);
+  margin-bottom: 16px;
+}
+
+.cu-ess-lista { list-style: none; display: grid; gap: 14px; }
+
+.cu-ess-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.cu-ess-n {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent-bright);
+  line-height: 1;
+}
+
+.cu-ess-item > div { min-width: 0; }
+
+/* A conclusão em corpo grande; a evidência em corpo pequeno logo abaixo.
+   As duas juntas, sempre: uma orientação sem o número que a sustenta é
+   palpite, e um número sem a orientação não serve para nada. */
+.cu-ess-frase {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  line-height: 1.35;
+  color: #fff;
+  margin-bottom: 5px;
+  max-width: 62ch;
+}
+
+.cu-ess-prova {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #a8a196;
+  max-width: 76ch;
+}
+
+.cu-ess-proc {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 22px;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.cu-ess-nums { display: flex; gap: 18px; }
+
+.cu-ess-num { text-align: center; }
+
+.cu-ess-num-v {
+  display: block;
+  font-family: var(--mono);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--accent-bright);
+}
+
+.cu-ess-num-r {
+  display: block;
+  margin-top: 4px;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #8a8479;
+}
+
+.cu-ess-proc-t {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #8a8479;
+  margin-bottom: 5px;
+}
+
+.cu-ess-proc-txt p {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #c9c4b6;
+  max-width: 76ch;
+}
+
+.cu-ess-proc-txt strong { color: #fff; }
+.cu-ess-proc-txt a { color: var(--accent-bright); }
+
+/* ─── glossário em linha ───
+   Um termo explicado no lugar exato onde ele aparece pela primeira vez. É a
+   diferença entre a pessoa continuar lendo e fechar a aba: "terminal" estava
+   sendo usado cem blocos antes de ser explicado. */
+.cu-gloss {
+  margin-top: 10px;
+  border: 1px dashed var(--ink-muted);
+  border-radius: 9px;
+  background: var(--white);
+}
+
+.cu-gloss > summary {
+  padding: 8px 11px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  list-style: none;
+}
+
+.cu-gloss > summary::-webkit-details-marker { display: none; }
+.cu-gloss > summary::before { content: "? "; font-family: var(--mono); }
+.cu-gloss[open] > summary { border-bottom: 1px dashed var(--hair); }
+
+.cu-gloss > p {
+  padding: 10px 12px 11px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-light);
+}
+
+/* ─── o que você ganha ───
+   Fecha a seção 01. Ela explicava muito bem o mecanismo e não respondia
+   "e daí?" — o leitor saía entendendo a diferença e sem saber se valia a
+   pena para ele. */
+.cu-ganho {
+  margin-top: 24px;
+  padding: 22px 24px 20px;
+  background: linear-gradient(to bottom, var(--white) 50%, rgba(10, 115, 89, 0.05));
+  border: 1px solid rgba(10, 115, 89, 0.3);
+  border-radius: 14px;
+}
+
+.cu-ganho h3 {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+
+.cu-ganho-lede {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-light);
+  margin-bottom: 16px;
+  max-width: 74ch;
+}
+
+.cu-ganho-itens {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.cu-ganho-i {
+  min-width: 0;
+  padding: 14px 15px;
+  background: var(--white);
+  border: 1px solid var(--hair);
+  border-radius: 11px;
+}
+
+.cu-ganho-i h4 {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.cu-ganho-i p {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-light);
+}
+
+/* O custo fica na mesma caixa do ganho, de propósito: uma vantagem sem o
+   preço ao lado é propaganda, e a seção 02 tem um bloco inteiro mostrando
+   onde o navegador ganha. */
+.cu-ganho-custo {
+  padding-top: 14px;
+  border-top: 1px dashed rgba(10, 115, 89, 0.3);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-muted);
+  max-width: 78ch;
+}
+
+/* A caixa do cinto de ferramentas guarda uma grade, não prosa: precisa da
+   largura toda. */
+.cu-saiba-larga .cu-saiba-corpo { max-width: none; }
+
+.cu-tools-lede {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-light);
+  margin-bottom: 14px;
+  max-width: 76ch;
+}
+
 /* ═══ 01 · A DIFERENÇA, EXPLICADA ═══ */
 
 /* Esta seção é a única da página escrita em texto corrido antes de qualquer
@@ -3864,22 +4093,6 @@
 .cu-integs-caixa .cu-integ:last-child { border-bottom: 0; }
 
 /* Botão "mostrar o resto", só no celular (ver colapsarCatalogoNoCelular). */
-.cu-mais {
-  display: block;
-  width: 100%;
-  margin-top: 10px;
-  padding: 11px 14px;
-  background: var(--white);
-  border: 1px dashed var(--hair);
-  border-radius: 10px;
-  font-family: var(--sans);
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--accent);
-  cursor: pointer;
-}
-
-.cu-mais:hover { border-color: var(--accent); border-style: solid; }
 
 /* ─── planos da assinatura ─── */
 .cu-planos {
@@ -4013,6 +4226,13 @@
   /* Os dois cartões de resultado empilham. O rótulo de cada um é o que
      mantém claro qual é qual quando deixam de estar lado a lado. */
   .cn-res-par { grid-template-columns: 1fr; }
+
+  /* Os três ganhos empilham; o bloco do essencial perde a coluna dos
+     números ao lado do texto e os coloca em cima. */
+  .cu-ganho-itens { grid-template-columns: 1fr; }
+  .cu-ess-proc { grid-template-columns: 1fr; gap: 14px; }
+  .cu-ess-nums { justify-content: flex-start; }
+  .cu-ess-frase { font-size: 16px; }
 
   /* O contraste perde a coluna do meio: o "sim"/"não" vai para baixo do caso,
      onde continua sendo a primeira coisa que o olho encontra. */
@@ -4310,4 +4530,78 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--accent);
+}
+
+/* A caixa que fecha cada família do catálogo. O resumo mostra a contagem e os
+   nomes numa linha só: quem procura uma ferramenta específica acha pelo nome
+   e abre; quem está lendo a página passa direto. O catálogo era 30% das
+   palavras visíveis da aba e não é leitura — é referência. */
+.cu-fam-cx {
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.cu-fam-cx > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 15px;
+  cursor: pointer;
+  list-style: none;
+  transition: background 0.15s ease;
+}
+
+.cu-fam-cx > summary::-webkit-details-marker { display: none; }
+.cu-fam-cx > summary:hover { background: var(--white); }
+
+.cu-fam-cx > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.cu-fam-cx-n {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  border: 1px solid var(--accent-soft);
+  background: var(--accent-soft);
+  padding: 3px 7px;
+  border-radius: 5px;
+}
+
+.cu-fam-cx-l {
+  min-width: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-light);
+}
+
+/* A seta, desenhada, para não entrar na seleção nem na busca da página. */
+.cu-fam-cx > summary::after {
+  content: "";
+  flex-shrink: 0;
+  margin-left: auto;
+  align-self: center;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--ink-muted);
+  border-bottom: 2px solid var(--ink-muted);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.18s ease;
+}
+
+.cu-fam-cx[open] > summary::after { transform: rotate(225deg) translate(-1px, -1px); }
+.cu-fam-cx[open] > summary { background: var(--white); border-bottom: 1px solid var(--hair); }
+
+.cu-fam-cx .cu-fam-grid { padding: 15px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cu-fam-cx > summary,
+  .cu-fam-cx > summary::after { transition: none; }
 }
