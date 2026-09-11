@@ -4264,3 +4264,50 @@
   .cu-naomed-l { grid-template-columns: 1fr; gap: 3px; }
   .cu-metodo-p { padding: 13px 14px; }
 }
+
+/* O objetivo declarado do tutorial. Fica no topo do guia em texto e é a
+   primeira coisa que a pessoa lê: sem ele, ela passa oito passos sem saber
+   para onde está indo. */
+.cu-rot-objetivo {
+  margin: 12px 0 4px;
+  padding: 12px 15px;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-light);
+  max-width: 80ch;
+}
+
+.cu-rot-objetivo span {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-muted);
+  margin-bottom: 4px;
+}
+
+.cu-plain-obj {
+  margin-bottom: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink);
+  padding-left: 12px;
+  border-left: 3px solid var(--accent);
+  max-width: 80ch;
+}
+
+/* O nome do ato abre cada grupo de passos no guia em texto: instalar, ligar
+   na conta, usar. É o que dá linha narrativa a uma lista de oito itens. */
+.cu-plain-ato {
+  display: block;
+  margin-bottom: 5px;
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}

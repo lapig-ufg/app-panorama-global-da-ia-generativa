@@ -1008,9 +1008,12 @@
     el.innerHTML = D.tutoriais.map(t => `
       <section class="cu-plain-tut">
         <h3>${esc(t.nome)} <span>· ${esc(t.legenda)}</span></h3>
+        ${t.objetivo ? `<p class="cu-plain-obj">${txt(t.objetivo)}</p>` : ''}
         <ol>
-          ${t.passos.map(p => `
+          ${t.passos.map((p, i) => `
             <li>
+              ${p.ato && (i === 0 || t.passos[i - 1].ato !== p.ato)
+                ? `<span class="cu-plain-ato">${esc(p.ato)}</span>` : ''}
               <strong>${esc(p.titulo)}</strong>
               <p>${txt(p.explicacao)}</p>
               ${p.prompt ? `<p class="cu-plain-nota"><strong>A tarefa dada ao agente:</strong> ${txt(p.prompt)}</p>` : ''}
@@ -1595,7 +1598,7 @@
     el.innerHTML = `
       <div class="cu-balao-topo">
         <span class="cu-balao-passo">${fim ? 'fim' : (os.passo + 1) + ' de ' + t.passos.length}</span>
-        <span class="cu-balao-tut">${esc(t.nomeCurto || t.nome)}</span>
+        <span class="cu-balao-tut">${fim || !p.ato ? esc(t.nomeCurto || t.nome) : esc(p.ato)}</span>
         <button type="button" class="cu-balao-x" data-acao="guia-min" aria-label="Encolher o guia">–</button>
       </div>
       ${corpo}
@@ -1702,9 +1705,10 @@
       </p>
       <div class="cu-rot-topo">
         <span class="cu-rot-passo">${fim ? 'fim' : `passo ${os.passo + 1} de ${t.passos.length}`}</span>
-        <span class="cu-rot-tut">${esc(t.nome)}</span>
+        <span class="cu-rot-tut">${esc(t.nome)}${!fim && p.ato ? ' · ' + esc(p.ato) : ''}</span>
         <span class="cu-rot-min">~${t.minutos} min no total</span>
       </div>
+      ${t.objetivo ? `<p class="cu-rot-objetivo"><span>Onde isto vai dar</span>${txt(t.objetivo)}</p>` : ''}
       ${fim ? `
         <h3 class="cu-rot-titulo">Tutorial concluído</h3>
         <p class="cu-rot-exp">${txt(t.fecho)}</p>

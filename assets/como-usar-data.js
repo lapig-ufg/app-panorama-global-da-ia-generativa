@@ -617,8 +617,14 @@ const COMO_USAR_DATA = {
       legenda: "Uma assinatura, qualquer harness",
       resumo: "Do zero a um modelo grande dirigindo o Claude Code, o OpenCode ou o Pi — sem editar um arquivo de configuração.",
       minutos: 9,
+
+      /* O tutorial declara o que você terá no fim. Sem isto, a pessoa passa
+         oito passos sem saber para onde está indo. */
+      objetivo: "No fim você tem um modelo grande demais para a sua máquina rodando pela assinatura da Ollama, dirigindo a ferramenta que você preferir — e sabe como trocar para um modelo local quando o dado não puder sair daí.",
+
       passos: [
         {
+          ato: "Instalar",
           janela: "dialogo",
           titulo: "Abrir o terminal",
           explicacao: "É a janela onde você digita comandos em vez de clicar. No Ubuntu, Ctrl+Alt+T. No macOS, Cmd+Espaço e \"Terminal\". No Windows, o PowerShell serve — mas para acompanhar este tutorial letra por letra vale ativar o WSL, que é um Linux dentro do Windows.",
@@ -633,6 +639,7 @@ const COMO_USAR_DATA = {
           }
         },
         {
+          ato: "Instalar",
           janela: "terminal",
           titulo: "Instalar o Ollama",
           explicacao: "Uma linha só. O `curl` baixa o script oficial e o `sh` executa. Antes de rodar um `curl | sh` vindo de qualquer lugar, confira que o endereço é mesmo o do site oficial — esse hábito vale para o resto da sua vida no terminal.",
@@ -648,6 +655,7 @@ const COMO_USAR_DATA = {
           nota: "Guarde esse endereço: 127.0.0.1:11434 é a sua própria máquina falando com ela mesma. Ele vai reaparecer no passo mais importante deste tutorial."
         },
         {
+          ato: "Ligar na conta",
           janela: "terminal",
           titulo: "Entrar na conta",
           explicacao: "Aqui o tutorial se separa do caminho \"modelo no meu disco\". A assinatura Ollama Cloud dá acesso a modelos grandes demais para caber numa máquina comum, rodando nos servidores deles. O comando abre o navegador para você confirmar.",
@@ -662,6 +670,7 @@ const COMO_USAR_DATA = {
           nota: "Plano Free dá créditos iniciais e uma requisição por vez; o Pro (US$ 20/mês) dá US$ 60 de crédito por mês e três requisições simultâneas. Os valores estão no quadro da seção 05."
         },
         {
+          ato: "Ligar na conta",
           janela: "terminal",
           titulo: "Rodar um modelo que não caberia aqui",
           explicacao: "O sufixo é tudo: `-cloud` (ou `:cloud`, nos modelos sem variante de tamanho) manda a conta para o servidor da Ollama. Repare no que NÃO acontece — não tem barra de download, porque não há nada para baixar.",
@@ -675,6 +684,7 @@ const COMO_USAR_DATA = {
           nota: "120 bilhões de parâmetros responderam em segundos numa máquina que não teria memória para carregá-los. O comando é local, o processo é local, a porta é local — o pensamento aconteceu num data center."
         },
         {
+          ato: "Usar",
           janela: "terminal",
           titulo: "Abrir o menu do launch",
           explicacao: "Este é o comando que muda o jogo. Sem argumento, `ollama launch` mostra as harnesses que a sua versão conhece, marca as que já estão instaladas e deixa escolher o modelo. Nada de variável de ambiente, nada de arquivo de configuração.",
@@ -695,6 +705,7 @@ const COMO_USAR_DATA = {
           nota: "A lista completa está na seção 05. Ela cresce a cada versão do Ollama — por isso vale rodar o comando e olhar a sua, em vez de confiar em qualquer tabela publicada (esta inclusive)."
         },
         {
+          ato: "Usar",
           janela: "terminal",
           titulo: "Dirigir o Claude Code com o modelo da Ollama",
           explicacao: "Instala o programa se ele faltar, aponta para o endereço local e abre. Repare na terceira linha da saída: o endereço é a sua máquina, e o modelo que vai responder está num servidor da Ollama. Onde ela pensa e até onde vai a mão dela são coisas diferentes.",
@@ -713,6 +724,7 @@ const COMO_USAR_DATA = {
           nota: "`ANTHROPIC_BASE_URL=http://localhost:11434`: a harness acha que está falando com a Anthropic e está falando com o processo do Ollama, na sua máquina, que por sua vez fala com o data center. Endereço local, modelo remoto — as duas coisas ao mesmo tempo, no mesmo comando."
         },
         {
+          ato: "Usar",
           janela: "terminal",
           titulo: "Trocar de harness sem trocar de assinatura",
           explicacao: "A mesma conta serve qualquer uma das integrações. Aqui o Pi, que nem precisava estar instalado: o launch instala e abre. Vale igual para `ollama launch opencode`, `ollama launch codex`, `ollama launch droid`.",
@@ -728,6 +740,7 @@ const COMO_USAR_DATA = {
           nota: "É este o ganho prático da assinatura: harness e modelo viram escolhas independentes. Dá para trocar de agente sem trocar de plano, e trocar de modelo sem reaprender o agente."
         },
         {
+          ato: "Quando o dado não pode sair",
           janela: "terminal",
           titulo: "E quando o dado não pode sair",
           explicacao: "O mesmo programa faz o contrário: sem sufixo de nuvem, os pesos vêm para o seu disco e a conta roda na sua máquina. É a opção para prontuário, entrevista e qualquer dado sob termo de consentimento — e a razão pela qual esta família existe na página.",
@@ -746,129 +759,142 @@ const COMO_USAR_DATA = {
     },
     {
       id: "antigravity",
-      nome: "Instalar o Antigravity",
+      nome: "Antigravity CLI",
       nomeCurto: "Antigravity",
       icone: "janela",
-      legenda: "Um IDE em que o agente é o protagonista",
-      resumo: "Do download à primeira tarefa executada, revisada em diff e conferida pelo próprio agente.",
-      minutos: 12,
+      legenda: "O agente do Google, no seu terminal",
+      resumo: "Da instalação à primeira tarefa — e à armadilha que a medição desta página encontrou.",
+      minutos: 8,
+
+      /* O tutorial declara o que você terá no fim. Sem isto, a pessoa passa
+         oito passos sem saber para onde está indo — foi a crítica que
+         motivou esta reescrita. */
+      objetivo: "No fim você tem um agente do Google rodando no seu terminal, olhando a sua pasta. E sabe a diferença entre ele enxergar os seus arquivos e não enxergar — que é a única coisa que separa os dois lados desta página inteira.",
+
+      /* É o CLI, não o aplicativo de janela. Foi o CLI (`agy`) que a medição
+         da seção 02 usou, e é ele que tem a mesma forma do tutorial do
+         Ollama: tudo acontece no terminal, do começo ao fim.
+         Comandos conferidos em antigravity.google/docs/cli/install/ e
+         .../getting-started/ em 11/set/2026. O passo 7 usa a saída REAL
+         medida em 10/set (ver automation/capturas/2026-09-10-leia-me.md). */
       passos: [
         {
-          janela: "navegador",
-          titulo: "Baixar",
-          explicacao: "Sim: o primeiro passo para sair do navegador acontece no navegador. É uma boa hora para reparar que o navegador nunca foi o problema — o problema era a IA morar dentro dele.",
-          navegador: {
-            url: "antigravity.google/download",
-            titulo: "Google Antigravity",
-            texto: "Prévia pública, sem custo. Escolha o instalador do seu sistema:",
-            opcoes: ["macOS (Apple Silicon)", "macOS (Intel)", "Windows", "Linux (.deb)"],
-            botao: "Baixar"
-          },
-          nota: "A prévia é gratuita e vem com cotas generosas do Gemini 3 Pro."
+          ato: "Instalar",
+          janela: "dialogo",
+          titulo: "Abrir o terminal",
+          explicacao: "A mesma janela do tutorial anterior. No Ubuntu, Ctrl+Alt+T. No macOS, Cmd+Espaço e \"Terminal\". No Windows, o PowerShell.",
+          dialogo: {
+            titulo: "Onde fica o terminal",
+            linhas: [
+              "Ubuntu / Linux — tecle Ctrl + Alt + T",
+              "macOS — Cmd + Espaço, digite Terminal, Enter",
+              "Windows — menu Iniciar, digite PowerShell"
+            ],
+            botao: "Abri o terminal"
+          }
         },
         {
-          janela: "dialogo",
+          ato: "Instalar",
+          janela: "terminal",
           titulo: "Instalar",
-          explicacao: "Instalação comum, sem terminal: no macOS você arrasta o ícone para a pasta Aplicativos; no Windows é o instalador de sempre; no Linux, um pacote .deb.",
-          dialogo: {
-            titulo: "Instalar o Antigravity",
-            linhas: [
-              "macOS — abra o .dmg e arraste para Aplicativos",
-              "Windows — execute o instalador e siga o assistente",
-              "Linux — sudo dpkg -i antigravity_*.deb"
-            ],
-            botao: "Instalado"
-          }
-        },
-        {
-          janela: "dialogo",
-          titulo: "Entrar e escolher o modelo",
-          explicacao: "No primeiro arranque ele pede a Conta Google e o modelo. Repare no que isso significa: o aplicativo está instalado na sua máquina e enxerga os seus arquivos, mas quem responde é um modelo num data center do Google.",
-          dialogo: {
-            titulo: "Bem-vindo ao Antigravity",
-            linhas: [
-              "Conta: entrar com o Google",
-              "Modelo: Gemini 3 Pro",
-              "Autonomia: Review-driven (revisar antes de aplicar)"
-            ],
-            botao: "Continuar"
-          },
-          nota: "Comece pelo preset mais conservador. Autonomia se afrouxa depois de a confiança ser conquistada, nunca antes."
-        },
-        {
-          janela: "dialogo",
-          titulo: "Abrir uma pasta",
-          explicacao: "O agente trabalha dentro de uma pasta — e enxerga só ela. Escolher a pasta é escolher o alcance dele; comece por um projeto pequeno e, de preferência, versionado no git.",
-          dialogo: {
-            titulo: "Abrir pasta",
-            linhas: [
-              "~/projetos/analise-cerrado",
-              "12 arquivos · repositório git · última alteração hoje"
-            ],
-            botao: "Abrir"
-          }
-        },
-        {
-          janela: "terminal",
-          titulo: "Dar a primeira tarefa",
-          explicacao: "Você escreve em português; ele planeja, executa e mostra o que fez. O terminal abaixo é o do próprio IDE — os comandos são os mesmos do primeiro cenário desta página, agora rodando dentro de uma janela com botões.",
-          prompt: "Organize as fotos de ~/campo-2026 em subpastas por data e me diga se sobrou alguma.",
-          cmd: "ls ~/campo-2026 | wc -l",
+          explicacao: "Uma linha, como o Ollama. O instalador detecta o seu sistema e deixa um programa chamado `agy` — não `antigravity`.",
+          cmd: "curl -fsSL https://antigravity.google/cli/install.sh | bash",
           saida: [
-            { t: "out", v: "1240" },
+            { t: "out", v: "==> Detecting platform… linux-x64" },
+            { t: "out", v: "==> Downloading Antigravity CLI v1.2.0" },
+            { t: "out", v: "==> Installed to ~/.local/bin/agy" },
             { t: "out", v: "" },
-            { t: "out", v: "[plano] 1. inspecionar nomes  2. agrupar por data de modificação" },
-            { t: "out", v: "        3. mover com mv -n  4. conferir a contagem final" }
+            { t: "out", v: "Run 'agy' to get started." }
           ],
-          nota: "Repare no plano antes da ação: é o preset \"revisar antes de aplicar\" funcionando. Você aprova o plano, e só então ele mexe em arquivo."
+          nota: "No Windows a linha é outra: `irm https://antigravity.google/cli/install.ps1 | iex`, no PowerShell. Se o terminal disser que não achou o `agy` depois de instalar, é a pasta `~/.local/bin` que não está no PATH — o próprio instalador imprime a linha que resolve."
         },
         {
+          ato: "Primeiro arranque",
           janela: "terminal",
-          titulo: "Ver o agente trabalhando",
-          explicacao: "Daqui em diante é igual ao terminal — porque é o terminal. A diferença é o que está em volta: diff lado a lado, navegador embutido para testar o que foi construído, e um gerenciador para tocar várias tarefas ao mesmo tempo.",
-          cmd: "find ~/campo-2026/ORGANIZADAS -type f | wc -l",
+          titulo: "Abrir pela primeira vez",
+          explicacao: "Sem argumento nenhum, o `agy` abre uma tela dentro do terminal. Na primeira vez ele pergunta o esquema de cores e se prefere tela cheia ou embutida — pode escolher qualquer coisa, dá para trocar depois.",
+          cmd: "agy",
+          saida: [
+            { t: "out", v: "  Antigravity CLI v1.2.0" },
+            { t: "out", v: "" },
+            { t: "out", v: "  Esquema de cores:  ● Dark   ○ Solarized   ○ Solarized Light   ○ Terminal" },
+            { t: "out", v: "  Modo de tela:      ● Tela cheia   ○ Embutido" }
+          ],
+          nota: "Repare que ele abriu **na pasta em que você estava**. Isso não é detalhe de conforto: é o que ele vai poder enxergar."
+        },
+        {
+          ato: "Primeiro arranque",
+          janela: "dialogo",
+          titulo: "Entrar na conta",
+          explicacao: "Na primeira execução ele abre o seu navegador sozinho para você entrar com a Conta Google. Depois disso a sessão fica guardada na máquina e ele não pergunta mais.",
+          dialogo: {
+            titulo: "Entrar com o Google",
+            linhas: [
+              "O navegador abriu em accounts.google.com",
+              "Escolha a conta e autorize o Antigravity CLI",
+              "Volte ao terminal — ele já está autenticado"
+            ],
+            botao: "Autorizei no navegador"
+          },
+          nota: "Aqui fica visível de novo o ponto da seção 01: o programa está instalado na sua máquina e enxerga os seus arquivos, mas quem responde é um modelo num servidor do Google. Onde ele pensa e até onde vai a mão dele são coisas diferentes."
+        },
+        {
+          ato: "Primeiro arranque",
+          janela: "dialogo",
+          titulo: "Autorizar a pasta",
+          explicacao: "Antes de qualquer coisa ele pergunta se pode ler a pasta em que foi aberto. É a pergunta mais importante do tutorial inteiro — e a resposta define todo o resto.",
+          dialogo: {
+            titulo: "Confiar nesta pasta?",
+            linhas: [
+              "~/laboratorio-teste",
+              "O agente vai poder ler os arquivos daqui.",
+              "Comandos que alteram arquivos continuam pedindo aprovação."
+            ],
+            botao: "Confiar nesta pasta"
+          },
+          nota: "Abra no projeto, e só nele. Abrir na raiz do disco ou na sua pasta pessoal é dar acesso a chave de SSH, a e-mail e a tudo mais — ver a seção 07."
+        },
+        {
+          ato: "Usar",
+          janela: "terminal",
+          titulo: "A primeira tarefa, em português",
+          explicacao: "Você escreve o que quer. Ele olha a pasta antes de propor qualquer coisa — e é isso que o chat do navegador não consegue fazer.",
+          prompt: "Quantas fotos tem na pasta campo-2026 e de quantos dias diferentes elas são?",
+          cmd: "ls campo-2026 | wc -l",
           saida: [
             { t: "out", v: "1240" },
             { t: "out", v: "" },
-            { t: "out", v: "[agente] 1240 arquivos em 20 subpastas por data. Nenhum sobrou." },
-            { t: "out", v: "[agente] Escrevi indice.py para gerar o CSV. Quer revisar?" }
-          ]
+            { t: "out", v: "São 1.240 fotos. Vou olhar as datas de modificação para" },
+            { t: "out", v: "contar quantos dias diferentes elas cobrem." }
+          ],
+          nota: "Ninguém disse que eram 1.240. Ele contou."
         },
         {
-          janela: "diff",
-          titulo: "Revisar antes de aceitar",
-          explicacao: "Aqui está a parte que o terminal não desenha bem. O agente não aplicou nada: ele propôs, e a mudança chega como diff — linha que sai em vermelho, linha que entra em verde, arquivo por arquivo. Você lê, aceita ou rejeita trecho a trecho. É a mesma aprovação do CLI, com o texto na frente dos olhos em vez de rolando no histórico.",
-          diff: {
-            arquivo: "indice.py",
-            linhas: [
-              { t: "ctx", v: "import csv, pathlib" },
-              { t: "ctx", v: "" },
-              { t: "menos", v: "for f in pathlib.Path('.').glob('*.jpg'):" },
-              { t: "mais", v: "raiz = pathlib.Path.home() / 'campo-2026' / 'ORGANIZADAS'" },
-              { t: "mais", v: "for f in sorted(raiz.rglob('*.jpg')):" },
-              { t: "ctx", v: "    linhas.append([f.name, f.parent.name, f.stat().st_size])" },
-              { t: "ctx", v: "" },
-              { t: "mais", v: "# a data vem da PASTA, que já foi conferida — e não do nome do arquivo" }
-            ],
-            botoes: ["Aceitar tudo", "Rejeitar"]
-          },
-          nota: "Repare no comentário que ele escreveu na última linha: o agente registrou POR QUE tirou a data do nome do arquivo. Num terminal essa justificativa some com a rolagem; num diff ela fica no arquivo, para o próximo bolsista ler."
+          ato: "Usar",
+          janela: "terminal",
+          titulo: "O modo sem tela — e a armadilha dele",
+          explicacao: "Para rodar o agente dentro de um script existe o modo `--print`: ele responde e sai, sem abrir tela. **Neste modo ele não herda a pasta em que você está** — foi assim que a medição desta página descobriu, sem querer, a demonstração mais limpa do argumento todo.",
+          cmd: "agy --print \"Rode: pwd\"",
+          saida: [
+            { t: "out", v: "/home/voce/.antigravity/scratch" },
+            { t: "nota", v: "Você está em ~/laboratorio-teste. Ele não está." }
+          ],
+          nota: "Sem a pasta, os mesmos cinco pedidos da seção 02 deram **zero comandos** e respostas indistinguíveis das do chat de navegador. Mesmo programa, mesmo modelo, mesma pergunta — só muda se ele consegue ver o disco."
         },
         {
-          janela: "navegador",
-          titulo: "Deixar o agente conferir sozinho",
-          explicacao: "O navegador embutido é a ferramenta que nenhuma CLI tem: o agente abre o que acabou de construir, olha, e conserta se estiver errado — sem você virar o olho de revisão. Aqui ele gerou uma prévia do índice e foi verificar se as 20 pastas apareceram mesmo.",
-          navegador: {
-            url: "localhost:8000/indice.html",
-            titulo: "Índice de campo — 2026",
-            texto: "1.240 fotos · 20 dias de campo · gerado por indice.py",
-            opcoes: ["2026-07-14 — 96 fotos", "2026-07-15 — 71 fotos", "2026-07-16 — 88 fotos"],
-            botao: "Baixar CSV"
-          },
-          nota: "O agente confere o próprio trabalho olhando o resultado, e não relendo o código que escreveu. É o mesmo movimento do `wc -l` do primeiro cenário desta página — só que com olhos."
+          ato: "Usar",
+          janela: "terminal",
+          titulo: "Dar a pasta, e ver a diferença",
+          explicacao: "A opção `--add-dir` entrega a pasta ao agente. Compare a saída com a do passo anterior: é o mesmo comando, no mesmo computador, no mesmo segundo.",
+          cmd: "agy --print --add-dir . \"Rode: pwd\"",
+          saida: [
+            { t: "out", v: "/home/voce/laboratorio-teste" },
+            { t: "nota", v: "Agora sim. A partir daqui ele enxerga os seus arquivos." }
+          ],
+          nota: "Guarde este par de saídas: é a aba inteira em duas linhas. A diferença entre \"IA no navegador\" e \"IA na sua máquina\" não é o modelo nem a inteligência — é **se ela alcança o seu disco**, e isso liga e desliga numa opção de linha de comando."
         }
       ],
-      fecho: "O Antigravity resolve a parte que trava a maioria das pessoas — a janela preta — e ainda ganha duas coisas que o terminal não desenha: a revisão em diff, que deixa a aprovação legível, e o navegador embutido, que deixa o agente conferir o próprio resultado. O preço é ser um programa a mais para instalar e uma conta a mais para ter."
+      fecho: "Você tem o agente instalado, autenticado e apontado para uma pasta. O que fazer com ele é a seção 02 desta página — e o que NÃO deixar ele fazer é a seção 07. Se quiser dirigir este mesmo agente com outro modelo, ou usar um modelo da Ollama dentro de outra harness, o quadro do `ollama launch` no catálogo mostra como."
     }
   ],
 
