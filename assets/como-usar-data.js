@@ -412,6 +412,17 @@ const COMO_USAR_DATA = {
           link: "https://github.com/earendil-works/pi"
         },
         {
+        nome: "Antigravity CLI",
+        empresa: "Google",
+        instala: "curl -fsSL https://antigravity.google/cli/install.sh | bash",
+        comando: true,
+        instalaAlt: "Windows (PowerShell): irm https://antigravity.google/cli/install.ps1 | iex · O programa instalado chama-se `agy`, não `antigravity`.",
+        precisa: "Conta Google. Prévia pública, sem custo.",
+        acesso: "O mesmo agente do aplicativo de janela, no terminal: lê, escreve, roda comando e navega. Tem um modo `--print` para usar dentro de script — e nesse modo é preciso passar `--add-dir`, senão ele não enxerga a sua pasta.",
+        codigoAberto: false,
+        link: "https://antigravity.google/docs/cli/install/"
+      },
+      {
           nome: "Gemini CLI",
           empresa: "Google",
           licenca: "Apache-2.0",
@@ -457,7 +468,7 @@ const COMO_USAR_DATA = {
           instala: "Baixar em antigravity.google/download (macOS, Windows, Linux)",
           instalaAlt: "Prévia pública, sem custo, com cotas generosas do Gemini 3 Pro.",
           precisa: "Conta Google.",
-          acesso: "IDE onde o agente é o elemento central: editor, terminal e navegador embutido ficam à disposição dele, com um gerenciador para tocar várias tarefas em paralelo.",
+          acesso: "IDE onde o agente é o elemento central: editor, terminal e navegador embutido ficam à disposição dele, com um gerenciador para tocar várias tarefas em paralelo. O mesmo agente existe em versão de terminal — o Antigravity CLI, na família acima, que é a versão medida na seção 02 e ensinada na seção 05.",
           codigoAberto: false,
           link: "https://antigravity.google/"
         }
