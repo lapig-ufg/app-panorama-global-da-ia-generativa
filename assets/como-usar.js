@@ -280,18 +280,63 @@
     if (!el || typeof CENAS === 'undefined') return;
     const c = CENAS.cenas[exemploAtual];
     const F = CENAS.fontes;
+    const totalCenas = CENAS.cenas.length;
+    const proxIdx = (exemploAtual + 1) % totalCenas;
+    const antIdx = (exemploAtual - 1 + totalCenas) % totalCenas;
 
     el.innerHTML = `
-      <div class="cn-abas" role="tablist" aria-label="Escolher o exemplo">
-        ${CENAS.cenas.map((x, i) => `
-          <button type="button" role="tab" class="cn-aba ${i === exemploAtual ? 'is-active' : ''}"
-                  data-cn="ir" data-i="${i}" tabindex="${i === exemploAtual ? '0' : '-1'}"
-                  aria-selected="${i === exemploAtual}">${esc(x.aba)}</button>`).join('')}
+      <div class="cn-seletor" role="region" aria-label="Seletor de exemplos">
+        <div class="cn-abas-topo">
+          <div class="cn-abas-chamada">
+            <span class="cn-abas-icone" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3l7 18 3-7 7-3L3 3z"/>
+              </svg>
+            </span>
+            <span class="cn-abas-titulo">Clique em um exemplo para ver a comparação:</span>
+          </div>
+          <span class="cn-abas-contador">
+            <span class="cn-abas-contador-atual">Exemplo ${exemploAtual + 1}</span> de ${totalCenas} selecionado
+          </span>
+        </div>
+
+        <div class="cn-abas" role="tablist" aria-label="Escolher o exemplo">
+          ${CENAS.cenas.map((x, i) => {
+            const ativa = i === exemploAtual;
+            return `
+            <button type="button" role="tab" class="cn-aba ${ativa ? 'is-active' : ''}"
+                    data-cn="ir" data-i="${i}" tabindex="${ativa ? '0' : '-1'}"
+                    aria-selected="${ativa}"
+                    title="Clique para ver o exemplo ${i + 1}: ${esc(x.aba)}">
+              <span class="cn-aba-num" aria-hidden="true">0${i + 1}</span>
+              <span class="cn-aba-corpo">
+                <span class="cn-aba-rotulo">Exemplo 0${i + 1}</span>
+                <strong class="cn-aba-txt">${esc(x.aba)}</strong>
+              </span>
+              <span class="cn-aba-indicador" aria-hidden="true">
+                ${ativa ? `
+                  <span class="cn-aba-status-tag">Ativo</span>
+                  <svg class="cn-aba-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                ` : `
+                  <span class="cn-aba-status-tag is-ver">Ver</span>
+                  <svg class="cn-aba-seta" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                `}
+              </span>
+            </button>`;
+          }).join('')}
+        </div>
       </div>
 
       <article class="cn-ex">
         <div class="cn-ex-pergunta">
-          <span class="cn-ex-rot">A pergunta</span>
+          <div class="cn-ex-pergunta-meta">
+            <span class="cn-ex-rot">Exemplo 0${exemploAtual + 1} de 0${totalCenas} · A pergunta</span>
+            <span class="cn-ex-tema">${esc(c.aba)}</span>
+          </div>
           <h3>${esc(c.pergunta)}</h3>
         </div>
 
@@ -314,6 +359,23 @@
         </div>
 
         ${c.saibaMais ? `<div class="cu-saibas">${[].concat(c.saibaMais).map(i => saibaMais(i)).join('')}</div>` : ''}
+
+        <nav class="cn-ex-nav" aria-label="Navegar entre exemplos">
+          <button type="button" class="cn-ex-nav-btn is-ant" data-cn="ir" data-i="${antIdx}" title="Ver exemplo anterior: ${esc(CENAS.cenas[antIdx].aba)}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <span class="cn-ex-nav-texto">
+              <span class="cn-ex-nav-legenda">Exemplo anterior (0${antIdx + 1})</span>
+              <span class="cn-ex-nav-nome">${esc(CENAS.cenas[antIdx].aba)}</span>
+            </span>
+          </button>
+          <button type="button" class="cn-ex-nav-btn is-prox" data-cn="ir" data-i="${proxIdx}" title="Ver próximo exemplo: ${esc(CENAS.cenas[proxIdx].aba)}">
+            <span class="cn-ex-nav-texto">
+              <span class="cn-ex-nav-legenda">Próximo exemplo (0${proxIdx + 1})</span>
+              <span class="cn-ex-nav-nome">${esc(CENAS.cenas[proxIdx].aba)}</span>
+            </span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </nav>
       </article>
 
       <p class="cn-fonte">
