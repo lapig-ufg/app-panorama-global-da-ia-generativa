@@ -130,17 +130,20 @@ planilha, não depende de cron e não tem pipeline. Todo o conteúdo mora em
 `assets/como-usar-data.js` — é o único arquivo a editar para atualizar a aba.
 
 Ela responde ao "como" que faltava no painel: a diferença entre conversar com a IA numa
-aba do navegador e instalá-la na máquina, com acesso aos arquivos. São **seis seções**, na
+aba do navegador e instalá-la na máquina, com acesso aos arquivos. São **sete seções**, na
 ordem da narrativa: entender → ver na prática → o que sobra → instalar → referência →
-procedência.
+procedência → resumo.
 
-Antes da seção 01 vem **"Comece por aqui"**: a premissa em duas frases, as três conclusões
-que a medição sustenta, e a procedência (5 tarefas · 60+ execuções · 3 programas).
+No fim, depois da medição, vem **"O resumo"**: a premissa em duas frases, as três conclusões
+que a página sustenta — cada uma com link de volta para a seção que a demonstra — e a
+procedência (5 tarefas · 60+ execuções · 3 programas). O bloco nasceu no topo, como
+*"Comece por aqui"*, e foi movido em 12/set/2026: abria citando os números da medição
+(planilhas, abas, repetições) para um leitor que ainda não sabia que existia uma medição —
+o caso extremo do erro de descontextualização que o usuário apontou na página inteira.
 
-> **Regra ao editar esse bloco:** cada frase tem de fazer sentido para quem nunca leu o
-> resto. Ele já abriu em *"No navegador, descreva a sua máquina"* e provou com *"dizer no
-> Ubuntu numa máquina Windows"* — conclusões escritas de dentro do teste, e portanto frases
-> soltas para qualquer outra pessoa.
+> **Regra ao editar esse bloco:** cada frase tem de fazer sentido para quem chegou ao fim
+> sem reler nada, e quem pulou direto ao resumo tem de encontrar, no link de cada
+> conclusão, o caminho para o contexto que não leu.
 
 1. **A diferença, explicada** — texto corrido, para quem nunca instalou nada. Duas ideias,
    uma de cada vez: se a IA consegue **olhar** os seus arquivos e se ela pode **mexer** neles.
@@ -167,6 +170,8 @@ que a medição sustenta, e a procedência (5 tarefas · 60+ execuções · 3 pr
    quadro do `ollama launch`.
 6. **Como isto foi medido** — o método em três passos, a lista do que **não** foi medido, e as
    três conclusões que estavam erradas.
+7. **O resumo** — as três conclusões da página com link para a seção que demonstra cada uma,
+   e a procedência embaixo. Fecha a página.
 
 > A seção **"Antes de instalar: o que você está autorizando"** existiu entre 11 e 12/set/2026
 > e foi removida: eram sete regras técnicas e nichadas, escritas para quem já administra a

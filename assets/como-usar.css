@@ -120,9 +120,10 @@
   color: var(--ink);
 }
 
-/* ═══ 00 · O ESSENCIAL ═══
-   O bloco do topo, para quem não vai ler a página. Fundo escuro porque ele
-   precisa se distinguir de tudo que vem depois: é conclusão, não argumento. */
+/* ═══ 07 · O RESUMO ═══
+   O bloco que fecha a página. Fundo escuro porque ele precisa se distinguir
+   de tudo que veio antes: é fechamento, não argumento — e a seção inteira
+   já é o contraste visual que sinaliza "a partir daqui é recado final". */
 .cu-ess {
   margin: 0 0 34px;
   padding: 24px 26px 22px;
@@ -209,6 +210,14 @@
   line-height: 1.6;
   color: #a8a196;
   max-width: 76ch;
+}
+
+/* O caminho de volta: cada conclusão do resumo liga à seção onde a
+   demonstração mora. É o que separa um resumo de um pôster. */
+.cu-ess-link {
+  white-space: nowrap;
+  color: var(--accent-bright);
+  font-weight: 600;
 }
 
 .cu-ess-proc {

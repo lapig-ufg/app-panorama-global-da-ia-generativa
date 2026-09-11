@@ -29,51 +29,50 @@ const COMO_USAR_DATA = {
   updatedAt: "2026-09-06",
 
   /* ─────────────────────────────────────────────────────────────
-     0. O ESSENCIAL, ANTES DE TUDO
-     Fica no topo, antes da seção 01, e é a única parte da página
-     escrita para quem não vai ler a página. Três conclusões e a
-     linha que diz de onde elas vêm — porque "fizemos o teste" e
-     "achamos que é assim" precisam ser distinguíveis de relance.
+     7. O RESUMO (fecha a página)
+     Nasceu no topo, como "Comece por aqui", e virou o exemplo máximo do
+     erro que o usuário apontou: citava os números da medição (40
+     planilhas, 57 abas, "repetimos dez vezes") para um leitor que ainda
+     não sabia nem que existia uma medição. Como resumo no fim, cada
+     conclusão pode apontar para trás: as três frases abaixo dizem o que
+     a página inteira mostrou, e cada uma tem um link para a seção onde
+     o leitor viu (ou pode ver) o sustento.
+
+     Regra para editar daqui em diante: cada frase continua tendo de
+     fazer sentido para quem NÃO leu a página — mas agora o contexto
+     que falta tem um lugar para ser buscado, que é o link da frase.
      ───────────────────────────────────────────────────────────── */
   essencial: {
-    rotulo: "Comece por aqui",
+    rotulo: "Fim da página",
 
-    /* A ARMADILHA QUE ESTE BLOCO JÁ CAIU UMA VEZ: conclusão só funciona
-       depois da premissa. A primeira versão abria em "No navegador, descreva
-       a sua máquina" e citava "dizer no Ubuntu numa máquina Windows" —
-       frases escritas da cadeira de quem já leu a página inteira e já sabe
-       o que foram os testes. Quem chega não sabe nem que existem dois jeitos
-       de usar IA.
+    intro: "Se você leu até aqui, estas três frases já são conhecidas. Se pulou direto para o resumo, elas são a página em miniatura — e cada uma leva à seção onde está a demonstração.",
 
-       Regra para editar daqui em diante: cada frase deste bloco tem de fazer
-       sentido para alguém que NUNCA leu o resto. Nada de vocabulário que só
-       existe dentro da medição — sem "Ubuntu", sem "zero comandos", sem "os
-       dois programas". Se precisar de contexto, o contexto vem antes. */
-    intro: "Há dois jeitos de usar inteligência artificial. No primeiro, que é o que quase todo mundo usa, você abre uma aba do navegador e conversa: ela responde, você copia o que serve. No segundo, você <strong>instala um programa no seu computador</strong> e ele abre os seus arquivos e trabalha neles. Esta página compara os dois, e as comparações são testes de verdade, não opinião.",
-
-    conclusoesRotulo: "Se você só ler isto, leve estas três coisas",
+    conclusoesRotulo: "O que esta página mostrou, em três frases",
 
     conclusoes: [
       {
         n: "1",
         frase: "No navegador, a IA não faz ideia de como é o seu computador.",
-        prova: "Ela não sabe qual sistema você usa, onde ficam os seus arquivos nem quantos são. Por isso você precisa contar. E se contar errado, a resposta vem errada sem ninguém perceber. O programa instalado não precisa: ele vai olhar."
+        prova: "Ela não sabe qual sistema você usa, onde ficam os seus arquivos nem quantos são. Por isso você precisa contar — e quem conta errado recebe resposta errada sem aviso. O programa instalado não precisa de descrição: ele abre a pasta e vê.",
+        link: { texto: "a demonstração", href: "#abertura" }
       },
       {
         n: "2",
         frase: "Diga o que não pode ser perdido.",
-        prova: "Pedimos “converta estas 40 planilhas para CSV”. Vieram 40 arquivos, e 57 abas de dados sumiram sem nenhum aviso. Pedindo a mesma coisa com “sem perder nenhuma aba”, vieram os 97 arquivos certos. Repetimos dez vezes: o resultado foi sempre esse."
+        prova: "Conversão de planilhas é o exemplo mais claro: pedida sem ressalvas, a IA entrega um arquivo por planilha e as abas de dados somem em silêncio, com a resposta dizendo “pronto” o tempo todo. Com “sem perder nenhuma aba” no pedido, sai tudo. A diferença é uma frase.",
+        link: { texto: "o exemplo, com os números", href: "#comparacao" }
       },
       {
         n: "3",
         frase: "Confira o resultado, não o relatório.",
-        prova: "Nesse mesmo teste, a resposta na tela dizia “pronto, 0 erros” no exato momento em que os dados já tinham se perdido. Abrir a pasta e contar os arquivos leva dez segundos, e é a única conferência que vale."
+        prova: "A resposta na tela pode dizer “concluído” no exato momento em que o arquivo errado já está gravado. Abrir a pasta e olhar leva dez segundos — e é a única conferência que a própria IA não consegue falsificar, porque os arquivos não conversam.",
+        link: { texto: "onde isto apareceu", href: "#medicao" }
       }
     ],
 
     procedencia: {
       titulo: "De onde vêm estes números",
-      texto: "Cinco tarefas comuns de trabalho — organizar fotos, converter planilhas, descobrir o que lotou uma pasta — feitas de verdade em setembro de 2026. Primeiro num chat de navegador, depois em dois programas instalados numa máquina com os arquivos na frente. As tarefas que mais importavam foram repetidas cinco vezes em cada programa. <strong>Quem diz se deu certo são os arquivos na sua pasta, não a resposta da IA.</strong>",
+      texto: "Cinco tarefas comuns de trabalho — organizar fotos, converter planilhas, descobrir o que lotou uma pasta — feitas de verdade em setembro de 2026. Primeiro num chat de navegador, depois em dois programas instalados numa máquina com os arquivos na frente. As tarefas que mais importavam foram repetidas cinco vezes em cada programa. <strong>Quem diz se deu certo são os arquivos na pasta, não a resposta da IA.</strong> A seção acima conta o método; aqui fica a escala.",
       numeros: [
         { valor: "5", rotulo: "tarefas" },
         { valor: "60+", rotulo: "execuções" },
@@ -102,10 +101,10 @@ const COMO_USAR_DATA = {
     lede: "Você já usa IA. Provavelmente numa aba do navegador: abre o site, escreve o que precisa, lê a resposta, copia o que serve. Esta aba é sobre o outro jeito: <strong>instalar a IA no seu computador e deixar que ela abra os seus arquivos</strong>.",
 
     /* Os parágrafos de abertura. Texto corrido de propósito: a versão
-       anterior desta seção era um quadro comparativo, e o leitor
-       chegava na seção 02 sem ter entendido o que estava comparando. */
+        anterior desta seção era um quadro comparativo, e o leitor
+        chegava na seção 02 sem ter entendido o que estava comparando. */
     paragrafos: [
-      "A diferença entre os dois não é a inteligência do modelo. Pode ser o mesmo modelo nos dois lugares, e nesta página, em boa parte dos testes, foi.",
+      "A diferença entre os dois não é a inteligência do modelo. Pode ser o mesmo modelo nos dois lugares — e, quando a gente compara os dois jeitos de trabalhar, é o que costuma acontecer.",
       "A diferença são duas coisas bem concretas: <strong>se ela consegue olhar</strong> os seus arquivos, e <strong>se ela pode mexer</strong> neles. As duas mudam o que você precisa escrever no pedido, e mudam em direções opostas, e é isso que costuma confundir quem está começando.",
       "Vale a pena entender uma de cada vez."
     ],
@@ -186,7 +185,7 @@ const COMO_USAR_DATA = {
           texto: "O que sobra é um programinha guardado, numa pasta organizada, com o registro do que mudou. Na semana seguinte você roda de novo. É a seção 03 desta página."
         }
       ],
-      custo: "O preço é real e vale dizer: instalar leva uns quinze minutos na primeira vez, e você passa a aprovar comandos em vez de só ler respostas. Para uma dúvida avulsa, o navegador continua sendo mais rápido. A seção 02 tem um bloco só sobre isso."
+      custo: "O preço é real e vale dizer: instalar leva uns quinze minutos na primeira vez, e você passa a aprovar comandos em vez de só ler respostas. Para uma dúvida avulsa, o navegador continua sendo mais rápido. Depois dos exemplos da seção 02 há um bloco inteiro sobre os casos em que a aba ganha."
     },
 
     saibaMais: [
@@ -329,7 +328,7 @@ const COMO_USAR_DATA = {
             "  a lista antes de trocar por `mv`."
           ]
         },
-        nota: "Repare de onde saiu cada linha: são as lições dos cenários 2, 5 e 1 desta página, viradas em regra permanente. É assim que uma correção deixa de ser um episódio e vira comportamento."
+        nota: "Repare de onde sai cada linha: são os erros e quase-erros que os exemplos desta página mostraram — dado bruto que nunca se mexe, colisão de nome ao padronizar, abas de planilha que somem — virados em regra permanente. É assim que uma correção deixa de ser um episódio e vira comportamento."
       },
       {
         titulo: "E, no fim, a reprodutibilidade",
@@ -947,7 +946,7 @@ const COMO_USAR_DATA = {
             { t: "out", v: "/home/voce/.antigravity/scratch" },
             { t: "nota", v: "Você está em ~/laboratorio-teste. Ele não está." }
           ],
-          nota: "Sem a pasta, os mesmos cinco pedidos da seção 02 deram **zero comandos** e respostas indistinguíveis das do chat de navegador. Mesmo programa, mesmo modelo, mesma pergunta. Só muda se ele consegue ver os seus arquivos."
+          nota: "Sem a pasta, os mesmos pedidos dos exemplos da seção 02 voltam a dar **zero comandos** e respostas indistinguíveis das do chat de navegador. Mesmo programa, mesmo modelo, mesma pergunta. Só muda se ele consegue ver os seus arquivos."
         },
         {
           ato: "Usar",
@@ -1005,7 +1004,7 @@ const COMO_USAR_DATA = {
     naoMedido: [
       {
         item: "Tempo e custo comparáveis",
-        porque: "o lado do navegador não teve tempo cronometrado. Um lado medido e outro estimado foi exatamente o que tirou o gráfico de custos desta página; não vamos repetir."
+        porque: "o lado do navegador não teve tempo cronometrado. Um lado medido e outro estimado não é comparação: por isso esta página não publica tempo nem custo nenhum."
       },
       {
         item: "Um cenário de geoprocessamento com GDAL",
@@ -1023,7 +1022,7 @@ const COMO_USAR_DATA = {
 
     saibaMais: {
       titulo: "Três conclusões desta medição estavam erradas. Como elas foram descobertas",
-      corpo: "Medir IA é fácil de errar, e a maneira mais comum de errar é atribuir ao programa um comportamento que na verdade foi o teste que causou. Aconteceu três vezes aqui, e as três foram corrigidas antes de qualquer número chegar a esta página.<br><br><strong>1. “A palavra Ubuntu desliga o programa.”</strong> Errado. Nomear um sistema não desliga nada. Nomear o sistema <em>errado</em> desliga. A máquina era Windows e o enunciado dizia Ubuntu.<br><br><strong>2. “A trava de isolamento não distorce nada.”</strong> Errado, e este foi o pior: a trava <em>escondia o Python</em> de um dos programas. O outro enxergava as bibliotecas instaladas e parecia mais rápido. Não era programa melhor; era ambiente diferente, e eu tinha creditado o mérito ao programa.<br><br><strong>3. “Os dois programas saem da pasta e varrem o computador todo.”</strong> Errado. Era o enunciado, que falava de um HD de 500 GB inexistente. Corrigido o texto, os dois ficaram dentro da pasta.<br><br>O fio comum das três é a mesma frase da seção 01: <strong>o programa age sobre o que consegue verificar que existe.</strong> Pedido que descreve o que não está na máquina vira resposta de conhecimento; ambiente que esconde uma ferramenta vira “a máquina não tem”.<br><br>O cenário de teste também precisou de conserto. Numa versão anterior as fotos tinham 91 bytes cada, e um programa concluiu, corretamente, que eram arquivos quebrados e recomendou apagar as 1.240. O erro era do teste. Com fotos JPEG de verdade, nenhuma das vinte execuções seguintes chamou o dado de sintético.<br><br>Tudo isso está registrado por escrito em <code>automation/capturas/</code>, inclusive nos arquivos que ficaram errados: eles têm um bloco de retificação no topo em vez de terem sido reescritos."
+      corpo: "Medir IA é fácil de errar, e a maneira mais comum de errar é atribuir ao programa um comportamento que na verdade foi o teste que causou. Aconteceu três vezes aqui, e as três foram corrigidas antes de qualquer número chegar a esta página.<br><br><strong>1. “A palavra Ubuntu desliga o programa.”</strong> Errado. Nomear um sistema não desliga nada. Nomear o sistema <em>errado</em> desliga. A máquina era Windows e o enunciado dizia Ubuntu.<br><br><strong>2. “A trava de isolamento não distorce nada.”</strong> Errado, e este foi o pior: a trava <em>escondia o Python</em> de um dos programas. O outro enxergava as bibliotecas instaladas e parecia mais rápido. Não era programa melhor; era ambiente diferente, e eu tinha creditado o mérito ao programa.<br><br><strong>3. “Os dois programas saem da pasta e varrem o computador todo.”</strong> Errado. Era o enunciado, que falava de um HD de 500 GB inexistente. Corrigido o texto, os dois ficaram dentro da pasta.<br><br>O fio comum das três é uma regra que vale para os dois lados desta página: <strong>o programa age sobre o que consegue verificar que existe.</strong> Pedido que descreve o que não está na máquina vira resposta de conhecimento; ambiente que esconde uma ferramenta vira “a máquina não tem”.<br><br>O cenário de teste também precisou de conserto. Numa versão anterior as fotos tinham 91 bytes cada, e um programa concluiu, corretamente, que eram arquivos quebrados e recomendou apagar as 1.240. O erro era do teste. Com fotos JPEG de verdade, nenhuma das vinte execuções seguintes chamou o dado de sintético.<br><br>Tudo isso está registrado por escrito em <code>automation/capturas/</code>, inclusive nos arquivos que ficaram errados: eles têm um bloco de retificação no topo em vez de terem sido reescritos."
     }
   }
 };

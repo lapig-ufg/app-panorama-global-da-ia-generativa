@@ -82,24 +82,29 @@
     `;
   }
 
-  /* ─── 00 · o essencial ───────────────────────────────────── */
+  /* ─── 07 · o resumo (fecha a página) ────────────────────── */
 
-  /* A única parte da página escrita para quem NÃO vai ler a página. Três
-     conclusões, cada uma com a evidência ao lado, e a procedência logo
-     abaixo. Fica antes da seção 01 porque a pergunta "vocês testaram
-     mesmo?" tem de ser respondida antes de a pessoa decidir se lê o resto. */
+  /* Nasceu no topo, como "Comece por aqui": três conclusões com a evidência
+     ao lado e a procedência embaixo. Foi para o fim porque citava números
+     da medição para um leitor que ainda não sabia que ela existia. Aqui
+     cada conclusão pode apontar para trás: o link leva à seção onde está
+     a demonstração, e o leitor que chegou ao fim lê o mesmo bloco como
+     recapitulação. */
   function renderEssencial() {
     const el = $('cu-essencial');
+    const lede = $('cu-resumo-lede');
     if (!el || !D.essencial) return;
     const e = D.essencial;
+
+    if (lede) lede.innerHTML = 'Três conclusões para levar da página — cada uma com o caminho de volta até a seção que a demonstra.';
 
     el.innerHTML = `
       <div class="cu-ess">
         <span class="cu-ess-rot">${esc(e.rotulo)}</span>
 
-        <!-- A premissa vem ANTES da conclusão. Sem estas duas frases, "descreva
-             a sua máquina" é conselho sobre uma coisa que o leitor ainda não
-             sabe que existe. -->
+        <!-- A premissa continua ANTES da conclusão: sem as duas frases de
+             contexto, "descreva a sua máquina" é conselho sobre uma coisa que
+             o leitor não sabe que existe. -->
         <p class="cu-ess-intro">${e.intro}</p>
 
         <span class="cu-ess-sub">${esc(e.conclusoesRotulo)}</span>
@@ -109,7 +114,7 @@
               <span class="cu-ess-n" aria-hidden="true">${esc(c.n)}</span>
               <div>
                 <p class="cu-ess-frase">${txt(c.frase)}</p>
-                <p class="cu-ess-prova">${txt(c.prova)}</p>
+                <p class="cu-ess-prova">${txt(c.prova)}${c.link ? ` <a class="cu-ess-link" href="${esc(c.link.href)}">${esc(c.link.texto)}</a>` : ''}</p>
               </div>
             </li>`).join('')}
         </ol>
@@ -1526,7 +1531,7 @@
     const upd = $('cu-updated');
     if (upd) upd.textContent = fmtDataCurta(D.updatedAt) || '—';
 
-    renderEssencial();
+    renderEssencial(); // o resumo mora no fim (seção 07), mas renderiza igual
     renderAbertura();
     renderCenas();
     ligarCenas();

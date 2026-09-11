@@ -40,7 +40,7 @@
   <!-- Estilos -->
   <link rel="stylesheet" href="assets/styles.css?v=30">
   <link rel="stylesheet" href="assets/guia.css?v=27">
-  <link rel="stylesheet" href="assets/como-usar.css?v=13">
+  <link rel="stylesheet" href="assets/como-usar.css?v=14">
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSBR3JMT2X"></script>
@@ -193,7 +193,8 @@
 
   <!-- Sumário: a página é longa e a ordem importa (a seção 01 sustenta a
        comparação, que sustenta o catálogo). Os atalhos deixam quem já sabe
-       pular direto para a instalação sem esconder a espinha do argumento. -->
+       pular direto para a instalação, e quem não vai ler nada pular direto
+       para o resumo do fim. -->
   <div class="controls">
     <div class="cu-toc" role="navigation" aria-label="Seções desta página">
       <a class="cu-toc-link" href="#abertura"><span class="cu-toc-n">01</span> A diferença</a>
@@ -202,6 +203,7 @@
       <a class="cu-toc-link" href="#tutorial"><span class="cu-toc-n">04</span> Instalar, passo a passo</a>
       <a class="cu-toc-link" href="#catalogo"><span class="cu-toc-n">05</span> O catálogo</a>
       <a class="cu-toc-link" href="#medicao"><span class="cu-toc-n">06</span> Como isto foi medido</a>
+      <a class="cu-toc-link" href="#resumo"><span class="cu-toc-n">07</span> O resumo</a>
     </div>
   </div>
 
@@ -218,17 +220,11 @@
       </p>
       <p class="cu-lede-2">
         Abaixo: a diferença explicada em duas ideias simples, quatro perguntas de trabalho
-        respondidas nos dois lugares, o que sobra depois, o que instalar, e uma tela de
-        computador de mentira onde você faz a instalação de verdade.
+        respondidas nos dois lugares, o que sobra depois, o que instalar, como a medição foi
+        feita — e, no fim, um resumo de três conclusões para quem quer levar a página inteira
+        num bolso só.
       </p>
     </div>
-
-    <!-- ─── 00 · O ESSENCIAL ─────────────────────────────────── -->
-    <!-- A única parte da página escrita para quem NÃO vai ler a página.
-         Três conclusões com a evidência ao lado, e a procedência logo
-         abaixo: "vocês testaram mesmo?" tem de ser respondido antes de a
-         pessoa decidir se lê o resto. -->
-    <div id="cu-essencial"></div>
 
     <!-- ─── 01 · A DIFERENÇA, EXPLICADA ──────────────────────── -->
     <!-- Abre a aba. Texto corrido antes de qualquer quadro, de propósito:
@@ -431,7 +427,7 @@
     </section>
 
     <!-- ─── 08 · COMO ISTO FOI MEDIDO ────────────────────────── -->
-    <!-- Fecha a página porque é a seção que dá crédito às outras sete. A
+    <!-- Antes do resumo: é a seção que dá crédito às outras sete. A
          lista do que NÃO foi medido fica visível de propósito: é ela que
          separa uma página que mediu de uma página que afirma. -->
     <section id="medicao" class="cu-section" aria-labelledby="h-medicao">
@@ -449,6 +445,23 @@
       <div id="cu-medicao"></div>
     </section>
 
+    <!-- ─── 07 · O RESUMO ────────────────────────────────────── -->
+    <!-- Nasceu no topo, como "Comece por aqui", e confundia: citava os
+         números das planilhas e o placar das repetições antes de o leitor
+         saber que existia uma medição. Aqui as três conclusões são o que
+         promete o nome: um fechamento que recapitula a página para quem
+         chegou até o fim — e um atalho legível para quem pular direto. -->
+    <section id="resumo" class="cu-section" aria-labelledby="h-resumo">
+      <header class="cu-sec-head">
+        <span class="cu-sec-n">07</span>
+        <div>
+          <h2 id="h-resumo">O resumo</h2>
+          <p class="cu-sec-sub" id="cu-resumo-lede"></p>
+        </div>
+      </header>
+      <div id="cu-essencial"></div>
+    </section>
+
 
   </main>
 
@@ -462,9 +475,9 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="assets/como-usar-data.js?v=12"></script>
+  <script src="assets/como-usar-data.js?v=13"></script>
   <script src="assets/como-usar-cenas.js?v=5"></script>
-  <script src="assets/como-usar.js?v=13"></script>
+  <script src="assets/como-usar.js?v=14"></script>
 </body>
 
 </html>

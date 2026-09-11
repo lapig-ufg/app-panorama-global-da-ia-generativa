@@ -549,9 +549,9 @@ panorama-llms/
 │                                  #   como-usar-data.js; as CITAÇÕES das capturas ficam
 │                                  #   separadas em como-usar-cenas.js porque só elas passam
 │                                  #   pelo valida-cenas.mjs. Sete seções, na ordem da
-│                                  #   narrativa (entender → provar → o que sobra → o que
-│                                  #   você autoriza → instalar → referência → procedência),
-│                                  #   com um resumo de três conclusões antes da primeira.
+│                                  #   narrativa (entender → ver na prática → o que sobra →
+│                                  #   instalar → referência → procedência → resumo),
+│                                  #   com o resumo de três conclusões fechando a página.
 │                                  #   Ver README § "A aba Como usar".
 ├── admin/                         # PWA de curadoria
 │   ├── index.html                 #   app (shell + lógica): lê via fetch CORS (?action=listar),
