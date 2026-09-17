@@ -10,6 +10,13 @@ Iniciativa do **Laboratório de Processamento de Imagens e Geoinformação — L
 
 Acesse a versão pública em: **https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/**
 
+Versão em inglês: **https://lapig-ufg.github.io/app-panorama-global-da-ia-generativa/en/**
+
+A rota `/en/` replica as quatro páginas do painel e usa a aba `Lancamentos_EN` da
+planilha. Enquanto essa aba estiver indisponível, a cronologia usa o instantâneo
+versionado `assets/lancamentos-en.json`; assim que a aba existir e estiver pública,
+ela volta a ser a fonte prioritária automaticamente.
+
 ---
 
 ## 🏗 Arquitetura & automação
@@ -58,6 +65,7 @@ panorama-llms/
 ├── guia.html               # "Qual modelo usar" — rankings de benchmarks (interativa)
 ├── gratuitos.html          # Catálogo de IAs gratuitas
 ├── como-usar.html          # "Como usar fora do navegador" — IA instalada na máquina (interativa)
+├── en/                     # Versões inglesas das quatro páginas
 ├── assets/
 │   ├── styles.css          # Estilos da timeline
 │   ├── data.js             # Logos, bandeiras, cores, grupos, aliases + SHEET_ID
@@ -83,6 +91,10 @@ panorama-llms/
 ## 📊 Estrutura da planilha de dados
 
 A planilha do Google Sheets deve conter uma aba chamada **`Lancamentos`** com as seguintes colunas (na ordem):
+
+A versão inglesa lê uma aba paralela chamada **`Lancamentos_EN`**, com o mesmo
+esquema. Para manter datas, nomes, estados e classificações sincronizados, essas
+colunas devem referenciar `Lancamentos`; apenas `impacto` precisa de tradução.
 
 | Coluna | Nome              | Tipo      | Descrição                                                                  |
 | ------ | ----------------- | --------- | -------------------------------------------------------------------------- |

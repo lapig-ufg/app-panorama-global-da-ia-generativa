@@ -81,6 +81,40 @@ body {
   overflow-x: clip;
 }
 
+/* Seletor de idioma compartilhado pelas quatro páginas. */
+.language-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px;
+  margin-left: auto;
+  border: 1px solid rgba(18, 36, 31, .18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .76);
+  font: 700 11px/1 Inter, sans-serif;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+
+.language-switch a,
+.language-switch span {
+  padding: 7px 9px;
+  border-radius: 999px;
+  color: #365048;
+  text-decoration: none;
+}
+
+.language-switch [aria-current="page"] {
+  color: #fff;
+  background: #0f6a54;
+}
+
+.language-switch a:hover { background: rgba(15, 106, 84, .09); }
+
+@media (max-width: 760px) {
+  .language-switch { order: 3; margin: 8px 0 0; }
+}
+
 /* ─── TOP RIBBON (regional accents) ─── */
 .top-ribbon {
   display: flex;

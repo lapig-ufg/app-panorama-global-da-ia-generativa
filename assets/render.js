@@ -245,13 +245,17 @@ function rebuildV2(customMaxDias, pxPerDay) {
     // O selo usa o MESMO sistema de tooltip das pílulas (hover/click/teclado/touch).
     // O <title> nativo de SVG era pouco confiável: só aparece com o ponteiro parado
     // por ~1s no desktop e não existe em telas de toque.
-    const marcoAria = `Marco zero — ${fmtFull(CONFIG.MARCO.toISOString().slice(0, 10))}, lançamento do ChatGPT`;
+    const marcoAria = PANORAMA_EN
+      ? `Starting point — ${fmtFull(CONFIG.MARCO.toISOString().slice(0, 10))}, ChatGPT release`
+      : `Marco zero — ${fmtFull(CONFIG.MARCO.toISOString().slice(0, 10))}, lançamento do ChatGPT`;
     window.tooltipData['marco-zero'] = {
       date: '2022-11-30',
       dias: 0,
       mod: 'ChatGPT',
       emp: 'OpenAI',
-      impact: 'Marco zero da régua: o lançamento do ChatGPT em 30/11/2022 deflagrou a corrida global da IA generativa. Todas as distâncias temporais da timeline são contadas a partir deste dia.',
+      impact: PANORAMA_EN
+        ? 'Timeline starting point: the release of ChatGPT on 30 Nov 2022 triggered the global generative AI race. All dates on this timeline are measured from that day.'
+        : 'Marco zero da régua: o lançamento do ChatGPT em 30/11/2022 deflagrou a corrida global da IA generativa. Todas as distâncias temporais da timeline são contadas a partir deste dia.',
       color: '#10a37f'
     };
     const marcoAttrs = `class="pill-group" data-pill-id="marco-zero" role="button" tabindex="0" aria-label="${escapeXml(marcoAria)}" style="cursor:pointer"`;
@@ -341,7 +345,9 @@ function rebuildV2(customMaxDias, pxPerDay) {
         const globalId = `${gIdx}-${idx}-${ev.emp.replace(/\s+/g, '_')}`;
         window.tooltipData[globalId] = { ...ev, color };
 
-        const nivelAria = marco ? '' : ev.nivel === 2 ? ' (lançamento secundário)' : ' (catálogo Artificial Analysis)';
+        const nivelAria = marco ? '' : ev.nivel === 2
+          ? (PANORAMA_EN ? ' (secondary release)' : ' (lançamento secundário)')
+          : (PANORAMA_EN ? ' (Artificial Analysis catalog)' : ' (catálogo Artificial Analysis)');
         const ariaLabel = `${ev.mod} — ${ev.emp}, ${fmtFull(ev.date)}${nivelAria}`;
         elementsSvg += `<g class="pill-group${marco ? '' : ' pill-compacta'}" data-pill-id="${globalId}" role="button" tabindex="0" aria-label="${escapeXml(ariaLabel)}" style="cursor:pointer">`;
 
@@ -405,9 +411,9 @@ function rebuildV2(customMaxDias, pxPerDay) {
     currentY += groupHeight + GROUP_GAP;
   });
 
-  const sufixoModo = MODO === 'ampliada' ? ' — régua ampliada' : '';
-  const finalSvg = `<svg id="global-svg" class="global-svg" viewBox="0 0 ${SVG_W} ${SVG_H}" xmlns="http://www.w3.org/2000/svg" width="${SVG_W}" height="${SVG_H}" role="img" aria-label="Linha do tempo dos lançamentos de modelos de IA generativa${sufixoModo}">
-    <title>Panorama Global da IA Generativa — Linha do Tempo${sufixoModo}</title>
+  const sufixoModo = MODO === 'ampliada' ? (PANORAMA_EN ? ' — expanded timeline' : ' — régua ampliada') : '';
+  const finalSvg = `<svg id="global-svg" class="global-svg" viewBox="0 0 ${SVG_W} ${SVG_H}" xmlns="http://www.w3.org/2000/svg" width="${SVG_W}" height="${SVG_H}" role="img" aria-label="${PANORAMA_EN ? 'Timeline of generative AI model releases' : 'Linha do tempo dos lançamentos de modelos de IA generativa'}${sufixoModo}">
+    <title>${PANORAMA_EN ? 'Global Generative AI Landscape — Timeline' : 'Panorama Global da IA Generativa — Linha do Tempo'}${sufixoModo}</title>
     ${defsSvg}
     <rect width="100%" height="100%" fill="#fff"/>
     ${bgSvg}
@@ -443,15 +449,15 @@ function rebuildV2(customMaxDias, pxPerDay) {
    estrutura. Este bloco devolve a hierarquia — h2 por região, lista de faixas
    com a contagem — sem mudar um pixel do desenho. */
 function buildOutline(layout) {
-  let html = '<div class="sr-only" id="tl-outline"><h2>Sumário da linha do tempo</h2>';
+  let html = `<div class="sr-only" id="tl-outline"><h2>${PANORAMA_EN ? 'Timeline summary' : 'Sumário da linha do tempo'}</h2>`;
   ACTIVE_GROUPS.forEach((group, gIdx) => {
     const tracks = (layout[gIdx] && layout[gIdx].tracks) || [];
     const total = tracks.reduce((acc, t) => acc + ((t.track.events || []).length), 0);
-    html += `<h3>${escapeXml(group.title)} — ${total} lançamento${total === 1 ? '' : 's'}</h3>`;
+    html += `<h3>${escapeXml(group.title)} — ${total} ${PANORAMA_EN ? `release${total === 1 ? '' : 's'}` : `lançamento${total === 1 ? '' : 's'}`}</h3>`;
     html += '<ul>';
     tracks.forEach(t => {
       const n = (t.track.events || []).length;
-      html += `<li>${escapeXml(t.track.name)}: ${n} lançamento${n === 1 ? '' : 's'}</li>`;
+      html += `<li>${escapeXml(t.track.name)}: ${n} ${PANORAMA_EN ? `release${n === 1 ? '' : 's'}` : `lançamento${n === 1 ? '' : 's'}`}</li>`;
     });
     html += '</ul>';
   });
