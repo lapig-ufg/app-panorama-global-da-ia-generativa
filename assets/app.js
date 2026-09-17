@@ -101,7 +101,7 @@ function clampZoom(v) {
 }
 
 function getZoomLabel() {
-  return `${currentPxPerDay.toFixed(1)} px/dia`;
+  return `${currentPxPerDay.toFixed(1)} ${PANORAMA_EN ? 'px/day' : 'px/dia'}`;
 }
 
 /* ─── AS DUAS FONTES DA RÉGUA ───
@@ -362,8 +362,9 @@ async function setModo(modo, opts = {}) {
     if (!ok) {
       // Sem catálogo, a ampliada ainda tem o nível 2 (planilha) para mostrar —
       // mas o usuário precisa saber que o censo automático não entrou.
-      mostrarAvisoModo('Não foi possível carregar o catálogo da Artificial Analysis. ' +
-        'A régua ampliada está mostrando só os lançamentos curados.');
+      mostrarAvisoModo(PANORAMA_EN
+        ? 'The Artificial Analysis catalog could not be loaded. The expanded timeline is showing curated releases only.'
+        : 'Não foi possível carregar o catálogo da Artificial Analysis. A régua ampliada está mostrando só os lançamentos curados.');
     }
   }
 
@@ -417,9 +418,13 @@ function preencherModoPopover() {
   if (!el) return;
   if (catalogoEstado === 'ok') {
     const data = CATALOGO_META.fetched_at ? fmtFull(CATALOGO_META.fetched_at.slice(0, 10)) : '—';
-    el.textContent = `Catálogo carregado: ${CATALOGO_META.total} modelos, coletados em ${data}.`;
+    el.textContent = PANORAMA_EN
+      ? `Catalog loaded: ${CATALOGO_META.total} models, collected on ${data}.`
+      : `Catálogo carregado: ${CATALOGO_META.total} modelos, coletados em ${data}.`;
   } else {
-    el.textContent = 'O catálogo é baixado quando você liga o modo pela primeira vez.';
+    el.textContent = PANORAMA_EN
+      ? 'The catalog is downloaded when you enable this mode for the first time.'
+      : 'O catálogo é baixado quando você liga o modo pela primeira vez.';
   }
 }
 
@@ -508,7 +513,9 @@ async function loadSheetData() {
   } catch (e) {
     console.error('Falha ao carregar planilha:', e);
     hideLoading();
-    showError('Verifique sua conexão e se a planilha está pública. Erro: ' + (e.message || 'desconhecido'));
+    showError((PANORAMA_EN
+      ? 'Check your connection and whether the spreadsheet is public. Error: '
+      : 'Verifique sua conexão e se a planilha está pública. Erro: ') + (e.message || (PANORAMA_EN ? 'unknown' : 'desconhecido')));
   }
 }
 
@@ -522,7 +529,12 @@ function normHeader(s) {
 async function fetchFresh(silent) {
   const allRows = [];
   for (const tab of CONFIG.SHEET_TABS) {
-    const data = await gvizFetch(tab);
+    let data = null;
+    try {
+      data = await gvizFetch(tab);
+    } catch (error) {
+      if (!PANORAMA_EN) throw error;
+    }
     if (!data || !data.table || !data.table.rows) continue;
 
     // A 1ª linha vem como dado (é o cabeçalho da planilha): usa p/ localizar
@@ -569,6 +581,33 @@ async function fetchFresh(silent) {
       allRows.push({ date, emp, mod, impact, ref, grupo, addedAt, updatedAt, nivel });
     }
   }
+
+  // The English tab is the live source. A versioned snapshot keeps /en/
+  // available during formula recalculation or if the tab is temporarily
+  // unavailable; the next successful load replaces it automatically.
+  if (PANORAMA_EN && !allRows.length) {
+    const response = await fetch(CONFIG.EN_FALLBACK_URL, { cache: 'no-cache' });
+    if (!response.ok) throw new Error('English launch data is unavailable');
+    const fallback = await response.json();
+    for (const row of fallback) {
+      const nivel = row.status === 'publicado' ? 1 : row.status === 'secundario' ? 2 : 0;
+      const date = parseSheetDate(row.date);
+      if (!nivel || !date || !row.emp || !row.mod) continue;
+      allRows.push({
+        date,
+        emp: row.emp,
+        mod: row.mod,
+        impact: row.impact || '',
+        ref: row.ref || '',
+        grupo: row.grupo || '',
+        addedAt: row.addedAt || 0,
+        updatedAt: row.updatedAt || 0,
+        nivel
+      });
+    }
+  }
+
+  if (!allRows.length) throw new Error(PANORAMA_EN ? 'English launch data is empty' : 'planilha sem lançamentos publicados');
 
   writeCache(allRows);
   SHEET_ROWS = allRows;
@@ -706,7 +745,7 @@ function showTip(e, id) {
   const tooltip = getTooltip();
 
   document.getElementById('tt-date').textContent = fmtFull(ev.date);
-  document.getElementById('tt-day').textContent = '+ Dia ' + ev.dias;
+  document.getElementById('tt-day').textContent = (PANORAMA_EN ? '+ Day ' : '+ Dia ') + ev.dias;
   document.getElementById('tt-model').textContent = ev.mod;
   document.getElementById('tt-model').style.color = ev.color;
   document.getElementById('tt-company').textContent = ev.emp;
@@ -719,10 +758,14 @@ function showTip(e, id) {
   if (fonteEl) {
     if (ev.nivel === 3) {
       const nota = ev.score != null ? ` · Intelligence Index ${ev.score}` : '';
-      fonteEl.textContent = `Catálogo Artificial Analysis — sem curadoria editorial${nota}`;
+      fonteEl.textContent = PANORAMA_EN
+        ? `Artificial Analysis catalog — no editorial review${nota}`
+        : `Catálogo Artificial Analysis — sem curadoria editorial${nota}`;
       fonteEl.hidden = false;
     } else if (ev.nivel === 2) {
-      fonteEl.textContent = 'Lançamento curado, classificado como secundário';
+      fonteEl.textContent = PANORAMA_EN
+        ? 'Curated release, classified as secondary'
+        : 'Lançamento curado, classificado como secundário';
       fonteEl.hidden = false;
     } else {
       fonteEl.hidden = true;
@@ -1442,21 +1485,26 @@ function csvEscape(value) {
 
 function downloadCSV() {
   if (!RAW || !RAW.length) {
-    alert('Ainda não há modelos carregados para exportar.');
+    alert(PANORAMA_EN ? 'There are no loaded models to export yet.' : 'Ainda não há modelos carregados para exportar.');
     return;
   }
 
   const btn = document.getElementById('btnExportCSV');
   const oldHTML = btn ? btn.innerHTML : null;
-  if (btn) { btn.innerHTML = 'Gerando…'; btn.disabled = true; }
+  if (btn) { btn.innerHTML = PANORAMA_EN ? 'Generating…' : 'Gerando…'; btn.disabled = true; }
 
   try {
     // `nivel`/`fonte` viajam com o CSV: quem baixar os dados para uma análise
     // consegue separar marco curado de censo automático sem voltar ao site.
-    const headers = ['Data', 'Empresa', 'Modelo', 'Impacto', 'Referência', 'Grupo',
-                     'Dias desde o marco zero', 'Nível', 'Fonte'];
-    const rotuloNivel = { 1: 'marco', 2: 'secundário', 3: 'catálogo' };
-    const rotuloFonte = { 1: 'curadoria', 2: 'curadoria', 3: 'Artificial Analysis' };
+    const headers = PANORAMA_EN
+      ? ['Date', 'Company', 'Model', 'Impact', 'Reference', 'Group', 'Days since starting point', 'Level', 'Source']
+      : ['Data', 'Empresa', 'Modelo', 'Impacto', 'Referência', 'Grupo', 'Dias desde o marco zero', 'Nível', 'Fonte'];
+    const rotuloNivel = PANORAMA_EN
+      ? { 1: 'milestone', 2: 'secondary', 3: 'catalog' }
+      : { 1: 'marco', 2: 'secundário', 3: 'catálogo' };
+    const rotuloFonte = PANORAMA_EN
+      ? { 1: 'curated', 2: 'curated', 3: 'Artificial Analysis' }
+      : { 1: 'curadoria', 2: 'curadoria', 3: 'Artificial Analysis' };
     const linhas = RAW.slice().sort((a, b) => a.dias - b.dias).map(r => [
       r.date,
       r.emp,
