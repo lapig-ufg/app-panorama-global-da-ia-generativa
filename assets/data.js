@@ -237,7 +237,12 @@ function normModel(s) {
 // ─── CARREGAMENTO DA PLANILHA (Google Sheets via gviz/JSONP) ───
 // Mora aqui porque as DUAS páginas precisam: a régua para desenhar a timeline,
 // o guia para saber quais modelos existem na régua e poder linkar para eles.
-const PANORAMA_EN = !!(window.PANORAMA_LOCALE && window.PANORAMA_LOCALE.isEnglish);
+/* `typeof window` e não `window` direto: este arquivo também é carregado FORA do
+   navegador — automation/prepare.mjs, publish.mjs e update-benchmarks.mjs o
+   executam num contexto vm sem DOM para reaproveitar COMPANY_COLORS, SHEET_ID e
+   CREATOR_COUNTRY. Sem a guarda, os três quebram com ReferenceError na carga. */
+const PANORAMA_EN = typeof window !== 'undefined' &&
+  !!(window.PANORAMA_LOCALE && window.PANORAMA_LOCALE.isEnglish);
 
 function gvizFetch(tab) {
   return new Promise((resolve, reject) => {
