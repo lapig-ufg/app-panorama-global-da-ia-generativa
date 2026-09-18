@@ -58,15 +58,19 @@ panorama-llms/
 ├── guia.html               # "Qual modelo usar" — rankings de benchmarks (interativa)
 ├── gratuitos.html          # Catálogo de IAs gratuitas
 ├── como-usar.html          # "Como usar fora do navegador" — IA instalada na máquina (interativa)
+├── en/                     # As MESMAS quatro páginas em inglês (ver "Versão em inglês")
 ├── assets/
 │   ├── styles.css          # Estilos da timeline
+│   ├── i18n.js             # Resolve o idioma e monta o seletor Português/English
 │   ├── data.js             # Logos, bandeiras, cores, grupos, aliases + SHEET_ID
 │   ├── render.js           # Lógica de construção do SVG (timeline)
 │   ├── app.js              # Carregamento de dados, tooltip, drag, exportação
 │   ├── benchmarks.json     # Dados da Artificial Analysis (gerado pelo cron)
+│   ├── benchmarks-en.json  # Os MESMOS números, rótulos em inglês (gerado pelo mesmo cron)
 │   ├── guia.js / guia.css  # Página "Qual modelo usar" (abas, ordenação, comparação)
 │   ├── gratuitos.*         # Página de IAs gratuitas
-│   └── como-usar.*         # Página "Como usar fora do navegador" (dados, lógica, estilos)
+│   ├── como-usar.*         # Página "Como usar fora do navegador" (dados, lógica, estilos)
+│   └── *-en.js             # Conteúdo editorial traduzido das três páginas de texto
 ├── admin/                  # PWA de curadoria (aprovar/rejeitar pendentes)
 ├── automation/             # Pipelines: lançamentos (prepare/publish) + benchmarks (update-benchmarks.mjs)
 │   ├── README.md           # Pipeline de lançamentos
@@ -308,6 +312,42 @@ de tela — não o elimine ao mexer no balão.
   da Ollama; `qwen3.5:4b` roda no disco de quem executou. Mesmo comando, mesma porta 11434,
   destinos opostos — é o exemplo que a seção 01 usa e a regra 06 repete. Não misture os dois em
   exemplos sobre dado sensível.
+
+---
+
+## 🌍 Versão em inglês
+
+O site existe em português (`/`) e inglês (`/en/`). **Não são dois sites** — são as mesmas
+páginas, os mesmos dados e o mesmo código, com uma camada de idioma por cima.
+
+**Como o idioma é decidido.** `assets/i18n.js` roda antes de tudo, olha o `lang` do `<html>`
+(ou o `/en/` na URL) e publica `window.PANORAMA_LOCALE`. Os scripts leem isso como
+`PANORAMA_EN` e escolhem o texto. Sem o `i18n.js` carregado, `PANORAMA_EN` é `false` e o
+comportamento é exatamente o português — o inglês é aditivo, nunca substitui o PT.
+
+**Por que a versão inglesa não envelhece.** Cada fonte de dados tem um caminho que atualiza
+os dois idiomas de uma vez, sem passo humano no meio:
+
+| Conteúdo | Como o inglês se mantém em dia |
+|---|---|
+| **Lançamentos (régua)** | Os dois idiomas leem a MESMA aba `Lancamentos`. Um lançamento novo aparece em inglês no mesmo dia. |
+| **Texto de impacto** | Traduzido pela aba `Lancamentos_EN`, casada por empresa+modelo. Sem tradução, o lançamento **aparece mesmo assim**, com a frase em português e marcado no tooltip. |
+| **Benchmarks** | `benchmarks-en.json` sai do MESMO run do cron semanal que gera o `benchmarks.json`, dos mesmos números. |
+| **Catálogo (régua ampliada)** | Arquivo único, `assets/catalogo.json`, lido pelos dois idiomas. |
+| **Texto editorial** | Os únicos arquivos realmente bilíngues (`assets/*-en.js`). Mudou a prosa em português? Atualize o `-en` correspondente. |
+
+A regra que sustenta isso: **o inglês nunca tem uma segunda lista de lançamentos.** A aba
+`Lancamentos_EN` é uma camada de tradução (colunas `empresa`, `modelo`, `impacto` — aceita
+também `company`, `model`, `impact`), não uma segunda fonte da verdade. Se ela estiver vazia,
+incompleta ou fora do ar, a régua inglesa continua completa — só com mais texto em português.
+
+**Traduzir um lançamento** é acrescentar uma linha em `Lancamentos_EN` com a empresa e o
+modelo escritos como estão em `Lancamentos`, e o impacto em inglês. Nada mais precisa ser
+feito: a régua inglesa pega na próxima carga.
+
+**No modo embed** (`?embed=1`, que é como o Observatório UFG-IA encaixa o Panorama num
+iframe), o seletor de idioma daqui fica escondido: quem manda no idioma é o seletor do site
+anfitrião, que troca a casca inteira. Fora do embed ele aparece normalmente.
 
 ---
 

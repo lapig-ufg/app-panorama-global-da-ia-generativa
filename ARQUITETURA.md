@@ -123,6 +123,12 @@ data | empresa | modelo | impacto | referencia | status | tipo | dias | origem |
   - `publicado` → **nível 1 (marco)**: aparece sempre, nos dois modos de leitura.
   - `secundario` → **nível 2**: lançamento real, curado e aprovado, mas que não é marco.
     Só aparece quando o leitor liga a **régua ampliada** (ver seção 15).
+- **`Lancamentos_EN`** — **camada de tradução, não uma segunda lista.** Colunas
+  `empresa | modelo | impacto` (aceita também `company | model | impact`). O site em
+  inglês lê a aba `Lancamentos` normal — esta aqui só substitui o texto de `impacto`,
+  casando por empresa+modelo. Consequência importante: **um lançamento novo aparece em
+  inglês no mesmo dia em que entra em `Lancamentos`**, mesmo sem tradução (nesse caso com
+  a frase em português e um aviso no tooltip). A aba pode estar vazia sem quebrar nada.
 - **`Pendentes`** — staging. A automação grava aqui com `status = pendente`. A coluna
   `Aprovar?` é um checkbox (criado pelo `setup()`); marcar promove a linha como `publicado`
   (caminho alternativo à PWA; para `secundario`, use a PWA).

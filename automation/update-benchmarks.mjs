@@ -31,6 +31,11 @@ const ROTA_FREE = '/language/models/free';
 const ROTA_PRO = '/language/models';
 const MAX_PAGINAS = 20;   // trava contra loop se a paginação vier maluca
 const OUT_PATH = join(ROOT, 'assets', 'benchmarks.json');
+/* O arquivo inglês sai do MESMO run e dos MESMOS números: só os rótulos
+   (category/description/unit) mudam, vindos do campo `en` da tabela acima.
+   É isso que impede o guia inglês de envelhecer — não existe passo humano
+   entre a atualização semanal e a versão em inglês. */
+const OUT_EN_PATH = join(ROOT, 'assets', 'benchmarks-en.json');
 const CATALOGO_PATH = join(ROOT, 'assets', 'catalogo.json');
 
 // Nº de modelos DISTINTOS (famílias) guardados por benchmark. Como as variantes
@@ -49,9 +54,9 @@ async function loadDataJs(fields) {
 /* Os 3 índices compostos da AA — tudo que a chave free entrega. Todos em
    escala 0–100 (só os benchmarks individuais vêm em fração). */
 const BENCHMARKS_FREE = [
-  { key: 'artificial_analysis_intelligence_index', label: 'Intelligence Index', category: 'Inteligência', description: 'Composite AA de raciocínio geral (v4.1: GDPval-AA, τ³-Banking, Terminal-Bench, SciCode, AA-LCR, AA-Omniscience, HLE, GPQA Diamond, CritPt)', unit: 'índice (0–100)', is_fraction: false },
-  { key: 'artificial_analysis_coding_index', label: 'Coding Index', category: 'Coding', description: 'Composite AA de código, derivado de um subconjunto das avaliações do Intelligence Index', unit: 'índice (0–100)', is_fraction: false },
-  { key: 'artificial_analysis_agentic_index', label: 'Agentic Index', category: 'Agents', description: 'Composite AA de uso autônomo de ferramentas e terminal', unit: 'índice (0–100)', is_fraction: false },
+  { key: 'artificial_analysis_intelligence_index', label: 'Intelligence Index', category: 'Inteligência', description: 'Composite AA de raciocínio geral (v4.1: GDPval-AA, τ³-Banking, Terminal-Bench, SciCode, AA-LCR, AA-Omniscience, HLE, GPQA Diamond, CritPt)', unit: 'índice (0–100)', is_fraction: false, en: { category: 'Intelligence', description: 'AA composite for general reasoning (v4.1: GDPval-AA, τ³-Banking, Terminal-Bench, SciCode, AA-LCR, AA-Omniscience, HLE, GPQA Diamond, CritPt)', unit: 'index (0–100)' } },
+  { key: 'artificial_analysis_coding_index', label: 'Coding Index', category: 'Coding', description: 'Composite AA de código, derivado de um subconjunto das avaliações do Intelligence Index', unit: 'índice (0–100)', is_fraction: false, en: { category: 'Coding', description: 'AA coding composite, derived from a subset of the Intelligence Index evaluations', unit: 'index (0–100)' } },
+  { key: 'artificial_analysis_agentic_index', label: 'Agentic Index', category: 'Agents', description: 'Composite AA de uso autônomo de ferramentas e terminal', unit: 'índice (0–100)', is_fraction: false, en: { category: 'Agents', description: 'AA composite for autonomous tool and terminal use', unit: 'index (0–100)' } },
 ];
 
 /* Benchmarks individuais — só com chave Pro. Mantidos aqui para que a migração
@@ -61,14 +66,14 @@ const BENCHMARKS_FREE = [
    livecodebench não existem mais em nenhum tier — a AA os aposentou. */
 const BENCHMARKS_PRO = [
   ...BENCHMARKS_FREE,
-  { key: 'gpqa_diamond', label: 'GPQA Diamond', category: 'Inteligência', description: 'Perguntas de nível PhD — raciocínio profundo', unit: '%', is_fraction: true },
-  { key: 'hle', label: "Humanity's Last Exam", category: 'Inteligência', description: 'Perguntas de especialistas — fronteira do conhecimento', unit: '%', is_fraction: true },
-  { key: 'scicode', label: 'SciCode', category: 'Coding', description: 'Geração de código científico', unit: '%', is_fraction: true },
-  { key: 'terminalbench_v2_1', label: 'Terminal-Bench v2.1', category: 'Agents', description: 'Agentes em terminal (tarefas reais)', unit: '%', is_fraction: true },
-  { key: 'tau2_telecom', label: 'TAU-bench', category: 'Agents', description: 'Agentes com ferramentas de atendimento', unit: '%', is_fraction: true },
-  { key: 'ifbench', label: 'IFBench', category: 'Instruções', description: 'Seguimento complexo de instruções', unit: '%', is_fraction: true },
-  { key: 'aa_lcr', label: 'AA-LCR', category: 'Instruções', description: 'Leitura crítica e raciocínio longo', unit: '%', is_fraction: true },
-  { key: 'critpt', label: 'CritPt', category: 'Inteligência', description: 'Raciocínio de física em nível de doutorado', unit: '%', is_fraction: true },
+  { key: 'gpqa_diamond', label: 'GPQA Diamond', category: 'Inteligência', description: 'Perguntas de nível PhD — raciocínio profundo', unit: '%', is_fraction: true, en: { category: 'Intelligence', description: 'PhD-level questions — deep reasoning', unit: '%' } },
+  { key: 'hle', label: "Humanity's Last Exam", category: 'Inteligência', description: 'Perguntas de especialistas — fronteira do conhecimento', unit: '%', is_fraction: true, en: { category: 'Intelligence', description: 'Expert-written questions — the frontier of knowledge', unit: '%' } },
+  { key: 'scicode', label: 'SciCode', category: 'Coding', description: 'Geração de código científico', unit: '%', is_fraction: true, en: { category: 'Coding', description: 'Scientific code generation', unit: '%' } },
+  { key: 'terminalbench_v2_1', label: 'Terminal-Bench v2.1', category: 'Agents', description: 'Agentes em terminal (tarefas reais)', unit: '%', is_fraction: true, en: { category: 'Agents', description: 'Terminal agents (real-world tasks)', unit: '%' } },
+  { key: 'tau2_telecom', label: 'TAU-bench', category: 'Agents', description: 'Agentes com ferramentas de atendimento', unit: '%', is_fraction: true, en: { category: 'Agents', description: 'Agents using customer-support tools', unit: '%' } },
+  { key: 'ifbench', label: 'IFBench', category: 'Instruções', description: 'Seguimento complexo de instruções', unit: '%', is_fraction: true, en: { category: 'Instructions', description: 'Complex instruction following', unit: '%' } },
+  { key: 'aa_lcr', label: 'AA-LCR', category: 'Instruções', description: 'Leitura crítica e raciocínio longo', unit: '%', is_fraction: true, en: { category: 'Instructions', description: 'Critical reading and long-context reasoning', unit: '%' } },
+  { key: 'critpt', label: 'CritPt', category: 'Inteligência', description: 'Raciocínio de física em nível de doutorado', unit: '%', is_fraction: true, en: { category: 'Intelligence', description: 'Doctorate-level physics reasoning', unit: '%' } },
 ];
 
 /* Removidos de propósito:
@@ -475,6 +480,24 @@ async function main() {
     benchmarks,
   };
 
+  const EN_BY_KEY = new Map(BENCHMARKS_PRO.map(b => [b.key, b.en]));
+  const semTraducao = out.benchmarks.filter(b => !EN_BY_KEY.get(b.key)).map(b => b.key);
+  if (semTraducao.length) {
+    console.log(`::warning::Benchmark(s) sem tradução em BENCHMARKS_PRO (campo en): ` +
+      `${semTraducao.join(', ')} — o guia inglês vai mostrar o rótulo em português. ` +
+      'Acrescente o campo en na tabela para corrigir.');
+  }
+  const outEn = {
+    ...out,
+    attribution: 'Data: Artificial Analysis — artificialanalysis.ai',
+    benchmarks: out.benchmarks.map(b => {
+      const en = EN_BY_KEY.get(b.key);
+      // O spread preserva a ORDEM das chaves do arquivo português: os dois
+      // arquivos continuam comparáveis linha a linha num diff.
+      return en ? { ...b, category: en.category, description: en.description, unit: en.unit } : b;
+    }),
+  };
+
   /* ─── Catálogo da régua ampliada ─── */
   const cat = construirCatalogo(models, canonicalCompany, CONFIG.MARCO.getTime());
 
@@ -509,7 +532,9 @@ async function main() {
     console.log('\n[DRY_RUN] Validou sem escrever o arquivo.');
   } else {
     await writeFile(OUT_PATH, JSON.stringify(out, null, 2), 'utf8');
+    await writeFile(OUT_EN_PATH, JSON.stringify(outEn, null, 2), 'utf8');
     console.log(`\nSalvo: ${OUT_PATH}`);
+    console.log(`Salvo: ${OUT_EN_PATH}`);
   }
 
   /* O catálogo tem guarda própria e mais frouxa que a do benchmarks.json: se

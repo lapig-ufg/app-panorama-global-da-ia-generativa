@@ -101,7 +101,7 @@ function clampZoom(v) {
 }
 
 function getZoomLabel() {
-  return `${currentPxPerDay.toFixed(1)} px/dia`;
+  return `${currentPxPerDay.toFixed(1)} ${PANORAMA_EN ? 'px/day' : 'px/dia'}`;
 }
 
 /* ─── AS DUAS FONTES DA RÉGUA ───
@@ -362,8 +362,9 @@ async function setModo(modo, opts = {}) {
     if (!ok) {
       // Sem catálogo, a ampliada ainda tem o nível 2 (planilha) para mostrar —
       // mas o usuário precisa saber que o censo automático não entrou.
-      mostrarAvisoModo('Não foi possível carregar o catálogo da Artificial Analysis. ' +
-        'A régua ampliada está mostrando só os lançamentos curados.');
+      mostrarAvisoModo(PANORAMA_EN
+        ? 'The Artificial Analysis catalog could not be loaded. The expanded timeline is showing curated releases only.'
+        : 'Não foi possível carregar o catálogo da Artificial Analysis. A régua ampliada está mostrando só os lançamentos curados.');
     }
   }
 
@@ -417,9 +418,13 @@ function preencherModoPopover() {
   if (!el) return;
   if (catalogoEstado === 'ok') {
     const data = CATALOGO_META.fetched_at ? fmtFull(CATALOGO_META.fetched_at.slice(0, 10)) : '—';
-    el.textContent = `Catálogo carregado: ${CATALOGO_META.total} modelos, coletados em ${data}.`;
+    el.textContent = PANORAMA_EN
+      ? `Catalog loaded: ${CATALOGO_META.total} models, collected on ${data}.`
+      : `Catálogo carregado: ${CATALOGO_META.total} modelos, coletados em ${data}.`;
   } else {
-    el.textContent = 'O catálogo é baixado quando você liga o modo pela primeira vez.';
+    el.textContent = PANORAMA_EN
+      ? 'The catalog is downloaded when you enable this mode for the first time.'
+      : 'O catálogo é baixado quando você liga o modo pela primeira vez.';
   }
 }
 
@@ -508,7 +513,9 @@ async function loadSheetData() {
   } catch (e) {
     console.error('Falha ao carregar planilha:', e);
     hideLoading();
-    showError('Verifique sua conexão e se a planilha está pública. Erro: ' + (e.message || 'desconhecido'));
+    showError((PANORAMA_EN
+      ? 'Check your connection and whether the spreadsheet is public. Error: '
+      : 'Verifique sua conexão e se a planilha está pública. Erro: ') + (e.message || (PANORAMA_EN ? 'unknown' : 'desconhecido')));
   }
 }
 
@@ -570,12 +577,87 @@ async function fetchFresh(silent) {
     }
   }
 
+  if (PANORAMA_EN) await aplicarTraducoes(allRows);
+
   writeCache(allRows);
   SHEET_ROWS = allRows;
   // O catálogo já em memória foi deduplicado contra a planilha ANTERIOR; com
   // linhas novas, um modelo pode ter passado a existir dos dois lados.
   if (catalogoEstado === 'ok') CATALOGO_ROWS = deduplicarCatalogo(CATALOGO_BRUTO);
   processRows(rowsDoModo());
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TRADUÇÃO DOS LANÇAMENTOS (só a régua inglesa)
+   ═══════════════════════════════════════════════════════════════
+
+   A régua inglesa desenha exatamente os mesmos lançamentos da portuguesa: a
+   aba `Lancamentos` é a fonte única de QUAIS lançamentos existem, nos dois
+   idiomas. A aba `Lancamentos_EN` não é uma segunda lista — é uma camada de
+   tradução, casada linha a linha por empresa+modelo, e o único campo que ela
+   precisa trazer é `impacto` (data, empresa, modelo e grupo não se traduzem).
+
+   A consequência é a que interessa: um lançamento novo aparece em inglês no
+   MESMO dia em que entra na planilha. Se a tradução ainda não existir, ele
+   aparece com a frase de impacto em português e marcado como não traduzido,
+   em vez de simplesmente não existir na régua inglesa. A aba pode estar vazia,
+   incompleta ou fora do ar — nenhum desses casos esconde um lançamento. */
+function chaveLancamento(emp, mod) {
+  return `${canonicalCompany(emp).toUpperCase()}|${chaveModelo(mod)}`;
+}
+
+function lerTraducoes(data) {
+  const mapa = new Map();
+  const linhas = (data && data.table && data.table.rows) || [];
+  if (!linhas.length) return mapa;
+
+  // Mesma convenção da aba portuguesa: a 1ª linha vem como dado e é o cabeçalho.
+  // Aceita os nomes nos dois idiomas para não obrigar quem edita a aba inglesa
+  // a escrever cabeçalho em português.
+  const colIdx = {};
+  ((linhas[0] && linhas[0].c) || []).forEach((cell, i) => {
+    const n = normHeader(cell && cell.v);
+    if (n && colIdx[n] === undefined) colIdx[n] = i;
+  });
+  const acha = (...nomes) => {
+    for (const n of nomes) if (colIdx[n] !== undefined) return colIdx[n];
+    return -1;
+  };
+  const iEmp = acha('empresa', 'company');
+  const iMod = acha('modelo', 'model');
+  const iImpact = acha('impacto', 'impact');
+  if (iEmp < 0 || iMod < 0 || iImpact < 0) {
+    console.warn('Lancamentos_EN: expected columns company/model/impact were not found.');
+    return mapa;
+  }
+
+  for (const row of linhas.slice(1)) {
+    const c = row.c;
+    if (!c) continue;
+    const emp = c[iEmp] ? String(c[iEmp].v || '').trim() : '';
+    const mod = c[iMod] ? String(c[iMod].v || '').trim() : '';
+    const impact = c[iImpact] ? String(c[iImpact].v || '').trim() : '';
+    if (!emp || !mod || !impact) continue;
+    mapa.set(chaveLancamento(emp, mod), impact);
+  }
+  return mapa;
+}
+
+async function aplicarTraducoes(rows) {
+  let data = null;
+  try {
+    data = await gvizFetch(CONFIG.SHEET_TAB_EN);
+  } catch (e) {
+    // Aba ausente, vazia ou fora do ar: a régua inglesa segue com o texto
+    // português marcado. Nunca é motivo para falhar o carregamento.
+    console.warn('Lancamentos_EN unavailable; falling back to the Portuguese text.', e);
+  }
+  const traducoes = data ? lerTraducoes(data) : new Map();
+  for (const r of rows) {
+    const traduzido = traducoes.get(chaveLancamento(r.emp, r.mod));
+    if (traduzido) r.impact = traduzido;
+    else r.untranslated = true;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -706,7 +788,7 @@ function showTip(e, id) {
   const tooltip = getTooltip();
 
   document.getElementById('tt-date').textContent = fmtFull(ev.date);
-  document.getElementById('tt-day').textContent = '+ Dia ' + ev.dias;
+  document.getElementById('tt-day').textContent = (PANORAMA_EN ? '+ Day ' : '+ Dia ') + ev.dias;
   document.getElementById('tt-model').textContent = ev.mod;
   document.getElementById('tt-model').style.color = ev.color;
   document.getElementById('tt-company').textContent = ev.emp;
@@ -717,12 +799,25 @@ function showTip(e, id) {
      ampliada empresta a credibilidade da curadoria a dados que não a têm. */
   const fonteEl = document.getElementById('tt-fonte');
   if (fonteEl) {
+    const partes = [];
     if (ev.nivel === 3) {
       const nota = ev.score != null ? ` · Intelligence Index ${ev.score}` : '';
-      fonteEl.textContent = `Catálogo Artificial Analysis — sem curadoria editorial${nota}`;
-      fonteEl.hidden = false;
+      partes.push(PANORAMA_EN
+        ? `Artificial Analysis catalog — no editorial review${nota}`
+        : `Catálogo Artificial Analysis — sem curadoria editorial${nota}`);
     } else if (ev.nivel === 2) {
-      fonteEl.textContent = 'Lançamento curado, classificado como secundário';
+      partes.push(PANORAMA_EN
+        ? 'Curated release, classified as secondary'
+        : 'Lançamento curado, classificado como secundário');
+    }
+    /* Lançamento curado que ainda não passou pela aba de tradução: ele APARECE
+       na régua inglesa, com a frase de impacto em português, e diz isso. O
+       nível 3 fica de fora porque o catálogo não tem prosa a traduzir. */
+    if (PANORAMA_EN && ev.untranslated && ev.nivel !== 3) {
+      partes.push('impact summary not yet translated');
+    }
+    if (partes.length) {
+      fonteEl.textContent = partes.join(' · ');
       fonteEl.hidden = false;
     } else {
       fonteEl.hidden = true;
@@ -1442,21 +1537,26 @@ function csvEscape(value) {
 
 function downloadCSV() {
   if (!RAW || !RAW.length) {
-    alert('Ainda não há modelos carregados para exportar.');
+    alert(PANORAMA_EN ? 'There are no loaded models to export yet.' : 'Ainda não há modelos carregados para exportar.');
     return;
   }
 
   const btn = document.getElementById('btnExportCSV');
   const oldHTML = btn ? btn.innerHTML : null;
-  if (btn) { btn.innerHTML = 'Gerando…'; btn.disabled = true; }
+  if (btn) { btn.innerHTML = PANORAMA_EN ? 'Generating…' : 'Gerando…'; btn.disabled = true; }
 
   try {
     // `nivel`/`fonte` viajam com o CSV: quem baixar os dados para uma análise
     // consegue separar marco curado de censo automático sem voltar ao site.
-    const headers = ['Data', 'Empresa', 'Modelo', 'Impacto', 'Referência', 'Grupo',
-                     'Dias desde o marco zero', 'Nível', 'Fonte'];
-    const rotuloNivel = { 1: 'marco', 2: 'secundário', 3: 'catálogo' };
-    const rotuloFonte = { 1: 'curadoria', 2: 'curadoria', 3: 'Artificial Analysis' };
+    const headers = PANORAMA_EN
+      ? ['Date', 'Company', 'Model', 'Impact', 'Reference', 'Group', 'Days since starting point', 'Level', 'Source']
+      : ['Data', 'Empresa', 'Modelo', 'Impacto', 'Referência', 'Grupo', 'Dias desde o marco zero', 'Nível', 'Fonte'];
+    const rotuloNivel = PANORAMA_EN
+      ? { 1: 'milestone', 2: 'secondary', 3: 'catalog' }
+      : { 1: 'marco', 2: 'secundário', 3: 'catálogo' };
+    const rotuloFonte = PANORAMA_EN
+      ? { 1: 'curated', 2: 'curated', 3: 'Artificial Analysis' }
+      : { 1: 'curadoria', 2: 'curadoria', 3: 'Artificial Analysis' };
     const linhas = RAW.slice().sort((a, b) => a.dias - b.dias).map(r => [
       r.date,
       r.emp,

@@ -237,6 +237,8 @@ function normModel(s) {
 // ─── CARREGAMENTO DA PLANILHA (Google Sheets via gviz/JSONP) ───
 // Mora aqui porque as DUAS páginas precisam: a régua para desenhar a timeline,
 // o guia para saber quais modelos existem na régua e poder linkar para eles.
+const PANORAMA_EN = !!(window.PANORAMA_LOCALE && window.PANORAMA_LOCALE.isEnglish);
+
 function gvizFetch(tab) {
   return new Promise((resolve, reject) => {
     const cb = '_gv_' + tab.replace(/[^a-zA-Z0-9]/g, '_') + '_' + Date.now();
@@ -274,8 +276,9 @@ const desconhecida = r => !!r.emp && !KNOWN_COMPANIES.has(empDe(r));
 // ─── ESTRUTURA DE GRUPOS / TRACKS ───
 const LAYOUT_GROUPS = [
   {
-    title: 'ECOSSISTEMA NORTE-AMERICANO',
-    subtitle: 'Berço do ChatGPT (nov/2022), que deu início à corrida global. Modelos e ferramentas desenvolvidos nos Estados Unidos — majoritariamente fechados, com poucas exceções de código aberto.',
+    key: 'ECOSSISTEMA NORTE-AMERICANO',
+    title: PANORAMA_EN ? 'NORTH AMERICAN ECOSYSTEM' : 'ECOSSISTEMA NORTE-AMERICANO',
+    subtitle: PANORAMA_EN ? 'Birthplace of ChatGPT (Nov/2022), which started the global race. Models and tools developed in the United States — mostly closed, with a few open-source exceptions.' : 'Berço do ChatGPT (nov/2022), que deu início à corrida global. Modelos e ferramentas desenvolvidos nos Estados Unidos — majoritariamente fechados, com poucas exceções de código aberto.',
     bg: '#f0f4fa',
     flag: 'US',
     accent: '#3C3B6E',
@@ -287,12 +290,13 @@ const LAYOUT_GROUPS = [
       { name: 'IBM', filter: r => r.emp && r.emp.trim().toUpperCase() === 'IBM' },
       { name: 'xAI', filter: r => r.emp && r.emp.trim().toUpperCase() === 'XAI' },
       { name: 'NVIDIA', filter: r => r.emp && r.emp.trim().toUpperCase() === 'NVIDIA' },
-      { name: 'Outros', filter: r => ['META', 'CURSOR', 'OPENCLAW'].includes(empDe(r)) || (desconhecida(r) && grupoDe(r) === 'ECOSSISTEMA NORTE-AMERICANO') }
+      { name: PANORAMA_EN ? 'Other' : 'Outros', filter: r => ['META', 'CURSOR', 'OPENCLAW'].includes(empDe(r)) || (desconhecida(r) && grupoDe(r) === 'ECOSSISTEMA NORTE-AMERICANO') }
     ]
   },
   {
-    title: 'ECOSSISTEMA CHINÊS',
-    subtitle: 'Crescimento acelerado com forte aposta em código aberto.',
+    key: 'ECOSSISTEMA CHINÊS',
+    title: PANORAMA_EN ? 'CHINESE ECOSYSTEM' : 'ECOSSISTEMA CHINÊS',
+    subtitle: PANORAMA_EN ? 'Rapid growth with a strong commitment to open-source models.' : 'Crescimento acelerado com forte aposta em código aberto.',
     bg: '#fdf2f2',
     flag: 'CN',
     accent: '#DE2910',
@@ -302,12 +306,13 @@ const LAYOUT_GROUPS = [
       { name: 'Zhipu AI', filter: r => r.emp && r.emp.trim().toUpperCase() === 'ZHIPU AI' },
       { name: 'Moonshot AI', filter: r => r.emp && r.emp.trim().toUpperCase() === 'MOONSHOT AI' },
       { name: 'MiniMax', filter: r => r.emp && r.emp.trim().toUpperCase() === 'MINIMAX' },
-      { name: 'Outros', filter: r => ['BAIDU', 'XIAOMI'].includes(empDe(r)) || (desconhecida(r) && grupoDe(r) === 'ECOSSISTEMA CHINÊS') }
+      { name: PANORAMA_EN ? 'Other' : 'Outros', filter: r => ['BAIDU', 'XIAOMI'].includes(empDe(r)) || (desconhecida(r) && grupoDe(r) === 'ECOSSISTEMA CHINÊS') }
     ]
   },
   {
-    title: 'OUTROS PAÍSES',
-    subtitle: 'Laboratórios de fronteira fora dos eixos EUA–China.',
+    key: 'OUTROS PAÍSES',
+    title: PANORAMA_EN ? 'OTHER COUNTRIES' : 'OUTROS PAÍSES',
+    subtitle: PANORAMA_EN ? 'Frontier laboratories outside the US–China axis.' : 'Laboratórios de fronteira fora dos eixos EUA–China.',
     bg: '#f4f2fb',
     flag: 'WORLD',
     accent: '#5B53A8',
@@ -316,17 +321,17 @@ const LAYOUT_GROUPS = [
       // Duas empresas do mesmo país caem na mesma faixa. Japão e França são sempre
       // desenhados (são os âncoras com marcos curados); os demais só aparecem se
       // tiverem lançamento publicado (hideIfEmpty).
-      { name: 'Japão', filter: r => companyCountry(r.emp) === 'Japão' },
-      { name: 'França', filter: r => companyCountry(r.emp) === 'França' },
-      { name: 'Coreia do Sul', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Coreia do Sul' },
+      { name: PANORAMA_EN ? 'Japan' : 'Japão', filter: r => companyCountry(r.emp) === 'Japão' },
+      { name: PANORAMA_EN ? 'France' : 'França', filter: r => companyCountry(r.emp) === 'França' },
+      { name: PANORAMA_EN ? 'South Korea' : 'Coreia do Sul', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Coreia do Sul' },
       { name: 'Israel', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Israel' },
-      { name: 'Índia', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Índia' },
-      { name: 'Emirados Árabes', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Emirados Árabes' },
-      { name: 'Suíça', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Suíça' },
-      { name: 'Espanha', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Espanha' },
+      { name: PANORAMA_EN ? 'India' : 'Índia', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Índia' },
+      { name: PANORAMA_EN ? 'United Arab Emirates' : 'Emirados Árabes', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Emirados Árabes' },
+      { name: PANORAMA_EN ? 'Switzerland' : 'Suíça', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Suíça' },
+      { name: PANORAMA_EN ? 'Spain' : 'Espanha', hideIfEmpty: true, filter: r => companyCountry(r.emp) === 'Espanha' },
       // Catch-all: linha do grupo cujo país não tem trilha própria (empresa sem
       // país cadastrado, ou país não listado acima). hideIfEmpty: só desenha com evento.
-      { name: 'Outros', hideIfEmpty: true, filter: r => grupoDaLinha(r) === 'OUTROS PAÍSES' && !PAIS_COM_TRILHA.has(companyCountry(r.emp)) }
+      { name: PANORAMA_EN ? 'Other' : 'Outros', hideIfEmpty: true, filter: r => grupoDaLinha(r) === 'OUTROS PAÍSES' && !PAIS_COM_TRILHA.has(companyCountry(r.emp)) }
     ]
   }
 ];
@@ -336,6 +341,10 @@ const CONFIG = {
   MARCO: new Date('2022-11-30'),                                 // Lançamento do ChatGPT
   SHEET_ID: '1RsaiSCZBTUB4XTSj_mVbNgsLSHpky7wsjKltZboDaPA',
   SHEET_TABS: ['Lancamentos'],
+  /* A régua inglesa NÃO tem lista própria de lançamentos: lê a MESMA aba do
+     português e aplica por cima as traduções que existirem nesta aba. É o que
+     garante que um lançamento novo apareça nos dois idiomas no mesmo dia. */
+  SHEET_TAB_EN: 'Lancamentos_EN',
   PX_PER_DAY: 1.5,
   MIN_PX_PER_DAY: 0.4,
   MAX_PX_PER_DAY: 4.0,
@@ -345,15 +354,19 @@ const CONFIG = {
   MAX_LANES_AMPLIADA: 48,          // ver computeTrackLayout: a ampliada é bem mais densa
   PAD_L: 170,
   PAD_R: 200,
-  CACHE_KEY: 'panorama-llms-cache-v4',   // v4: linhas passaram a carregar `nivel`
+  // PT (/) e EN (/en/) dividem a MESMA origem e, portanto, o mesmo sessionStorage:
+  // as chaves precisam ser distintas ou um idioma serviria o texto do outro.
+  CACHE_KEY: PANORAMA_EN ? 'panorama-llms-cache-v5-en' : 'panorama-llms-cache-v5-pt',
   CACHE_TTL_MS: 6 * 60 * 60 * 1000,                               // 6 horas
   // Catálogo da régua ampliada (nível 3). Só é baixado quando o usuário liga o
   // modo — a régua padrão continua carregando exatamente o que carregava antes.
-  CATALOGO_URL: 'assets/catalogo.json?v=1',
+  CATALOGO_URL: PANORAMA_EN ? '../assets/catalogo.json?v=1' : 'assets/catalogo.json?v=1',
   MODO_KEY: 'panorama-llms-modo-v1'
 };
 
-const MESES = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+const MESES = PANORAMA_EN
+  ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
 /* Formato ÚNICO de data em toda a interface: "05 Ago 2026".
    Cada página vinha inventando o seu — a timeline mostrava "05 AGO 2026", o
@@ -506,6 +519,24 @@ const SUBTITULO_AMPLIADA = {
   'OUTROS PAÍSES': 'Coreia do Sul, Israel, Índia, Emirados, Europa e Japão — a diversidade geográfica que a régua padrão, restrita a marcos, não alcança.'
 };
 
+const SUBTITULO_AMPLIADA_EN = {
+  'ECOSSISTEMA NORTE-AMERICANO': 'United States and Canada, including laboratories that do not appear in the standard timeline because they have no release classified as a milestone.',
+  'ECOSSISTEMA CHINÊS': 'Rapid growth with a strong commitment to open source. The expanded view reveals universities, telecom companies and AI divisions of large platforms.',
+  'OUTROS PAÍSES': 'South Korea, Israel, India, the Emirates, Europe and Japan — the geographic diversity beyond the milestone-only standard timeline.'
+};
+
+const COUNTRY_LABEL_EN = {
+  'Japão': 'Japan',
+  'França': 'France',
+  'Coreia do Sul': 'South Korea',
+  'Índia': 'India',
+  'Emirados Árabes': 'United Arab Emirates',
+  'Suíça': 'Switzerland',
+  'Espanha': 'Spain'
+};
+
+const displayCountry = country => PANORAMA_EN ? (COUNTRY_LABEL_EN[country] || country) : country;
+
 /* Monta os grupos/trilhas do modo ampliado a partir das linhas carregadas.
    Não toca em LAYOUT_GROUPS: devolve uma estrutura nova com o mesmo contrato
    ({ title, subtitle, bg, flag, accent, tracks:[{name, filter}] }), para que
@@ -521,16 +552,17 @@ const SUBTITULO_AMPLIADA = {
    Meta e Cursor têm volume para trilha própria. */
 function buildExpandedGroups(rows) {
   return LAYOUT_GROUPS.map(base => {
-    const nomeadas = base.tracks.filter(t => t.name !== 'Outros');
+    const baseKey = base.key || base.title;
+    const nomeadas = base.tracks.filter(t => t.name !== 'Outros' && t.name !== 'Other');
     const coberta = r => nomeadas.some(t => t.filter(r));
-    const doGrupo = rows.filter(r => grupoDaLinha(r) === base.title);
+    const doGrupo = rows.filter(r => grupoDaLinha(r) === baseKey);
 
     // No grupo OUTROS PAÍSES, agrupamos por PAÍS (não por empresa): todos os
     // modelos coreanos — Motif, LG AI Research, Upstage, Naver etc. — caem numa
     // trilha só "Coreia do Sul", em vez de se espalharem por faixas separadas
     // "· Coreia do Sul" (uma por empresa promovida). EUA e China continuam por
     // empresa: são ecossistemas densos de laboratórios com nome próprio.
-    if (base.title === GRUPO_PADRAO) {
+    if (baseKey === GRUPO_PADRAO) {
       // Conta, por país, quantos vêm da curadoria (planilha, níveis 1 e 2) e
       // quantos vêm do catálogo automático (nível 3). Um país ganha trilha própria
       // se tem >=1 modelo curado OU >=MIN_MODELOS_TRACK do catálogo. Sem isso, o
@@ -551,17 +583,17 @@ function buildExpandedGroups(rows) {
         .map(([p]) => p);
       const paisesSet = new Set(paises);
       const doPais = p => r =>
-        grupoDaLinha(r) === base.title && companyCountry(r.emp) === p;
+        grupoDaLinha(r) === baseKey && companyCountry(r.emp) === p;
       return {
         ...base,
-        subtitle: SUBTITULO_AMPLIADA[base.title] || base.subtitle,
+        subtitle: (PANORAMA_EN ? SUBTITULO_AMPLIADA_EN : SUBTITULO_AMPLIADA)[baseKey] || base.subtitle,
         tracks: [
-          ...paises.map(p => ({ name: p, auto: true, filter: doPais(p) })),
+          ...paises.map(p => ({ name: displayCountry(p), auto: true, filter: doPais(p) })),
           {
-            name: 'Outros',
+            name: PANORAMA_EN ? 'Other' : 'Outros',
             hideIfEmpty: true,
             auto: true,
-            filter: r => grupoDaLinha(r) === base.title &&
+            filter: r => grupoDaLinha(r) === baseKey &&
                          (!companyCountry(r.emp) || !paisesSet.has(companyCountry(r.emp)))
           }
         ]
@@ -582,7 +614,7 @@ function buildExpandedGroups(rows) {
     const promovidasUC = new Set(promovidas.map(c => c.toUpperCase()));
 
     const daEmpresa = c => r =>
-      grupoDaLinha(r) === base.title &&
+      grupoDaLinha(r) === baseKey &&
       canonicalCompany(r.emp).toUpperCase() === c.toUpperCase();
 
     // Em OUTROS PAÍSES o país faz parte do rótulo, como já é na régua padrão
@@ -590,22 +622,22 @@ function buildExpandedGroups(rows) {
     // empresa sozinho não diz de onde ela é.
     const rotulo = c => {
       const pais = companyCountry(c);
-      return (base.title === GRUPO_PADRAO && pais) ? `${c} · ${pais}` : c;
+      return (baseKey === GRUPO_PADRAO && pais) ? `${c} · ${displayCountry(pais)}` : c;
     };
 
     const tracks = [
       ...nomeadas,
       ...promovidas.map(c => ({ name: rotulo(c), auto: true, filter: daEmpresa(c) })),
       {
-        name: 'Outros',
+        name: PANORAMA_EN ? 'Other' : 'Outros',
         hideIfEmpty: true,
         auto: true,
-        filter: r => grupoDaLinha(r) === base.title && !coberta(r) &&
+        filter: r => grupoDaLinha(r) === baseKey && !coberta(r) &&
                      !promovidasUC.has(canonicalCompany(r.emp).toUpperCase())
       }
     ];
 
-    return { ...base, subtitle: SUBTITULO_AMPLIADA[base.title] || base.subtitle, tracks };
+    return { ...base, subtitle: (PANORAMA_EN ? SUBTITULO_AMPLIADA_EN : SUBTITULO_AMPLIADA)[baseKey] || base.subtitle, tracks };
   });
 }
 
