@@ -3,8 +3,8 @@
   "source_url": "https://artificialanalysis.ai/",
   "attribution": "Dados: Artificial Analysis — artificialanalysis.ai",
   "api_tier": "free",
-  "fetched_at": "2026-09-21T15:32:00.860Z",
-  "familias_total": 468,
+  "fetched_at": "2026-09-28T17:13:29.431Z",
+  "familias_total": 472,
   "descartados": {
     "entradas_sem_data": 0,
     "anteriores_ao_marco": 0
@@ -2972,13 +2972,6 @@
       "open_weights": null
     },
     {
-      "mod": "Agnes 2.5 Pro Alpha",
-      "emp": "Sapiens AI",
-      "date": "2026-07-24",
-      "score": 26.8,
-      "open_weights": null
-    },
-    {
       "mod": "Inkling Small",
       "emp": "Thinking Machines",
       "date": "2026-07-30",
@@ -3161,13 +3154,6 @@
       "open_weights": null
     },
     {
-      "mod": "Agnes 2.5 Pro Beta",
-      "emp": "Sapiens AI",
-      "date": "2026-08-26",
-      "score": 35.2,
-      "open_weights": null
-    },
-    {
       "mod": "GLM 5.3 Flash",
       "emp": "Zhipu AI",
       "date": "2026-08-26",
@@ -3178,7 +3164,7 @@
       "mod": "Apodex 1.1",
       "emp": "Apodex",
       "date": "2026-08-30",
-      "score": 30.4,
+      "score": 26.4,
       "open_weights": null
     },
     {
@@ -3252,6 +3238,13 @@
       "open_weights": null
     },
     {
+      "mod": "Mercury 2.5",
+      "emp": "Inception",
+      "date": "2026-09-08",
+      "score": 12.3,
+      "open_weights": null
+    },
+    {
       "mod": "DeepSeek V4.1 Flash",
       "emp": "DeepSeek",
       "date": "2026-09-10",
@@ -3273,17 +3266,52 @@
       "open_weights": null
     },
     {
-      "mod": "Agnes 3.0 Flash",
-      "emp": "Sapiens AI",
-      "date": "2026-09-11",
-      "score": 35.5,
-      "open_weights": null
-    },
-    {
       "mod": "Step 5 Preview",
       "emp": "StepFun",
       "date": "2026-09-18",
       "score": 43.7,
+      "open_weights": null
+    },
+    {
+      "mod": "Grok 4.7",
+      "emp": "xAI",
+      "date": "2026-09-21",
+      "score": 46.4,
+      "open_weights": null
+    },
+    {
+      "mod": "MiMo-V2.6-Flash",
+      "emp": "Xiaomi",
+      "date": "2026-09-21",
+      "score": 37.9,
+      "open_weights": null
+    },
+    {
+      "mod": "MiMo-V2.6-Pro",
+      "emp": "Xiaomi",
+      "date": "2026-09-21",
+      "score": 46.3,
+      "open_weights": null
+    },
+    {
+      "mod": "Claude Opus 5.5",
+      "emp": "Anthropic",
+      "date": "2026-09-22",
+      "score": 57.6,
+      "open_weights": null
+    },
+    {
+      "mod": "GPT-6 Luna",
+      "emp": "OpenAI",
+      "date": "2026-09-22",
+      "score": 37.3,
+      "open_weights": null
+    },
+    {
+      "mod": "GPT-6 Sol",
+      "emp": "OpenAI",
+      "date": "2026-09-22",
+      "score": 47.5,
       "open_weights": null
     }
   ]

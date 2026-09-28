@@ -3,8 +3,8 @@
   "source_url": "https://artificialanalysis.ai/",
   "attribution": "Dados: Artificial Analysis — artificialanalysis.ai",
   "api_tier": "free",
-  "models_total": 653,
-  "fetched_at": "2026-09-21T15:32:00.860Z",
+  "models_total": 674,
+  "fetched_at": "2026-09-28T17:13:29.431Z",
   "has_open_weights": false,
   "benchmarks": [
     {
@@ -14,9 +14,19 @@
       "description": "Composite AA de raciocínio geral (v4.1: GDPval-AA, τ³-Banking, Terminal-Bench, SciCode, AA-LCR, AA-Omniscience, HLE, GPQA Diamond, CritPt)",
       "unit": "índice (0–100)",
       "is_fraction": false,
-      "models_evaluated": 644,
-      "families_evaluated": 461,
+      "models_evaluated": 665,
+      "families_evaluated": 465,
       "top": [
+        {
+          "model": "Claude Opus 5.5",
+          "variant": "Adaptive Reasoning, Max Effort, Default Fallback",
+          "creator": "Anthropic",
+          "score": 57.6,
+          "release_date": "2026-09-22",
+          "price_1m_blended": 8,
+          "tok_per_sec": 95.38,
+          "open_weights": null
+        },
         {
           "model": "Claude Fable 5.1",
           "variant": "Adaptive Reasoning, Max Effort, Default Fallback",
@@ -24,7 +34,7 @@
           "score": 53.4,
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
-          "tok_per_sec": 69.22,
+          "tok_per_sec": 70.8,
           "open_weights": null
         },
         {
@@ -34,7 +44,7 @@
           "score": 52.7,
           "release_date": "2026-09-03",
           "price_1m_blended": 20,
-          "tok_per_sec": 68.7,
+          "tok_per_sec": 63.55,
           "open_weights": null
         },
         {
@@ -44,7 +54,7 @@
           "score": 50.8,
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
-          "tok_per_sec": 58.86,
+          "tok_per_sec": 60.51,
           "open_weights": null
         },
         {
@@ -54,7 +64,7 @@
           "score": 49.6,
           "release_date": "2026-06-09",
           "price_1m_blended": 20,
-          "tok_per_sec": 67.87,
+          "tok_per_sec": 63.54,
           "open_weights": null
         },
         {
@@ -64,7 +74,17 @@
           "score": 48.1,
           "release_date": "2026-09-02",
           "price_1m_blended": 2,
-          "tok_per_sec": 240.68,
+          "tok_per_sec": 221.43,
+          "open_weights": null
+        },
+        {
+          "model": "GPT-6 Sol",
+          "variant": "max",
+          "creator": "OpenAI",
+          "score": 47.5,
+          "release_date": "2026-09-22",
+          "price_1m_blended": 4,
+          "tok_per_sec": 89.79,
           "open_weights": null
         },
         {
@@ -74,7 +94,27 @@
           "score": 47,
           "release_date": "2026-07-09",
           "price_1m_blended": 8,
-          "tok_per_sec": 77.28,
+          "tok_per_sec": 94.2,
+          "open_weights": null
+        },
+        {
+          "model": "Grok 4.7",
+          "variant": "xhigh",
+          "creator": "xAI",
+          "score": 46.4,
+          "release_date": "2026-09-21",
+          "price_1m_blended": 3,
+          "tok_per_sec": 82.59,
+          "open_weights": null
+        },
+        {
+          "model": "MiMo-V2.6-Pro",
+          "variant": null,
+          "creator": "Xiaomi",
+          "score": 46.3,
+          "release_date": "2026-09-21",
+          "price_1m_blended": 0.54,
+          "tok_per_sec": 52.05,
           "open_weights": null
         },
         {
@@ -84,7 +124,7 @@
           "score": 45.4,
           "release_date": "2026-09-02",
           "price_1m_blended": 3,
-          "tok_per_sec": 38.78,
+          "tok_per_sec": 39.2,
           "open_weights": null
         },
         {
@@ -94,7 +134,7 @@
           "score": 44.8,
           "release_date": "2026-08-18",
           "price_1m_blended": 2.15,
-          "tok_per_sec": 66.45,
+          "tok_per_sec": 91.75,
           "open_weights": null
         },
         {
@@ -104,7 +144,7 @@
           "score": 44.3,
           "release_date": "2026-08-12",
           "price_1m_blended": 3,
-          "tok_per_sec": 66.68,
+          "tok_per_sec": 67.73,
           "open_weights": null
         },
         {
@@ -114,7 +154,7 @@
           "score": 43.7,
           "release_date": "2026-09-18",
           "price_1m_blended": 1.425,
-          "tok_per_sec": 91.5,
+          "tok_per_sec": 82.06,
           "open_weights": null
         },
         {
@@ -124,7 +164,7 @@
           "score": 43.6,
           "release_date": "2026-07-16",
           "price_1m_blended": 6,
-          "tok_per_sec": 43.59,
+          "tok_per_sec": 0,
           "open_weights": null
         },
         {
@@ -134,7 +174,7 @@
           "score": 42.1,
           "release_date": "2026-07-09",
           "price_1m_blended": 4.5,
-          "tok_per_sec": 105.51,
+          "tok_per_sec": 103.76,
           "open_weights": null
         },
         {
@@ -144,7 +184,7 @@
           "score": 41.8,
           "release_date": "2026-08-26",
           "price_1m_blended": 0.2375,
-          "tok_per_sec": 93.67,
+          "tok_per_sec": 55.86,
           "open_weights": null
         },
         {
@@ -154,7 +194,7 @@
           "score": 41.8,
           "release_date": "2026-05-28",
           "price_1m_blended": 10,
-          "tok_per_sec": 59.13,
+          "tok_per_sec": 53.37,
           "open_weights": null
         },
         {
@@ -164,7 +204,7 @@
           "score": 40.9,
           "release_date": "2026-09-02",
           "price_1m_blended": 1.5,
-          "tok_per_sec": 328.82,
+          "tok_per_sec": 285.25,
           "open_weights": null
         },
         {
@@ -174,51 +214,16 @@
           "score": 40.7,
           "release_date": "2026-04-16",
           "price_1m_blended": 10,
-          "tok_per_sec": 51.34,
-          "open_weights": null
-        },
-        {
-          "model": "Qwen3.8 2.4T A95B",
-          "variant": null,
-          "creator": "Alibaba",
-          "score": 39.9,
-          "release_date": "2026-08-12",
-          "price_1m_blended": 3,
-          "tok_per_sec": 39.96,
-          "open_weights": null
-        },
-        {
-          "model": "Qwen3.8-Flash-Next",
-          "variant": null,
-          "creator": "Alibaba",
-          "score": 39.8,
-          "release_date": "2026-08-26",
-          "price_1m_blended": 0.22999999999999998,
-          "tok_per_sec": 63.78,
-          "open_weights": null
-        },
-        {
-          "model": "Muse Spark 1.2",
-          "variant": "xhigh",
-          "creator": "Meta",
-          "score": 39.6,
-          "release_date": "2026-08-05",
-          "price_1m_blended": 2,
-          "tok_per_sec": 224.7,
-          "open_weights": null
-        },
-        {
-          "model": "Gemini 3.7 Flash",
-          "variant": "medium",
-          "creator": "Google",
-          "score": 39.6,
-          "release_date": "2026-08-13",
-          "price_1m_blended": 1.5,
-          "tok_per_sec": 317.81,
+          "tok_per_sec": 52.75,
           "open_weights": null
         }
       ],
       "full": [
+        {
+          "model": "Claude Opus 5.5",
+          "creator": "Anthropic",
+          "score": 57.6
+        },
         {
           "model": "Claude Fable 5.1",
           "creator": "Anthropic",
@@ -245,9 +250,24 @@
           "score": 48.1
         },
         {
+          "model": "GPT-6 Sol",
+          "creator": "OpenAI",
+          "score": 47.5
+        },
+        {
           "model": "GPT-5.6 Sol",
           "creator": "OpenAI",
           "score": 47
+        },
+        {
+          "model": "Grok 4.7",
+          "creator": "xAI",
+          "score": 46.4
+        },
+        {
+          "model": "MiMo-V2.6-Pro",
+          "creator": "Xiaomi",
+          "score": 46.3
         },
         {
           "model": "Qwen3.8 Max",
@@ -345,7 +365,17 @@
           "score": 38.2
         },
         {
+          "model": "MiMo-V2.6-Flash",
+          "creator": "Xiaomi",
+          "score": 37.9
+        },
+        {
           "model": "GPT-5.6 Luna",
+          "creator": "OpenAI",
+          "score": 37.3
+        },
+        {
+          "model": "GPT-6 Luna",
           "creator": "OpenAI",
           "score": 37.3
         },
@@ -353,16 +383,6 @@
           "model": "DeepSeek V4 Pro 0813",
           "creator": "DeepSeek",
           "score": 36
-        },
-        {
-          "model": "Agnes 3.0 Flash",
-          "creator": "Sapiens AI",
-          "score": 35.5
-        },
-        {
-          "model": "Agnes 2.5 Pro Beta",
-          "creator": "Sapiens AI",
-          "score": 35.2
         },
         {
           "model": "DeepSeek V4 Flash Vision",
@@ -423,11 +443,6 @@
           "model": "K2 Horizon 375B A23B",
           "creator": "Institute of Foundation Models",
           "score": 30.5
-        },
-        {
-          "model": "Apodex 1.1",
-          "creator": "Apodex",
-          "score": 30.4
         },
         {
           "model": "GPT-5.2",
@@ -525,11 +540,6 @@
           "score": 27
         },
         {
-          "model": "Agnes 2.5 Pro Alpha",
-          "creator": "Sapiens AI",
-          "score": 26.8
-        },
-        {
           "model": "Quasar 438B",
           "creator": "Multiverse Computing",
           "score": 26.7
@@ -538,6 +548,11 @@
           "model": "GLM-5-Turbo",
           "creator": "Zhipu AI",
           "score": 26.6
+        },
+        {
+          "model": "Apodex 1.1",
+          "creator": "Apodex",
+          "score": 26.4
         },
         {
           "model": "Gemini 3 Flash Preview",
@@ -1158,6 +1173,11 @@
           "model": "o1-pro",
           "creator": "OpenAI",
           "score": 12.4
+        },
+        {
+          "model": "Mercury 2.5",
+          "creator": "Inception",
+          "score": 12.3
         },
         {
           "model": "JT-MINI",
@@ -2533,8 +2553,8 @@
       "description": "Composite AA de código, derivado de um subconjunto das avaliações do Intelligence Index",
       "unit": "índice (0–100)",
       "is_fraction": false,
-      "models_evaluated": 261,
-      "families_evaluated": 198,
+      "models_evaluated": 259,
+      "families_evaluated": 196,
       "top": [
         {
           "model": "Claude Fable 5.1",
@@ -2543,7 +2563,7 @@
           "score": 81.6,
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
-          "tok_per_sec": 69.22,
+          "tok_per_sec": 70.8,
           "open_weights": null
         },
         {
@@ -2553,7 +2573,7 @@
           "score": 78.3,
           "release_date": "2026-07-09",
           "price_1m_blended": 8,
-          "tok_per_sec": 72.03,
+          "tok_per_sec": 92.49,
           "open_weights": null
         },
         {
@@ -2563,7 +2583,7 @@
           "score": 78,
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
-          "tok_per_sec": 58.86,
+          "tok_per_sec": 60.51,
           "open_weights": null
         },
         {
@@ -2573,7 +2593,7 @@
           "score": 77.1,
           "release_date": "2026-09-03",
           "price_1m_blended": 20,
-          "tok_per_sec": 62.31,
+          "tok_per_sec": 58.3,
           "open_weights": null
         },
         {
@@ -2583,7 +2603,7 @@
           "score": 76.8,
           "release_date": "2026-08-12",
           "price_1m_blended": 3,
-          "tok_per_sec": 66.68,
+          "tok_per_sec": 67.73,
           "open_weights": null
         },
         {
@@ -2593,7 +2613,7 @@
           "score": 76.7,
           "release_date": "2026-07-09",
           "price_1m_blended": 4.5,
-          "tok_per_sec": 105.51,
+          "tok_per_sec": 103.76,
           "open_weights": null
         },
         {
@@ -2603,7 +2623,7 @@
           "score": 76.5,
           "release_date": "2026-09-02",
           "price_1m_blended": 2,
-          "tok_per_sec": 292.76,
+          "tok_per_sec": 196.37,
           "open_weights": null
         },
         {
@@ -2613,7 +2633,7 @@
           "score": 76.5,
           "release_date": "2026-06-09",
           "price_1m_blended": 20,
-          "tok_per_sec": 67.87,
+          "tok_per_sec": 63.54,
           "open_weights": null
         },
         {
@@ -2623,7 +2643,7 @@
           "score": 76.3,
           "release_date": "2026-09-02",
           "price_1m_blended": 1.5,
-          "tok_per_sec": 328.82,
+          "tok_per_sec": 285.25,
           "open_weights": null
         },
         {
@@ -2633,7 +2653,7 @@
           "score": 76.2,
           "release_date": "2026-07-16",
           "price_1m_blended": 6,
-          "tok_per_sec": 43.59,
+          "tok_per_sec": 0,
           "open_weights": null
         },
         {
@@ -2643,7 +2663,7 @@
           "score": 76.2,
           "release_date": "2026-09-02",
           "price_1m_blended": 3,
-          "tok_per_sec": 38.78,
+          "tok_per_sec": 39.2,
           "open_weights": null
         },
         {
@@ -2653,7 +2673,7 @@
           "score": 76.1,
           "release_date": "2026-08-13",
           "price_1m_blended": 1.5,
-          "tok_per_sec": 334.67,
+          "tok_per_sec": 308.45,
           "open_weights": null
         },
         {
@@ -2663,7 +2683,7 @@
           "score": 74.9,
           "release_date": "2026-04-23",
           "price_1m_blended": 11.25,
-          "tok_per_sec": 119,
+          "tok_per_sec": 108.08,
           "open_weights": null
         },
         {
@@ -2673,7 +2693,7 @@
           "score": 74.8,
           "release_date": "2026-08-18",
           "price_1m_blended": 2.15,
-          "tok_per_sec": 66.45,
+          "tok_per_sec": 91.75,
           "open_weights": null
         },
         {
@@ -2683,7 +2703,7 @@
           "score": 74.3,
           "release_date": "2026-05-28",
           "price_1m_blended": 10,
-          "tok_per_sec": 59.13,
+          "tok_per_sec": 53.37,
           "open_weights": null
         },
         {
@@ -2693,7 +2713,7 @@
           "score": 73.6,
           "release_date": "2026-04-16",
           "price_1m_blended": 10,
-          "tok_per_sec": 51.34,
+          "tok_per_sec": 52.75,
           "open_weights": null
         },
         {
@@ -2703,7 +2723,7 @@
           "score": 73.1,
           "release_date": "2026-08-26",
           "price_1m_blended": 0.22999999999999998,
-          "tok_per_sec": 63.78,
+          "tok_per_sec": 58.48,
           "open_weights": null
         },
         {
@@ -2713,7 +2733,7 @@
           "score": 72.4,
           "release_date": "2026-07-08",
           "price_1m_blended": 3,
-          "tok_per_sec": 62.14,
+          "tok_per_sec": 65.39,
           "open_weights": null
         },
         {
@@ -2723,7 +2743,7 @@
           "score": 72.2,
           "release_date": "2026-08-05",
           "price_1m_blended": 2,
-          "tok_per_sec": 224.7,
+          "tok_per_sec": 281.06,
           "open_weights": null
         },
         {
@@ -2733,7 +2753,7 @@
           "score": 71.9,
           "release_date": "2026-08-12",
           "price_1m_blended": 3,
-          "tok_per_sec": 39.96,
+          "tok_per_sec": 38.64,
           "open_weights": null
         }
       ],
@@ -2919,11 +2939,6 @@
           "score": 63
         },
         {
-          "model": "Agnes 2.5 Pro Beta",
-          "creator": "Sapiens AI",
-          "score": 62.3
-        },
-        {
           "model": "Kimi K2.6",
           "creator": "Moonshot AI",
           "score": 61.8
@@ -2967,11 +2982,6 @@
           "model": "Nex-N2-Pro",
           "creator": "Nex AGI",
           "score": 59.1
-        },
-        {
-          "model": "Agnes 2.5 Pro Alpha",
-          "creator": "Sapiens AI",
-          "score": 58.8
         },
         {
           "model": "Hy3",
@@ -3737,8 +3747,8 @@
       "description": "Composite AA de uso autônomo de ferramentas e terminal",
       "unit": "índice (0–100)",
       "is_fraction": false,
-      "models_evaluated": 155,
-      "families_evaluated": 115,
+      "models_evaluated": 156,
+      "families_evaluated": 116,
       "top": [
         {
           "model": "Claude Fable 5.1",
@@ -3747,7 +3757,7 @@
           "score": 57.9,
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
-          "tok_per_sec": 69.22,
+          "tok_per_sec": 70.8,
           "open_weights": null
         },
         {
@@ -3757,7 +3767,7 @@
           "score": 56.5,
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
-          "tok_per_sec": 58.86,
+          "tok_per_sec": 60.51,
           "open_weights": null
         },
         {
@@ -3767,7 +3777,7 @@
           "score": 56,
           "release_date": "2026-09-02",
           "price_1m_blended": 3,
-          "tok_per_sec": 38.78,
+          "tok_per_sec": 39.2,
           "open_weights": null
         },
         {
@@ -3777,7 +3787,7 @@
           "score": 55.5,
           "release_date": "2026-09-02",
           "price_1m_blended": 2,
-          "tok_per_sec": 240.68,
+          "tok_per_sec": 221.43,
           "open_weights": null
         },
         {
@@ -3787,7 +3797,7 @@
           "score": 53.6,
           "release_date": "2026-08-26",
           "price_1m_blended": 0.22999999999999998,
-          "tok_per_sec": 63.78,
+          "tok_per_sec": 58.48,
           "open_weights": null
         },
         {
@@ -3797,7 +3807,7 @@
           "score": 53.1,
           "release_date": "2026-08-18",
           "price_1m_blended": 2.15,
-          "tok_per_sec": 66.45,
+          "tok_per_sec": 91.75,
           "open_weights": null
         },
         {
@@ -3807,7 +3817,7 @@
           "score": 53,
           "release_date": "2026-08-12",
           "price_1m_blended": 3,
-          "tok_per_sec": 66.68,
+          "tok_per_sec": 67.73,
           "open_weights": null
         },
         {
@@ -3817,7 +3827,7 @@
           "score": 51,
           "release_date": "2026-09-03",
           "price_1m_blended": 20,
-          "tok_per_sec": 68.7,
+          "tok_per_sec": 63.55,
           "open_weights": null
         },
         {
@@ -3827,7 +3837,7 @@
           "score": 50.9,
           "release_date": "2026-08-26",
           "price_1m_blended": 0.2375,
-          "tok_per_sec": 93.67,
+          "tok_per_sec": 55.86,
           "open_weights": null
         },
         {
@@ -3837,7 +3847,7 @@
           "score": 50.7,
           "release_date": "2026-06-09",
           "price_1m_blended": 20,
-          "tok_per_sec": 67.87,
+          "tok_per_sec": 63.54,
           "open_weights": null
         },
         {
@@ -3847,7 +3857,7 @@
           "score": 50.2,
           "release_date": "2026-07-09",
           "price_1m_blended": 8,
-          "tok_per_sec": 77.28,
+          "tok_per_sec": 94.2,
           "open_weights": null
         },
         {
@@ -3857,7 +3867,7 @@
           "score": 50.1,
           "release_date": "2026-08-12",
           "price_1m_blended": 3,
-          "tok_per_sec": 39.96,
+          "tok_per_sec": 38.64,
           "open_weights": null
         },
         {
@@ -3867,7 +3877,7 @@
           "score": 50,
           "release_date": "2026-07-16",
           "price_1m_blended": 6,
-          "tok_per_sec": 43.59,
+          "tok_per_sec": 0,
           "open_weights": null
         },
         {
@@ -3877,7 +3887,7 @@
           "score": 47.5,
           "release_date": "2026-08-21",
           "price_1m_blended": 0.66,
-          "tok_per_sec": 237.49,
+          "tok_per_sec": 226.86,
           "open_weights": null
         },
         {
@@ -3887,7 +3897,7 @@
           "score": 45.8,
           "release_date": "2026-08-14",
           "price_1m_blended": 1.125,
-          "tok_per_sec": 46.72,
+          "tok_per_sec": 46.25,
           "open_weights": null
         },
         {
@@ -3897,7 +3907,7 @@
           "score": 43.6,
           "release_date": "2026-06-30",
           "price_1m_blended": 4,
-          "tok_per_sec": 81.15,
+          "tok_per_sec": 79.36,
           "open_weights": null
         },
         {
@@ -3907,7 +3917,7 @@
           "score": 43.2,
           "release_date": "2026-08-05",
           "price_1m_blended": 2,
-          "tok_per_sec": 224.7,
+          "tok_per_sec": 281.06,
           "open_weights": null
         },
         {
@@ -3917,7 +3927,7 @@
           "score": 43.2,
           "release_date": "2026-07-09",
           "price_1m_blended": 4.5,
-          "tok_per_sec": 105.51,
+          "tok_per_sec": 103.76,
           "open_weights": null
         },
         {
@@ -3927,7 +3937,7 @@
           "score": 42.1,
           "release_date": "2026-07-09",
           "price_1m_blended": 0.45,
-          "tok_per_sec": 164.51,
+          "tok_per_sec": 125.55,
           "open_weights": null
         },
         {
@@ -3937,7 +3947,7 @@
           "score": 41.9,
           "release_date": "2026-05-28",
           "price_1m_blended": 10,
-          "tok_per_sec": 59.13,
+          "tok_per_sec": 53.37,
           "open_weights": null
         }
       ],
@@ -4116,6 +4126,11 @@
           "model": "Ling-3.0-flash-VL",
           "creator": "InclusionAI",
           "score": 28.7
+        },
+        {
+          "model": "Apodex 1.1",
+          "creator": "Apodex",
+          "score": 28.4
         },
         {
           "model": "Ling-3.0-flash-Fin",
