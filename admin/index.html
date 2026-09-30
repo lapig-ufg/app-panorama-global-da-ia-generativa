@@ -288,9 +288,11 @@
   // responde com Access-Control-Allow-Origin: * (inclusive no 302 → googleusercontent),
   // então o fetch CORS lê o JSON direto. JSONP-via-<script> NÃO funciona aqui: a tag <script>
   // falha no redirect pro googleusercontent ("load failed").
+  // Timeout de 45s: medido em 2026-09-30, o web app demora 8-19s na rede (cold start +
+  // redirect do Google; exec do script é só ~0,5-2s) e o antigo teto de 20s estourava.
   function webAppGet(action) {
     var url = APPS_SCRIPT_URL + "?action=" + encodeURIComponent(action);
-    return withTimeout(fetch(url, { method: "GET", mode: "cors", redirect: "follow", cache: "no-store" }), 20000)
+    return withTimeout(fetch(url, { method: "GET", mode: "cors", redirect: "follow", cache: "no-store" }), 45000)
       .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); });
   }
 
@@ -301,7 +303,16 @@
     listEl.innerHTML = "";
     var data;
     try { data = await webAppGet("listar"); }
-    catch (e) { statusEl.textContent = "Falha ao ler pendentes (" + e.message + ")."; return; }
+    catch (e) {
+      // O web app do Apps Script pode demorar 10-20s na 1ª chamada (cold start + redirect
+      // do Google) e às vezes passa de 20s. Uma 2ª tentativa costuma resolver em ~1-2s.
+      statusEl.textContent = "Lento (" + e.message + "). Tentando de novo…";
+      try { data = await webAppGet("listar"); }
+      catch (e2) {
+        statusEl.textContent = "Falha ao ler pendentes (" + e2.message + "). O servidor pode estar acordando — aguarde ~15s e dê ↻.";
+        return;
+      }
+    }
 
     var raw = (data && Array.isArray(data.candidatos)) ? data.candidatos : [];
     var items = [];
@@ -351,9 +362,10 @@
   var busy = false; // trava global: só uma ação por vez (evita clique duplo)
 
   // O Apps Script responde por um redirect entre domínios do Google que o navegador
-  // muitas vezes não consegue ler — o fetch pode ficar pendurado. Por isso NÃO
-  // confiamos na resposta do POST: disparamos e depois CONFIRMAMOS pelo estado real
-  // (listar, ao vivo e sem cache). O card só some se a linha realmente saiu de Pendentes.
+  // muitas vezes não consegue ler — o fetch com redirect:"follow" pode ficar pendurado
+  // até o timeout. Como NÃO lemos a resposta, usamos redirect:"manual": o fetch resolve
+  // no instante do 302 (o doPost JÁ terminou de processar), sem pendurar. A validade
+  // continua sendo confirmada pelo estado real (listar, ao vivo) abaixo.
   function withTimeout(promise, ms) {
     return Promise.race([
       promise,
@@ -377,14 +389,14 @@
     var payload = { action: action, token: getToken(), data: it.date, empresa: it.emp, modelo: it.mod };
     if (secundario) payload.nivel = "secundario";
 
-    // Dispara o POST. A resposta do Apps Script costuma ser ilegível (redirect do Google),
-    // então NÃO dependemos dela — confirmamos pelo estado real (listar, ao vivo).
+    // Dispara o POST. redirect:"manual" resolve na hora do 302 (o processamento já
+    // terminou); NÃO dependemos da resposta — confirmamos pelo estado real (listar).
     try {
       await withTimeout(fetch(APPS_SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(payload),
-        redirect: "follow"
+        redirect: "manual"
       }), 30000);
     } catch (e) { /* timeout/CORS: o servidor pode estar processando — confirmamos abaixo */ }
 
@@ -494,9 +506,9 @@
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(payload),
-        redirect: "follow"
+        redirect: "manual"
       }), 45000);
-      try { var j = JSON.parse(await res.text()); if (j && j.ok === false) errMsg = j.error || "falhou"; } catch (e) { /* ilegível: assume disparado */ }
+      try { var j = JSON.parse(await res.text()); if (j && j.ok === false) errMsg = j.error || "falhou"; } catch (e) { /* opaqueredirect (302): assume disparado */ }
     } catch (e) { /* timeout/CORS: o servidor provavelmente disparou — confirmamos por e-mail/pendentes */ }
     busy = false;
     btn.innerHTML = label;

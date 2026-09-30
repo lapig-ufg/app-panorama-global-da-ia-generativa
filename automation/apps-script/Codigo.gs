@@ -25,6 +25,18 @@ var TAB_LANC = 'Lancamentos';
 var TAB_PEND = 'Pendentes';
 var COL_APROVAR = 'Aprovar?';
 
+// ── cache de leitura para listar (CacheService) ──
+// A leitura executa em ~0,5-2s (lendo a aba inteira); o cache corta esse trecho nas
+// chamadas repetidas (PWA recarrega, reconciliação pós-POST, gviz-concorrente).
+// TTL curto DE PROPÓSITO: qualquer edição manual na planilha só aparece no
+// `listar` no máximo em LISTAR_TTL_S_S. TODA escrita por script invalida na hora.
+var CACHE_LISTAR = 'panorama-llms-listar-v1';
+var LISTAR_TTL_S = 300;
+
+function _invalidarListar_() {
+  try { CacheService.getScriptCache().remove(CACHE_LISTAR); } catch (e) { /* cache é melhor-esforço */ }
+}
+
 function getSecret_() {
   var s = PropertiesService.getScriptProperties().getProperty('SECRET');
   if (!s) throw new Error('Script Property "SECRET" não definida (Project Settings → Script Properties).');
@@ -78,6 +90,36 @@ function doPost(e) {
   }
 }
 
+// ── limpeza (rodar 1x, opcional): remove as linhas-fantasma de "Pendentes" ──
+// O setup() aplicou validação de checkbox em 1.000 linhas (2..1001); essas linhas
+// ficam só com Aprovar?=FALSE e sem nenhum dado, mas contam no getLastRow() —
+// o que faz listar/_existingKeys/_handleAdmin_ lerem ~1.000 linhas vazias por
+// chamada. Esta função apaga as linhas em que TODOS os campos (menos Aprovar?)
+// estão vazios, de baixo para cima. Segura: conserva qualquer linha com dados.
+function limparLinhasFantasmas() {
+  var t0 = Date.now();
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var pend = ss.getSheetByName(TAB_PEND);
+  if (!pend) throw new Error('aba "' + TAB_PEND + '" nao existe');
+  var last = pend.getLastRow();
+  if (last < 2) return 'nada a limpar';
+  var headers = _headers(pend);
+  var colAprovar = headers.indexOf(COL_APROVAR); // 0-based; -1 se nao existir
+  var all = pend.getRange(2, 1, last - 1, pend.getLastColumn()).getValues();
+  var removidas = 0;
+  for (var r = all.length - 1; r >= 0; r--) {
+    var temDado = false;
+    for (var c = 0; c < all[r].length; c++) {
+      if (c === colAprovar) continue; // Aprovar?=FALSE sozinho não conta como dado
+      var v = all[r][c];
+      if (v !== '' && v !== null) { temDado = true; break; }
+    }
+    if (!temDado) { pend.deleteRow(r + 2); removidas++; }
+  }
+  console.log('[limpeza] removidas=' + removidas + ' antes=' + last + ' exec=' + (Date.now() - t0) + 'ms');
+  return 'limpeza ok: ' + removidas + ' linha(s) fantasma(s) removida(s) (antes: ' + last + ' linhas).';
+}
+
 // ───────────────────────────── doGet (leitura) ──────────────────────────────
 // Leituras públicas (não exigem token — os Pendentes já são legíveis via gviz hoje,
 // então listar não vaza nada novo). Devolve JSON puro, lido pela PWA via fetch CORS
@@ -95,6 +137,27 @@ function doGet(e) {
 
 function _listarData_() {
   var t0 = Date.now();
+  var cache = CacheService.getScriptCache();
+  if (cache) {
+    var cached;
+    try { cached = cache.get(CACHE_LISTAR); } catch (e) { cached = null; }
+    if (cached) {
+      try {
+        var obj = JSON.parse(cached);
+        console.log('[listar] cache hit linhas=' + obj.candidatos.length + ' exec=' + (Date.now() - t0) + 'ms');
+        return obj;
+      } catch (e) { /* payload corrompido: recalcula abaixo */ }
+    }
+  }
+  var payload = _listarCompute_();
+  if (cache) {
+    try { cache.put(CACHE_LISTAR, JSON.stringify(payload), LISTAR_TTL_S); } catch (e) { /* melhor-esforço */ }
+  }
+  console.log('[listar] linhas=' + payload.candidatos.length + ' exec=' + (Date.now() - t0) + 'ms');
+  return payload;
+}
+
+function _listarCompute_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var pend = ss.getSheetByName(TAB_PEND);
   if (!pend) return { candidatos: [] };
@@ -120,7 +183,6 @@ function _listarData_() {
       });
     }
   }
-  console.log('[listar] linhas=' + out.length + ' exec=' + (Date.now() - t0) + 'ms');
   return { candidatos: out };
 }
 
@@ -167,6 +229,7 @@ function _handleIngestao_(body) {
 
   _sendEmail(body, added, skipped);
   SpreadsheetApp.flush();
+  _invalidarListar_(); // pendentes novos: a PWA precisa vê-los na próxima listagem
   console.log('[ingestao] added=' + added.length + ' skipped=' + skipped + ' exec=' + (Date.now() - t0) + 'ms');
   return _json({ ok: true, added: added.length, skipped: skipped });
 }
@@ -217,6 +280,7 @@ function _handleAdmin_(body, action) {
       if (action === 'aprovar' && !jaNoLanc) _promoverLinha_(ss, pend, headers, sheetRow, statusAlvo);
       pend.deleteRow(sheetRow);
       SpreadsheetApp.flush(); // propaga imediatamente p/ abas abertas e PWA
+      _invalidarListar_(); // a PWA reconcilia re-ler listar — tem que vir sem a linha removida
       console.log('[admin] ' + action + ' ' + alvo + (action === 'aprovar' ? ' status=' + statusAlvo : '') +
                   (jaNoLanc ? ' (ja publicado, so removeu)' : '') +
                   ' commit=' + (Date.now() - t0) + 'ms');
@@ -277,6 +341,7 @@ function onEdit(e) {
   var iStatus = _col(headers, 'status');
   if (iStatus >= 0) sh.getRange(row, iStatus + 1).setValue('publicado');
   sh.getRange(row, aprovarCol).setNote('Aprovado e publicado em ' + new Date());
+  _invalidarListar_(); // a linha mudou de status: não pode aparecer como pendente no cache
 }
 
 // ── helper compartilhado: copia a linha de Pendentes p/ Lancamentos ──
