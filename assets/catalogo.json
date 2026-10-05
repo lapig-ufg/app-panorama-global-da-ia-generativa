@@ -3,8 +3,8 @@
   "source_url": "https://artificialanalysis.ai/",
   "attribution": "Dados: Artificial Analysis — artificialanalysis.ai",
   "api_tier": "free",
-  "fetched_at": "2026-09-28T17:13:29.431Z",
-  "familias_total": 472,
+  "fetched_at": "2026-10-05T17:39:06.182Z",
+  "familias_total": 477,
   "descartados": {
     "entradas_sem_data": 0,
     "anteriores_ao_marco": 0
@@ -2310,7 +2310,7 @@
       "mod": "Qwen3.5 9B",
       "emp": "Alibaba",
       "date": "2026-03-02",
-      "score": 13.7,
+      "score": 13.3,
       "open_weights": null
     },
     {
@@ -2380,7 +2380,7 @@
       "mod": "NVIDIA Nemotron 3 Nano 4B",
       "emp": "NVIDIA",
       "date": "2026-03-16",
-      "score": 7.4,
+      "score": 4.8,
       "open_weights": null
     },
     {
@@ -2485,7 +2485,7 @@
       "mod": "Gemma 4 31B",
       "emp": "Google",
       "date": "2026-04-02",
-      "score": 19,
+      "score": 14.7,
       "open_weights": null
     },
     {
@@ -2639,7 +2639,7 @@
       "mod": "DeepSeek V4 Flash 0420",
       "emp": "DeepSeek",
       "date": "2026-04-24",
-      "score": 26,
+      "score": 24.4,
       "open_weights": null
     },
     {
@@ -2884,7 +2884,7 @@
       "mod": "JT-4.1 Flash 236B A21B",
       "emp": "China Mobile",
       "date": "2026-07-09",
-      "score": 27.3,
+      "score": 33.9,
       "open_weights": null
     },
     {
@@ -2975,7 +2975,7 @@
       "mod": "Inkling Small",
       "emp": "Thinking Machines",
       "date": "2026-07-30",
-      "score": 27.8,
+      "score": 25.7,
       "open_weights": null
     },
     {
@@ -2996,7 +2996,7 @@
       "mod": "Ling 3.0 Flash",
       "emp": "InclusionAI",
       "date": "2026-08-04",
-      "score": 24.9,
+      "score": 20.1,
       "open_weights": null
     },
     {
@@ -3017,7 +3017,7 @@
       "mod": "Ling 3.0 Tiny",
       "emp": "InclusionAI",
       "date": "2026-08-06",
-      "score": 15.3,
+      "score": 11.1,
       "open_weights": null
     },
     {
@@ -3066,7 +3066,7 @@
       "mod": "A.X-K2",
       "emp": "SK Telecom",
       "date": "2026-08-12",
-      "score": 22.7,
+      "score": 21.5,
       "open_weights": null
     },
     {
@@ -3304,14 +3304,49 @@
       "mod": "GPT-6 Luna",
       "emp": "OpenAI",
       "date": "2026-09-22",
-      "score": 37.3,
+      "score": 38.1,
       "open_weights": null
     },
     {
       "mod": "GPT-6 Sol",
       "emp": "OpenAI",
       "date": "2026-09-22",
-      "score": 47.5,
+      "score": 47.6,
+      "open_weights": null
+    },
+    {
+      "mod": "Solar Mini 4",
+      "emp": "Upstage",
+      "date": "2026-09-22",
+      "score": 24.1,
+      "open_weights": null
+    },
+    {
+      "mod": "Claude Sonnet 5.5",
+      "emp": "Anthropic",
+      "date": "2026-09-28",
+      "score": 56,
+      "open_weights": null
+    },
+    {
+      "mod": "GPT-6.1 Sol",
+      "emp": "OpenAI",
+      "date": "2026-09-29",
+      "score": 51.8,
+      "open_weights": null
+    },
+    {
+      "mod": "Gemini 4 Argon",
+      "emp": "Google",
+      "date": "2026-09-30",
+      "score": 52.6,
+      "open_weights": null
+    },
+    {
+      "mod": "Ling 3.1 Flash",
+      "emp": "InclusionAI",
+      "date": "2026-10-01",
+      "score": 41.1,
       "open_weights": null
     }
   ]
