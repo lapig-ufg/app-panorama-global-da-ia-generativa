@@ -3,8 +3,8 @@
   "source_url": "https://artificialanalysis.ai/",
   "attribution": "Dados: Artificial Analysis — artificialanalysis.ai",
   "api_tier": "free",
-  "fetched_at": "2026-10-05T17:39:06.182Z",
-  "familias_total": 477,
+  "fetched_at": "2026-10-12T18:26:19.166Z",
+  "familias_total": 481,
   "descartados": {
     "entradas_sem_data": 0,
     "anteriores_ao_marco": 0
@@ -3129,7 +3129,7 @@
       "mod": "Granite 4.2 30B",
       "emp": "IBM",
       "date": "2026-08-25",
-      "score": 14.8,
+      "score": 12.7,
       "open_weights": null
     },
     {
@@ -3154,7 +3154,7 @@
       "open_weights": null
     },
     {
-      "mod": "GLM 5.3 Flash",
+      "mod": "GLM-5.3-Flash",
       "emp": "Zhipu AI",
       "date": "2026-08-26",
       "score": 41.8,
@@ -3347,6 +3347,34 @@
       "emp": "InclusionAI",
       "date": "2026-10-01",
       "score": 41.1,
+      "open_weights": null
+    },
+    {
+      "mod": "Mistral Large 4 Preview",
+      "emp": "Mistral",
+      "date": "2026-10-06",
+      "score": 38.4,
+      "open_weights": null
+    },
+    {
+      "mod": "Claude Haiku 5.5",
+      "emp": "Anthropic",
+      "date": "2026-10-07",
+      "score": 43.4,
+      "open_weights": null
+    },
+    {
+      "mod": "Muse Wonder",
+      "emp": "Meta",
+      "date": "2026-10-12",
+      "score": 52.4,
+      "open_weights": null
+    },
+    {
+      "mod": "Muse Wonder Full",
+      "emp": "Meta",
+      "date": "2026-10-12",
+      "score": 55.8,
       "open_weights": null
     }
   ]
