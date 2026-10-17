@@ -36,11 +36,11 @@ const GRATUITOS_DATA = {
     name: "The AI Rankings — Best Free AI Tools",
     url: "https://theairankings.com/best-free-ai-tools/",
     attribution: "Quotas and limits adapted from The AI Rankings (theairankings.com)",
-    lastChecked: "2026-08-10",
+    lastChecked: "2026-10-17",
     schemaVersion: 2,
   },
-  updatedAt: "2026-08-10",
-  updatedText: "August 10, 2026",
+  updatedAt: "2026-10-17",
+  updatedText: "October 17, 2026",
   categories: [
     { id: "todos", label: "All AIs" },
     { id: "assistentes-dev", label: "Code Assistants & IDEs" },
@@ -54,23 +54,25 @@ const GRATUITOS_DATA = {
     /* ── Models & Web Chat ─────────────────────────────────── */
 
     {
+      /* Revisão de 17/out/2026: a tabela de outubro ainda serve o 3.6 Flash
+         no gratuito; 3.7/3.8 são pagos. Vídeo grátis agora é via Flow. */
       id: "gemini-free",
       rank: 1,
       name: "Gemini Free",
       company: "Google",
       category: "modelos-llm",
       badge: "Multimodal Web Chat",
-      highlight: "The most generous free tier in multimodality — voice, search, image and video in a single chat.",
-      freeModel: "Gemini 3.5 Flash",
+      highlight: "Voice, research and images in free chat, with free video available separately in Google Flow.",
+      freeModel: "Gemini 3.6 Flash",
       freeQuota: "Compute-based quota, renewable every ~5h up to a weekly cap.",
-      limits: "Free-tier activity may be used to train Google's models (can be disabled in settings).",
-      bestFor: "The most generous all-rounder: voice, search, image and video.",
-      paidStepUp: "Google AI Pro $19.99/mo (or AI Plus $7.99).",
-      theCatch: "Flash lags behind Gemini 3.5 Pro (paid) on harder reasoning.",
+      limits: "Free activity may train Google's models (opt-out in settings). Deep Research: ~10 reports/month. In-app video and Gemini 3.7/3.8 Flash require a subscription.",
+      bestFor: "Multimodal everyday use: voice, research and images, with free video via Flow.",
+      paidStepUp: "Google AI Plus ~$4.99/mo or AI Pro $19.99/mo.",
+      theCatch: "Flash lags behind Gemini 3.1 Pro (paid) on harder reasoning.",
       howToAccess: "Visit gemini.google.com with a free Google account.",
       link: "https://gemini.google.com/",
       sourceUrl: "https://theairankings.com/best-free-ai-tools/",
-      tags: ["Gemini 3.5 Flash", "Voice", "Image", "Video"]
+      tags: ["Gemini 3.6 Flash", "Voice", "Image", "Deep Research", "Flow"]
     },
     {
       /* Rewritten on 10/Aug/2026. Until 06/Aug the free plan gave ~10 GPT-5.5
@@ -78,43 +80,51 @@ const GRATUITOS_DATA = {
          default is GPT-5.6 Luna and text is unlimited. The old `id` was
          "codex-chatgpt", a name inherited from when Codex and ChatGPT were the same
          entry — since Codex became its own card right below, keeping the two
-         with swapped names would only confuse anyone editing. */
+         with swapped names would only confuse anyone editing.
+         Em 17/out, mantemos Luna ilimitado conforme a tabela atual da fonte;
+         trechos antigos da página ainda descrevem GPT-5.5 seguido de mini. */
       id: "chatgpt-free",
       rank: 2,
       name: "ChatGPT Free",
       company: "OpenAI",
       category: "modelos-llm",
       badge: "Web Chat",
-      highlight: "Since 06/Aug/2026, text conversations with no limits whatsoever — and on GPT-5.6 Luna, no longer on the downgraded model.",
+      highlight: "Unlimited text conversations on GPT-5.6 Luna, with limited uploads, images and tools.",
       freeModel: "GPT-5.6 Luna",
-      freeQuota: "Unlimited text chats, no daily quota or downgrade to mini.",
-      limits: "Unlimited applies only to text: images, files, voice and image generation maintain separate quotas. Rollout is gradual since the 06/Aug announcement, so it may not have reached your account yet. In some markets the free version displays ads, and conversations may train the model if you haven't disabled it.",
+      freeQuota: "Unlimited text chats, subject to abuse guardrails; limited uploads, images and tools.",
+      limits: "Unlimited applies only to text. Ads in several markets, including India since August 27, 2026; conversations may train models by default (opt-out available).",
       bestFor: "High-volume text chat without counting messages — plus the Think button when the question is hard.",
       paidStepUp: "Go $8/mo or Plus $20/mo.",
-      theCatch: "Luna scores 52.3 on the Artificial Analysis Intelligence Index, below GPT-5.6 Sol (60.9), which remains exclusive to paid plans along with Deep Research and Work mode.",
+      theCatch: "Uploads, images and tools have tight quotas; ads and conversation training are enabled by default, with a training opt-out.",
       howToAccess: "Create a free account at chatgpt.com.",
       link: "https://chatgpt.com/",
-      sourceUrl: "https://openai.com/index/improving-gpt-5-6-sol-in-chatgpt/",
+      sourceUrl: "https://theairankings.com/best-free-ai-tools/",
       tags: ["GPT-5.6 Luna", "Unlimited Text", "Think", "Images"]
     },
     {
+      /* A fonte agregada de outubro ainda dizia Sonnet 5. O Sonnet 5.5 foi
+         lançado em 28/set (https://www.anthropic.com/news/claude-sonnet-5-5),
+         mas o anúncio oficial não detalha o plano gratuito. Tom's Guide
+         informa que substituiu o Sonnet 5 como padrão de Free e Pro.
+         A cota abaixo vem de The AI Rankings, medida com o Sonnet 5:
+         https://theairankings.com/best-free-ai-tools/ */
       id: "claude-web",
       rank: 3,
       name: "Claude Free",
       company: "Anthropic",
       category: "modelos-llm",
       badge: "Web Chat & Artifacts",
-      highlight: "Free access to Claude Sonnet 4.6 with support for visual Artifacts.",
-      freeModel: "Claude Sonnet 4.6",
-      freeQuota: "~15 messages, with daily/weekly quotas that fluctuate based on demand.",
-      limits: "The limit fluctuates with global traffic; no native image or video generation.",
+      highlight: "Free access to Claude Sonnet 5.5 for writing, careful reasoning and long documents.",
+      freeModel: "Claude Sonnet 5.5",
+      freeQuota: "~30–40 messages per 5h window (source estimate for Sonnet 5).",
+      limits: "The limit varies with demand; the message estimate was measured with Sonnet 5. No Opus or native image or video generation.",
       bestFor: "Natural prose, careful reasoning and long documents.",
       paidStepUp: "Pro $20/mo ($17 annual).",
-      theCatch: "Withholds Opus 4.8 (the strongest model); tighter quotas than Gemini.",
+      theCatch: "No Opus access; tighter quotas than Gemini and no image or video generation.",
       howToAccess: "Visit and create a free account at claude.ai.",
       link: "https://claude.ai/",
-      sourceUrl: "https://theairankings.com/best-free-ai-tools/",
-      tags: ["Sonnet 4.6", "Artifacts", "Writing", "Reasoning"]
+      sourceUrl: "https://www.tomsguide.com/ai/claude/claude-sonnet-5-5-just-launched-heres-why-its-about-to-become-your-daily-driver",
+      tags: ["Sonnet 5.5", "Artifacts", "Writing", "Reasoning"]
     },
     {
       id: "deepseek-web",
@@ -136,23 +146,25 @@ const GRATUITOS_DATA = {
       tags: ["DeepSeek", "Reasoning", "Math", "Totally Free"]
     },
     {
+      /* Muse Image substituiu o gerador anterior em 07/jul/2026; uso intenso
+         de imagem agora exige plano pago, sem preço informado pela fonte. */
       id: "meta-ai",
       rank: 5,
       name: "Meta AI",
       company: "Meta",
       category: "modelos-llm",
       badge: "Chat on Social Networks",
-      highlight: "Fully free multimodal AI embedded in WhatsApp, Instagram and Messenger.",
-      freeModel: "Muse Spark",
-      freeQuota: "Completely free, no paid plan.",
-      limits: "Tied to your Meta social accounts.",
+      highlight: "Free everyday chat and images within WhatsApp, Instagram and Messenger.",
+      freeModel: "Muse Spark + Muse Image",
+      freeQuota: "Free for everyday use; heavy image use requires a paid plan.",
+      limits: "Tied to your Meta social accounts; heavy image use depends on a paid plan.",
       bestFor: "Casual multimodal use within WhatsApp, Instagram and Messenger.",
-      paidStepUp: "",
-      theCatch: "Tied to your Meta social accounts.",
+      paidStepUp: "Meta paid plans for heavy image use (price not published).",
+      theCatch: "Tied to your Meta social accounts; high-volume image use requires payment.",
       howToAccess: "Available inside WhatsApp, Instagram and Messenger.",
       link: "https://www.meta.ai/",
       sourceUrl: "https://theairankings.com/best-free-ai-tools/",
-      tags: ["Muse Spark", "WhatsApp", "Instagram", "Totally Free"]
+      tags: ["Muse Spark", "Muse Image", "WhatsApp", "Instagram"]
     },
     {
       id: "le-chat",
@@ -174,6 +186,8 @@ const GRATUITOS_DATA = {
       tags: ["Mistral", "European Union", "Image", "Code"]
     },
     {
+      /* Em 18/ago/2026 foram aposentados Deep Research, Group Chats,
+         podcasts de IA e Labs; o chat mantém seletor GPT-5.2 / MAI. */
       id: "microsoft-copilot",
       rank: 7,
       name: "Microsoft Copilot Free",
@@ -181,16 +195,16 @@ const GRATUITOS_DATA = {
       category: "modelos-llm",
       badge: "Chat & Office",
       highlight: "Drafts and images inside the Office and Edge ecosystem.",
-      freeModel: "GPT-class model",
+      freeModel: "GPT-5.2 / MAI (model selector)",
       freeQuota: "Daily quotas; richest inside Office and Edge.",
-      limits: "Daily quotas; real value is inside Office apps.",
+      limits: "Daily quotas. Deep Research, Group Chats, AI podcasts and Labs were retired on August 18, 2026.",
       bestFor: "Drafts and images inside Word, Outlook and Edge.",
       paidStepUp: "Microsoft 365 Premium $19.99/mo.",
       theCatch: "Performs better inside Word/Outlook/Edge than in the standalone chat.",
       howToAccess: "Visit copilot.microsoft.com or use inside Edge/Office.",
       link: "https://copilot.microsoft.com/",
       sourceUrl: "https://theairankings.com/best-free-ai-tools/",
-      tags: ["Copilot", "Office", "Edge", "Images"]
+      tags: ["GPT-5.2", "MAI", "Office", "Edge", "Images"]
     },
     {
       id: "perplexity-free",
@@ -212,23 +226,65 @@ const GRATUITOS_DATA = {
       tags: ["Web Search", "Citations", "Updated Facts", "Sources"]
     },
     {
+      /* A tabela atual corrige seções antigas da própria fonte: geração
+         de imagem deixou de estar disponível no gratuito em março/2026. */
       id: "grok-free",
       rank: 9,
       name: "Grok Free",
       company: "xAI",
       category: "modelos-llm",
       badge: "Chat & News",
-      highlight: "Access to real-time X/news, image generation and fewer filters.",
-      freeModel: "Grok (xAI)",
+      highlight: "Access to real-time X/news and chat with fewer filters.",
+      freeModel: "Grok (Grok 4-class)",
       freeQuota: "~10 prompts every 2h.",
-      limits: "Trains on your data by default (opt-out available).",
-      bestFor: "Real-time X/news, image generation and fewer filters.",
+      limits: "No free image generation since March 2026. Trains on your data by default (opt-out available).",
+      bestFor: "Real-time X/news and conversations with fewer filters.",
       paidStepUp: "SuperGrok Lite $10 or SuperGrok $30/mo.",
       theCatch: "Cap of ~10 prompts every 2h.",
       howToAccess: "Visit grok.com with an X account or a free account.",
       link: "https://grok.com/",
       sourceUrl: "https://theairankings.com/best-free-ai-tools/",
-      tags: ["Grok", "X", "Real Time", "Images"]
+      tags: ["Grok 4", "X", "Real Time", "Chat"]
+    },
+    {
+      /* Novos no ranking de outubro: Qwen (10) e Kimi (11). A fonte não
+         publica cotas numéricas nem preços de entrada para estes chats. */
+      id: "qwen-chat",
+      rank: 10,
+      name: "Qwen Chat",
+      company: "Alibaba",
+      category: "modelos-llm",
+      badge: "Multimodal Chat",
+      highlight: "Free multimodal and multilingual chat with generous usage.",
+      freeModel: "Qwen",
+      freeQuota: "Free and generous multimodal chat; no numerical quota reported by the source.",
+      limits: "Prompts stored on servers in China.",
+      bestFor: "Free multimodal and multilingual chat.",
+      paidStepUp: "—",
+      theCatch: "Hosted in China; the source provides no numerical usage limit.",
+      howToAccess: "Visit chat.qwen.ai.",
+      link: "https://chat.qwen.ai/",
+      sourceUrl: "https://theairankings.com/best-free-ai-tools/",
+      tags: ["Qwen", "Multimodal", "Multilingual", "China"]
+    },
+    {
+      id: "kimi-chat",
+      rank: 11,
+      name: "Kimi",
+      company: "Moonshot AI",
+      category: "modelos-llm",
+      badge: "Long-Context Chat",
+      highlight: "Free long-context chat for documents and agentic research.",
+      freeModel: "Kimi (standard; K3 is paid)",
+      freeQuota: "Free, with long context; no numerical quota reported by the source.",
+      limits: "Prompts stored on servers in China; K3 requires a paid plan.",
+      bestFor: "Long-document analysis and agentic research.",
+      paidStepUp: "—",
+      theCatch: "Hosted in China; the K3 model is paid.",
+      howToAccess: "Visit kimi.com.",
+      link: "https://www.kimi.com/",
+      sourceUrl: "https://theairankings.com/best-free-ai-tools/",
+      tags: ["Kimi", "Long Context", "Documents", "Agentic Research", "China"]
     },
     {
       id: "huggingface-chat",
@@ -328,22 +384,29 @@ const GRATUITOS_DATA = {
       /* Two things with similar names and a single card, because in practice you
          use both together: OpenCode (MIT agent, runs locally) and OpenCode
          Zen (their gateway, which is where the free models come from). */
+      /* Em 17/out/2026 o catálogo inclui vários modelos Free. Contextos
+         fornecidos no roteiro desta revisão, com procedência declarada em
+         https://models.dev/api.json (provedor opencode): DeepSeek V4.1 Flash,
+         GLM-5.3-Flash, MiMo-V2.6-Flash e Big Pickle: 200K; Nemotron 3.5
+         Lightning: 262K; Nemotron 3 Ultra, Nemotron 3.5 Super VL, LongCat 2.5
+         Preview, Beam e Space Bunny: 1M. A documentação do Zen confirma
+         os modelos gratuitos temporários e distingue políticas de treino. */
       id: "opencode-zen",
       name: "OpenCode + Zen (free models)",
       company: "OpenCode",
       category: "assistentes-dev",
       badge: "Open Source Agent",
-      highlight: "Open source code agent in the terminal, with frontier models released for free on the Zen gateway — including DeepSeek V4 Flash.",
-      freeModel: "DeepSeek V4 Flash Free",
-      freeQuota: "Models marked as Free on OpenCode Zen, at no per-token cost while the beta lasts.",
-      limits: "These are time-limited releases with no published quota per model. What you send on the free models may be used to improve the model — do not send personal or confidential data.",
-      bestFor: "Running a full code agent in the terminal without paying for an API, or using DeepSeek on programming tasks.",
-      paidStepUp: "Paid Zen is pay-as-you-go (starting from $20 balance); the agent itself is free and MIT.",
-      theCatch: "Free models come and go from the catalog without notice, and commercial use terms are unclear — use for study and prototyping, not production.",
+      highlight: "Open source code agent with several free Zen models: DeepSeek V4.1 Flash, GLM-5.3-Flash and MiMo-V2.6-Flash have 200K context; others reach 1M.",
+      freeModel: "DeepSeek V4.1 Flash, GLM-5.3-Flash, MiMo-V2.6-Flash and others",
+      freeQuota: "Models marked as Free at no per-token cost for a limited time; 200K context in several models and up to 1M in some.",
+      limits: "Temporary releases with no published usage quota per model. Some free models may use data for model improvement; the documentation states zero retention and no training for DeepSeek V4.1 Flash and GLM-5.3-Flash. Check each model's policy before sending personal or confidential data.",
+      bestFor: "Running a terminal code agent with several free models and long context.",
+      paidStepUp: "Paid Zen is prepaid pay-as-you-go; the agent itself is free and MIT.",
+      theCatch: "Free access is temporary, the catalog changes and data-use policies vary by model.",
       howToAccess: "Install OpenCode, create an account at opencode.ai/auth and connect the Zen key with the /connect command.",
       link: "https://opencode.ai/docs/zen/",
       sourceUrl: "https://opencode.ai/docs/zen/",
-      tags: ["DeepSeek V4 Flash", "Terminal", "Open Source", "MIT"]
+      tags: ["DeepSeek V4.1 Flash", "GLM-5.3-Flash", "MiMo-V2.6-Flash", "200K Context", "Up to 1M", "Open Source"]
     },
     {
       id: "antigravity",
@@ -361,6 +424,8 @@ const GRATUITOS_DATA = {
       tags: ["Gemini", "Agents", "Code", "IDE"]
     },
     {
+      /* Mantidas ~2.000 conclusões/mês; a edição de outubro não sustenta
+         o antigo número de 50 chats. Copilot Student reabriu em 17/jun. */
       id: "github-copilot-free",
       name: "GitHub Copilot (Free Plan)",
       company: "GitHub / Microsoft",
@@ -368,8 +433,8 @@ const GRATUITOS_DATA = {
       badge: "IDE Extension",
       highlight: "Code autocompletion and chat in the extension, with broad IDE compatibility.",
       freeModel: "Copilot models",
-      freeQuota: "~2,000 code completions per month + 50 chat interactions.",
-      limits: "Quota renewed monthly on your GitHub account.",
+      freeQuota: "~2,000 code completions per month.",
+      limits: "Quota renewed monthly on your GitHub account; Copilot Student reopened on June 17, 2026 for eligible students.",
       bestFor: "Real-time quick code suggestions right in the editor (VS Code, JetBrains…).",
       theCatch: "Monthly limit of ~2,000 completions.",
       howToAccess: "Install the GitHub Copilot extension in VS Code and log in with your GitHub account.",
@@ -404,9 +469,9 @@ const GRATUITOS_DATA = {
       highlight: "Best free tier for images: text in image, character consistency and conversational editing.",
       freeModel: "Nano Banana 2 (Gemini 3.1 Flash Image)",
       freeQuota: "~20 images/day at up to 1K resolution.",
-      limits: "Limited daily count; free resolution capped at 1K; 4K only on paid.",
+      limits: "Limited daily count; free resolution capped at 1K.",
       bestFor: "Image generation with text, character consistency and conversational editing.",
-      paidStepUp: "Google AI Pro $19.99/mo.",
+      paidStepUp: "Google AI Plus ~$4.99/mo or AI Pro $19.99/mo.",
       theCatch: "Cap of ~20 images/day and 1K on free.",
       howToAccess: "Request images inside the Gemini app (gemini.google.com).",
       link: "https://gemini.google.com/",
@@ -447,22 +512,24 @@ const GRATUITOS_DATA = {
     /* ── Video, Voice & Music ────────────────────────────────── */
 
     {
+      /* O vídeo gratuito saiu do app Gemini: Veo 3.1 agora é via Flow,
+         com 50 créditos/dia e áudio sincronizado também no gratuito. */
       id: "google-veo",
       name: "Google Veo 3.1",
       company: "Google",
       category: "midia-av",
       badge: "Video Generation",
-      highlight: "The easiest free path to high-quality video.",
+      highlight: "Videos with synchronized audio via Google Flow, with 50 free credits per day.",
       freeModel: "Veo 3.1",
-      freeQuota: "Free for any Google account (via Gemini app and Google Vids).",
-      limits: "4K and synchronized audio only on paid plans.",
-      bestFor: "Easiest free path to high-quality video.",
-      paidStepUp: "Google AI Pro $19.99/mo (4K + synchronized audio).",
-      theCatch: "The free tier only generates the basics; 4K/synchronized audio are paid.",
-      howToAccess: "Generate video inside the Gemini app (gemini.google.com).",
-      link: "https://gemini.google.com/",
+      freeQuota: "50 credits/day in Google Flow for non-subscribers.",
+      limits: "Generations consume Flow credits; video in the Gemini app now requires a paid plan.",
+      bestFor: "Generating free video with synchronized audio via Flow; Gemini Omni Flash is also free inside YouTube Shorts.",
+      paidStepUp: "Google AI Pro $19.99/mo.",
+      theCatch: "Free access is via Flow, with daily credits; video within the Gemini app is paid.",
+      howToAccess: "Visit Google Flow (labs.google/fx/tools/flow) with your Google account.",
+      link: "https://labs.google/fx/tools/flow",
       sourceUrl: "https://theairankings.com/best-free-ai-tools/",
-      tags: ["Veo 3.1", "Video", "Gemini", "4K*"]
+      tags: ["Veo 3.1", "Google Flow", "Video", "Synchronized Audio", "50 credits/day"]
     },
     {
       id: "whisper",
