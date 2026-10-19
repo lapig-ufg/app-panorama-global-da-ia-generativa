@@ -3,8 +3,8 @@
   "source_url": "https://artificialanalysis.ai/",
   "attribution": "Dados: Artificial Analysis — artificialanalysis.ai",
   "api_tier": "free",
-  "fetched_at": "2026-10-12T18:26:19.166Z",
-  "familias_total": 481,
+  "fetched_at": "2026-10-19T16:04:05.294Z",
+  "familias_total": 488,
   "descartados": {
     "entradas_sem_data": 0,
     "anteriores_ao_marco": 0
@@ -910,14 +910,14 @@
       "mod": "Llama 4 Maverick",
       "emp": "Meta",
       "date": "2025-04-05",
-      "score": 10,
+      "score": 9.3,
       "open_weights": null
     },
     {
       "mod": "Llama 4 Scout",
       "emp": "Meta",
       "date": "2025-04-05",
-      "score": 8.1,
+      "score": 6.5,
       "open_weights": null
     },
     {
@@ -994,7 +994,7 @@
       "mod": "Qwen3 14B",
       "emp": "Alibaba",
       "date": "2025-04-28",
-      "score": 8.2,
+      "score": 6.7,
       "open_weights": null
     },
     {
@@ -1015,7 +1015,7 @@
       "mod": "Qwen3 32B",
       "emp": "Alibaba",
       "date": "2025-04-28",
-      "score": 8.6,
+      "score": 7.3,
       "open_weights": null
     },
     {
@@ -1029,7 +1029,7 @@
       "mod": "Qwen3 8B",
       "emp": "Alibaba",
       "date": "2025-04-28",
-      "score": 7.3,
+      "score": 6,
       "open_weights": null
     },
     {
@@ -1169,7 +1169,7 @@
       "mod": "Mistral Small 3.2",
       "emp": "Mistral",
       "date": "2025-06-20",
-      "score": 8.2,
+      "score": 7,
       "open_weights": null
     },
     {
@@ -2254,7 +2254,7 @@
       "mod": "Mercury 2",
       "emp": "Inception",
       "date": "2026-02-20",
-      "score": 13.8,
+      "score": 10.8,
       "open_weights": null
     },
     {
@@ -2597,7 +2597,7 @@
       "mod": "MiMo-V2.5",
       "emp": "Xiaomi",
       "date": "2026-04-22",
-      "score": 25.2,
+      "score": 21.8,
       "open_weights": null
     },
     {
@@ -3024,7 +3024,7 @@
       "mod": "Solar Pro 4",
       "emp": "Upstage",
       "date": "2026-08-06",
-      "score": 28.2,
+      "score": 26.6,
       "open_weights": null
     },
     {
@@ -3151,6 +3151,13 @@
       "emp": "Alibaba",
       "date": "2026-08-26",
       "score": 39.8,
+      "open_weights": null
+    },
+    {
+      "mod": "Agnes 2.5 Pro Beta",
+      "emp": "Sapiens AI",
+      "date": "2026-08-26",
+      "score": 35.2,
       "open_weights": null
     },
     {
@@ -3375,6 +3382,48 @@
       "emp": "Meta",
       "date": "2026-10-12",
       "score": 55.8,
+      "open_weights": null
+    },
+    {
+      "mod": "Muse Spark Open",
+      "emp": "Meta",
+      "date": "2026-10-15",
+      "score": 38.9,
+      "open_weights": null
+    },
+    {
+      "mod": "Nemotron 3.5 Bolt 74B-A9B",
+      "emp": "NVIDIA",
+      "date": "2026-10-15",
+      "score": 21.4,
+      "open_weights": null
+    },
+    {
+      "mod": "Nemotron 3.5 Super VL",
+      "emp": "NVIDIA",
+      "date": "2026-10-15",
+      "score": 26.5,
+      "open_weights": null
+    },
+    {
+      "mod": "Beam 1.0",
+      "emp": "Reflection",
+      "date": "2026-10-16",
+      "score": 30.3,
+      "open_weights": null
+    },
+    {
+      "mod": "DeepSeek V4.1 Flash 1017",
+      "emp": "DeepSeek",
+      "date": "2026-10-17",
+      "score": 45.1,
+      "open_weights": null
+    },
+    {
+      "mod": "MiniMax-M3.1-Flash",
+      "emp": "MiniMax",
+      "date": "2026-10-19",
+      "score": 42.4,
       "open_weights": null
     }
   ]
