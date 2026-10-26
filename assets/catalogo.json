@@ -3,8 +3,8 @@
   "source_url": "https://artificialanalysis.ai/",
   "attribution": "Dados: Artificial Analysis — artificialanalysis.ai",
   "api_tier": "free",
-  "fetched_at": "2026-10-19T16:04:05.294Z",
-  "familias_total": 488,
+  "fetched_at": "2026-10-26T15:41:07.231Z",
+  "familias_total": 491,
   "descartados": {
     "entradas_sem_data": 0,
     "anteriores_ao_marco": 0
@@ -3423,7 +3423,28 @@
       "mod": "MiniMax-M3.1-Flash",
       "emp": "MiniMax",
       "date": "2026-10-19",
-      "score": 42.4,
+      "score": 42.7,
+      "open_weights": null
+    },
+    {
+      "mod": "Ling 3.1 Flash 1019",
+      "emp": "InclusionAI",
+      "date": "2026-10-22",
+      "score": 43.9,
+      "open_weights": null
+    },
+    {
+      "mod": "Kimi K3.1 Pro",
+      "emp": "Moonshot AI",
+      "date": "2026-10-23",
+      "score": 55.1,
+      "open_weights": null
+    },
+    {
+      "mod": "Nemotron 3.5 Bolt E4B 4GB",
+      "emp": "NVIDIA",
+      "date": "2026-10-23",
+      "score": null,
       "open_weights": null
     }
   ]
