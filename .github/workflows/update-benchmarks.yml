@@ -38,7 +38,18 @@ jobs:
         env:
           AA_API_KEY: ${{ secrets.AA_API_KEY }}
           DRY_RUN: ${{ inputs.dry_run == true && 'true' || 'false' }}
+          # Export cru da resposta, no formato de .local/aa-free.json. Sobe como
+          # artefato (30 dias) logo abaixo; nunca entra no commit.
+          AA_RAW_OUT: aa-free.json
         run: node automation/update-benchmarks.mjs
+
+      - name: Guardar export cru da AA
+        uses: actions/upload-artifact@v4
+        with:
+          name: aa-free
+          path: aa-free.json
+          retention-days: 30
+          if-no-files-found: ignore
 
       # Os tres arquivos saem da MESMA resposta da API (ver update-benchmarks.mjs):
       # benchmarks.json alimenta o guia "Qual modelo usar", benchmarks-en.json e a

@@ -1,2 +1,6 @@
 __pycache__/
 *.pyc
+
+# Export cru da Artificial Analysis gerado pelo workflow (AA_RAW_OUT). É
+# artefato de diagnóstico, não dado publicado: não entra no git.
+aa-free.json
