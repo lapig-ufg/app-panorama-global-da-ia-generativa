@@ -1,0 +1,515 @@
+{
+  "schema": 1,
+  "checked_at": "2026-11-17",
+  "plans": [
+    {
+      "id": "chatgpt-free",
+      "provider": "OpenAI",
+      "name": "ChatGPT Free",
+      "price": "US$ 0/mês",
+      "families": [
+        {
+          "id": "gpt-6-luna",
+          "efforts": null,
+          "note": "Disponível no Free pela tabela de modelos da página de preços; nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gpt-5-6-terra",
+          "efforts": null,
+          "note": "Acesso limitado no ChatGPT Work e no Codex no desktop; nenhum nível de esforço é declarado."
+        }
+      ],
+      "source_url": "https://openai.com/chatgpt/pricing/",
+      "checked": true,
+      "note": "A tabela de modelos marca GPT-6 Luna como disponível e GPT-5.6 Terra com acesso limitado. A página também lista GPT-5 Thinking Mini, que não tem família com índice na AA. O texto do plano fala apenas em 'GPT-6' genérico."
+    },
+    {
+      "id": "chatgpt-go",
+      "provider": "OpenAI",
+      "name": "ChatGPT Go",
+      "price": "US$ 8/mês (EUA)",
+      "families": [
+        {
+          "id": "gpt-6-luna",
+          "efforts": null,
+          "note": "Mesma disponibilidade do Free, com limites maiores; nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gpt-5-6-terra",
+          "efforts": null,
+          "note": "Acesso limitado no ChatGPT Work e no Codex no desktop; nenhum nível de esforço é declarado."
+        }
+      ],
+      "source_url": "https://openai.com/chatgpt/pricing/",
+      "checked": true,
+      "note": "Plano existe e está na tabela de preços. O valor de US$ 8/mês nos EUA foi confirmado no anúncio oficial de 16/01/2026 (https://openai.com/index/introducing-chatgpt-go/); a página de preços não expõe o número no HTML."
+    },
+    {
+      "id": "chatgpt-plus",
+      "provider": "OpenAI",
+      "name": "ChatGPT Plus",
+      "price": "US$ 20/mês",
+      "families": [
+        {
+          "id": "gpt-6-1-sol",
+          "efforts": null,
+          "note": "Marcado como disponível no Plus; nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gpt-6-astra",
+          "efforts": null,
+          "note": "Marcado como disponível no Plus; nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gpt-6-sol",
+          "efforts": null,
+          "note": "Marcado como disponível no Plus; nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gpt-6-luna",
+          "efforts": null,
+          "note": "Marcado como disponível no Plus (também no Free); nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gpt-5-6-terra",
+          "efforts": null,
+          "note": "Marcado como disponível no Plus; nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gpt-5-6-luna",
+          "efforts": null,
+          "note": "Marcado como disponível no Plus; nenhum nível de esforço é declarado."
+        }
+      ],
+      "source_url": "https://openai.com/chatgpt/pricing/",
+      "checked": true,
+      "note": "Preço confirmado na Central de Ajuda (https://help.openai.com/en/articles/6950777-what-is-chatgpt-plus). A tabela também lista GPT-5.6 Sol, GPT-5.6 Sol Pro e GPT-5 Thinking Mini; os dois primeiros não têm família com índice na AA e o último não tem família AA."
+    },
+    {
+      "id": "chatgpt-pro",
+      "provider": "OpenAI",
+      "name": "ChatGPT Pro",
+      "price": "A partir de US$ 100/mês (Pro 100); Pro 200 US$ 200; Pro 500 US$ 500",
+      "families": [
+        {
+          "id": "gpt-6-1-sol",
+          "efforts": null,
+          "note": "Acesso expandido no Pro; nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gpt-6-astra",
+          "efforts": null,
+          "note": "Acesso expandido no Pro; o plano anuncia 'Pro reasoning powered by GPT-6 Astra'."
+        },
+        {
+          "id": "gpt-6-sol",
+          "efforts": null,
+          "note": "Acesso expandido no Pro; nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gpt-6-luna",
+          "efforts": null,
+          "note": "Acesso expandido no Pro; nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gpt-5-6-terra",
+          "efforts": null,
+          "note": "Acesso ilimitado no Pro; nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gpt-5-6-luna",
+          "efforts": null,
+          "note": "Acesso ilimitado no Pro; nenhum nível de esforço é declarado."
+        }
+      ],
+      "source_url": "https://openai.com/chatgpt/pricing/",
+      "checked": true,
+      "note": "As três faixas Pro 100/200/500 estão documentadas em https://help.openai.com/en/articles/9793128-what-is-chatgpt-pro. GPT-5.6 Sol, GPT-5.6 Sol Pro e GPT-5 Thinking Mini aparecem na tabela, mas não têm família com índice na AA; GPT-5.6 Sol Pro é o modo Pro do GPT-5.6 Sol."
+    },
+    {
+      "id": "claude-free",
+      "provider": "Anthropic",
+      "name": "Claude Free",
+      "price": "US$ 0/mês",
+      "families": [
+        {
+          "id": "claude-sonnet-5-5",
+          "efforts": null,
+          "note": "A tabela de modelos marca Sonnet como disponível no Free; a página não dá versão nem esforço."
+        },
+        {
+          "id": "claude-haiku-5-5",
+          "efforts": null,
+          "note": "A tabela de modelos marca Haiku como disponível no Free; a página não dá versão nem esforço."
+        }
+      ],
+      "source_url": "https://www.anthropic.com/pricing",
+      "checked": true,
+      "note": "A página usa os nomes de família Sonnet e Haiku sem versão. As versões atuais na AA são Sonnet 5.5 e Haiku 5.5; Fable e Opus ficam fora do Free."
+    },
+    {
+      "id": "claude-pro",
+      "provider": "Anthropic",
+      "name": "Claude Pro",
+      "price": "US$ 20/mês (US$ 17/mês no plano anual de US$ 200)",
+      "families": [
+        {
+          "id": "claude-opus-5-5",
+          "efforts": null,
+          "note": "Opus incluído no Pro; a página não dá versão nem esforço."
+        },
+        {
+          "id": "claude-sonnet-5-5",
+          "efforts": null,
+          "note": "Sonnet incluído no Pro; a página não dá versão nem esforço."
+        },
+        {
+          "id": "claude-haiku-5-5",
+          "efforts": null,
+          "note": "Haiku incluído no Pro; a página não dá versão nem esforço."
+        },
+        {
+          "id": "claude-fable-5-2",
+          "efforts": null,
+          "note": "Fable disponível no Pro via créditos de uso; a página não dá versão nem esforço."
+        }
+      ],
+      "source_url": "https://www.anthropic.com/pricing",
+      "checked": true,
+      "note": "A página não declara níveis de esforço. Versões atuais na AA: Opus 5.5, Sonnet 5.5, Haiku 5.5 e Fable 5.2."
+    },
+    {
+      "id": "claude-max",
+      "provider": "Anthropic",
+      "name": "Claude Max",
+      "price": "US$ 100/mês (5x Pro)",
+      "families": [
+        {
+          "id": "claude-opus-5-5",
+          "efforts": null,
+          "note": "Incluído no Max; a página não dá versão nem esforço."
+        },
+        {
+          "id": "claude-sonnet-5-5",
+          "efforts": null,
+          "note": "Incluído no Max; a página não dá versão nem esforço."
+        },
+        {
+          "id": "claude-haiku-5-5",
+          "efforts": null,
+          "note": "Incluído no Max; a página não dá versão nem esforço."
+        },
+        {
+          "id": "claude-fable-5-2",
+          "efforts": null,
+          "note": "Fable incluído até metade do limite semanal no Max; a página não dá versão nem esforço."
+        }
+      ],
+      "source_url": "https://www.anthropic.com/pricing",
+      "checked": true,
+      "note": "A página também lista Ultra (US$ 200/mês, 10x o limite semanal do Pro), acima do Max. Nenhum nível de esforço é declarado."
+    },
+    {
+      "id": "gemini-free",
+      "provider": "Google",
+      "name": "Gemini (grátis)",
+      "price": "US$ 0/mês",
+      "families": [
+        {
+          "id": "gemini-4-hydrogen",
+          "efforts": null,
+          "note": "A página diz 'Inclui Gemini 4 Hydrogen'; nenhum nível de esforço é declarado."
+        }
+      ],
+      "source_url": "https://gemini.google/us/subscriptions/?hl=en",
+      "checked": true,
+      "note": "A página também cita acesso a um 'modelo Flash-Lite' sem versão; não foi mapeado para evitar chute. Nenhum nível de esforço é declarado."
+    },
+    {
+      "id": "gemini-ai-pro",
+      "provider": "Google",
+      "name": "Google AI Pro",
+      "price": "US$ 19,99/mês",
+      "families": [
+        {
+          "id": "gemini-4-carbon",
+          "efforts": null,
+          "note": "A página diz 'Inclui Gemini 4 Carbon' no cartão do AI Pro; nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gemini-4-argon",
+          "efforts": null,
+          "note": "Acesso explícito ao Gemini 4 Argon; nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gemini-4-hydrogen",
+          "efforts": null,
+          "note": "Acesso explícito ao Gemini 4 Hydrogen; nenhum nível de esforço é declarado."
+        }
+      ],
+      "source_url": "https://gemini.google/us/subscriptions/?hl=en",
+      "checked": true,
+      "note": "A página também cita 'acesso ao nosso modelo Pro' sem versão; não foi mapeado para evitar chute. O Google AI Plus (US$ 4,99/mês) existe abaixo do Pro, mas não foi pedido."
+    },
+    {
+      "id": "gemini-ai-ultra",
+      "provider": "Google",
+      "name": "Google AI Ultra",
+      "price": "A partir de US$ 99,99/mês (5x Pro); US$ 199,99/mês (20x Pro)",
+      "families": [
+        {
+          "id": "gemini-4-carbon",
+          "efforts": null,
+          "note": "Acesso máximo ao Gemini 4 Carbon; nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gemini-4-argon",
+          "efforts": null,
+          "note": "Acesso máximo ao Gemini 4 Argon; nenhum nível de esforço é declarado."
+        },
+        {
+          "id": "gemini-4-hydrogen",
+          "efforts": null,
+          "note": "Acesso máximo ao Gemini 4 Hydrogen; nenhum nível de esforço é declarado."
+        }
+      ],
+      "source_url": "https://gemini.google/us/subscriptions/?hl=en",
+      "checked": true,
+      "note": "Duas faixas de uso (5x e 20x o AI Pro). Nenhum nível de esforço é declarado na página do plano."
+    },
+    {
+      "id": "copilot-free",
+      "provider": "Microsoft",
+      "name": "Microsoft Copilot (grátis)",
+      "price": "US$ 0",
+      "families": [],
+      "source_url": "https://support.microsoft.com/en-us/microsoft-365-copilot/what-s-the-difference-between-microsoft-copilot-free-and-copilot-in-microsoft-365",
+      "checked": false,
+      "note": "A página oficial confirma o Copilot gratuito e recursos de chat, pesquisa na web e criação de imagens, mas não lista quais modelos nem níveis de esforço o plano gratuito usa. Não mapeado."
+    },
+    {
+      "id": "grok-free",
+      "provider": "xAI",
+      "name": "Grok Free",
+      "price": "US$ 0/mês",
+      "families": [],
+      "source_url": "https://x.ai/pricing",
+      "checked": false,
+      "note": "A página de preços confirma o plano gratuito com uso limitado, mas não diz qual modelo nem esforço. O modelo atual do Grok é o 4.7 (https://docs.x.ai/developers/models), mas a associação ao plano não está documentada; não mapeado."
+    },
+    {
+      "id": "grok-premium",
+      "provider": "xAI",
+      "name": "Grok Premium (pago)",
+      "price": "US$ 30/mês",
+      "families": [],
+      "source_url": "https://x.ai/pricing",
+      "checked": false,
+      "note": "Plano pago 'mais popular'. A página não lista modelos por plano. Existem também Plus (US$ 8), Super (US$ 100) e Ultra (US$ 200). O modelo atual do Grok é o 4.7, mas não há confirmação de que todos os planos pagos o entreguem."
+    },
+    {
+      "id": "deepseek-free",
+      "provider": "DeepSeek",
+      "name": "DeepSeek (app grátis)",
+      "price": "Grátis",
+      "families": [
+        {
+          "id": "deepseek-v4-1-flash-1017",
+          "efforts": null,
+          "note": "O site oficial anuncia o V4.1-Flash-1017 no app; a página não detalha os níveis de esforço oferecidos no aplicativo."
+        }
+      ],
+      "source_url": "https://www.deepseek.com/",
+      "checked": true,
+      "note": "O app é gratuito; a API é cobrada à parte. O modo thinking vem ligado por padrão na API, mas a página do app não declara esforços."
+    },
+    {
+      "id": "meta-ai-free",
+      "provider": "Meta",
+      "name": "Meta AI (grátis)",
+      "price": "Não informado na página (meta.ai inacessível)",
+      "families": [],
+      "source_url": "https://www.meta.ai/",
+      "checked": false,
+      "note": "meta.ai retornou 403 para acesso automatizado em 17/11/2026. O blog oficial (https://research.meta.ai/blog/specialized-models-for-muse-and-metaai) só diz que modelos especializados da linha Muse chegaram ao Meta AI, sem nomear a família. Nada mapeado."
+    },
+    {
+      "id": "mistral-le-chat-free",
+      "provider": "Mistral",
+      "name": "Mistral Le Chat / Vibe (grátis)",
+      "price": "Grátis",
+      "families": [],
+      "source_url": "https://mistral.ai/pricing",
+      "checked": false,
+      "note": "A página de planos não nomeia os modelos do Free. O FAQ recomenda Mistral Medium 3.5 e o catálogo atual tem Mistral Large 4, mas a associação ao plano gratuito não está documentada; não mapeado."
+    },
+    {
+      "id": "mistral-le-chat-pro",
+      "provider": "Mistral",
+      "name": "Mistral Le Chat / Vibe Pro",
+      "price": "US$ 14,99/mês (US$ 5,99/mês para estudantes verificados)",
+      "families": [],
+      "source_url": "https://mistral.ai/pricing",
+      "checked": false,
+      "note": "Pro dá mais limites, mensagens, buscas e 'more extended thinking and deep research reports', mas não nomeia modelos nem níveis de esforço. Não mapeado."
+    },
+    {
+      "id": "qwen-chat-free",
+      "provider": "Alibaba",
+      "name": "Qwen Chat (grátis)",
+      "price": "Não informado na página",
+      "families": [],
+      "source_url": "https://chat.qwen.ai/",
+      "checked": false,
+      "note": "A página do app não lista modelos nem planos. O blog oficial anuncia o Qwen4-Max (https://qwen.ai/blog?id=qwen4-max), mas não foi possível ler o conteúdo para confirmar o vínculo com o plano gratuito; nada mapeado."
+    },
+    {
+      "id": "kimi-free",
+      "provider": "Moonshot AI",
+      "name": "Kimi Free",
+      "price": "Grátis (¥0/mês)",
+      "families": [
+        {
+          "id": "kimi-k3-1-pro",
+          "efforts": null,
+          "note": "A tabela oficial marca 'K3.1 Pro (web e Kimi Work): uso limitado' no Free; nenhum nível de esforço é declarado."
+        }
+      ],
+      "source_url": "https://www.kimi.com/resources/kimi-k3-1-pro-pricing",
+      "checked": true,
+      "note": "A página de planos também lista Go, Plus, Pro, Max e Ultra (¥39 a ¥1.119/mês no anual). O Free não inclui K3.1 Pro Highspeed, Kimi Code nem K3 com contexto de 1M."
+    },
+    {
+      "id": "ollama-free",
+      "provider": "Ollama",
+      "name": "Ollama Free (pay as you go)",
+      "price": "US$ 0 (modelos locais; nuvem cobrada por token)",
+      "families": [],
+      "source_url": "https://ollama.com/pricing",
+      "checked": false,
+      "note": "O plano gratuito roda modelos localmente sem assinatura e cobra por token nos modelos de nuvem. A página não define um conjunto fixo de modelos por plano; não mapeado."
+    },
+    {
+      "id": "ollama-pro",
+      "provider": "Ollama",
+      "name": "Ollama Pro",
+      "price": "US$ 20/mês (US$ 16,67/mês no anual)",
+      "families": [],
+      "source_url": "https://ollama.com/pricing",
+      "checked": false,
+      "note": "Inclui US$ 60 de créditos por mês e 'acesso a modelos pro maiores', sem nomes. Existe também Max (US$ 100/mês). Nenhum modelo ou esforço é declarado por plano; não mapeado."
+    }
+  ],
+  "defaults": {
+    "gpt-6-1-sol": {
+      "effort": "medium",
+      "where": "API (Responses)",
+      "source_url": "https://developers.openai.com/api/docs/guides/reasoning"
+    },
+    "gpt-6-1-terra": {
+      "effort": "medium",
+      "where": "API (Responses)",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-6.1-terra"
+    },
+    "gpt-6-sol": {
+      "effort": "medium",
+      "where": "API (Responses)",
+      "source_url": "https://developers.openai.com/api/docs/guides/reasoning"
+    },
+    "gpt-6-luna": {
+      "effort": "medium",
+      "where": "API (Responses)",
+      "source_url": "https://developers.openai.com/api/docs/guides/reasoning"
+    },
+    "gpt-5-6-terra": {
+      "effort": "medium",
+      "where": "API (Responses)",
+      "source_url": "https://developers.openai.com/api/docs/guides/reasoning"
+    },
+    "gpt-5-6-luna": {
+      "effort": "medium",
+      "where": "API (Responses)",
+      "source_url": "https://developers.openai.com/api/docs/guides/reasoning"
+    },
+    "claude-opus-5-5": {
+      "effort": "medium",
+      "where": "API (Messages)",
+      "source_url": "https://platform.claude.com/docs/en/build-with-claude/effort"
+    },
+    "claude-sonnet-5-5": {
+      "effort": "high",
+      "where": "API (Messages)",
+      "source_url": "https://platform.claude.com/docs/en/build-with-claude/effort"
+    },
+    "claude-haiku-5-5": {
+      "effort": "medium",
+      "where": "API (Messages)",
+      "source_url": "https://platform.claude.com/docs/en/build-with-claude/effort"
+    },
+    "claude-fable-5-2": {
+      "effort": "high",
+      "where": "API (Messages)",
+      "source_url": "https://platform.claude.com/docs/en/build-with-claude/effort"
+    },
+    "gemini-4-carbon": {
+      "effort": "medium",
+      "where": "API (Interactions; thinking_level)",
+      "source_url": "https://ai.google.dev/gemini-api/docs/thinking"
+    },
+    "gemini-4-argon": {
+      "effort": "medium",
+      "where": "API (Interactions; thinking_level)",
+      "source_url": "https://ai.google.dev/gemini-api/docs/thinking"
+    },
+    "gemini-4-hydrogen": {
+      "effort": "high",
+      "where": "API (Interactions; thinking_level)",
+      "source_url": "https://ai.google.dev/gemini-api/docs/thinking"
+    },
+    "gemini-3-8-flash": {
+      "effort": "medium",
+      "where": "API (Interactions; thinking_level)",
+      "source_url": "https://ai.google.dev/gemini-api/docs/thinking"
+    },
+    "gemini-3-5-flash-lite": {
+      "effort": "minimal",
+      "where": "API (Interactions; thinking_level)",
+      "source_url": "https://ai.google.dev/gemini-api/docs/thinking"
+    },
+    "grok-4-7": {
+      "effort": "high",
+      "where": "API (reasoning_effort)",
+      "source_url": "https://docs.x.ai/developers/models/grok-4.7"
+    },
+    "deepseek-v4-1-flash-1017": {
+      "effort": "high",
+      "where": "API (thinking mode; reasoning_effort)",
+      "source_url": "https://api-docs.deepseek.com/guides/thinking_mode/"
+    },
+    "deepseek-v4-pro": {
+      "effort": "high",
+      "where": "API (thinking mode; reasoning_effort)",
+      "source_url": "https://api-docs.deepseek.com/guides/thinking_mode/"
+    },
+    "kimi-k3-1-pro": {
+      "effort": "max",
+      "where": "API (reasoning_effort)",
+      "source_url": "https://www.kimi.com/resources/kimi-k3-1-pro-pricing"
+    },
+    "qwen4-max": {
+      "effort": "high",
+      "where": "API (reasoning_effort)",
+      "source_url": "https://www.alibabacloud.com/help/en/model-studio/qwen4-max"
+    },
+    "mistral-large-4": {
+      "effort": "high",
+      "where": "API (reasoning_effort)",
+      "source_url": "https://docs.mistral.ai/inference/conversations/reasoning"
+    },
+    "muse-wonder": {
+      "effort": "max",
+      "where": "API (Model API; reasoning effort)",
+      "source_url": "https://dev.meta.ai/docs/muse-wonder"
+    }
+  }
+}
