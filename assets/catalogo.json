@@ -3,7 +3,7 @@
   "source_url": "https://artificialanalysis.ai/",
   "attribution": "Dados: Artificial Analysis — artificialanalysis.ai",
   "api_tier": "free",
-  "fetched_at": "2026-11-17T13:54:30.397Z",
+  "fetched_at": "2026-11-17T15:47:03.028Z",
   "familias_total": 503,
   "descartados": {
     "entradas_sem_data": 0,
@@ -3066,7 +3066,7 @@
       "mod": "A.X-K2",
       "emp": "SK Telecom",
       "date": "2026-08-12",
-      "score": null,
+      "score": 9,
       "open_weights": null
     },
     {

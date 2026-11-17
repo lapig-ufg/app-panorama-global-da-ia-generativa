@@ -5,7 +5,7 @@
   "api_tier": "free",
   "intelligence_index_version": 5,
   "models_total": 742,
-  "fetched_at": "2026-11-17T13:54:30.397Z",
+  "fetched_at": "2026-11-17T15:47:03.028Z",
   "has_open_weights": false,
   "benchmarks": [
     {
@@ -15,8 +15,8 @@
       "description": "Índice composto da AA — média de quatro blocos de 25%: trabalho de conhecimento, código, ciência e geral (v5)",
       "unit": "índice (0–100)",
       "is_fraction": false,
-      "models_evaluated": 130,
-      "families_evaluated": 71,
+      "models_evaluated": 131,
+      "families_evaluated": 72,
       "top": [
         {
           "model": "Claude Fable 5.2",
@@ -37,7 +37,7 @@
           "release_date": "2026-10-28",
           "price_1m_blended": 4,
           "cost_per_task": 5.4848,
-          "tok_per_sec": 84.76,
+          "tok_per_sec": 82.87,
           "open_weights": null
         },
         {
@@ -70,7 +70,7 @@
           "release_date": "2026-09-29",
           "price_1m_blended": 4,
           "cost_per_task": 1.2721,
-          "tok_per_sec": 64.78,
+          "tok_per_sec": 63.22,
           "open_weights": null
         },
         {
@@ -81,7 +81,7 @@
           "release_date": "2026-09-28",
           "price_1m_blended": 4,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 131.09,
+          "tok_per_sec": 130.7,
           "open_weights": null
         },
         {
@@ -92,7 +92,7 @@
           "release_date": "2026-11-12",
           "price_1m_blended": 3,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 207.55,
+          "tok_per_sec": 201.17,
           "open_weights": null
         },
         {
@@ -103,7 +103,7 @@
           "release_date": "2026-10-26",
           "price_1m_blended": 2,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 90.23,
+          "tok_per_sec": 88.53,
           "open_weights": null
         },
         {
@@ -114,7 +114,7 @@
           "release_date": "2026-09-30",
           "price_1m_blended": 4,
           "cost_per_task": 4.9733,
-          "tok_per_sec": 88.87,
+          "tok_per_sec": 90.42,
           "open_weights": null
         },
         {
@@ -147,7 +147,7 @@
           "release_date": "2026-10-23",
           "price_1m_blended": 4,
           "cost_per_task": 3.6812,
-          "tok_per_sec": 28.5,
+          "tok_per_sec": 28.28,
           "open_weights": null
         },
         {
@@ -158,7 +158,7 @@
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
           "cost_per_task": 11.8215,
-          "tok_per_sec": 51.29,
+          "tok_per_sec": 50.05,
           "open_weights": null
         },
         {
@@ -169,7 +169,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 4,
           "cost_per_task": 2.4658,
-          "tok_per_sec": 142.86,
+          "tok_per_sec": 135.4,
           "open_weights": null
         },
         {
@@ -191,7 +191,7 @@
           "release_date": "2026-11-16",
           "price_1m_blended": 2.25,
           "cost_per_task": 3.2681,
-          "tok_per_sec": 50.37,
+          "tok_per_sec": 48.88,
           "open_weights": null
         },
         {
@@ -213,7 +213,7 @@
           "release_date": "2026-10-07",
           "price_1m_blended": 0.2,
           "cost_per_task": 0.411,
-          "tok_per_sec": 234.06,
+          "tok_per_sec": 232.97,
           "open_weights": null
         },
         {
@@ -235,7 +235,7 @@
           "release_date": "2026-09-21",
           "price_1m_blended": 3,
           "cost_per_task": 7.7715,
-          "tok_per_sec": 71.79,
+          "tok_per_sec": 69.59,
           "open_weights": null
         }
       ],
@@ -521,6 +521,11 @@
           "score": 11.7
         },
         {
+          "model": "A.X-K2",
+          "creator": "SK Telecom",
+          "score": 9
+        },
+        {
           "model": "K-EXAONE 2.0",
           "creator": "LG AI Research",
           "score": 7.6
@@ -604,8 +609,8 @@
       "description": "Índice de domínio da AA para finanças e contabilidade",
       "unit": "índice (0–100)",
       "is_fraction": false,
-      "models_evaluated": 139,
-      "families_evaluated": 74,
+      "models_evaluated": 140,
+      "families_evaluated": 75,
       "top": [
         {
           "model": "Claude Fable 5.2",
@@ -626,7 +631,7 @@
           "release_date": "2026-10-28",
           "price_1m_blended": 4,
           "cost_per_task": 5.4848,
-          "tok_per_sec": 84.76,
+          "tok_per_sec": 82.87,
           "open_weights": null
         },
         {
@@ -648,7 +653,7 @@
           "release_date": "2026-11-12",
           "price_1m_blended": 3,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 207.55,
+          "tok_per_sec": 201.17,
           "open_weights": null
         },
         {
@@ -670,7 +675,7 @@
           "release_date": "2026-09-29",
           "price_1m_blended": 4,
           "cost_per_task": 1.2721,
-          "tok_per_sec": 64.78,
+          "tok_per_sec": 63.22,
           "open_weights": null
         },
         {
@@ -681,7 +686,7 @@
           "release_date": "2026-09-30",
           "price_1m_blended": 4,
           "cost_per_task": 4.9733,
-          "tok_per_sec": 88.87,
+          "tok_per_sec": 90.42,
           "open_weights": null
         },
         {
@@ -692,7 +697,7 @@
           "release_date": "2026-09-28",
           "price_1m_blended": 4,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 131.09,
+          "tok_per_sec": 130.7,
           "open_weights": null
         },
         {
@@ -714,7 +719,7 @@
           "release_date": "2026-11-16",
           "price_1m_blended": 2.25,
           "cost_per_task": 3.2681,
-          "tok_per_sec": 50.37,
+          "tok_per_sec": 48.88,
           "open_weights": null
         },
         {
@@ -725,7 +730,7 @@
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
           "cost_per_task": 12.994,
-          "tok_per_sec": 68.55,
+          "tok_per_sec": 68.45,
           "open_weights": null
         },
         {
@@ -736,7 +741,7 @@
           "release_date": "2026-10-23",
           "price_1m_blended": 4,
           "cost_per_task": 3.6812,
-          "tok_per_sec": 28.5,
+          "tok_per_sec": 28.28,
           "open_weights": null
         },
         {
@@ -747,7 +752,7 @@
           "release_date": "2026-09-21",
           "price_1m_blended": 3,
           "cost_per_task": 7.7715,
-          "tok_per_sec": 71.79,
+          "tok_per_sec": 69.59,
           "open_weights": null
         },
         {
@@ -769,7 +774,7 @@
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
           "cost_per_task": 11.8215,
-          "tok_per_sec": 51.29,
+          "tok_per_sec": 50.05,
           "open_weights": null
         },
         {
@@ -780,7 +785,7 @@
           "release_date": "2026-10-26",
           "price_1m_blended": 2,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 90.23,
+          "tok_per_sec": 88.53,
           "open_weights": null
         },
         {
@@ -813,7 +818,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 4,
           "cost_per_task": 2.4658,
-          "tok_per_sec": 142.86,
+          "tok_per_sec": 135.4,
           "open_weights": null
         },
         {
@@ -824,7 +829,7 @@
           "release_date": "2026-09-02",
           "price_1m_blended": 3,
           "cost_per_task": 10.0239,
-          "tok_per_sec": 40.74,
+          "tok_per_sec": 41.45,
           "open_weights": null
         }
       ],
@@ -1120,6 +1125,11 @@
           "score": 21.4
         },
         {
+          "model": "A.X-K2",
+          "creator": "SK Telecom",
+          "score": 21.2
+        },
+        {
           "model": "Claude 4.5 Haiku",
           "creator": "Anthropic",
           "score": 19.4
@@ -1241,7 +1251,7 @@
           "release_date": "2026-10-28",
           "price_1m_blended": 4,
           "cost_per_task": 5.4848,
-          "tok_per_sec": 84.76,
+          "tok_per_sec": 82.87,
           "open_weights": null
         },
         {
@@ -1252,7 +1262,7 @@
           "release_date": "2026-09-28",
           "price_1m_blended": 4,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 131.09,
+          "tok_per_sec": 130.7,
           "open_weights": null
         },
         {
@@ -1263,7 +1273,7 @@
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
           "cost_per_task": 12.994,
-          "tok_per_sec": 68.55,
+          "tok_per_sec": 68.45,
           "open_weights": null
         },
         {
@@ -1296,7 +1306,7 @@
           "release_date": "2026-11-12",
           "price_1m_blended": 3,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 207.55,
+          "tok_per_sec": 201.17,
           "open_weights": null
         },
         {
@@ -1307,7 +1317,7 @@
           "release_date": "2026-09-29",
           "price_1m_blended": 4,
           "cost_per_task": 1.2721,
-          "tok_per_sec": 64.78,
+          "tok_per_sec": 63.22,
           "open_weights": null
         },
         {
@@ -1318,7 +1328,7 @@
           "release_date": "2026-10-23",
           "price_1m_blended": 4,
           "cost_per_task": 3.6812,
-          "tok_per_sec": 28.5,
+          "tok_per_sec": 28.28,
           "open_weights": null
         },
         {
@@ -1329,7 +1339,7 @@
           "release_date": "2026-09-30",
           "price_1m_blended": 4,
           "cost_per_task": 4.9733,
-          "tok_per_sec": 88.87,
+          "tok_per_sec": 90.42,
           "open_weights": null
         },
         {
@@ -1340,7 +1350,7 @@
           "release_date": "2026-11-16",
           "price_1m_blended": 2.25,
           "cost_per_task": 3.2681,
-          "tok_per_sec": 50.37,
+          "tok_per_sec": 48.88,
           "open_weights": null
         },
         {
@@ -1351,7 +1361,7 @@
           "release_date": "2026-09-21",
           "price_1m_blended": 3,
           "cost_per_task": 7.7715,
-          "tok_per_sec": 71.79,
+          "tok_per_sec": 69.59,
           "open_weights": null
         },
         {
@@ -1373,7 +1383,7 @@
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
           "cost_per_task": 11.8215,
-          "tok_per_sec": 51.29,
+          "tok_per_sec": 50.05,
           "open_weights": null
         },
         {
@@ -1395,7 +1405,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 4,
           "cost_per_task": 2.4658,
-          "tok_per_sec": 142.86,
+          "tok_per_sec": 135.4,
           "open_weights": null
         },
         {
@@ -1406,7 +1416,7 @@
           "release_date": "2026-10-19",
           "price_1m_blended": 0.26249999999999996,
           "cost_per_task": 0.491,
-          "tok_per_sec": 134.41,
+          "tok_per_sec": 119.02,
           "open_weights": null
         },
         {
@@ -1428,7 +1438,7 @@
           "release_date": "2026-10-26",
           "price_1m_blended": 2,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 90.23,
+          "tok_per_sec": 88.53,
           "open_weights": null
         }
       ],
@@ -1837,8 +1847,8 @@
       "description": "Índice de domínio da AA para direito",
       "unit": "índice (0–100)",
       "is_fraction": false,
-      "models_evaluated": 139,
-      "families_evaluated": 74,
+      "models_evaluated": 140,
+      "families_evaluated": 75,
       "top": [
         {
           "model": "Claude Fable 5.2",
@@ -1859,7 +1869,7 @@
           "release_date": "2026-10-28",
           "price_1m_blended": 4,
           "cost_per_task": 5.4848,
-          "tok_per_sec": 84.76,
+          "tok_per_sec": 82.87,
           "open_weights": null
         },
         {
@@ -1881,7 +1891,7 @@
           "release_date": "2026-11-12",
           "price_1m_blended": 3,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 207.55,
+          "tok_per_sec": 201.17,
           "open_weights": null
         },
         {
@@ -1892,7 +1902,7 @@
           "release_date": "2026-09-03",
           "price_1m_blended": 20,
           "cost_per_task": 3.6589,
-          "tok_per_sec": 48.5,
+          "tok_per_sec": 46.73,
           "open_weights": null
         },
         {
@@ -1903,7 +1913,7 @@
           "release_date": "2026-09-30",
           "price_1m_blended": 4,
           "cost_per_task": 4.9733,
-          "tok_per_sec": 88.87,
+          "tok_per_sec": 90.42,
           "open_weights": null
         },
         {
@@ -1914,7 +1924,7 @@
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
           "cost_per_task": 12.994,
-          "tok_per_sec": 68.55,
+          "tok_per_sec": 68.45,
           "open_weights": null
         },
         {
@@ -1925,7 +1935,7 @@
           "release_date": "2026-09-29",
           "price_1m_blended": 4,
           "cost_per_task": 0.764,
-          "tok_per_sec": 57.62,
+          "tok_per_sec": 55.61,
           "open_weights": null
         },
         {
@@ -1936,7 +1946,7 @@
           "release_date": "2026-09-28",
           "price_1m_blended": 4,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 131.09,
+          "tok_per_sec": 130.7,
           "open_weights": null
         },
         {
@@ -1947,7 +1957,7 @@
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
           "cost_per_task": 11.8215,
-          "tok_per_sec": 51.29,
+          "tok_per_sec": 50.05,
           "open_weights": null
         },
         {
@@ -1969,7 +1979,7 @@
           "release_date": "2026-11-16",
           "price_1m_blended": 2.25,
           "cost_per_task": 3.2681,
-          "tok_per_sec": 50.37,
+          "tok_per_sec": 48.88,
           "open_weights": null
         },
         {
@@ -1980,7 +1990,7 @@
           "release_date": "2026-10-23",
           "price_1m_blended": 4,
           "cost_per_task": 3.6812,
-          "tok_per_sec": 28.5,
+          "tok_per_sec": 28.28,
           "open_weights": null
         },
         {
@@ -1991,7 +2001,7 @@
           "release_date": "2026-09-21",
           "price_1m_blended": 3,
           "cost_per_task": 7.7715,
-          "tok_per_sec": 71.79,
+          "tok_per_sec": 69.59,
           "open_weights": null
         },
         {
@@ -2013,7 +2023,7 @@
           "release_date": "2026-10-26",
           "price_1m_blended": 2,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 90.23,
+          "tok_per_sec": 88.53,
           "open_weights": null
         },
         {
@@ -2024,7 +2034,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 4,
           "cost_per_task": 2.4658,
-          "tok_per_sec": 142.86,
+          "tok_per_sec": 135.4,
           "open_weights": null
         },
         {
@@ -2348,6 +2358,11 @@
           "score": 21.7
         },
         {
+          "model": "A.X-K2",
+          "creator": "SK Telecom",
+          "score": 21
+        },
+        {
           "model": "Apodex 1.1",
           "creator": "Apodex",
           "score": 20.6
@@ -2474,7 +2489,7 @@
           "release_date": "2026-10-28",
           "price_1m_blended": 4,
           "cost_per_task": 5.4848,
-          "tok_per_sec": 84.76,
+          "tok_per_sec": 82.87,
           "open_weights": null
         },
         {
@@ -2485,7 +2500,7 @@
           "release_date": "2026-09-28",
           "price_1m_blended": 4,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 131.09,
+          "tok_per_sec": 130.7,
           "open_weights": null
         },
         {
@@ -2507,7 +2522,7 @@
           "release_date": "2026-11-12",
           "price_1m_blended": 3,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 207.55,
+          "tok_per_sec": 201.17,
           "open_weights": null
         },
         {
@@ -2518,7 +2533,7 @@
           "release_date": "2026-09-29",
           "price_1m_blended": 4,
           "cost_per_task": 1.2721,
-          "tok_per_sec": 64.78,
+          "tok_per_sec": 63.22,
           "open_weights": null
         },
         {
@@ -2540,7 +2555,7 @@
           "release_date": "2026-10-23",
           "price_1m_blended": 4,
           "cost_per_task": 3.6812,
-          "tok_per_sec": 28.5,
+          "tok_per_sec": 28.28,
           "open_weights": null
         },
         {
@@ -2551,7 +2566,7 @@
           "release_date": "2026-09-30",
           "price_1m_blended": 4,
           "cost_per_task": 4.9733,
-          "tok_per_sec": 88.87,
+          "tok_per_sec": 90.42,
           "open_weights": null
         },
         {
@@ -2562,7 +2577,7 @@
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
           "cost_per_task": 12.994,
-          "tok_per_sec": 68.55,
+          "tok_per_sec": 68.45,
           "open_weights": null
         },
         {
@@ -2584,7 +2599,7 @@
           "release_date": "2026-11-16",
           "price_1m_blended": 2.25,
           "cost_per_task": 3.2681,
-          "tok_per_sec": 50.37,
+          "tok_per_sec": 48.88,
           "open_weights": null
         },
         {
@@ -2595,7 +2610,7 @@
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
           "cost_per_task": 11.8215,
-          "tok_per_sec": 51.29,
+          "tok_per_sec": 50.05,
           "open_weights": null
         },
         {
@@ -2606,7 +2621,7 @@
           "release_date": "2026-09-21",
           "price_1m_blended": 3,
           "cost_per_task": 7.7715,
-          "tok_per_sec": 71.79,
+          "tok_per_sec": 69.59,
           "open_weights": null
         },
         {
@@ -2617,7 +2632,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 4,
           "cost_per_task": 2.4658,
-          "tok_per_sec": 142.86,
+          "tok_per_sec": 135.4,
           "open_weights": null
         },
         {
@@ -2628,7 +2643,7 @@
           "release_date": "2026-10-26",
           "price_1m_blended": 2,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 90.23,
+          "tok_per_sec": 88.53,
           "open_weights": null
         },
         {
@@ -2975,8 +2990,8 @@
       "description": "Índice de domínio da AA para engenharia",
       "unit": "índice (0–100)",
       "is_fraction": false,
-      "models_evaluated": 130,
-      "families_evaluated": 71,
+      "models_evaluated": 131,
+      "families_evaluated": 72,
       "top": [
         {
           "model": "Claude Fable 5.2",
@@ -2997,7 +3012,7 @@
           "release_date": "2026-10-28",
           "price_1m_blended": 4,
           "cost_per_task": 5.4848,
-          "tok_per_sec": 84.76,
+          "tok_per_sec": 82.87,
           "open_weights": null
         },
         {
@@ -3030,7 +3045,7 @@
           "release_date": "2026-11-12",
           "price_1m_blended": 3,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 207.55,
+          "tok_per_sec": 201.17,
           "open_weights": null
         },
         {
@@ -3041,7 +3056,7 @@
           "release_date": "2026-09-29",
           "price_1m_blended": 4,
           "cost_per_task": 1.2721,
-          "tok_per_sec": 64.78,
+          "tok_per_sec": 63.22,
           "open_weights": null
         },
         {
@@ -3052,7 +3067,7 @@
           "release_date": "2026-09-28",
           "price_1m_blended": 4,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 131.09,
+          "tok_per_sec": 130.7,
           "open_weights": null
         },
         {
@@ -3063,7 +3078,7 @@
           "release_date": "2026-09-30",
           "price_1m_blended": 4,
           "cost_per_task": 4.9733,
-          "tok_per_sec": 88.87,
+          "tok_per_sec": 90.42,
           "open_weights": null
         },
         {
@@ -3096,7 +3111,7 @@
           "release_date": "2026-10-26",
           "price_1m_blended": 2,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 90.23,
+          "tok_per_sec": 88.53,
           "open_weights": null
         },
         {
@@ -3107,7 +3122,7 @@
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
           "cost_per_task": 11.8215,
-          "tok_per_sec": 51.29,
+          "tok_per_sec": 50.05,
           "open_weights": null
         },
         {
@@ -3118,7 +3133,7 @@
           "release_date": "2026-10-23",
           "price_1m_blended": 4,
           "cost_per_task": 3.6812,
-          "tok_per_sec": 28.5,
+          "tok_per_sec": 28.28,
           "open_weights": null
         },
         {
@@ -3129,7 +3144,7 @@
           "release_date": "2026-11-16",
           "price_1m_blended": 2.25,
           "cost_per_task": 3.2681,
-          "tok_per_sec": 50.37,
+          "tok_per_sec": 48.88,
           "open_weights": null
         },
         {
@@ -3151,7 +3166,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 4,
           "cost_per_task": 2.4658,
-          "tok_per_sec": 142.86,
+          "tok_per_sec": 135.4,
           "open_weights": null
         },
         {
@@ -3173,7 +3188,7 @@
           "release_date": "2026-10-07",
           "price_1m_blended": 0.2,
           "cost_per_task": 0.411,
-          "tok_per_sec": 234.06,
+          "tok_per_sec": 232.97,
           "open_weights": null
         },
         {
@@ -3184,7 +3199,7 @@
           "release_date": "2026-09-21",
           "price_1m_blended": 3,
           "cost_per_task": 7.7715,
-          "tok_per_sec": 71.79,
+          "tok_per_sec": 69.59,
           "open_weights": null
         },
         {
@@ -3481,6 +3496,11 @@
           "score": 21.2
         },
         {
+          "model": "A.X-K2",
+          "creator": "SK Telecom",
+          "score": 19.6
+        },
+        {
           "model": "K-EXAONE 2.0",
           "creator": "LG AI Research",
           "score": 18.2
@@ -3564,8 +3584,8 @@
       "description": "Índice de domínio da AA para economia",
       "unit": "índice (0–100)",
       "is_fraction": false,
-      "models_evaluated": 139,
-      "families_evaluated": 74,
+      "models_evaluated": 140,
+      "families_evaluated": 75,
       "top": [
         {
           "model": "Claude Fable 5.2",
@@ -3597,7 +3617,7 @@
           "release_date": "2026-10-28",
           "price_1m_blended": 4,
           "cost_per_task": 5.4848,
-          "tok_per_sec": 84.76,
+          "tok_per_sec": 82.87,
           "open_weights": null
         },
         {
@@ -3608,7 +3628,7 @@
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
           "cost_per_task": 12.994,
-          "tok_per_sec": 68.55,
+          "tok_per_sec": 68.45,
           "open_weights": null
         },
         {
@@ -3630,7 +3650,7 @@
           "release_date": "2026-09-29",
           "price_1m_blended": 4,
           "cost_per_task": 1.2721,
-          "tok_per_sec": 64.78,
+          "tok_per_sec": 63.22,
           "open_weights": null
         },
         {
@@ -3641,7 +3661,7 @@
           "release_date": "2026-11-12",
           "price_1m_blended": 3,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 207.55,
+          "tok_per_sec": 201.17,
           "open_weights": null
         },
         {
@@ -3652,7 +3672,7 @@
           "release_date": "2026-09-28",
           "price_1m_blended": 4,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 131.09,
+          "tok_per_sec": 130.7,
           "open_weights": null
         },
         {
@@ -3674,7 +3694,7 @@
           "release_date": "2026-09-30",
           "price_1m_blended": 4,
           "cost_per_task": 4.9733,
-          "tok_per_sec": 88.87,
+          "tok_per_sec": 90.42,
           "open_weights": null
         },
         {
@@ -3685,7 +3705,7 @@
           "release_date": "2026-11-16",
           "price_1m_blended": 2.25,
           "cost_per_task": 3.2681,
-          "tok_per_sec": 50.37,
+          "tok_per_sec": 48.88,
           "open_weights": null
         },
         {
@@ -3696,7 +3716,7 @@
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
           "cost_per_task": 11.8215,
-          "tok_per_sec": 51.29,
+          "tok_per_sec": 50.05,
           "open_weights": null
         },
         {
@@ -3707,7 +3727,7 @@
           "release_date": "2026-10-23",
           "price_1m_blended": 4,
           "cost_per_task": 3.6812,
-          "tok_per_sec": 28.5,
+          "tok_per_sec": 28.28,
           "open_weights": null
         },
         {
@@ -3729,7 +3749,7 @@
           "release_date": "2026-10-26",
           "price_1m_blended": 2,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 90.23,
+          "tok_per_sec": 88.53,
           "open_weights": null
         },
         {
@@ -3740,7 +3760,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 4,
           "cost_per_task": 2.4658,
-          "tok_per_sec": 142.86,
+          "tok_per_sec": 135.4,
           "open_weights": null
         },
         {
@@ -3762,7 +3782,7 @@
           "release_date": "2026-09-21",
           "price_1m_blended": 3,
           "cost_per_task": 7.7715,
-          "tok_per_sec": 71.79,
+          "tok_per_sec": 69.59,
           "open_weights": null
         },
         {
@@ -3773,7 +3793,7 @@
           "release_date": "2026-11-05",
           "price_1m_blended": 0.475,
           "cost_per_task": 1.1784,
-          "tok_per_sec": 114.39,
+          "tok_per_sec": 111.78,
           "open_weights": null
         },
         {
@@ -3784,7 +3804,7 @@
           "release_date": "2026-10-07",
           "price_1m_blended": 0.2,
           "cost_per_task": 0.411,
-          "tok_per_sec": 234.06,
+          "tok_per_sec": 232.97,
           "open_weights": null
         }
       ],
@@ -4075,6 +4095,11 @@
           "score": 21.9
         },
         {
+          "model": "A.X-K2",
+          "creator": "SK Telecom",
+          "score": 21.6
+        },
+        {
           "model": "Apodex 1.1",
           "creator": "Apodex",
           "score": 21.4
@@ -4177,19 +4202,19 @@
           "variant": "medium",
           "intelligence": 56.4,
           "cost_per_task": 3.8026,
-          "tok_per_sec": 73.93
+          "tok_per_sec": 73.38
         },
         {
           "variant": "high",
           "intelligence": 61.8,
           "cost_per_task": 9.0784,
-          "tok_per_sec": 75.17
+          "tok_per_sec": 74.68
         },
         {
           "variant": "xhigh",
           "intelligence": 62.2,
           "cost_per_task": 14.8286,
-          "tok_per_sec": 77.13
+          "tok_per_sec": 77.44
         },
         {
           "variant": "max",
@@ -4213,13 +4238,13 @@
           "variant": "medium",
           "intelligence": 58.3,
           "cost_per_task": 4.6777,
-          "tok_per_sec": 77.82
+          "tok_per_sec": 76.97
         },
         {
           "variant": "high",
           "intelligence": 60,
           "cost_per_task": 5.4848,
-          "tok_per_sec": 84.76
+          "tok_per_sec": 82.87
         }
       ]
     },
@@ -4237,13 +4262,13 @@
           "variant": "medium",
           "intelligence": 48.2,
           "cost_per_task": 2.4511,
-          "tok_per_sec": 73.38
+          "tok_per_sec": 72.48
         },
         {
           "variant": "high",
           "intelligence": 51.8,
           "cost_per_task": 3.4647,
-          "tok_per_sec": 75.17
+          "tok_per_sec": 73.78
         },
         {
           "variant": "xhigh",
@@ -4267,25 +4292,25 @@
           "variant": "low",
           "intelligence": 43.3,
           "cost_per_task": 1.4237,
-          "tok_per_sec": 42.29
+          "tok_per_sec": 42.15
         },
         {
           "variant": "medium",
           "intelligence": 51.6,
           "cost_per_task": 2.7324,
-          "tok_per_sec": 45.5
+          "tok_per_sec": 44.68
         },
         {
           "variant": "high",
           "intelligence": 54.8,
           "cost_per_task": 3.2386,
-          "tok_per_sec": 44.7
+          "tok_per_sec": 44.43
         },
         {
           "variant": "xhigh",
           "intelligence": 55.3,
           "cost_per_task": 3.6589,
-          "tok_per_sec": 48.5
+          "tok_per_sec": 46.73
         },
         {
           "variant": "max",
@@ -4309,25 +4334,25 @@
           "variant": "medium",
           "intelligence": 46.3,
           "cost_per_task": 0.3594,
-          "tok_per_sec": 49.99
+          "tok_per_sec": 48.85
         },
         {
           "variant": "high",
           "intelligence": 50.3,
           "cost_per_task": 0.591,
-          "tok_per_sec": 53.06
+          "tok_per_sec": 52.27
         },
         {
           "variant": "xhigh",
           "intelligence": 52.5,
           "cost_per_task": 0.764,
-          "tok_per_sec": 57.62
+          "tok_per_sec": 55.61
         },
         {
           "variant": "max",
           "intelligence": 54.6,
           "cost_per_task": 1.2721,
-          "tok_per_sec": 64.78
+          "tok_per_sec": 63.22
         }
       ]
     },
@@ -4357,13 +4382,13 @@
           "variant": "xhigh",
           "intelligence": 49.9,
           "cost_per_task": 4.092,
-          "tok_per_sec": 100.43
+          "tok_per_sec": 99.72
         },
         {
           "variant": "max",
           "intelligence": 54.5,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 131.09
+          "tok_per_sec": 130.7
         }
       ]
     },
@@ -4387,13 +4412,13 @@
           "variant": "high",
           "intelligence": 50.8,
           "cost_per_task": 1.8733,
-          "tok_per_sec": 205.55
+          "tok_per_sec": 204.05
         },
         {
           "variant": "xhigh",
           "intelligence": 53.9,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 207.55
+          "tok_per_sec": 201.17
         }
       ]
     },
@@ -4405,7 +4430,7 @@
           "variant": "non-reasoning",
           "intelligence": 30.5,
           "cost_per_task": 0.2259,
-          "tok_per_sec": 71.33
+          "tok_per_sec": 70.51
         },
         {
           "variant": "low",
@@ -4423,19 +4448,19 @@
           "variant": "high",
           "intelligence": 42.4,
           "cost_per_task": 0.2593,
-          "tok_per_sec": 77.43
+          "tok_per_sec": 74
         },
         {
           "variant": "xhigh",
           "intelligence": 45.3,
           "cost_per_task": 0.4007,
-          "tok_per_sec": 78.74
+          "tok_per_sec": 78.46
         },
         {
           "variant": "max",
           "intelligence": 51.3,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 90.23
+          "tok_per_sec": 88.53
         }
       ]
     },
@@ -4453,7 +4478,7 @@
           "variant": "high",
           "intelligence": 50.4,
           "cost_per_task": 4.9733,
-          "tok_per_sec": 88.87
+          "tok_per_sec": 90.42
         }
       ]
     },
@@ -4489,7 +4514,7 @@
           "variant": "max",
           "intelligence": 49.2,
           "cost_per_task": 12.994,
-          "tok_per_sec": 68.55
+          "tok_per_sec": 68.45
         }
       ]
     },
@@ -4531,19 +4556,19 @@
           "variant": "high",
           "intelligence": 29.9,
           "cost_per_task": 0.1586,
-          "tok_per_sec": 160.91
+          "tok_per_sec": 159.17
         },
         {
           "variant": "xhigh",
           "intelligence": 34.6,
           "cost_per_task": 0.2484,
-          "tok_per_sec": 182.46
+          "tok_per_sec": 179.47
         },
         {
           "variant": "max",
           "intelligence": 36.5,
           "cost_per_task": 0.411,
-          "tok_per_sec": 234.06
+          "tok_per_sec": 232.97
         }
       ]
     },
@@ -4555,7 +4580,7 @@
           "variant": "xhigh",
           "intelligence": 34.1,
           "cost_per_task": 0.1162,
-          "tok_per_sec": 579.67
+          "tok_per_sec": 566.17
         },
         {
           "variant": "max",
@@ -4579,13 +4604,13 @@
           "variant": "high",
           "intelligence": 35.2,
           "cost_per_task": 6.1836,
-          "tok_per_sec": 66.1
+          "tok_per_sec": 64.77
         },
         {
           "variant": "xhigh",
           "intelligence": 35.5,
           "cost_per_task": 7.7715,
-          "tok_per_sec": 71.79
+          "tok_per_sec": 69.59
         }
       ]
     },
@@ -4597,19 +4622,19 @@
           "variant": "non-reasoning",
           "intelligence": 18.5,
           "cost_per_task": 0.4254,
-          "tok_per_sec": 172.31
+          "tok_per_sec": 176.27
         },
         {
           "variant": "high",
           "intelligence": 28.6,
           "cost_per_task": 0.4562,
-          "tok_per_sec": 173.32
+          "tok_per_sec": 180.39
         },
         {
           "variant": "max",
           "intelligence": 32.6,
           "cost_per_task": 0.6021,
-          "tok_per_sec": 168.03
+          "tok_per_sec": 169.47
         }
       ]
     },
@@ -4621,13 +4646,13 @@
           "variant": "low",
           "intelligence": 23.1,
           "cost_per_task": 1.5749,
-          "tok_per_sec": 90.31
+          "tok_per_sec": 87.77
         },
         {
           "variant": "max",
           "intelligence": 31.7,
           "cost_per_task": 5.0093,
-          "tok_per_sec": 104.57
+          "tok_per_sec": 103.26
         }
       ]
     },
@@ -4663,7 +4688,7 @@
           "variant": "non-reasoning",
           "intelligence": 9.4,
           "cost_per_task": 0.0714,
-          "tok_per_sec": 109.99
+          "tok_per_sec": 110.23
         },
         {
           "variant": "low",
@@ -4675,13 +4700,13 @@
           "variant": "medium",
           "intelligence": 18.5,
           "cost_per_task": 0.0422,
-          "tok_per_sec": 116.65
+          "tok_per_sec": 115.78
         },
         {
           "variant": "high",
           "intelligence": 21.4,
           "cost_per_task": 0.0729,
-          "tok_per_sec": 113.23
+          "tok_per_sec": 113.41
         },
         {
           "variant": "xhigh",
@@ -4723,7 +4748,7 @@
           "variant": "non-reasoning",
           "intelligence": 12.6,
           "cost_per_task": 0.977,
-          "tok_per_sec": 95.02
+          "tok_per_sec": 99.43
         },
         {
           "variant": "high",
@@ -4735,7 +4760,7 @@
           "variant": "max",
           "intelligence": 23.1,
           "cost_per_task": 1.7691,
-          "tok_per_sec": 93.5
+          "tok_per_sec": 89.83
         }
       ]
     },
@@ -4747,19 +4772,19 @@
           "variant": "non-reasoning",
           "intelligence": 10,
           "cost_per_task": 3.7729,
-          "tok_per_sec": 50.54
+          "tok_per_sec": 50.35
         },
         {
           "variant": "low",
           "intelligence": 15.7,
           "cost_per_task": 1.9059,
-          "tok_per_sec": 48.55
+          "tok_per_sec": 47.67
         },
         {
           "variant": "medium",
           "intelligence": 17.5,
           "cost_per_task": 2.16,
-          "tok_per_sec": 45.95
+          "tok_per_sec": 45.58
         },
         {
           "variant": "xhigh",
