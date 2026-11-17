@@ -167,11 +167,6 @@
           "id": "claude-haiku-5-5",
           "efforts": null,
           "note": "Haiku incluído no Pro; a página não dá versão nem esforço."
-        },
-        {
-          "id": "claude-fable-5-2",
-          "efforts": null,
-          "note": "Fable disponível no Pro via créditos de uso; a página não dá versão nem esforço."
         }
       ],
       "source_url": "https://www.anthropic.com/pricing",
@@ -202,7 +197,7 @@
         {
           "id": "claude-fable-5-2",
           "efforts": null,
-          "note": "Fable incluído até metade do limite semanal no Max; a página não dá versão nem esforço."
+          "note": "Fable incluído até metade do limite semanal (página de preços); no Pro, só com créditos de uso pagos à parte."
         }
       ],
       "source_url": "https://www.anthropic.com/pricing",
@@ -216,14 +211,29 @@
       "price": "US$ 0/mês",
       "families": [
         {
-          "id": "gemini-4-hydrogen",
+          "id": "gemini-3-5-flash-lite",
           "efforts": null,
-          "note": "A página diz 'Inclui Gemini 4 Hydrogen'; nenhum nível de esforço é declarado."
+          "note": "A página diz “Access to our Flash-Lite model”, sem versão; mapeado para a versão atual na AA."
         }
       ],
       "source_url": "https://gemini.google/us/subscriptions/?hl=en",
       "checked": true,
       "note": "A página também cita acesso a um 'modelo Flash-Lite' sem versão; não foi mapeado para evitar chute. Nenhum nível de esforço é declarado."
+    },
+    {
+      "id": "gemini-ai-plus",
+      "provider": "Google",
+      "name": "Google AI Plus",
+      "price": "US$ 4,99/mês",
+      "families": [
+        {
+          "id": "gemini-4-hydrogen",
+          "efforts": null,
+          "note": "“Access to Gemini 4 Hydrogen”."
+        }
+      ],
+      "source_url": "https://gemini.google/us/subscriptions/?hl=en",
+      "checked": true
     },
     {
       "id": "gemini-ai-pro",
@@ -232,19 +242,14 @@
       "price": "US$ 19,99/mês",
       "families": [
         {
-          "id": "gemini-4-carbon",
-          "efforts": null,
-          "note": "A página diz 'Inclui Gemini 4 Carbon' no cartão do AI Pro; nenhum nível de esforço é declarado."
-        },
-        {
           "id": "gemini-4-argon",
           "efforts": null,
-          "note": "Acesso explícito ao Gemini 4 Argon; nenhum nível de esforço é declarado."
+          "note": ""
         },
         {
           "id": "gemini-4-hydrogen",
           "efforts": null,
-          "note": "Acesso explícito ao Gemini 4 Hydrogen; nenhum nível de esforço é declarado."
+          "note": ""
         }
       ],
       "source_url": "https://gemini.google/us/subscriptions/?hl=en",
@@ -260,17 +265,17 @@
         {
           "id": "gemini-4-carbon",
           "efforts": null,
-          "note": "Acesso máximo ao Gemini 4 Carbon; nenhum nível de esforço é declarado."
+          "note": "“Highest access to Gemini 4 Carbon”."
         },
         {
           "id": "gemini-4-argon",
           "efforts": null,
-          "note": "Acesso máximo ao Gemini 4 Argon; nenhum nível de esforço é declarado."
+          "note": ""
         },
         {
           "id": "gemini-4-hydrogen",
           "efforts": null,
-          "note": "Acesso máximo ao Gemini 4 Hydrogen; nenhum nível de esforço é declarado."
+          "note": ""
         }
       ],
       "source_url": "https://gemini.google/us/subscriptions/?hl=en",
@@ -511,5 +516,6 @@
       "where": "API (Model API; reasoning effort)",
       "source_url": "https://dev.meta.ai/docs/muse-wonder"
     }
-  }
+  },
+  "revisao": "17/11/2026: conferido de novo nas páginas oficiais. Claude Pro sem Fable (créditos de uso); Gemini: grátis = Flash-Lite, AI Plus = Hydrogen, Carbon só confirmado no Ultra (as linhas “Includes …” da página do Google anunciam o plano seguinte)."
 }
