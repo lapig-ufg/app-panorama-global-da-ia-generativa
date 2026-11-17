@@ -1,0 +1,3560 @@
+{
+  "schema": 1,
+  "generated_at": "2026-11-17T16:47:11Z",
+  "sources": {
+    "lmarena": {
+      "name": "LMArena",
+      "url": "https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset",
+      "collected_at": "2026-11-17T13:50:02.126201+00:00",
+      "measures": "preferência humana em conversas às cegas (Arena Score, Bradley-Terry)",
+      "license": "CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/ (dataset: https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset)",
+      "attribution": "LMArena — Arena Leaderboard Dataset (Hugging Face)",
+      "license_checked_at": "2026-11-17",
+      "redistributable": true
+    },
+    "epoch": {
+      "name": "Epoch AI",
+      "url": "https://epoch.ai/benchmarks",
+      "collected_at": "2026-11-17T13:49:38.487130+00:00",
+      "measures": "benchmarks de fronteira em matemática, ciência, código, agentes e conhecimento",
+      "license": "CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/ (https://epoch.ai/benchmarks/use-this-data); benchmarks de terceiros no hub mantêm a licença original",
+      "attribution": "Epoch AI — Capabilities & benchmarking (epoch.ai)",
+      "license_checked_at": "2026-11-17",
+      "redistributable": true
+    },
+    "vals": {
+      "name": "Vals AI",
+      "url": "https://vals.ai",
+      "collected_at": "2026-11-17T13:49:38.531999+00:00",
+      "measures": "benchmarks de trabalho real em finanças, direito, saúde, código e agentes",
+      "license": "Sem licença de republicação identificada (conferido em 17/11/2026): conteúdo © Vals AI, todos os direitos reservados (https://vals.ai; não encontrei termos de uso nem licença de dados publicados no site). Os números não foram incluídos.",
+      "attribution": "Vals AI — vals.ai",
+      "license_checked_at": "2026-11-17",
+      "redistributable": false
+    }
+  },
+  "families": {
+    "claude-fable-5-1": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1512.0,
+            "lower": 1506.6,
+            "upper": 1517.5,
+            "votes": 20511,
+            "rank": 4,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1527.4,
+              "lower": 1517.4,
+              "upper": 1537.3,
+              "votes": 4008,
+              "rank": 9,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1514.1,
+              "lower": 1504.2,
+              "upper": 1524.0,
+              "votes": 4672,
+              "rank": 4,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1520.0,
+              "lower": 1511.6,
+              "upper": 1528.5,
+              "votes": 6217,
+              "rank": 5,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1492.0,
+              "lower": 1480.0,
+              "upper": 1504.0,
+              "votes": 2740,
+              "rank": 14,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "otis_mock_aime_2024_2025": {
+            "score": 100.0,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 90.2,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 87.8,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 57.1,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 70.8,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 48.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 58.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 93.3,
+            "label": "MirrorCode"
+          },
+          "frontiermath_erdos": {
+            "score": 0.0,
+            "label": "FrontierMath Erdős"
+          },
+          "furniture_assembly": {
+            "score": 70.0,
+            "label": "Furniture Assembly"
+          },
+          "spireclimb": {
+            "score": 2.0,
+            "label": "SpireClimb"
+          },
+          "spireclimb_sts1_a20_heart": {
+            "score": 0.0,
+            "label": "Spireclimb Sts1 A20 Heart"
+          },
+          "spireclimb_sts2_a10": {
+            "score": 4.0,
+            "label": "Spireclimb Sts2 A10"
+          }
+        }
+      }
+    },
+    "claude-fable-5-2": {
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 93.9,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 99.7,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 95.1,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 100.0,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 90.5,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 94.0,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 79.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 90.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "furniture_assembly": {
+            "score": 90.0,
+            "label": "Furniture Assembly"
+          },
+          "spireclimb": {
+            "score": 15.3,
+            "label": "SpireClimb"
+          },
+          "spireclimb_sts1_a20_heart": {
+            "score": 13.3,
+            "label": "Spireclimb Sts1 A20 Heart"
+          },
+          "spireclimb_sts2_a10": {
+            "score": 17.3,
+            "label": "Spireclimb Sts2 A10"
+          }
+        }
+      }
+    },
+    "claude-haiku-5-5": {
+      "lmarena": [
+        {
+          "effort": "high",
+          "overall": {
+            "rating": 1397.7,
+            "lower": 1391.5,
+            "upper": 1403.8,
+            "votes": 13894,
+            "rank": 160,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1453.6,
+              "lower": 1442.5,
+              "upper": 1464.7,
+              "votes": 3278,
+              "rank": 96,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1336.5,
+              "lower": 1324.7,
+              "upper": 1348.3,
+              "votes": 3195,
+              "rank": 189,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1411.2,
+              "lower": 1401.8,
+              "upper": 1420.7,
+              "votes": 4952,
+              "rank": 104,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1387.8,
+              "lower": 1373.9,
+              "upper": 1401.6,
+              "votes": 2164,
+              "rank": 174,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 89.7,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 98.9,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 75.1,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 46.3,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 43.8,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 23.8,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 55.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 30.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 78.9,
+            "label": "MirrorCode"
+          },
+          "furniture_assembly": {
+            "score": 47.5,
+            "label": "Furniture Assembly"
+          }
+        },
+        "effort_mixed": true
+      }
+    },
+    "claude-opus-5": {
+      "lmarena": [
+        {
+          "effort": "high",
+          "overall": {
+            "rating": 1502.2,
+            "lower": 1498.6,
+            "upper": 1505.8,
+            "votes": 73632,
+            "rank": 7,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1530.8,
+              "lower": 1525.0,
+              "upper": 1536.7,
+              "votes": 18770,
+              "rank": 7,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1486.0,
+              "lower": 1479.7,
+              "upper": 1492.5,
+              "votes": 16529,
+              "rank": 12,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1515.2,
+              "lower": 1509.8,
+              "upper": 1520.6,
+              "votes": 25967,
+              "rank": 8,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1493.5,
+              "lower": 1486.8,
+              "upper": 1500.3,
+              "votes": 11535,
+              "rank": 13,
+              "n": 419
+            }
+          }
+        },
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1506.5,
+            "lower": 1501.8,
+            "upper": 1511.2,
+            "votes": 35670,
+            "rank": 5,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1532.0,
+              "lower": 1524.7,
+              "upper": 1539.3,
+              "votes": 8842,
+              "rank": 6,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1494.0,
+              "lower": 1486.1,
+              "upper": 1501.9,
+              "votes": 8161,
+              "rank": 8,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1517.8,
+              "lower": 1511.3,
+              "upper": 1524.4,
+              "votes": 12378,
+              "rank": 7,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1498.8,
+              "lower": 1490.0,
+              "upper": 1507.6,
+              "votes": 5388,
+              "rank": 11,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 93.9,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 98.9,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 85.6,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 73.2,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 45.7,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 59.9,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 43.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 59.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 87.8,
+            "label": "MirrorCode"
+          },
+          "frontiermath_erdos": {
+            "score": 0.0,
+            "label": "FrontierMath Erdős"
+          },
+          "furniture_assembly": {
+            "score": 60.8,
+            "label": "Furniture Assembly"
+          }
+        }
+      }
+    },
+    "claude-opus-5-5": {
+      "lmarena": [
+        {
+          "effort": "high",
+          "overall": {
+            "rating": 1513.7,
+            "lower": 1507.7,
+            "upper": 1519.6,
+            "votes": 15793,
+            "rank": 3,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1543.4,
+              "lower": 1532.5,
+              "upper": 1554.3,
+              "votes": 3460,
+              "rank": 2,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1531.5,
+              "lower": 1520.2,
+              "upper": 1542.9,
+              "votes": 3800,
+              "rank": 3,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1535.2,
+              "lower": 1526.0,
+              "upper": 1544.3,
+              "votes": 5477,
+              "rank": 3,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1502.4,
+              "lower": 1488.7,
+              "upper": 1516.1,
+              "votes": 2170,
+              "rank": 10,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 90.6,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 100.0,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 91.2,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 95.0,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 71.4,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 72.2,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 67.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 71.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 95.6,
+            "label": "MirrorCode"
+          },
+          "frontiermath_erdos": {
+            "score": 2.9,
+            "label": "FrontierMath Erdős"
+          },
+          "furniture_assembly": {
+            "score": 83.3,
+            "label": "Furniture Assembly"
+          },
+          "spireclimb": {
+            "score": 5.8,
+            "label": "SpireClimb"
+          },
+          "spireclimb_sts1_a20_heart": {
+            "score": 5.0,
+            "label": "Spireclimb Sts1 A20 Heart"
+          },
+          "spireclimb_sts2_a10": {
+            "score": 6.7,
+            "label": "Spireclimb Sts2 A10"
+          }
+        }
+      }
+    },
+    "claude-sonnet-5-5": {
+      "lmarena": [
+        {
+          "effort": "xhigh",
+          "overall": {
+            "rating": 1469.1,
+            "lower": 1463.1,
+            "upper": 1475.1,
+            "votes": 14355,
+            "rank": 34,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1500.9,
+              "lower": 1489.8,
+              "upper": 1512.0,
+              "votes": 3301,
+              "rank": 24,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1466.2,
+              "lower": 1454.6,
+              "upper": 1477.7,
+              "votes": 3366,
+              "rank": 24,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1487.3,
+              "lower": 1478.0,
+              "upper": 1496.6,
+              "votes": 4901,
+              "rank": 16,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1461.8,
+              "lower": 1448.2,
+              "upper": 1475.4,
+              "votes": 2141,
+              "rank": 49,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 95.6,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 100.0,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 88.8,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 80.5,
+            "label": "FrontierMath Tier 4"
+          },
+          "simpleqa_verified": {
+            "score": 46.5,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 59.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 65.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 97.8,
+            "label": "MirrorCode"
+          },
+          "frontiermath_erdos": {
+            "score": 2.9,
+            "label": "FrontierMath Erdős"
+          },
+          "furniture_assembly": {
+            "score": 75.0,
+            "label": "Furniture Assembly"
+          },
+          "spireclimb": {
+            "score": 1.3,
+            "label": "SpireClimb"
+          },
+          "spireclimb_sts1_a20_heart": {
+            "score": 0.0,
+            "label": "Spireclimb Sts1 A20 Heart"
+          },
+          "spireclimb_sts2_a10": {
+            "score": 2.7,
+            "label": "Spireclimb Sts2 A10"
+          }
+        }
+      }
+    },
+    "deepseek-v4-1-flash-1017": {
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 93.2,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 99.4,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 71.2,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 46.3,
+            "label": "FrontierMath Tier 4"
+          },
+          "simpleqa_verified": {
+            "score": 42.5,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 46.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 49.0,
+            "label": "Mystery Game Puzzles"
+          }
+        }
+      }
+    },
+    "deepseek-v4-pro": {
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 91.7,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 98.6,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 64.6,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 26.8,
+            "label": "FrontierMath Tier 4"
+          },
+          "simpleqa_verified": {
+            "score": 52.9,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 46.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 43.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 33.3,
+            "label": "MirrorCode"
+          }
+        }
+      }
+    },
+    "gemini-3-1-flash-lite-preview": {
+      "epoch": {
+        "effort": "high",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 81.8,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 80.0,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 27.7,
+            "label": "FrontierMath Tiers 1-3"
+          }
+        }
+      }
+    },
+    "gemini-3-5-flash-lite": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1434.7,
+            "lower": 1430.2,
+            "upper": 1439.2,
+            "votes": 35094,
+            "rank": 90,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1453.4,
+              "lower": 1446.5,
+              "upper": 1460.4,
+              "votes": 9718,
+              "rank": 100,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1420.4,
+              "lower": 1412.4,
+              "upper": 1428.5,
+              "votes": 7251,
+              "rank": 71,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1419.5,
+              "lower": 1413.1,
+              "upper": 1425.9,
+              "votes": 12616,
+              "rank": 91,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1445.4,
+              "lower": 1436.9,
+              "upper": 1453.9,
+              "votes": 5792,
+              "rank": 78,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "high",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 83.3,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 71.1,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 26.0,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 0.0,
+            "label": "FrontierMath Tier 4"
+          },
+          "chess_puzzles": {
+            "score": 21.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 19.0,
+            "label": "Mystery Game Puzzles"
+          }
+        },
+        "effort_mixed": true
+      }
+    },
+    "gemini-3-8-flash": {
+      "lmarena": [
+        {
+          "effort": "high",
+          "overall": {
+            "rating": 1499.6,
+            "lower": 1495.4,
+            "upper": 1503.8,
+            "votes": 62675,
+            "rank": 10,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1510.1,
+              "lower": 1504.0,
+              "upper": 1516.2,
+              "votes": 15812,
+              "rank": 15,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1493.2,
+              "lower": 1486.5,
+              "upper": 1499.9,
+              "votes": 14262,
+              "rank": 9,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1493.1,
+              "lower": 1487.4,
+              "upper": 1498.7,
+              "votes": 22697,
+              "rank": 13,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1503.1,
+              "lower": 1495.8,
+              "upper": 1510.4,
+              "votes": 9462,
+              "rank": 9,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "high",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 95.4,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 98.9,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 68.4,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 21.9,
+            "label": "FrontierMath Tier 4"
+          },
+          "simpleqa_verified": {
+            "score": 69.7,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 58.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 47.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 38.9,
+            "label": "MirrorCode"
+          },
+          "frontiermath_erdos": {
+            "score": 0.0,
+            "label": "FrontierMath Erdős"
+          },
+          "furniture_assembly": {
+            "score": 31.7,
+            "label": "Furniture Assembly"
+          }
+        }
+      }
+    },
+    "gemini-4-argon": {
+      "lmarena": [
+        {
+          "effort": "high",
+          "overall": {
+            "rating": 1529.5,
+            "lower": 1524.1,
+            "upper": 1534.8,
+            "votes": 20779,
+            "rank": 2,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1540.2,
+              "lower": 1530.9,
+              "upper": 1549.6,
+              "votes": 4833,
+              "rank": 3,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1532.7,
+              "lower": 1522.7,
+              "upper": 1542.8,
+              "votes": 4928,
+              "rank": 1,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1536.1,
+              "lower": 1528.1,
+              "upper": 1544.1,
+              "votes": 7564,
+              "rank": 2,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1547.6,
+              "lower": 1535.5,
+              "upper": 1559.7,
+              "votes": 2927,
+              "rank": 2,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "high",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 96.4,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 100.0,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 86.0,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 78.0,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 64.8,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 76.0,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 59.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 64.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 58.9,
+            "label": "MirrorCode"
+          },
+          "frontiermath_erdos": {
+            "score": 1.5,
+            "label": "FrontierMath Erdős"
+          },
+          "furniture_assembly": {
+            "score": 72.5,
+            "label": "Furniture Assembly"
+          }
+        }
+      }
+    },
+    "gemini-4-carbon": {
+      "lmarena": [
+        {
+          "effort": "high",
+          "overall": {
+            "rating": 1538.4,
+            "lower": 1528.8,
+            "upper": 1547.9,
+            "votes": 4273,
+            "rank": 1,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1564.4,
+              "lower": 1545.7,
+              "upper": 1583.0,
+              "votes": 1069,
+              "rank": 1,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1532.5,
+              "lower": 1512.5,
+              "upper": 1552.6,
+              "votes": 1007,
+              "rank": 2,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1539.5,
+              "lower": 1523.1,
+              "upper": 1555.8,
+              "votes": 1421,
+              "rank": 1,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1569.2,
+              "lower": 1543.8,
+              "upper": 1594.6,
+              "votes": 605,
+              "rank": 1,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "high",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 96.5,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 100.0,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 90.5,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 95.1,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 87.6,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 77.7,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 78.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 73.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "frontiermath_erdos": {
+            "score": 2.9,
+            "label": "FrontierMath Erdős"
+          },
+          "furniture_assembly": {
+            "score": 77.5,
+            "label": "Furniture Assembly"
+          }
+        }
+      }
+    },
+    "gemini-4-hydrogen": {
+      "lmarena": [
+        {
+          "effort": "high",
+          "overall": {
+            "rating": 1502.1,
+            "lower": 1493.1,
+            "upper": 1511.1,
+            "votes": 4741,
+            "rank": 8,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1515.9,
+              "lower": 1497.5,
+              "upper": 1534.2,
+              "votes": 1044,
+              "rank": 12,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1509.5,
+              "lower": 1489.7,
+              "upper": 1529.2,
+              "votes": 1007,
+              "rank": 5,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1519.2,
+              "lower": 1504.2,
+              "upper": 1534.2,
+              "votes": 1700,
+              "rank": 6,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1485.5,
+              "lower": 1463.2,
+              "upper": 1507.8,
+              "votes": 709,
+              "rank": 20,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "gemma-4-31b": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1442.5,
+            "lower": 1435.1,
+            "upper": 1450.0,
+            "votes": 6130,
+            "rank": 73,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1459.0,
+              "lower": 1444.0,
+              "upper": 1474.0,
+              "votes": 1411,
+              "rank": 87,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1415.1,
+              "lower": 1396.5,
+              "upper": 1433.7,
+              "votes": 975,
+              "rank": 76,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1432.8,
+              "lower": 1419.2,
+              "upper": 1446.4,
+              "votes": 1801,
+              "rank": 72,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1452.0,
+              "lower": 1434.8,
+              "upper": 1469.2,
+              "votes": 1121,
+              "rank": 66,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "glm-5-2": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1469.4,
+            "lower": 1465.3,
+            "upper": 1473.4,
+            "votes": 54143,
+            "rank": 33,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1487.9,
+              "lower": 1481.9,
+              "upper": 1493.9,
+              "votes": 14364,
+              "rank": 41,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1459.3,
+              "lower": 1452.5,
+              "upper": 1466.1,
+              "votes": 10851,
+              "rank": 26,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1466.7,
+              "lower": 1461.2,
+              "upper": 1472.2,
+              "votes": 18594,
+              "rank": 38,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1469.3,
+              "lower": 1462.2,
+              "upper": 1476.5,
+              "votes": 8616,
+              "rank": 41,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 91.9,
+            "label": "GPQA Diamond"
+          },
+          "swe_bench_verified": {
+            "score": 78.7,
+            "label": "SWE-bench Verified"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 86.4,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 59.2,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 29.3,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 9.5,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 34.2,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 22.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 19.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 36.7,
+            "label": "MirrorCode"
+          }
+        },
+        "effort_mixed": true
+      }
+    },
+    "glm-5-3": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1474.9,
+            "lower": 1470.3,
+            "upper": 1479.6,
+            "votes": 31604,
+            "rank": 26,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1498.5,
+              "lower": 1490.8,
+              "upper": 1506.2,
+              "votes": 7348,
+              "rank": 28,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1459.2,
+              "lower": 1451.1,
+              "upper": 1467.4,
+              "votes": 7185,
+              "rank": 27,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1483.1,
+              "lower": 1476.3,
+              "upper": 1489.9,
+              "votes": 10480,
+              "rank": 20,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1474.4,
+              "lower": 1465.0,
+              "upper": 1483.7,
+              "votes": 4682,
+              "rank": 33,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 90.9,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 91.1,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 68.8,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 29.3,
+            "label": "FrontierMath Tier 4"
+          },
+          "simpleqa_verified": {
+            "score": 41.0,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 37.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 33.0,
+            "label": "Mystery Game Puzzles"
+          }
+        }
+      }
+    },
+    "glm-5-3-flash": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1471.7,
+            "lower": 1467.3,
+            "upper": 1476.1,
+            "votes": 51019,
+            "rank": 30,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1509.4,
+              "lower": 1502.9,
+              "upper": 1515.9,
+              "votes": 12885,
+              "rank": 16,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1442.1,
+              "lower": 1435.0,
+              "upper": 1449.1,
+              "votes": 10973,
+              "rank": 44,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1479.8,
+              "lower": 1473.8,
+              "upper": 1485.7,
+              "votes": 17601,
+              "rank": 22,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1471.4,
+              "lower": 1463.7,
+              "upper": 1479.1,
+              "votes": 7811,
+              "rank": 38,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 90.2,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 93.9,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 55.8,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 17.1,
+            "label": "FrontierMath Tier 4"
+          },
+          "chess_puzzles": {
+            "score": 21.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 8.0,
+            "label": "Mystery Game Puzzles"
+          }
+        }
+      }
+    },
+    "gpt-5-6-luna": {
+      "lmarena": [
+        {
+          "effort": "xhigh",
+          "overall": {
+            "rating": 1431.0,
+            "lower": 1426.8,
+            "upper": 1435.4,
+            "votes": 40598,
+            "rank": 94,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1467.0,
+              "lower": 1460.4,
+              "upper": 1473.6,
+              "votes": 10982,
+              "rank": 79,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1396.4,
+              "lower": 1388.9,
+              "upper": 1403.9,
+              "votes": 8484,
+              "rank": 107,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1437.2,
+              "lower": 1431.1,
+              "upper": 1443.3,
+              "votes": 14426,
+              "rank": 65,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1434.5,
+              "lower": 1426.4,
+              "upper": 1442.5,
+              "votes": 6573,
+              "rank": 96,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 91.6,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 98.3,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 82.1,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 61.0,
+            "label": "FrontierMath Tier 4"
+          },
+          "simpleqa_verified": {
+            "score": 41.0,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 43.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 21.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 21.1,
+            "label": "MirrorCode"
+          },
+          "furniture_assembly": {
+            "score": 42.5,
+            "label": "Furniture Assembly"
+          }
+        }
+      }
+    },
+    "gpt-5-6-terra": {
+      "lmarena": [
+        {
+          "effort": "xhigh",
+          "overall": {
+            "rating": 1448.8,
+            "lower": 1444.7,
+            "upper": 1453.0,
+            "votes": 48778,
+            "rank": 56,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1485.4,
+              "lower": 1479.1,
+              "upper": 1491.7,
+              "votes": 12782,
+              "rank": 48,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1413.7,
+              "lower": 1406.7,
+              "upper": 1420.8,
+              "votes": 10485,
+              "rank": 80,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1455.4,
+              "lower": 1449.7,
+              "upper": 1461.1,
+              "votes": 17409,
+              "rank": 50,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1455.0,
+              "lower": 1447.4,
+              "upper": 1462.5,
+              "votes": 7871,
+              "rank": 57,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 93.3,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 99.7,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 86.0,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 70.7,
+            "label": "FrontierMath Tier 4"
+          },
+          "simpleqa_verified": {
+            "score": 43.2,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 47.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 35.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 41.1,
+            "label": "MirrorCode"
+          },
+          "furniture_assembly": {
+            "score": 54.2,
+            "label": "Furniture Assembly"
+          }
+        }
+      }
+    },
+    "gpt-6-1-sol": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1444.8,
+            "lower": 1438.6,
+            "upper": 1450.9,
+            "votes": 13498,
+            "rank": 66,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1485.6,
+              "lower": 1473.6,
+              "upper": 1497.6,
+              "votes": 2830,
+              "rank": 46,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1419.6,
+              "lower": 1407.4,
+              "upper": 1431.8,
+              "votes": 2982,
+              "rank": 72,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1463.5,
+              "lower": 1453.5,
+              "upper": 1473.5,
+              "votes": 4262,
+              "rank": 41,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1448.9,
+              "lower": 1434.8,
+              "upper": 1463.1,
+              "votes": 1961,
+              "rank": 70,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 95.4,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 100.0,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 93.7,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 100.0,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 54.3,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 73.9,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 68.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 80.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 61.1,
+            "label": "MirrorCode"
+          },
+          "frontiermath_erdos": {
+            "score": 4.4,
+            "label": "FrontierMath Erdős"
+          },
+          "furniture_assembly": {
+            "score": 80.0,
+            "label": "Furniture Assembly"
+          },
+          "spireclimb": {
+            "score": 23.8,
+            "label": "SpireClimb"
+          },
+          "spireclimb_sts1_a20_heart": {
+            "score": 18.3,
+            "label": "Spireclimb Sts1 A20 Heart"
+          },
+          "spireclimb_sts2_a10": {
+            "score": 29.3,
+            "label": "Spireclimb Sts2 A10"
+          }
+        }
+      }
+    },
+    "gpt-6-1-terra": {
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 94.3,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 100.0,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 90.9,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 92.7,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 78.1,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 57.3,
+            "label": "SimpleQA Verified"
+          },
+          "mystery_game_puzzles": {
+            "score": 74.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 76.7,
+            "label": "MirrorCode"
+          },
+          "furniture_assembly": {
+            "score": 79.2,
+            "label": "Furniture Assembly"
+          },
+          "spireclimb": {
+            "score": 22.3,
+            "label": "SpireClimb"
+          },
+          "spireclimb_sts1_a20_heart": {
+            "score": 10.0,
+            "label": "Spireclimb Sts1 A20 Heart"
+          },
+          "spireclimb_sts2_a10": {
+            "score": 34.7,
+            "label": "Spireclimb Sts2 A10"
+          }
+        }
+      }
+    },
+    "gpt-6-astra": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1439.6,
+            "lower": 1434.1,
+            "upper": 1445.1,
+            "votes": 18745,
+            "rank": 78,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1494.2,
+              "lower": 1484.5,
+              "upper": 1503.9,
+              "votes": 4229,
+              "rank": 34,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1421.5,
+              "lower": 1411.1,
+              "upper": 1431.8,
+              "votes": 4134,
+              "rank": 70,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1455.7,
+              "lower": 1447.3,
+              "upper": 1464.0,
+              "votes": 5922,
+              "rank": 49,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1447.7,
+              "lower": 1435.5,
+              "upper": 1459.9,
+              "votes": 2683,
+              "rank": 73,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 95.8,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 100.0,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 93.7,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 97.6,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 76.2,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 75.6,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 74.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 84.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 60.0,
+            "label": "MirrorCode"
+          },
+          "frontiermath_erdos": {
+            "score": 2.9,
+            "label": "FrontierMath Erdős"
+          },
+          "furniture_assembly": {
+            "score": 80.0,
+            "label": "Furniture Assembly"
+          },
+          "spireclimb": {
+            "score": 34.0,
+            "label": "SpireClimb"
+          },
+          "spireclimb_sts1_a20_heart": {
+            "score": 33.3,
+            "label": "Spireclimb Sts1 A20 Heart"
+          },
+          "spireclimb_sts2_a10": {
+            "score": 34.7,
+            "label": "Spireclimb Sts2 A10"
+          }
+        },
+        "effort_mixed": true
+      }
+    },
+    "gpt-6-luna": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1388.5,
+            "lower": 1384.4,
+            "upper": 1392.6,
+            "votes": 108508,
+            "rank": 173,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1431.2,
+              "lower": 1425.5,
+              "upper": 1436.9,
+              "votes": 24889,
+              "rank": 141,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1359.4,
+              "lower": 1353.3,
+              "upper": 1365.5,
+              "votes": 24499,
+              "rank": 157,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1403.2,
+              "lower": 1397.9,
+              "upper": 1408.6,
+              "votes": 36846,
+              "rank": 125,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1392.8,
+              "lower": 1386.4,
+              "upper": 1399.2,
+              "votes": 15948,
+              "rank": 165,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 90.5,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 98.9,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 79.0,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 56.1,
+            "label": "FrontierMath Tier 4"
+          },
+          "simpleqa_verified": {
+            "score": 41.4,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 36.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 7.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 26.7,
+            "label": "MirrorCode"
+          },
+          "furniture_assembly": {
+            "score": 44.2,
+            "label": "Furniture Assembly"
+          },
+          "spireclimb": {
+            "score": 0.0,
+            "label": "SpireClimb"
+          },
+          "spireclimb_sts1_a20_heart": {
+            "score": 0.0,
+            "label": "Spireclimb Sts1 A20 Heart"
+          },
+          "spireclimb_sts2_a10": {
+            "score": 0.0,
+            "label": "Spireclimb Sts2 A10"
+          }
+        }
+      }
+    },
+    "gpt-6-sol": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1396.8,
+            "lower": 1391.3,
+            "upper": 1402.2,
+            "votes": 20430,
+            "rank": 163,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1449.5,
+              "lower": 1440.0,
+              "upper": 1459.0,
+              "votes": 4725,
+              "rank": 106,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1370.3,
+              "lower": 1360.1,
+              "upper": 1380.6,
+              "votes": 4354,
+              "rank": 145,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1410.0,
+              "lower": 1402.0,
+              "upper": 1418.1,
+              "votes": 6913,
+              "rank": 107,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1414.3,
+              "lower": 1402.9,
+              "upper": 1425.7,
+              "votes": 3206,
+              "rank": 131,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 94.3,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 100.0,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 89.8,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 90.0,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 53.3,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 60.7,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 56.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 56.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 48.9,
+            "label": "MirrorCode"
+          },
+          "frontiermath_erdos": {
+            "score": 1.5,
+            "label": "FrontierMath Erdős"
+          },
+          "furniture_assembly": {
+            "score": 58.3,
+            "label": "Furniture Assembly"
+          },
+          "spireclimb": {
+            "score": 9.2,
+            "label": "SpireClimb"
+          },
+          "spireclimb_sts1_a20_heart": {
+            "score": 5.0,
+            "label": "Spireclimb Sts1 A20 Heart"
+          },
+          "spireclimb_sts2_a10": {
+            "score": 13.3,
+            "label": "Spireclimb Sts2 A10"
+          }
+        }
+      }
+    },
+    "gpt-oss-120b": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1365.5,
+            "lower": 1361.2,
+            "upper": 1369.9,
+            "votes": 30115,
+            "rank": 197,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1379.6,
+              "lower": 1371.9,
+              "upper": 1387.3,
+              "votes": 6387,
+              "rank": 198,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1274.3,
+              "lower": 1264.5,
+              "upper": 1284.0,
+              "votes": 3892,
+              "rank": 247,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1318.0,
+              "lower": 1311.0,
+              "upper": 1325.0,
+              "votes": 7839,
+              "rank": 220,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1339.6,
+              "lower": 1330.9,
+              "upper": 1348.4,
+              "votes": 4869,
+              "rank": 218,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "high",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 75.8,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 88.9,
+            "label": "AIME 2024-2025"
+          },
+          "mystery_game_puzzles": {
+            "score": 2.0,
+            "label": "Mystery Game Puzzles"
+          }
+        },
+        "effort_mixed": true
+      }
+    },
+    "granite-4-2-30b": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1361.6,
+            "lower": 1351.0,
+            "upper": 1372.1,
+            "votes": 3314,
+            "rank": 201,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1394.8,
+              "lower": 1373.5,
+              "upper": 1416.1,
+              "votes": 827,
+              "rank": 184,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1284.6,
+              "lower": 1259.1,
+              "upper": 1310.1,
+              "votes": 637,
+              "rank": 242,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1349.6,
+              "lower": 1331.4,
+              "upper": 1367.8,
+              "votes": 1138,
+              "rank": 193,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1340.0,
+              "lower": 1313.2,
+              "upper": 1366.8,
+              "votes": 539,
+              "rank": 216,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "granite-4-2-3b": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1292.4,
+            "lower": 1280.8,
+            "upper": 1304.1,
+            "votes": 3184,
+            "rank": 258,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1358.4,
+              "lower": 1336.3,
+              "upper": 1380.6,
+              "votes": 809,
+              "rank": 226,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1203.8,
+              "lower": 1175.4,
+              "upper": 1232.3,
+              "votes": 620,
+              "rank": 307,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1272.1,
+              "lower": 1252.2,
+              "upper": 1292.1,
+              "votes": 1067,
+              "rank": 257,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1288.0,
+              "lower": 1258.8,
+              "upper": 1317.2,
+              "votes": 516,
+              "rank": 260,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "granite-4-2-8b": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1318.6,
+            "lower": 1307.4,
+            "upper": 1329.7,
+            "votes": 3193,
+            "rank": 242,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1374.2,
+              "lower": 1352.6,
+              "upper": 1395.8,
+              "votes": 810,
+              "rank": 205,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1234.6,
+              "lower": 1207.4,
+              "upper": 1261.8,
+              "votes": 622,
+              "rank": 290,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1298.7,
+              "lower": 1279.9,
+              "upper": 1317.6,
+              "votes": 1113,
+              "rank": 242,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1297.9,
+              "lower": 1269.3,
+              "upper": 1326.4,
+              "votes": 515,
+              "rank": 251,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "grok-4-6": {
+      "lmarena": [
+        {
+          "effort": "high",
+          "overall": {
+            "rating": 1430.0,
+            "lower": 1425.4,
+            "upper": 1434.7,
+            "votes": 34582,
+            "rank": 96,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1464.1,
+              "lower": 1456.8,
+              "upper": 1471.4,
+              "votes": 8562,
+              "rank": 82,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1427.6,
+              "lower": 1419.7,
+              "upper": 1435.6,
+              "votes": 7732,
+              "rank": 63,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1431.2,
+              "lower": 1424.7,
+              "upper": 1437.7,
+              "votes": 12264,
+              "rank": 74,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1426.8,
+              "lower": 1418.0,
+              "upper": 1435.7,
+              "votes": 5230,
+              "rank": 108,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "xhigh",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 94.0,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 99.2,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 66.0,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 31.7,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 30.5,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 49.3,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 33.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 34.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 41.1,
+            "label": "MirrorCode"
+          },
+          "furniture_assembly": {
+            "score": 40.0,
+            "label": "Furniture Assembly"
+          }
+        },
+        "effort_mixed": true
+      }
+    },
+    "grok-4-7": {
+      "lmarena": [
+        {
+          "effort": "xhigh",
+          "overall": {
+            "rating": 1399.9,
+            "lower": 1394.7,
+            "upper": 1405.2,
+            "votes": 22219,
+            "rank": 158,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1425.3,
+              "lower": 1416.0,
+              "upper": 1434.6,
+              "votes": 4876,
+              "rank": 148,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1384.0,
+              "lower": 1374.5,
+              "upper": 1393.6,
+              "votes": 5096,
+              "rank": 129,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1403.6,
+              "lower": 1395.7,
+              "upper": 1411.4,
+              "votes": 7408,
+              "rank": 124,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1396.6,
+              "lower": 1385.5,
+              "upper": 1407.8,
+              "votes": 3349,
+              "rank": 161,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "xhigh",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 92.7,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 98.1,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 53.0,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 17.1,
+            "label": "FrontierMath Tier 4"
+          },
+          "simpleqa_verified": {
+            "score": 56.0,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 41.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 29.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 54.4,
+            "label": "MirrorCode"
+          },
+          "frontiermath_erdos": {
+            "score": 0.0,
+            "label": "FrontierMath Erdős"
+          },
+          "furniture_assembly": {
+            "score": 20.8,
+            "label": "Furniture Assembly"
+          }
+        }
+      }
+    },
+    "inkling": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1443.0,
+            "lower": 1439.0,
+            "upper": 1447.1,
+            "votes": 50718,
+            "rank": 71,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1467.0,
+              "lower": 1460.9,
+              "upper": 1473.2,
+              "votes": 13407,
+              "rank": 78,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1395.1,
+              "lower": 1388.2,
+              "upper": 1402.0,
+              "votes": 11132,
+              "rank": 109,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1426.9,
+              "lower": 1421.3,
+              "upper": 1432.5,
+              "votes": 18192,
+              "rank": 81,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1442.0,
+              "lower": 1434.5,
+              "upper": 1449.5,
+              "votes": 7926,
+              "rank": 87,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "xhigh",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 88.3,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 88.9,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 33.3,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 4.9,
+            "label": "FrontierMath Tier 4"
+          },
+          "simpleqa_verified": {
+            "score": 40.3,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 21.0,
+            "label": "Chess Puzzles"
+          }
+        }
+      }
+    },
+    "inkling-2-small": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1402.6,
+            "lower": 1390.9,
+            "upper": 1414.4,
+            "votes": 2669,
+            "rank": 153,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1455.2,
+              "lower": 1431.8,
+              "upper": 1478.7,
+              "votes": 619,
+              "rank": 93,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1347.9,
+              "lower": 1323.5,
+              "upper": 1372.2,
+              "votes": 643,
+              "rank": 170,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1407.6,
+              "lower": 1387.9,
+              "upper": 1427.4,
+              "votes": 929,
+              "rank": 113,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1407.7,
+              "lower": 1379.0,
+              "upper": 1436.5,
+              "votes": 399,
+              "rank": 144,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "inkling-small": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1414.2,
+            "lower": 1409.7,
+            "upper": 1418.7,
+            "votes": 37610,
+            "rank": 136,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1451.5,
+              "lower": 1444.6,
+              "upper": 1458.3,
+              "votes": 10199,
+              "rank": 104,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1337.2,
+              "lower": 1329.3,
+              "upper": 1345.1,
+              "votes": 8145,
+              "rank": 188,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1402.1,
+              "lower": 1395.8,
+              "upper": 1408.3,
+              "votes": 13636,
+              "rank": 129,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1416.8,
+              "lower": 1408.3,
+              "upper": 1425.3,
+              "votes": 5840,
+              "rank": 125,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "xhigh",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 88.5,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 90.0,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 46.3,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 17.1,
+            "label": "FrontierMath Tier 4"
+          },
+          "simpleqa_verified": {
+            "score": 19.1,
+            "label": "SimpleQA Verified"
+          },
+          "mystery_game_puzzles": {
+            "score": 6.0,
+            "label": "Mystery Game Puzzles"
+          }
+        }
+      }
+    },
+    "kimi-k3": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1474.6,
+            "lower": 1470.3,
+            "upper": 1478.8,
+            "votes": 41402,
+            "rank": 28,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1506.3,
+              "lower": 1499.6,
+              "upper": 1513.0,
+              "votes": 10247,
+              "rank": 18,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1452.7,
+              "lower": 1445.2,
+              "upper": 1460.2,
+              "votes": 8540,
+              "rank": 34,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1483.9,
+              "lower": 1477.8,
+              "upper": 1489.9,
+              "votes": 13794,
+              "rank": 18,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1488.7,
+              "lower": 1480.5,
+              "upper": 1496.9,
+              "votes": 6294,
+              "rank": 16,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 93.1,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 97.2,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 72.2,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 39.0,
+            "label": "FrontierMath Tier 4"
+          },
+          "simpleqa_verified": {
+            "score": 50.6,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 37.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 26.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 54.4,
+            "label": "MirrorCode"
+          },
+          "frontiermath_erdos": {
+            "score": 0.0,
+            "label": "FrontierMath Erdős"
+          },
+          "furniture_assembly": {
+            "score": 34.2,
+            "label": "Furniture Assembly"
+          }
+        },
+        "effort_mixed": true
+      }
+    },
+    "kimi-k3-1-pro": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1459.1,
+            "lower": 1449.2,
+            "upper": 1469.1,
+            "votes": 3995,
+            "rank": 43,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1480.0,
+              "lower": 1460.1,
+              "upper": 1499.9,
+              "votes": 877,
+              "rank": 58,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1438.6,
+              "lower": 1417.8,
+              "upper": 1459.5,
+              "votes": 869,
+              "rank": 49,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1472.2,
+              "lower": 1455.6,
+              "upper": 1488.8,
+              "votes": 1311,
+              "rank": 32,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1448.7,
+              "lower": 1423.6,
+              "upper": 1473.8,
+              "votes": 572,
+              "rank": 72,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "mimo-v2-6-flash": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1450.8,
+            "lower": 1445.7,
+            "upper": 1456.0,
+            "votes": 23252,
+            "rank": 55,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1497.3,
+              "lower": 1488.3,
+              "upper": 1506.3,
+              "votes": 5341,
+              "rank": 31,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1402.0,
+              "lower": 1392.3,
+              "upper": 1411.7,
+              "votes": 4923,
+              "rank": 97,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1445.2,
+              "lower": 1437.5,
+              "upper": 1452.9,
+              "votes": 7627,
+              "rank": 59,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1443.2,
+              "lower": 1432.4,
+              "upper": 1454.0,
+              "votes": 3471,
+              "rank": 84,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "mimo-v2-6-pro": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1491.6,
+            "lower": 1482.2,
+            "upper": 1501.0,
+            "votes": 4064,
+            "rank": 14,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1533.6,
+              "lower": 1515.7,
+              "upper": 1551.5,
+              "votes": 1091,
+              "rank": 5,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1467.8,
+              "lower": 1446.7,
+              "upper": 1488.8,
+              "votes": 805,
+              "rank": 21,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1492.2,
+              "lower": 1476.2,
+              "upper": 1508.2,
+              "votes": 1389,
+              "rank": 14,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1470.6,
+              "lower": 1446.7,
+              "upper": 1494.5,
+              "votes": 589,
+              "rank": 40,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "minimax-m3": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1428.1,
+            "lower": 1424.4,
+            "upper": 1431.7,
+            "votes": 73579,
+            "rank": 100,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1468.1,
+              "lower": 1462.7,
+              "upper": 1473.5,
+              "votes": 20492,
+              "rank": 73,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1395.0,
+              "lower": 1388.8,
+              "upper": 1401.2,
+              "votes": 13750,
+              "rank": 111,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1427.6,
+              "lower": 1422.6,
+              "upper": 1432.6,
+              "votes": 25508,
+              "rank": 79,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1438.6,
+              "lower": 1432.4,
+              "upper": 1444.9,
+              "votes": 12656,
+              "rank": 91,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "single",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 90.9,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 71.1,
+            "label": "AIME 2024-2025"
+          },
+          "chess_puzzles": {
+            "score": 17.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 7.0,
+            "label": "Mystery Game Puzzles"
+          }
+        }
+      }
+    },
+    "mistral-large-4": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1411.3,
+            "lower": 1402.8,
+            "upper": 1419.8,
+            "votes": 6423,
+            "rank": 141,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1457.5,
+              "lower": 1441.8,
+              "upper": 1473.2,
+              "votes": 1500,
+              "rank": 90,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1342.6,
+              "lower": 1326.3,
+              "upper": 1358.9,
+              "votes": 1569,
+              "rank": 181,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1408.8,
+              "lower": 1395.6,
+              "upper": 1422.0,
+              "votes": 2318,
+              "rank": 110,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1420.8,
+              "lower": 1401.1,
+              "upper": 1440.5,
+              "votes": 953,
+              "rank": 118,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "mistral-medium-3-5": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1420.8,
+            "lower": 1414.4,
+            "upper": 1427.2,
+            "votes": 11647,
+            "rank": 114,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1460.8,
+              "lower": 1450.1,
+              "upper": 1471.6,
+              "votes": 3249,
+              "rank": 85,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1373.6,
+              "lower": 1359.9,
+              "upper": 1387.3,
+              "votes": 2052,
+              "rank": 143,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1416.0,
+              "lower": 1406.0,
+              "upper": 1426.0,
+              "votes": 3787,
+              "rank": 96,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1423.6,
+              "lower": 1409.6,
+              "upper": 1437.6,
+              "votes": 1901,
+              "rank": 115,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "muse-glimmer": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1388.8,
+            "lower": 1379.0,
+            "upper": 1398.5,
+            "votes": 3791,
+            "rank": 172,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1417.8,
+              "lower": 1399.6,
+              "upper": 1435.9,
+              "votes": 1091,
+              "rank": 155,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1340.6,
+              "lower": 1317.6,
+              "upper": 1363.7,
+              "votes": 699,
+              "rank": 184,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1373.2,
+              "lower": 1356.8,
+              "upper": 1389.5,
+              "votes": 1326,
+              "rank": 173,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1396.9,
+              "lower": 1372.6,
+              "upper": 1421.2,
+              "votes": 610,
+              "rank": 159,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "muse-spark-1-3": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1491.6,
+            "lower": 1486.7,
+            "upper": 1496.6,
+            "votes": 26806,
+            "rank": 13,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1508.7,
+              "lower": 1500.7,
+              "upper": 1516.7,
+              "votes": 6830,
+              "rank": 17,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1467.0,
+              "lower": 1458.2,
+              "upper": 1475.9,
+              "votes": 5983,
+              "rank": 22,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1479.4,
+              "lower": 1472.3,
+              "upper": 1486.4,
+              "votes": 9650,
+              "rank": 23,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1487.8,
+              "lower": 1477.8,
+              "upper": 1497.9,
+              "votes": 4003,
+              "rank": 17,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "otis_mock_aime_2024_2025": {
+            "score": 99.2,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 74.4,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 46.3,
+            "label": "FrontierMath Tier 4"
+          },
+          "chess_puzzles": {
+            "score": 37.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 25.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 54.4,
+            "label": "MirrorCode"
+          }
+        },
+        "effort_mixed": true
+      }
+    },
+    "muse-wonder": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1503.0,
+            "lower": 1496.8,
+            "upper": 1509.2,
+            "votes": 12696,
+            "rank": 6,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1515.6,
+              "lower": 1504.3,
+              "upper": 1526.9,
+              "votes": 3042,
+              "rank": 13,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1492.7,
+              "lower": 1480.6,
+              "upper": 1504.9,
+              "votes": 2947,
+              "rank": 10,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1494.3,
+              "lower": 1484.7,
+              "upper": 1504.0,
+              "votes": 4505,
+              "rank": 12,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1514.1,
+              "lower": 1499.5,
+              "upper": 1528.8,
+              "votes": 1843,
+              "rank": 3,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "qwen3-8-27b": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1436.6,
+            "lower": 1432.0,
+            "upper": 1441.1,
+            "votes": 33323,
+            "rank": 85,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1479.1,
+              "lower": 1472.0,
+              "upper": 1486.3,
+              "votes": 8865,
+              "rank": 59,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1376.6,
+              "lower": 1368.3,
+              "upper": 1384.9,
+              "votes": 6866,
+              "rank": 136,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1431.3,
+              "lower": 1424.8,
+              "upper": 1437.8,
+              "votes": 11741,
+              "rank": 73,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1436.0,
+              "lower": 1427.1,
+              "upper": 1445.0,
+              "votes": 5185,
+              "rank": 95,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "qwen3-8-max": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1485.3,
+            "lower": 1480.7,
+            "upper": 1489.8,
+            "votes": 36936,
+            "rank": 17,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1501.7,
+              "lower": 1494.8,
+              "upper": 1508.6,
+              "votes": 9849,
+              "rank": 23,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1482.0,
+              "lower": 1474.1,
+              "upper": 1490.0,
+              "votes": 7548,
+              "rank": 16,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1483.4,
+              "lower": 1477.2,
+              "upper": 1489.7,
+              "votes": 12965,
+              "rank": 19,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1491.9,
+              "lower": 1483.3,
+              "upper": 1500.6,
+              "votes": 5575,
+              "rank": 15,
+              "n": 419
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "xhigh",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 92.7,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 99.4,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 74.7,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 46.3,
+            "label": "FrontierMath Tier 4"
+          },
+          "simpleqa_verified": {
+            "score": 45.8,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 46.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 38.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 52.2,
+            "label": "MirrorCode"
+          }
+        }
+      }
+    },
+    "solar-pro4": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1388.2,
+            "lower": 1383.2,
+            "upper": 1393.2,
+            "votes": 27067,
+            "rank": 174,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1436.6,
+              "lower": 1428.7,
+              "upper": 1444.5,
+              "votes": 6891,
+              "rank": 127,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1316.8,
+              "lower": 1307.7,
+              "upper": 1325.9,
+              "votes": 5881,
+              "rank": 210,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1374.8,
+              "lower": 1367.8,
+              "upper": 1381.8,
+              "votes": 9722,
+              "rank": 169,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1389.2,
+              "lower": 1379.0,
+              "upper": 1399.4,
+              "votes": 4017,
+              "rank": 170,
+              "n": 419
+            }
+          }
+        }
+      ]
+    },
+    "step-5": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1443.3,
+            "lower": 1437.1,
+            "upper": 1449.6,
+            "votes": 12345,
+            "rank": 70,
+            "n": 421
+          },
+          "categories": {
+            "coding": {
+              "rating": 1481.7,
+              "lower": 1470.5,
+              "upper": 1492.9,
+              "votes": 2950,
+              "rank": 55,
+              "n": 416
+            },
+            "creative_writing": {
+              "rating": 1414.5,
+              "lower": 1402.0,
+              "upper": 1427.1,
+              "votes": 2636,
+              "rank": 77,
+              "n": 419
+            },
+            "instruction_following": {
+              "rating": 1445.1,
+              "lower": 1435.4,
+              "upper": 1454.7,
+              "votes": 4277,
+              "rank": 60,
+              "n": 421
+            },
+            "multi_turn": {
+              "rating": 1439.9,
+              "lower": 1425.3,
+              "upper": 1454.5,
+              "votes": 1774,
+              "rank": 90,
+              "n": 419
+            }
+          }
+        }
+      ]
+    }
+  }
+}
