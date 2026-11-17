@@ -37,6 +37,9 @@ const OUT_PATH = join(ROOT, 'assets', 'benchmarks.json');
    entre a atualização semanal e a versão em inglês. */
 const OUT_EN_PATH = join(ROOT, 'assets', 'benchmarks-en.json');
 const CATALOGO_PATH = join(ROOT, 'assets', 'catalogo.json');
+/* Dados da nova página "Qual modelo usar": as 7 notas por variante de esforço,
+   preço e tempos. Sai da MESMA resposta da API — o guia não faz chamada extra. */
+const GUIA_MODELOS_PATH = join(ROOT, 'assets', 'guia-modelos.json');
 
 // Nº de modelos DISTINTOS (famílias) guardados por benchmark. Como as variantes
 // de esforço são colapsadas antes do corte, 20 famílias ≈ 40-50 linhas cruas.
@@ -182,6 +185,23 @@ function splitVariant(name) {
 /* Níveis de esforço conhecidos, na ordem em que a escada deve ser lida. */
 const EFFORT_LEVELS = ['non-reasoning', 'minimal', 'low', 'medium', 'high', 'xhigh', 'max'];
 const EFFORT_POS = new Map(EFFORT_LEVELS.map((n, i) => [n, i]));
+
+/* Os 7 índices da v5 no vocabulário do guia novo. A ordem é a do schema
+   (assets/guia-modelos.json), não a ordem de exibição da página. */
+const GUIA_INDICES = [
+  ['intelligence', 'artificial_analysis_intelligence_index'],
+  ['finance', 'artificial_analysis_finance_and_accounting_index'],
+  ['strategy', 'artificial_analysis_strategy_and_ops_index'],
+  ['legal', 'artificial_analysis_legal_index'],
+  ['health', 'artificial_analysis_healthcare_and_medical_index'],
+  ['engineering', 'artificial_analysis_engineering_index'],
+  ['economics', 'artificial_analysis_economics_index'],
+];
+
+/* Ordem da escada no guia novo. `single` é a família que a AA lista sem
+   rótulo de esforço; níveis desconhecidos vão para o fim. */
+const GUIA_EFFORT_ORDER = ['non-reasoning', 'minimal', 'low', 'medium', 'high', 'xhigh', 'max', 'single'];
+const GUIA_EFFORT_POS = new Map(GUIA_EFFORT_ORDER.map((n, i) => [n, i]));
 
 /* Regra do rótulo da variante na escada: minúsculas e só o nível.
    A AA às vezes acrescenta sufixos depois de vírgula ("Max, Default Fallback",
@@ -337,6 +357,174 @@ function construirEscada(models, canonicalCompany) {
     });
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   GUIA "QUAL MODELO USAR" (assets/guia-modelos.json)
+   ═══════════════════════════════════════════════════════════════
+   O guia novo não decide pela pessoa: guarda as variantes de esforço que têm
+   nota, com os 7 índices, custo, preço e tempos, e a página escolhe como
+   cruzar. Diferente da escada, entram famílias com qualquer um dos 7 índices
+   (não só Intelligence) e variantes de um só degrau. O id é o slug da AA sem o
+   sufixo de esforço — é ele que casa com assets/guia-fontes.json. */
+function roundTo(v, digits) {
+  if (v == null) return null;
+  const n = Number(v);
+  if (!Number.isFinite(n)) return null;
+  const f = 10 ** digits;
+  return Math.round(n * f) / f;
+}
+
+function numberOrNull(v) {
+  if (v == null) return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+function perfMetric(model, keys) {
+  const perf = (model && model.performance && typeof model.performance === 'object') ? model.performance : model;
+  return numberOrNull(getValue(perf, keys));
+}
+
+/* A AA dá um slug por variante (claude-opus-5-5, -low, -medium...). O id da
+   família é o slug sem o sufixo do nível de esforço; quando a variante não tem
+   sufixo (o "max" costuma ser o slug base), o slug fica como está. */
+function guiaSlugBase(slug, nivel) {
+  let s = String(slug || '').trim();
+  if (!s) return '';
+  if (nivel && nivel !== 'single' && GUIA_EFFORT_POS.has(nivel)) {
+    const sufixo = `-${nivel}`;
+    if (s.endsWith(sufixo)) s = s.slice(0, -sufixo.length);
+  }
+  return s;
+}
+
+function slugDoNome(nome) {
+  return String(nome).toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+function compararTexto(a, b) {
+  return a < b ? -1 : a > b ? 1 : 0;
+}
+
+function construirGuiaModelos(models, canonicalCompany) {
+  const grupos = new Map();
+
+  for (const m of models) {
+    const { family, variant } = splitVariant(modelName(m));
+    if (!family) continue;
+    const creator = canonicalCompany(creatorName(m));
+    if (!creator || creator === 'Desconhecido') continue;
+
+    const nivel = effortLevel(variant) || 'single';
+    const label = variant ? variant.replace(/,\s*Default Fallback\s*$/i, '').trim() : null;
+    const chaveFamilia = `${creator}|${family}`;
+
+    let g = grupos.get(chaveFamilia);
+    if (!g) {
+      g = {
+        familia: family,
+        creator,
+        slugs: [],
+        variantes: new Map(),
+        release: null,
+        open_weights: null,
+      };
+      grupos.set(chaveFamilia, g);
+    }
+
+    // O slug entra mesmo quando a variante não tem nota: é ele que define o
+    // id estável da família (ex.: Claude 4.5 Haiku só tem nota em "Reasoning",
+    // mas o id base vem do slug de "Non-reasoning", claude-4-5-haiku).
+    g.slugs.push(guiaSlugBase(m.slug, nivel) || slugDoNome(family));
+
+    const dataLancamento = releaseDate(m);
+    if (dataLancamento && (!g.release || dataLancamento < g.release)) g.release = dataLancamento;
+    const ow = openWeights(m);
+    if (g.open_weights == null && ow != null) g.open_weights = ow;
+
+    const scores = {};
+    let temIndice = false;
+    for (const [nome, chave] of GUIA_INDICES) {
+      const nota = roundTo(benchmarkScore(m, chave), 1);
+      scores[nome] = nota;
+      if (nota != null) temIndice = true;
+    }
+    // Variante sem nenhum dos 7 índices não acrescenta nada à comparação.
+    if (!temIndice) continue;
+
+    const preco = (m && m.pricing && typeof m.pricing === 'object') ? m.pricing : {};
+    const variante = {
+      effort: nivel,
+      label,
+      scores,
+      cost_per_task: roundTo(costPerTask(m), 4),
+      price: {
+        input: roundTo(preco.price_1m_input_tokens, 4),
+        output: roundTo(preco.price_1m_output_tokens, 4),
+        cache_hit: roundTo(preco.price_1m_cache_hit_tokens, 4),
+        blended_3_1: roundTo(priceBlended(m), 4),
+      },
+      tps: roundTo(tokenSpeed(m), 2),
+      ttft_s: roundTo(perfMetric(m, ['median_time_to_first_token_seconds', 'median_time_to_first_answer_token_seconds', 'ttft_seconds']), 2),
+      e2e_s: roundTo(perfMetric(m, ['median_end_to_end_response_time_seconds', 'e2e_seconds']), 2),
+    };
+
+    /* Variantes repetidas do mesmo nível (ex.: "High" e "High, Default
+       Fallback") são fundidas, ficando a de maior Intelligence — a mesma
+       regra da escada. */
+    const atual = g.variantes.get(nivel);
+    if (!atual) {
+      g.variantes.set(nivel, variante);
+    } else {
+      const a = atual.scores.intelligence;
+      const b = variante.scores.intelligence;
+      if (b != null && (a == null || b > a)) g.variantes.set(nivel, variante);
+    }
+  }
+
+  const posicao = v => GUIA_EFFORT_POS.has(v.effort) ? GUIA_EFFORT_POS.get(v.effort) : 99;
+  const familias = [...grupos.values()]
+    .filter(g => g.variantes.size > 0)
+    .map(g => {
+      const id = g.slugs.filter(Boolean)
+        .sort((a, b) => a.length - b.length || compararTexto(a, b))[0];
+      return {
+        id: id || slugDoNome(g.familia),
+        name: g.familia,
+        creator: g.creator,
+        release_date: g.release,
+        open_weights: g.open_weights,
+        variants: [...g.variantes.values()].sort((a, b) =>
+          posicao(a) - posicao(b) || compararTexto(a.effort, b.effort) ||
+          compararTexto(a.label || '', b.label || '')),
+      };
+    });
+
+  const ordenarFamilias = (a, b) =>
+    compararTexto(slugDoNome(a.name), slugDoNome(b.name)) ||
+    compararTexto(slugDoNome(a.creator), slugDoNome(b.creator)) ||
+    compararTexto(a.id, b.id);
+
+  // Mesmo slug em duas famílias distintas não pode virar id ambíguo. A ordem
+  // é fixada antes de desempatar para o sufixo não depender da ordem da API.
+  familias.sort(ordenarFamilias);
+  const usados = new Set();
+  for (const f of familias) {
+    let id = f.id, n = 1;
+    while (usados.has(id)) { n++; id = `${f.id}-${n}`; }
+    if (id !== f.id) {
+      console.log(`::warning::Id duplicado "${f.id}" no guia-modelos — "${f.name}" (${f.creator}) virou "${id}".`);
+      f.id = id;
+    }
+    usados.add(f.id);
+  }
+  familias.sort(ordenarFamilias);
+
+  const comIntelligence = familias.filter(f => f.variants.some(v => v.scores.intelligence != null)).length;
+  return { familias, comIntelligence };
+}
+
 /* Busca uma rota inteira, seguindo a paginação (page_size = 200 hoje).
    Devolve também o tier e se a paginação fechou — sem isso o pipeline
    publicaria a primeira página e jogaria o resto fora em silêncio. */
@@ -449,7 +637,7 @@ async function main() {
     for (const x of evaluated) {
       const { family, variant } = splitVariant(modelName(x.m));
       const creator = canonicalCompany(creatorName(x.m));
-      const id = `${creator} ${family}`;
+      const id = `${creator}\0${family}`;
       const prev = byFamily.get(id);
       if (!prev || x.score > prev.score) {
         byFamily.set(id, { m: x.m, score: x.score, family, variant, creator });
@@ -625,6 +813,21 @@ async function main() {
       (semLink.size > 20 ? ` … (+${semLink.size - 20})` : ''));
   }
 
+  /* Dados da nova página "Qual modelo usar" — mesma resposta, sem chamada
+     extra. Guarda própria: se vier pequeno demais, mantém o arquivo anterior. */
+  const guia = construirGuiaModelos(models, canonicalCompany);
+  const guiaVariantes = guia.familias.reduce((n, f) => n + f.variants.length, 0);
+  const guiaOut = {
+    schema: 1,
+    source: 'Artificial Analysis Data API v2 (free)',
+    source_url: 'https://artificialanalysis.ai/',
+    attribution: 'Dados: Artificial Analysis — artificialanalysis.ai',
+    fetched_at: fetchedAt,
+    intelligence_index_version: versaoIndice,
+    indices: GUIA_INDICES.map(([nome]) => nome),
+    families: guia.familias,
+  };
+
   const escada = construirEscada(models, canonicalCompany);
 
   const out = {
@@ -730,6 +933,20 @@ async function main() {
   }
   console.log(`Catálogo: ${cat.modelos.length} famílias com data · ` +
     `descartadas ${cat.semData} entradas sem data e ${cat.antesDoMarco} anteriores ao marco zero`);
+
+  /* O guia-modelos não derruba o job: se a AA mudar de schema e sobrarem
+     poucas famílias com Intelligence, o arquivo anterior continua no ar. */
+  if (guia.comIntelligence < 40) {
+    const rotulo = guia.comIntelligence === 1 ? 'família' : 'famílias';
+    console.log(`::warning::O guia-modelos saiu com só ${guia.comIntelligence} ${rotulo} com ` +
+      'Intelligence Index (esperado: 40+). assets/guia-modelos.json NÃO foi reescrito — ' +
+      'o anterior continua valendo.');
+  } else if (!dry) {
+    await writeFile(GUIA_MODELOS_PATH, JSON.stringify(guiaOut), 'utf8');
+    console.log(`Salvo: ${GUIA_MODELOS_PATH}`);
+  }
+  console.log(`Guia de modelos: ${guia.familias.length} famílias · ` +
+    `${guia.comIntelligence} com Intelligence Index · ${guiaVariantes} variantes`);
   console.log(`Modelos: ${models.length} · Benchmarks: ${benchmarks.length} · Tier: ${r.tier} · Data: ${fetchedAt.slice(0, 10)}`);
   console.log(`Intelligence Index: versão ${versaoIndice ?? '?'} · Escada de esforço: ${escada.length} famílias`);
   console.log(`Preço: ${comPreco}/${nTop} linhas · Velocidade: ${comVeloc}/${nTop} linhas`);
