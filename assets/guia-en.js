@@ -30,121 +30,108 @@
   const AA_METHOD_URL = 'https://artificialanalysis.ai/methodology/intelligence-benchmarking';
 
   /* ─── THE CATEGORIES ───
-     Each category = ONE user question, answered by ONE primary benchmark
-     (currently the three are composite indices from AA itself). The support
-     benchmarks measure the same area in different ways: they appear only as cross-references
-     in "how we measure" and in the "other tests" row — never in the position calculation.
-     Rule when building the list: a category only exists where the data still separates
-     the models. This is why there is no Mathematics category — AIME is saturated
-     (>99%) and does not distinguish current top models.
+     Each category = ONE user question, answered by ONE AA index. "Overall
+     capability" uses the Intelligence Index v5; the other four use domain
+     indices that v5 now delivers on the free route. Support benchmarks appear
+     only as cross-references in "how we measure" and in the "other tests" row —
+     never in the position calculation.
 
-     Stagnant support benchmarks were removed (Jul/24/2026): MMLU-Pro, LiveCodeBench, and
-     AIME 2025 did not evaluate current top models — matching 0/20 and only
-     generating "—". At runtime, supports matching fewer than 5 of the top 20 models in the
-     main ranking are also hidden (safeguard against future staleness).
-     With the free key NO support exists (they are all Pro-only): the "support" block and
-     the "see other tests" button do not render. They are intentionally declared —
-     they will return on their own if the key becomes Pro.
+     ── What v5 changed (Nov/17/2026) ──
+     The Intelligence Index is no longer the average of four blocks with
+     separate coding/agentic indices. It is now nine evaluations in four
+     categories of 25%: knowledge work, coding, science and general. AA does not
+     publish a separate coding index in v5, so the "Coding" and "Agents and
+     automation" tabs are gone.
 
-     ── Reduction from 5 to 3 categories (Aug/5/2026) ──
-     AA shut down the legacy endpoint and started serving individual benchmarks
-     only on the Pro tier ($417/month). With the free key, only the 3 composite
-     indices remain, and two categories lost their foundation:
+     ── Why only four of the six domain indices became tabs ──
+       • Finance, Legal and Healthcare answer professional questions of their
+         own, with distinct audiences.
+       • Engineering is here because it is the domain index with the largest
+         amplitude in this collection — the 20th model sits further from the
+         leader than in Finance or Strategy, so the tab shows differences the
+         overall score does not.
+       • Strategy and operations and Economics were left out: in this
+         collection their lists repeat Finance (rho 0.97 and 0.99) and are the
+         most compressed. They remain in benchmarks.json in case AA publishes
+         their composition and the distinction becomes worth a tab.
 
-       • "Research and reasoning" (was HLE) — the available substitute would be
-         GPQA Diamond, but it is saturated (3.0 point spread in the top-15
-         vs. a standard error of 1.59: the top positions are noise) and, worse, is
-         an ingredient of the Intelligence Index itself. HLE was the most independent
-         and has no free source: Scale's leaderboard stopped in Apr/2026 and
-         aggregators covering the frontier publish numbers self-reported by
-         the manufacturers themselves.
-       • "Instructions and data" (was IFBench + AA-LCR) — no equivalent on the free tier.
+     ── ⚠ DOMAIN INDEX COMPOSITION ──
+     The Intelligence Index methodology page does not detail the tests or
+     weights of any domain index. The only exception is Healthcare and medicine,
+     which the page says includes MLCR-AA. That is why domain tabs appear
+     WITHOUT `composition`, with a `note` saying so — the guide renders normally
+     without it (see `renderPanel`). Do not invent weights.
 
-     If the key becomes Pro, the pipeline restores the individual benchmarks on its own and
-     these categories can return.
+     The lists sort similarly (rho 0.96–0.99 across indices in this collection).
+     That is measured at runtime by `spearman()` and declared in each tab's "how
+     we measure" section via `overlapLine()`. The tabs exist because the
+     questions and the MAGNITUDES change — not because they produce independent
+     orders. Methodology checked at AA_METHOD_URL. */
 
-     ── ⚠ WHAT THESE THREE INDICES ACTUALLY ARE (Aug/5/2026) ──
-     The Intelligence Index v4.1 is the weighted average of FOUR blocks:
-     Agents 34% · Code 24% · Scientific reasoning 24% · General 18%.
-     And the other two indices delivered by the free key ARE two of those blocks:
-     `coding_index` = Code block, `agentic_index` = Agents block. That is,
-     58% of the score on the first tab is literally the content of the other two.
+  // Used in domain tabs whose composition AA does not publish. It is a statement
+  // about what the consulted methodology does NOT contain — not a guess at weights.
+  const DOMAIN_NOTE = 'Artificial Analysis does not detail this domain index’s composition on the ' +
+    'Intelligence Index methodology page — that is why the tab appears without a list of tests and weights.';
 
-     Two consequences for anyone working here:
-       1. The first tab does NOT measure conversation, writing, or summarization — zero weight. That
-          is why it stopped being called "General use" (which promised exactly
-          that) and became "General capability", with a `caveat` saying what was left
-          out. Do not describe it again as "the everyday model".
-       2. The three lists sort almost identically (rho ~0.96; see `spearman()`, which
-          calculates the number at runtime instead of hardcoding it in the text). This is
-          declared in the "how we measure" section of each tab, via `overlapLine()`. The tabs
-          continue to exist because they answer different questions and the
-          MAGNITUDES differ — not because they produce independent orders.
-     Weights verified in the AA methodology (AA_METHOD_URL). */
   const CATEGORIES = [
     {
       id: 'geral',
       label: 'Overall capability',
       question: 'Reasoning, knowledge and difficult tasks — the model’s capability ceiling.',
       primary: 'artificial_analysis_intelligence_index',
-      support: ['gpqa_diamond', 'hle'],
+      support: [],
       // The weights live here, and not in the `description` of benchmarks.json, because the
       // JSON only brings the list of acronyms — and it's the weight that changes the reading of the score.
       composition: {
-        intro: '<b>v4.1</b>, a weighted average of four blocks',
+        intro: '<b>v5</b>, a weighted average of four categories of 25%',
         parts: [
-          { part: 'Agents', weight: '34%', tests: 'GDPval-AA v2 (20%) — professional tasks across 44 occupations; τ³-Banking (14%) — service tasks using tools' },
-          { part: 'Coding', weight: '24%', tests: 'Terminal-Bench v2.1 (16%) — real software engineering; SciCode (8%) — scientific computing' },
-          { part: 'Scientific reasoning', weight: '24%', tests: 'Humanity’s Last Exam (12%); GPQA Diamond (6%) — doctoral level; CritPt (6%) — research physics' },
-          { part: 'General', weight: '18%', tests: 'AA-Omniscience (12%) — knowledge and hallucination rate; AA-LCR (6%) — long-document reading' },
+          { part: 'Knowledge work', weight: '25%', tests: 'AA-Briefcase v1.1 (15%) — multi-week knowledge-work projects with deliverables; AutomationBench-AA (5%) — SaaS workflow automation with REST tools; GDP.pdf (5%) — answers grounded in a long PDF' },
+          { part: 'Coding', weight: '25%', tests: 'FrontierCode-AA 2.0 (15%) — changes to open-source repositories; Terminal-Bench 4.0 (10%) — tasks executed in a terminal' },
+          { part: 'Science', weight: '25%', tests: 'Terminal-Bench-Science 0.1 (15%) — scientific research tasks in a terminal; CritPt v2, hard subset (10%) — research physics' },
+          { part: 'General', weight: '25%', tests: 'AA-Omniscience v1.1 (15%) — knowledge and hallucination, split into 10% accuracy and 5% non-hallucination; HLE-Diamond (10%) — 1,000 questions, 500 reasoning and 500 knowledge' },
         ],
       },
-      // What the index does NOT measure. Previously the page promised exactly this.
-      caveat: 'None of the nine tests measures conversation, writing or summarization quality. ' +
-              'This score reflects the model’s ceiling on difficult tasks, not its everyday usefulness — ' +
-              'almost any model on this list can write an email or summarize text.',
-      // Answers the question that disappeared along with the "Research and
-      // reasoning" category. Honest version: the reason isn't an "external" correlation
-      // (GPQA is an ingredient in the index — citing it as proof was circular),
-      // but rather that the research block is ALREADY built into this score.
-      note: 'There is no separate research ranking because research is already included here: ' +
-            'the scientific-reasoning block represents 24% of the score — Humanity’s Last Exam (12%), ' +
-            'GPQA Diamond (6%) and CritPt (6%), all at doctoral level. ' +
+      // What the index does NOT measure. The suite is task-based, not conversational.
+      caveat: 'The suite is primarily text-based and in English; AA benchmarks visual reasoning, speech and multilingual performance separately, outside this index. ' +
+              'The score is the model’s ceiling on difficult tasks, not its quality for everyday conversation.',
+      // Answers the question that disappeared with the "Research and reasoning"
+      // category: the science block is already built into this score.
+      note: 'There is no separate research tab because science is already included here: ' +
+            '25% of the total, with Terminal-Bench-Science (15%) and CritPt v2 (10%). ' +
             'This same list applies to academic work.',
     },
     {
-      id: 'codigo',
-      label: 'Coding',
-      question: 'Write, review and fix code.',
-      primary: 'artificial_analysis_coding_index',
-      support: ['scicode'],
-      // This index is one of the four blocks of the Intelligence Index — declared
-      // here so that "how we measure" can tell the reader this with the correct weight.
-      blockLabel: 'Coding', blockWeight: '24%',
-      composition: {
-        intro: 'a closer look at the <b>coding</b> block of the Intelligence Index (24% of the overall score)',
-        parts: [
-          { part: 'Terminal-Bench v2.1', weight: '2/3', tests: 'verified software-engineering and systems-administration tasks' },
-          { part: 'SciCode', weight: '1/3', tests: 'scientific-computing problems in Python' },
-        ],
-      },
-      caveat: 'Both tests cover back-end and command-line work. <b>Artificial Analysis does not evaluate front-end work</b> — ' +
-              'this score says nothing about interface development.',
+      id: 'financas',
+      label: 'Finance and accounting',
+      question: 'Analyse numbers, financial statements and accounting tasks.',
+      primary: 'artificial_analysis_finance_and_accounting_index',
+      support: [],
+      note: DOMAIN_NOTE,
     },
     {
-      id: 'agentes',
-      label: 'Agents and automation',
-      question: 'Complete tasks autonomously using terminals, tools and APIs.',
-      primary: 'artificial_analysis_agentic_index',
-      support: ['terminalbench_v2_1', 'tau2_telecom'],
-      blockLabel: 'Agents', blockWeight: '34%',
-      composition: {
-        intro: 'a closer look at the <b>agents</b> block of the Intelligence Index (34% of the overall score, the largest block)',
-        parts: [
-          { part: 'GDPval-AA v2', weight: '20/34', tests: 'real economic-value tasks across 44 occupations' },
-          { part: 'τ³-Banking', weight: '14/34', tests: 'multi-step financial service with information retrieval and tool use' },
-        ],
-      },
+      id: 'direito',
+      label: 'Legal',
+      question: 'Read cases, draft filings and review legal documents.',
+      primary: 'artificial_analysis_legal_index',
+      support: [],
+      note: DOMAIN_NOTE,
+    },
+    {
+      id: 'saude',
+      label: 'Healthcare and medicine',
+      question: 'Interpret medical records and clinical content.',
+      primary: 'artificial_analysis_healthcare_and_medical_index',
+      support: [],
+      note: 'AA states that this index includes MLCR-AA, long medical-record reasoning; ' +
+            'the other components and weights are not detailed on the methodology page consulted.',
+    },
+    {
+      id: 'engenharia',
+      label: 'Engineering',
+      question: 'Solve technical problems in design, calculation and execution.',
+      primary: 'artificial_analysis_engineering_index',
+      support: [],
+      note: DOMAIN_NOTE,
     },
   ];
 
@@ -234,8 +221,7 @@
   }
 
   /* ─── Rank correlation between two rankings ───
-     Serves to DECLARE to the reader how much two tabs repeat the same order —
-     necessary because the three categories are the same index and two blocks of it.
+     Serves to DECLARE to the reader how much one tab repeats another's order.
      Calculated at runtime, intentionally: if AA changes the index composition,
      the number on the site follows it instead of becoming an old statement hardcoded in
      text. Ranks are recalculated WITHIN the intersection (using the position in
@@ -266,37 +252,33 @@
     return { on: a.filter(k => b.has(k)).length, total: a.length };
   }
 
-  /* Overlap phrase from "how we measure": which other category/ies
-     does this list repeat the order of, with the measured number. The first tab (the full
-     index) is compared against the other two; each block is compared against the
-     full index it is part of. */
+  /* Overlap phrase from "how we measure": which other tab has the most
+     similar order to this one, with the measured number. It does NOT claim that
+     one is a block of the other — domain indices are their own measures,
+     independent of the Intelligence Index; the similarity is empirical and
+     computed here. */
   function overlapLine(cat) {
     const mine = primaryBench(cat);
     if (!mine) return '';
-    const others = CATEGORIES.filter(c => c.id !== cat.id && primaryBench(c));
-    const bits = others.map(o => {
-      const ob = primaryBench(o);
-      const s = spearman(mine, ob);
-      if (!s) return null;
-      const ov = topOverlap(mine, ob);
-      // Decimal comma: the rest of the page is pt-BR.
-      const rho = s.rho.toFixed(2).replace('.', ',');
-      return `<b>${escapeHtml(o.label)}</b> ${rho} ` +
-             `<span class="qm-ov-detail">(${s.n} models in common; ${ov.on} of the top ${ov.total} overlap)</span>`;
-    }).filter(Boolean);
-    if (!bits.length) return '';
+    const outros = CATEGORIES
+      .filter(c => c.id !== cat.id && primaryBench(c))
+      .map(o => {
+        const ob = primaryBench(o);
+        const s = spearman(mine, ob);
+        if (!s) return null;
+        return { cat: o, ...s, ov: topOverlap(mine, ob) };
+      })
+      .filter(Boolean)
+      .sort((a, b) => b.rho - a.rho);
+    if (!outros.length) return '';
 
-    const why = cat.id === 'geral'
-      ? 'The other two tabs are blocks of <em>this same</em> index — Coding represents 24% and Agents 34%. Together they make up 58% of this score.'
-      : `This list is the <b>${escapeHtml(cat.blockLabel || cat.label)}</b> block of the ` +
-        `<b>Overall capability</b> (${escapeHtml(cat.blockWeight || '')} of its score), isolated — ` +
-        'it is not an independent measure.';
-
+    const best = outros[0];
+    const rho = best.rho.toFixed(2);
     return `<p><span class="qm-mtag qm-mtag-warn">overlap</span>
-      ${why} This is why the lists rank similarly — rank correlation:
-      ${bits.join(' · ')}.
-      What changes across tabs is less the order than the <b>distance</b> between models:
-      a model may lead clearly in one block and tie in another.</p>`;
+      The closest list to this one is <b>${escapeHtml(best.cat.label)}</b>, with a rank correlation of
+      ${rho} <span class="qm-ov-detail">(${best.n} models in common; ${best.ov.on} of the top ${best.ov.total} overlap)</span>.
+      The closer to 1, the more the two tabs repeat the same order — what changes across tabs
+      is less the order than the <b>distance</b> between models.</p>`;
   }
 
   // ─── Company mark (same source as the ruler: data.js) ───
@@ -717,9 +699,11 @@
   function renderMeta() {
     // Same format as the timeline and free tiers header — see fmtDataBR.
     const d = bmData.fetched_at ? fmtDataBR(bmData.fetched_at) : '';
+    const versao = bmData.intelligence_index_version;
     const el = document.getElementById('qm-meta');
     if (el) {
-      el.textContent = `${bmData.models_total} models tracked · ${bmData.benchmarks.length} benchmarks` +
+      el.textContent = `${bmData.models_total} models tracked · ${bmData.benchmarks.length} indices` +
+        (versao ? ` · Intelligence Index v${versao}` : '') +
         (d ? ` · data from ${d}` : '');
     }
     const upd = document.getElementById('qm-updated');
