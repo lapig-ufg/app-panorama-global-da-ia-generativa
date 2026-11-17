@@ -51,9 +51,10 @@
          Finanças ou Estratégia, então a aba mostra diferenças que a nota geral
          não deixa ver.
        • Estratégia e operações e Economia ficaram de fora: nesta coleta, suas
-         listas repetem Finanças (rho 0,97 e 0,99) e são as mais comprimidas.
-         Continuam no benchmarks.json, caso a AA publique a composição e a
-         distinção passe a valer uma aba.
+         listas repetem Finanças (rho 0,97 e 0,99); Estratégia é a mais
+         comprimida (17,4 pontos entre o 1º e o 20º) e Economia tem 19/20 do
+         topo igual ao da capacidade geral. Continuam no benchmarks.json, caso a
+         AA publique a composição e a distinção passe a valer uma aba.
 
      ── ⚠ COMPOSIÇÃO DOS ÍNDICES DE DOMÍNIO ──
      A página de metodologia do Intelligence Index não detalha os testes nem os

@@ -51,9 +51,11 @@
          leader than in Finance or Strategy, so the tab shows differences the
          overall score does not.
        • Strategy and operations and Economics were left out: in this
-         collection their lists repeat Finance (rho 0.97 and 0.99) and are the
-         most compressed. They remain in benchmarks.json in case AA publishes
-         their composition and the distinction becomes worth a tab.
+         collection their lists repeat Finance (rho 0.97 and 0.99); Strategy is
+         the most compressed (17.4 points between 1st and 20th) and Economics
+         has 19/20 of its top-20 equal to overall capability. They remain in
+         benchmarks.json in case AA publishes their composition and the
+         distinction becomes worth a tab.
 
      ── ⚠ DOMAIN INDEX COMPOSITION ──
      The Intelligence Index methodology page does not detail the tests or
