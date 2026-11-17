@@ -12,7 +12,7 @@
 
 import { writeFile, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import vm from 'node:vm';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -51,12 +51,19 @@ async function loadDataJs(fields) {
   return ctx.__X;
 }
 
-/* Os 3 índices compostos da AA — tudo que a chave free entrega. Todos em
-   escala 0–100 (só os benchmarks individuais vêm em fração). */
+/* Os sete índices da v5 — tudo que a chave free entrega. Todos em escala
+   0–100. Os índices antigos de coding e agentic não existem mais na v5: vêm
+   null em todos os modelos e foram substituídos por índices de domínio.
+   A composição de cada índice está na metodologia da AA
+   (https://artificialanalysis.ai/methodology/intelligence-benchmarking). */
 const BENCHMARKS_FREE = [
-  { key: 'artificial_analysis_intelligence_index', label: 'Intelligence Index', category: 'Inteligência', description: 'Composite AA de raciocínio geral (v4.1: GDPval-AA, τ³-Banking, Terminal-Bench, SciCode, AA-LCR, AA-Omniscience, HLE, GPQA Diamond, CritPt)', unit: 'índice (0–100)', is_fraction: false, en: { category: 'Intelligence', description: 'AA composite for general reasoning (v4.1: GDPval-AA, τ³-Banking, Terminal-Bench, SciCode, AA-LCR, AA-Omniscience, HLE, GPQA Diamond, CritPt)', unit: 'index (0–100)' } },
-  { key: 'artificial_analysis_coding_index', label: 'Coding Index', category: 'Coding', description: 'Composite AA de código, derivado de um subconjunto das avaliações do Intelligence Index', unit: 'índice (0–100)', is_fraction: false, en: { category: 'Coding', description: 'AA coding composite, derived from a subset of the Intelligence Index evaluations', unit: 'index (0–100)' } },
-  { key: 'artificial_analysis_agentic_index', label: 'Agentic Index', category: 'Agents', description: 'Composite AA de uso autônomo de ferramentas e terminal', unit: 'índice (0–100)', is_fraction: false, en: { category: 'Agents', description: 'AA composite for autonomous tool and terminal use', unit: 'index (0–100)' } },
+  { key: 'artificial_analysis_intelligence_index', label: 'Intelligence Index', category: 'Inteligência', description: 'Índice composto da AA — média de quatro blocos de 25%: trabalho de conhecimento, código, ciência e geral (v5)', unit: 'índice (0–100)', is_fraction: false, en: { label: 'Intelligence Index', category: 'Intelligence', description: 'AA composite — average of four 25% blocks: knowledge work, coding, science and general (v5)', unit: 'index (0–100)' } },
+  { key: 'artificial_analysis_finance_and_accounting_index', label: 'Finanças e contabilidade', category: 'Finanças', description: 'Índice de domínio da AA para finanças e contabilidade', unit: 'índice (0–100)', is_fraction: false, en: { label: 'Finance and accounting', category: 'Finance', description: 'AA domain index for finance and accounting', unit: 'index (0–100)' } },
+  { key: 'artificial_analysis_strategy_and_ops_index', label: 'Estratégia e operações', category: 'Estratégia', description: 'Índice de domínio da AA para estratégia e operações', unit: 'índice (0–100)', is_fraction: false, en: { label: 'Strategy and operations', category: 'Strategy', description: 'AA domain index for strategy and operations', unit: 'index (0–100)' } },
+  { key: 'artificial_analysis_legal_index', label: 'Direito', category: 'Direito', description: 'Índice de domínio da AA para direito', unit: 'índice (0–100)', is_fraction: false, en: { label: 'Legal', category: 'Legal', description: 'AA domain index for legal work', unit: 'index (0–100)' } },
+  { key: 'artificial_analysis_healthcare_and_medical_index', label: 'Saúde e medicina', category: 'Saúde', description: 'Índice de domínio da AA para saúde e medicina; inclui o MLCR-AA, de raciocínio sobre registros médicos longos', unit: 'índice (0–100)', is_fraction: false, en: { label: 'Healthcare and medicine', category: 'Health', description: 'AA domain index for healthcare and medicine; includes MLCR-AA, long medical-record reasoning', unit: 'index (0–100)' } },
+  { key: 'artificial_analysis_engineering_index', label: 'Engenharia', category: 'Engenharia', description: 'Índice de domínio da AA para engenharia', unit: 'índice (0–100)', is_fraction: false, en: { label: 'Engineering', category: 'Engineering', description: 'AA domain index for engineering', unit: 'index (0–100)' } },
+  { key: 'artificial_analysis_economics_index', label: 'Economia', category: 'Economia', description: 'Índice de domínio da AA para economia', unit: 'índice (0–100)', is_fraction: false, en: { label: 'Economics', category: 'Economics', description: 'AA domain index for economics', unit: 'index (0–100)' } },
 ];
 
 /* Benchmarks individuais — só com chave Pro. Mantidos aqui para que a migração
@@ -115,6 +122,20 @@ function tokenSpeed(model) {
   return getValue(perf, ['median_output_tokens_per_second', 'tok_per_sec', 'tokens_per_second', 'output_tokens_per_second', 'throughput_tokens_per_second']);
 }
 
+/* Custo por tarefa do Intelligence Index, em US$. A v5 passou a publicar o
+   número em model.artificial_analysis_intelligence_index_cost.cost_per_task
+   (objeto com total_cost), e não mais como campo solto. Devolve null quando o
+   modelo não foi avaliado no índice — nunca 0, que significaria "de graça". */
+function costPerTask(model) {
+  const c = model && model.artificial_analysis_intelligence_index_cost;
+  if (!c || typeof c !== 'object') return null;
+  const ct = c.cost_per_task;
+  const v = (ct && typeof ct === 'object') ? ct.total_cost : ct;
+  if (v == null) return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
 function creatorName(model) {
   // Schema v2 da AA: o criador virou um objeto { id, name, slug }.
   const mc = model && model.model_creator;
@@ -156,6 +177,22 @@ function splitVariant(name) {
   const m = String(name).match(/^(.*?)\s*\(([^()]*(?:\([^()]*\)[^()]*)*)\)\s*$/);
   if (!m) return { family: String(name).trim(), variant: null };
   return { family: m[1].trim(), variant: m[2].trim() };
+}
+
+/* Níveis de esforço conhecidos, na ordem em que a escada deve ser lida. */
+const EFFORT_LEVELS = ['non-reasoning', 'minimal', 'low', 'medium', 'high', 'xhigh', 'max'];
+const EFFORT_POS = new Map(EFFORT_LEVELS.map((n, i) => [n, i]));
+
+/* Regra do rótulo da variante na escada: minúsculas e só o nível.
+   A AA às vezes acrescenta sufixos depois de vírgula ("Max, Default Fallback",
+   "High, Based on gpt-oss-120b"); nesses casos vale o primeiro termo, que é o
+   nível. Rótulo sem nível conhecido ("Reasoning", "Preview", "Dec '24") fica
+   como está, em minúsculas, e é ordenado no fim da escada. */
+function effortLevel(variant) {
+  if (variant == null) return null;
+  const s = String(variant).trim().toLowerCase().replace(/\s+/g, ' ');
+  const first = s.split(',')[0].trim();
+  return EFFORT_POS.has(first) ? first : s;
 }
 
 function benchmarkScore(model, key) {
@@ -241,17 +278,76 @@ function construirCatalogo(models, canonicalCompany, marcoMs) {
   return { modelos, semData, antesDoMarco };
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   ESCADA DE ESFORÇO (effort_ladder)
+   ═══════════════════════════════════════════════════════════════
+   A mesma família aparece várias vezes na AA, uma por nível de esforço. A
+   escada mostra, lado a lado, o que cada nível compra em Intelligence Index,
+   custo por tarefa e velocidade. Só entram famílias com pelo menos DUAS
+   variantes que tenham Intelligence Index — uma "escada" de um degrau não
+   informa nada e só engordaria o arquivo. Variantes repetidas do mesmo nível
+   (ex.: "High" e "High, Default Fallback") são fundidas, ficando a de maior
+   pontuação. */
+function construirEscada(models, canonicalCompany) {
+  const familias = new Map();
+
+  for (const m of models) {
+    const intelligence = benchmarkScore(m, 'artificial_analysis_intelligence_index');
+    if (intelligence == null || Number.isNaN(intelligence)) continue;
+
+    const { family, variant } = splitVariant(modelName(m));
+    const nivel = effortLevel(variant);
+    if (!family || !nivel) continue;
+
+    const creator = canonicalCompany(creatorName(m));
+    if (!creator || creator === 'Desconhecido') continue;
+
+    const id = `${creator}|${family}`;
+    let fam = familias.get(id);
+    if (!fam) { fam = { model: family, creator, variants: new Map() }; familias.set(id, fam); }
+
+    const atual = fam.variants.get(nivel);
+    if (!atual || intelligence > atual.intelligence) {
+      fam.variants.set(nivel, {
+        variant: nivel,
+        intelligence,
+        cost_per_task: costPerTask(m),
+        tok_per_sec: tokenSpeed(m) ?? null,
+      });
+    }
+  }
+
+  return [...familias.values()]
+    .filter(f => f.variants.size >= 2)
+    .map(f => ({
+      model: f.model,
+      creator: f.creator,
+      variants: [...f.variants.values()].sort((a, b) => {
+        const pa = EFFORT_POS.has(a.variant) ? EFFORT_POS.get(a.variant) : 99;
+        const pb = EFFORT_POS.has(b.variant) ? EFFORT_POS.get(b.variant) : 99;
+        return pa - pb || a.variant.localeCompare(b.variant);
+      }),
+    }))
+    // Famílias com o degrau mais alto na frente; o desempate é estável para o
+    // diff semanal não dançar quando duas famílias empatam.
+    .sort((a, b) => {
+      const ma = Math.max(...a.variants.map(v => v.intelligence));
+      const mb = Math.max(...b.variants.map(v => v.intelligence));
+      return mb - ma || a.creator.localeCompare(b.creator) || a.model.localeCompare(b.model);
+    });
+}
+
 /* Busca uma rota inteira, seguindo a paginação (page_size = 200 hoje).
    Devolve também o tier e se a paginação fechou — sem isso o pipeline
    publicaria a primeira página e jogaria o resto fora em silêncio. */
 async function buscarRota(rota, apiKey) {
   const models = [];
-  let pagina = 1, totalPaginas = 1, tier = null, completa = false;
+  let pagina = 1, totalPaginas = 1, tier = null, completa = false, versao = null;
 
   while (pagina <= totalPaginas && pagina <= MAX_PAGINAS) {
     const url = `${API_BASE}${rota}?page=${pagina}`;
     const res = await fetch(url, { headers: { 'x-api-key': apiKey } });
-    if (!res.ok) return { erro: res.status, rota, models, tier };
+    if (!res.ok) return { erro: res.status, rota, models, tier, versao };
 
     const payload = await res.json();
     const lote = Array.isArray(payload) ? payload : (payload.data || payload.models || []);
@@ -259,19 +355,37 @@ async function buscarRota(rota, apiKey) {
 
     if (pagina === 1) {
       tier = payload.tier ?? res.headers.get('x-aa-tier') ?? null;
+      versao = payload.intelligence_index_version ?? null;
       totalPaginas = payload.pagination?.total_pages ?? 1;
       console.log(`  tier=${tier} · ${totalPaginas} página(s) · ${payload.pagination?.page_size ?? '?'} por página`);
     }
     completa = payload.pagination ? payload.pagination.has_more === false : true;
     pagina++;
   }
-  return { models, tier, totalPaginas, completa };
+  return { models, tier, totalPaginas, completa, versao };
+}
+
+/* Modo offline: lê um export cru da AA (o mesmo formato de .local/aa-free.json)
+   no lugar de chamar a API. Serve para testar sem chave e para reproduzir um
+   payload passado. Tier e versão do índice vêm do próprio arquivo. */
+async function carregarFixture(caminho) {
+  const bruto = JSON.parse(await readFile(caminho, 'utf8'));
+  const models = Array.isArray(bruto) ? bruto : (bruto.data || []);
+  return {
+    models,
+    tier: bruto.tier ?? null,
+    versao: bruto.intelligence_index_version ?? null,
+    collected_at: bruto.collected_at ?? null,
+    totalPaginas: 1,
+    completa: true,
+  };
 }
 
 async function main() {
   const apiKey = process.env.AA_API_KEY;
-  if (!apiKey) {
-    console.error('Erro: defina a variável de ambiente AA_API_KEY.');
+  const fixture = process.env.AA_FIXTURE;
+  if (!apiKey && !fixture) {
+    console.error('Erro: defina a variável de ambiente AA_API_KEY (ou AA_FIXTURE para o modo offline).');
     process.exit(1);
   }
 
@@ -279,23 +393,30 @@ async function main() {
     await loadDataJs(['canonicalCompany', 'COMPANY_COLORS', 'BENCH_ONLY_COLORS', 'MODEL_ALIASES',
                       'CREATOR_COUNTRY', 'CONFIG']);
 
-  /* Tenta o Pro primeiro: se a assinatura existir, o guia ganha os benchmarks
-     individuais de volta sozinho. 403 é a resposta esperada numa chave free —
-     não é erro, é a detecção funcionando. */
-  console.log(`Buscando ${API_BASE}${ROTA_PRO}…`);
-  let r = await buscarRota(ROTA_PRO, apiKey);
-  if (r.erro === 403) {
-    console.log('  403 — a chave não cobre o tier Pro. Usando a rota free.');
-    console.log(`Buscando ${API_BASE}${ROTA_FREE}…`);
-    r = await buscarRota(ROTA_FREE, apiKey);
-  }
-  if (r.erro) {
-    console.error(`::error::Erro na API: HTTP ${r.erro} em ${r.rota}. ` +
-      'Nada foi escrito — o benchmarks.json anterior continua valendo.');
-    process.exit(1);
+  let r;
+  if (fixture) {
+    console.log(`Modo offline: lendo ${fixture} (sem chamar a API).`);
+    r = await carregarFixture(fixture);
+  } else {
+    /* Tenta o Pro primeiro: se a assinatura existir, o guia ganha os benchmarks
+       individuais de volta sozinho. 403 é a resposta esperada numa chave free —
+       não é erro, é a detecção funcionando. */
+    console.log(`Buscando ${API_BASE}${ROTA_PRO}…`);
+    r = await buscarRota(ROTA_PRO, apiKey);
+    if (r.erro === 403) {
+      console.log('  403 — a chave não cobre o tier Pro. Usando a rota free.');
+      console.log(`Buscando ${API_BASE}${ROTA_FREE}…`);
+      r = await buscarRota(ROTA_FREE, apiKey);
+    }
+    if (r.erro) {
+      console.error(`::error::Erro na API: HTTP ${r.erro} em ${r.rota}. ` +
+        'Nada foi escrito — o benchmarks.json anterior continua valendo.');
+      process.exit(1);
+    }
   }
 
   const models = r.models;
+  const versaoIndice = (r.versao != null && Number.isFinite(Number(r.versao))) ? Number(r.versao) : null;
   const ehPro = r.tier === 'pro' || r.tier === 'commercial';
   const BENCHMARKS = ehPro ? BENCHMARKS_PRO : BENCHMARKS_FREE;
   console.log(`Modelos recebidos: ${models.length} · tier ${r.tier} · ${BENCHMARKS.length} benchmarks`);
@@ -309,10 +430,16 @@ async function main() {
     process.exit(1);
   }
 
-  const fetchedAt = new Date().toISOString();
+  /* No modo offline, usa o instante da coleta gravado no arquivo — repetir o
+     teste semanas depois não deve fingir que o payload é de hoje. Se o campo
+     faltar ou for inválido, cai no relógio local. */
+  const coletadoEm = r.collected_at ? new Date(r.collected_at) : null;
+  const fetchedAt = (coletadoEm && !Number.isNaN(coletadoEm.getTime()))
+    ? coletadoEm.toISOString()
+    : new Date().toISOString();
   let openWeightsSeen = 0;
 
-  const benchmarks = BENCHMARKS.map(b => {
+  let benchmarks = BENCHMARKS.map(b => {
     const evaluated = models
       .map(m => ({ m, score: normalizeScore(benchmarkScore(m, b.key), b.is_fraction) }))
       .filter(x => x.score != null && !Number.isNaN(x.score));
@@ -348,6 +475,9 @@ async function main() {
           score: x.score,
           release_date: releaseDate(x.m),
           price_1m_blended: priceBlended(x.m),
+          // Custo por tarefa da rodada do Intelligence Index (US$), não deste
+          // índice de domínio — é o único custo por tarefa que a AA publica.
+          cost_per_task: costPerTask(x.m),
           tok_per_sec: tokenSpeed(x.m) ?? 0,
           open_weights: ow,
         };
@@ -380,6 +510,32 @@ async function main() {
      Sem isto, uma resposta ruim da API sobrescreve em silêncio um arquivo bom,
      e o site publica uma página vazia até alguém reparar. Preferimos abortar e
      manter o benchmarks.json anterior no ar. */
+
+  /* O Intelligence Index alimenta a aba principal e o catálogo da régua. Se ele
+     vier vazio, não há publicação possível — aborta em qualquer versão. */
+  const intelligence = benchmarks.find(b => b.key === 'artificial_analysis_intelligence_index');
+  if (!intelligence || !intelligence.top.length) {
+    console.error('::error::O Intelligence Index voltou vazio em todos os modelos. ' +
+      'Nada foi escrito — o benchmarks.json anterior continua valendo. ' +
+      'Confira se a AA renomeou artificial_analysis_intelligence_index.');
+    process.exit(1);
+  }
+
+  /* Na v5, um índice de domínio pode vir vazio simplesmente porque a AA ainda
+     não avaliou todos os modelos nele. Nesse caso ele SAI da saída com um
+     notice e não conta para a guarda de vazios. Na v4 e anteriores, vazio
+     continua sendo sinal de chave renomeada e cai na guarda antiga. */
+  if (versaoIndice != null && versaoIndice >= 5) {
+    const descartados = benchmarks.filter(b => !b.top.length);
+    if (descartados.length) {
+      benchmarks = benchmarks.filter(b => b.top.length);
+      for (const b of descartados) {
+        console.log(`::notice::Índice "${b.key}" (${b.label}) veio vazio em todos os modelos ` +
+          `na versão ${versaoIndice} — saiu da saída desta rodada.`);
+      }
+    }
+  }
+
   const vazios = benchmarks.filter(b => !b.top.length);
 
   if (models.length < 50) {
@@ -469,15 +625,19 @@ async function main() {
       (semLink.size > 20 ? ` … (+${semLink.size - 20})` : ''));
   }
 
+  const escada = construirEscada(models, canonicalCompany);
+
   const out = {
     source: 'Artificial Analysis Data API v2',
     source_url: 'https://artificialanalysis.ai/',
     attribution: 'Dados: Artificial Analysis — artificialanalysis.ai',
     api_tier: r.tier,          // 'free' | 'pro' — o guia usa para explicar a cobertura
+    intelligence_index_version: versaoIndice,
     models_total: models.length,
     fetched_at: fetchedAt,
     has_open_weights: openWeightsSeen > 0,
     benchmarks,
+    effort_ladder: escada,
   };
 
   const EN_BY_KEY = new Map(BENCHMARKS_PRO.map(b => [b.key, b.en]));
@@ -494,9 +654,29 @@ async function main() {
       const en = EN_BY_KEY.get(b.key);
       // O spread preserva a ORDEM das chaves do arquivo português: os dois
       // arquivos continuam comparáveis linha a linha num diff.
-      return en ? { ...b, category: en.category, description: en.description, unit: en.unit } : b;
+      return en ? { ...b, label: en.label || b.label, category: en.category, description: en.description, unit: en.unit } : b;
     }),
   };
+
+  /* ─── Export cru para uso local ───
+     AA_RAW_OUT=<caminho> grava o payload no mesmo formato de .local/aa-free.json
+     (source / collected_at / tier / intelligence_index_version / data). Não é
+     dado publicado: o workflow sobe como artefato de 30 dias, nunca para assets/
+     nem para o git add. Grava também em DRY_RUN — é insumo de diagnóstico, não
+     a publicação. */
+  if (process.env.AA_RAW_OUT) {
+    const rawPath = resolve(process.env.AA_RAW_OUT);
+    const raw = {
+      source: out.source,
+      source_url: out.source_url,
+      collected_at: fetchedAt,
+      tier: r.tier,
+      intelligence_index_version: versaoIndice,
+      data: models,
+    };
+    await writeFile(rawPath, JSON.stringify(raw), 'utf8');
+    console.log(`Salvo: ${rawPath} (export cru da AA)`);
+  }
 
   /* ─── Catálogo da régua ampliada ─── */
   const cat = construirCatalogo(models, canonicalCompany, CONFIG.MARCO.getTime());
@@ -551,6 +731,7 @@ async function main() {
   console.log(`Catálogo: ${cat.modelos.length} famílias com data · ` +
     `descartadas ${cat.semData} entradas sem data e ${cat.antesDoMarco} anteriores ao marco zero`);
   console.log(`Modelos: ${models.length} · Benchmarks: ${benchmarks.length} · Tier: ${r.tier} · Data: ${fetchedAt.slice(0, 10)}`);
+  console.log(`Intelligence Index: versão ${versaoIndice ?? '?'} · Escada de esforço: ${escada.length} famílias`);
   console.log(`Preço: ${comPreco}/${nTop} linhas · Velocidade: ${comVeloc}/${nTop} linhas`);
   console.log(`Campo open_weights: ${openWeightsSeen > 0 ? `presente (${openWeightsSeen} linhas)` : 'AUSENTE na API — selo "aberto" fica oculto'}`);
   benchmarks.forEach(b => {
