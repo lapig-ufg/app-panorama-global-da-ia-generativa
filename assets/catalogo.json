@@ -3,8 +3,8 @@
   "source_url": "https://artificialanalysis.ai/",
   "attribution": "Dados: Artificial Analysis — artificialanalysis.ai",
   "api_tier": "free",
-  "fetched_at": "2026-11-17T15:47:03.028Z",
-  "familias_total": 503,
+  "fetched_at": "2026-11-23T19:56:43.280Z",
+  "familias_total": 514,
   "descartados": {
     "entradas_sem_data": 0,
     "anteriores_ao_marco": 0
@@ -3129,7 +3129,7 @@
       "mod": "Granite 4.2 30B",
       "emp": "IBM",
       "date": "2026-08-25",
-      "score": null,
+      "score": 5.5,
       "open_weights": null
     },
     {
@@ -3199,14 +3199,21 @@
       "mod": "K2 Horizon 0.9B",
       "emp": "Institute of Foundation Models",
       "date": "2026-09-03",
-      "score": null,
+      "score": 2.7,
       "open_weights": null
     },
     {
       "mod": "K2 Horizon 3.7B",
       "emp": "Institute of Foundation Models",
       "date": "2026-09-03",
-      "score": null,
+      "score": 8,
+      "open_weights": null
+    },
+    {
+      "mod": "K2 Horizon 32B",
+      "emp": "Institute of Foundation Models",
+      "date": "2026-09-03",
+      "score": 13.9,
       "open_weights": null
     },
     {
@@ -3220,14 +3227,14 @@
       "mod": "K2 Horizon 7B",
       "emp": "Institute of Foundation Models",
       "date": "2026-09-03",
-      "score": null,
+      "score": 10.6,
       "open_weights": null
     },
     {
       "mod": "K2 Horizon MoVA 36B A4B",
       "emp": "Institute of Foundation Models",
       "date": "2026-09-03",
-      "score": null,
+      "score": 13.8,
       "open_weights": null
     },
     {
@@ -3462,6 +3469,20 @@
       "open_weights": null
     },
     {
+      "mod": "LFM3-1.7B",
+      "emp": "Liquid AI",
+      "date": "2026-10-27",
+      "score": 6,
+      "open_weights": null
+    },
+    {
+      "mod": "LFM3-VL-2B",
+      "emp": "Liquid AI",
+      "date": "2026-10-27",
+      "score": 1.7,
+      "open_weights": null
+    },
+    {
       "mod": "Gemini 4 Carbon",
       "emp": "Google",
       "date": "2026-10-28",
@@ -3529,6 +3550,62 @@
       "emp": "Alibaba",
       "date": "2026-11-16",
       "score": 42.9,
+      "open_weights": null
+    },
+    {
+      "mod": "JoyAI-VL-Preview",
+      "emp": "Joy Future Academy",
+      "date": "2026-11-17",
+      "score": 28,
+      "open_weights": null
+    },
+    {
+      "mod": "Astra for Law 6.2",
+      "emp": "OpenAI",
+      "date": "2026-11-17",
+      "score": null,
+      "open_weights": null
+    },
+    {
+      "mod": "GPT-6.2 Astra",
+      "emp": "OpenAI",
+      "date": "2026-11-17",
+      "score": 62.1,
+      "open_weights": null
+    },
+    {
+      "mod": "GPT-6.2 Sol",
+      "emp": "OpenAI",
+      "date": "2026-11-17",
+      "score": 57.3,
+      "open_weights": null
+    },
+    {
+      "mod": "Gemini 4 Neon",
+      "emp": "Google",
+      "date": "2026-11-18",
+      "score": 61.4,
+      "open_weights": null
+    },
+    {
+      "mod": "Inkling 2 Mini",
+      "emp": "Thinking Machines",
+      "date": "2026-11-20",
+      "score": 20.1,
+      "open_weights": null
+    },
+    {
+      "mod": "LingSante-3.1-flash",
+      "emp": "InclusionAI",
+      "date": "2026-11-22",
+      "score": null,
+      "open_weights": null
+    },
+    {
+      "mod": "Ling-3.2-air",
+      "emp": "InclusionAI",
+      "date": "2026-11-23",
+      "score": 23.4,
       "open_weights": null
     }
   ]
