@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "generated_at": "2026-11-17T16:47:11Z",
+  "generated_at": "2026-11-23T20:00:43Z",
   "sources": {
     "lmarena": {
       "name": "LMArena",
       "url": "https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset",
-      "collected_at": "2026-11-17T13:50:02.126201+00:00",
+      "collected_at": "2026-11-23T19:59:51.985807+00:00",
       "measures": "preferência humana em conversas às cegas (Arena Score, Bradley-Terry)",
       "license": "CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/ (dataset: https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset)",
       "attribution": "LMArena — Arena Leaderboard Dataset (Hugging Face)",
@@ -15,7 +15,7 @@
     "epoch": {
       "name": "Epoch AI",
       "url": "https://epoch.ai/benchmarks",
-      "collected_at": "2026-11-17T13:49:38.487130+00:00",
+      "collected_at": "2026-11-23T19:56:41.540538+00:00",
       "measures": "benchmarks de fronteira em matemática, ciência, código, agentes e conhecimento",
       "license": "CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/ (https://epoch.ai/benchmarks/use-this-data); benchmarks de terceiros no hub mantêm a licença original",
       "attribution": "Epoch AI — Capabilities & benchmarking (epoch.ai)",
@@ -25,7 +25,7 @@
     "vals": {
       "name": "Vals AI",
       "url": "https://vals.ai",
-      "collected_at": "2026-11-17T13:49:38.531999+00:00",
+      "collected_at": "2026-11-23T19:56:41.592783+00:00",
       "measures": "benchmarks de trabalho real em finanças, direito, saúde, código e agentes",
       "license": "Sem licença de republicação identificada (conferido em 17/11/2026): conteúdo © Vals AI, todos os direitos reservados (https://vals.ai; não encontrei termos de uso nem licença de dados publicados no site). Os números não foram incluídos.",
       "attribution": "Vals AI — vals.ai",
@@ -39,45 +39,45 @@
         {
           "effort": "max",
           "overall": {
-            "rating": 1512.0,
-            "lower": 1506.6,
-            "upper": 1517.5,
-            "votes": 20511,
-            "rank": 4,
-            "n": 421
+            "rating": 1511.8,
+            "lower": 1506.5,
+            "upper": 1517.0,
+            "votes": 22920,
+            "rank": 5,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1527.4,
-              "lower": 1517.4,
-              "upper": 1537.3,
-              "votes": 4008,
-              "rank": 9,
-              "n": 416
+              "rating": 1528.1,
+              "lower": 1518.6,
+              "upper": 1537.7,
+              "votes": 4418,
+              "rank": 10,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1514.1,
-              "lower": 1504.2,
-              "upper": 1524.0,
-              "votes": 4672,
-              "rank": 4,
-              "n": 419
+              "rating": 1515.1,
+              "lower": 1505.6,
+              "upper": 1524.6,
+              "votes": 5251,
+              "rank": 5,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1520.0,
-              "lower": 1511.6,
-              "upper": 1528.5,
-              "votes": 6217,
+              "rating": 1521.8,
+              "lower": 1513.7,
+              "upper": 1529.9,
+              "votes": 6996,
               "rank": 5,
-              "n": 421
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1492.0,
-              "lower": 1480.0,
-              "upper": 1504.0,
-              "votes": 2740,
-              "rank": 14,
-              "n": 419
+              "rating": 1489.8,
+              "lower": 1478.5,
+              "upper": 1501.1,
+              "votes": 3092,
+              "rank": 16,
+              "n": 425
             }
           }
         }
@@ -141,6 +141,53 @@
       }
     },
     "claude-fable-5-2": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1477.2,
+            "lower": 1468.8,
+            "upper": 1485.6,
+            "votes": 5842,
+            "rank": 27,
+            "n": 427
+          },
+          "categories": {
+            "coding": {
+              "rating": 1486.2,
+              "lower": 1467.1,
+              "upper": 1505.2,
+              "votes": 958,
+              "rank": 49,
+              "n": 422
+            },
+            "creative_writing": {
+              "rating": 1511.4,
+              "lower": 1493.7,
+              "upper": 1529.2,
+              "votes": 1254,
+              "rank": 6,
+              "n": 425
+            },
+            "instruction_following": {
+              "rating": 1487.5,
+              "lower": 1473.2,
+              "upper": 1501.8,
+              "votes": 1833,
+              "rank": 17,
+              "n": 427
+            },
+            "multi_turn": {
+              "rating": 1458.1,
+              "lower": 1437.7,
+              "upper": 1478.5,
+              "votes": 858,
+              "rank": 54,
+              "n": 425
+            }
+          }
+        }
+      ],
       "epoch": {
         "effort": "max",
         "benchmarks": {
@@ -200,45 +247,45 @@
         {
           "effort": "high",
           "overall": {
-            "rating": 1397.7,
-            "lower": 1391.5,
-            "upper": 1403.8,
-            "votes": 13894,
-            "rank": 160,
-            "n": 421
+            "rating": 1397.8,
+            "lower": 1392.1,
+            "upper": 1403.5,
+            "votes": 18415,
+            "rank": 166,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1453.6,
-              "lower": 1442.5,
-              "upper": 1464.7,
-              "votes": 3278,
-              "rank": 96,
-              "n": 416
+              "rating": 1452.2,
+              "lower": 1442.3,
+              "upper": 1462.0,
+              "votes": 4369,
+              "rank": 106,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1336.5,
-              "lower": 1324.7,
-              "upper": 1348.3,
-              "votes": 3195,
-              "rank": 189,
-              "n": 419
+              "rating": 1334.6,
+              "lower": 1324.0,
+              "upper": 1345.2,
+              "votes": 4250,
+              "rank": 194,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1411.2,
-              "lower": 1401.8,
-              "upper": 1420.7,
-              "votes": 4952,
-              "rank": 104,
-              "n": 421
+              "rating": 1408.4,
+              "lower": 1399.9,
+              "upper": 1416.9,
+              "votes": 6589,
+              "rank": 116,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1387.8,
-              "lower": 1373.9,
-              "upper": 1401.6,
-              "votes": 2164,
-              "rank": 174,
-              "n": 419
+              "rating": 1388.8,
+              "lower": 1376.4,
+              "upper": 1401.1,
+              "votes": 2855,
+              "rank": 176,
+              "n": 425
             }
           }
         }
@@ -298,87 +345,87 @@
             "rating": 1502.2,
             "lower": 1498.6,
             "upper": 1505.8,
-            "votes": 73632,
-            "rank": 7,
-            "n": 421
+            "votes": 73350,
+            "rank": 8,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1530.8,
-              "lower": 1525.0,
-              "upper": 1536.7,
-              "votes": 18770,
-              "rank": 7,
-              "n": 416
+              "rating": 1530.7,
+              "lower": 1524.9,
+              "upper": 1536.6,
+              "votes": 18683,
+              "rank": 9,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1486.0,
-              "lower": 1479.7,
-              "upper": 1492.5,
-              "votes": 16529,
-              "rank": 12,
-              "n": 419
+              "rating": 1486.8,
+              "lower": 1480.4,
+              "upper": 1493.2,
+              "votes": 16509,
+              "rank": 13,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1515.2,
-              "lower": 1509.8,
-              "upper": 1520.6,
-              "votes": 25967,
+              "rating": 1515.0,
+              "lower": 1509.6,
+              "upper": 1520.4,
+              "votes": 25861,
               "rank": 8,
-              "n": 421
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1493.5,
-              "lower": 1486.8,
-              "upper": 1500.3,
-              "votes": 11535,
-              "rank": 13,
-              "n": 419
+              "rating": 1493.4,
+              "lower": 1486.7,
+              "upper": 1500.2,
+              "votes": 11493,
+              "rank": 14,
+              "n": 425
             }
           }
         },
         {
           "effort": "max",
           "overall": {
-            "rating": 1506.5,
-            "lower": 1501.8,
-            "upper": 1511.2,
-            "votes": 35670,
-            "rank": 5,
-            "n": 421
+            "rating": 1506.2,
+            "lower": 1501.5,
+            "upper": 1510.9,
+            "votes": 35495,
+            "rank": 6,
+            "n": 427
           },
           "categories": {
             "coding": {
               "rating": 1532.0,
               "lower": 1524.7,
-              "upper": 1539.3,
-              "votes": 8842,
-              "rank": 6,
-              "n": 416
+              "upper": 1539.2,
+              "votes": 8804,
+              "rank": 7,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1494.0,
-              "lower": 1486.1,
-              "upper": 1501.9,
-              "votes": 8161,
-              "rank": 8,
-              "n": 419
+              "rating": 1493.8,
+              "lower": 1485.9,
+              "upper": 1501.7,
+              "votes": 8113,
+              "rank": 11,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1517.8,
-              "lower": 1511.3,
-              "upper": 1524.4,
-              "votes": 12378,
+              "rating": 1517.4,
+              "lower": 1510.9,
+              "upper": 1524.0,
+              "votes": 12310,
               "rank": 7,
-              "n": 421
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1498.8,
-              "lower": 1490.0,
-              "upper": 1507.6,
-              "votes": 5388,
-              "rank": 11,
-              "n": 419
+              "rating": 1498.6,
+              "lower": 1489.8,
+              "upper": 1507.4,
+              "votes": 5380,
+              "rank": 12,
+              "n": 425
             }
           }
         }
@@ -438,45 +485,45 @@
         {
           "effort": "high",
           "overall": {
-            "rating": 1513.7,
-            "lower": 1507.7,
-            "upper": 1519.6,
-            "votes": 15793,
-            "rank": 3,
-            "n": 421
+            "rating": 1514.1,
+            "lower": 1508.5,
+            "upper": 1519.8,
+            "votes": 18959,
+            "rank": 4,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1543.4,
-              "lower": 1532.5,
-              "upper": 1554.3,
-              "votes": 3460,
-              "rank": 2,
-              "n": 416
+              "rating": 1542.8,
+              "lower": 1532.6,
+              "upper": 1553.0,
+              "votes": 4152,
+              "rank": 3,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1531.5,
-              "lower": 1520.2,
-              "upper": 1542.9,
-              "votes": 3800,
-              "rank": 3,
-              "n": 419
+              "rating": 1532.5,
+              "lower": 1522.0,
+              "upper": 1543.0,
+              "votes": 4561,
+              "rank": 2,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1535.2,
-              "lower": 1526.0,
-              "upper": 1544.3,
-              "votes": 5477,
-              "rank": 3,
-              "n": 421
+              "rating": 1533.4,
+              "lower": 1524.8,
+              "upper": 1541.9,
+              "votes": 6613,
+              "rank": 4,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1502.4,
-              "lower": 1488.7,
-              "upper": 1516.1,
-              "votes": 2170,
+              "rating": 1503.5,
+              "lower": 1490.9,
+              "upper": 1516.0,
+              "votes": 2627,
               "rank": 10,
-              "n": 419
+              "n": 425
             }
           }
         }
@@ -548,45 +595,45 @@
         {
           "effort": "xhigh",
           "overall": {
-            "rating": 1469.1,
-            "lower": 1463.1,
-            "upper": 1475.1,
-            "votes": 14355,
-            "rank": 34,
-            "n": 421
+            "rating": 1469.4,
+            "lower": 1463.7,
+            "upper": 1475.0,
+            "votes": 17616,
+            "rank": 36,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1500.9,
-              "lower": 1489.8,
-              "upper": 1512.0,
-              "votes": 3301,
-              "rank": 24,
-              "n": 416
+              "rating": 1499.6,
+              "lower": 1489.4,
+              "upper": 1509.8,
+              "votes": 3993,
+              "rank": 28,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1466.2,
-              "lower": 1454.6,
-              "upper": 1477.7,
-              "votes": 3366,
-              "rank": 24,
-              "n": 419
+              "rating": 1464.6,
+              "lower": 1453.9,
+              "upper": 1475.2,
+              "votes": 4128,
+              "rank": 27,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1487.3,
-              "lower": 1478.0,
-              "upper": 1496.6,
-              "votes": 4901,
-              "rank": 16,
-              "n": 421
+              "rating": 1482.6,
+              "lower": 1474.0,
+              "upper": 1491.2,
+              "votes": 6018,
+              "rank": 21,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1461.8,
-              "lower": 1448.2,
-              "upper": 1475.4,
-              "votes": 2141,
-              "rank": 49,
-              "n": 419
+              "rating": 1462.8,
+              "lower": 1450.4,
+              "upper": 1475.2,
+              "votes": 2641,
+              "rank": 47,
+              "n": 425
             }
           }
         }
@@ -747,45 +794,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1434.7,
-            "lower": 1430.2,
-            "upper": 1439.2,
-            "votes": 35094,
-            "rank": 90,
-            "n": 421
+            "rating": 1435.0,
+            "lower": 1430.5,
+            "upper": 1439.5,
+            "votes": 34934,
+            "rank": 92,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1453.4,
-              "lower": 1446.5,
-              "upper": 1460.4,
-              "votes": 9718,
-              "rank": 100,
-              "n": 416
+              "rating": 1453.7,
+              "lower": 1446.7,
+              "upper": 1460.6,
+              "votes": 9661,
+              "rank": 99,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1420.4,
-              "lower": 1412.4,
-              "upper": 1428.5,
-              "votes": 7251,
-              "rank": 71,
-              "n": 419
+              "rating": 1421.1,
+              "lower": 1413.1,
+              "upper": 1429.1,
+              "votes": 7234,
+              "rank": 74,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1419.5,
-              "lower": 1413.1,
-              "upper": 1425.9,
-              "votes": 12616,
-              "rank": 91,
-              "n": 421
+              "rating": 1420.2,
+              "lower": 1413.9,
+              "upper": 1426.6,
+              "votes": 12552,
+              "rank": 94,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1445.4,
-              "lower": 1436.9,
-              "upper": 1453.9,
-              "votes": 5792,
+              "rating": 1445.9,
+              "lower": 1437.4,
+              "upper": 1454.4,
+              "votes": 5775,
               "rank": 78,
-              "n": 419
+              "n": 425
             }
           }
         }
@@ -826,45 +873,45 @@
         {
           "effort": "high",
           "overall": {
-            "rating": 1499.6,
-            "lower": 1495.4,
-            "upper": 1503.8,
-            "votes": 62675,
-            "rank": 10,
-            "n": 421
+            "rating": 1500.9,
+            "lower": 1496.9,
+            "upper": 1504.9,
+            "votes": 76031,
+            "rank": 11,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1510.1,
-              "lower": 1504.0,
-              "upper": 1516.2,
-              "votes": 15812,
-              "rank": 15,
-              "n": 416
+              "rating": 1509.4,
+              "lower": 1503.5,
+              "upper": 1515.2,
+              "votes": 19012,
+              "rank": 17,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1493.2,
-              "lower": 1486.5,
-              "upper": 1499.9,
-              "votes": 14262,
+              "rating": 1495.0,
+              "lower": 1488.6,
+              "upper": 1501.4,
+              "votes": 17288,
               "rank": 9,
-              "n": 419
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1493.1,
-              "lower": 1487.4,
-              "upper": 1498.7,
-              "votes": 22697,
+              "rating": 1494.7,
+              "lower": 1489.2,
+              "upper": 1500.1,
+              "votes": 27665,
               "rank": 13,
-              "n": 421
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1503.1,
-              "lower": 1495.8,
-              "upper": 1510.4,
-              "votes": 9462,
-              "rank": 9,
-              "n": 419
+              "rating": 1500.9,
+              "lower": 1494.0,
+              "upper": 1507.8,
+              "votes": 11478,
+              "rank": 11,
+              "n": 425
             }
           }
         }
@@ -920,45 +967,45 @@
         {
           "effort": "high",
           "overall": {
-            "rating": 1529.5,
-            "lower": 1524.1,
-            "upper": 1534.8,
-            "votes": 20779,
+            "rating": 1527.7,
+            "lower": 1522.7,
+            "upper": 1532.7,
+            "votes": 28856,
             "rank": 2,
-            "n": 421
+            "n": 427
           },
           "categories": {
             "coding": {
               "rating": 1540.2,
-              "lower": 1530.9,
-              "upper": 1549.6,
-              "votes": 4833,
-              "rank": 3,
-              "n": 416
+              "lower": 1531.9,
+              "upper": 1548.5,
+              "votes": 6727,
+              "rank": 4,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1532.7,
-              "lower": 1522.7,
-              "upper": 1542.8,
-              "votes": 4928,
-              "rank": 1,
-              "n": 419
+              "rating": 1531.6,
+              "lower": 1522.6,
+              "upper": 1540.7,
+              "votes": 6772,
+              "rank": 3,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1536.1,
-              "lower": 1528.1,
-              "upper": 1544.1,
-              "votes": 7564,
+              "rating": 1536.6,
+              "lower": 1529.3,
+              "upper": 1543.9,
+              "votes": 10407,
               "rank": 2,
-              "n": 421
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1547.6,
-              "lower": 1535.5,
-              "upper": 1559.7,
-              "votes": 2927,
+              "rating": 1545.1,
+              "lower": 1534.7,
+              "upper": 1555.6,
+              "votes": 4116,
               "rank": 2,
-              "n": 419
+              "n": 425
             }
           }
         }
@@ -1009,6 +1056,18 @@
           "furniture_assembly": {
             "score": 72.5,
             "label": "Furniture Assembly"
+          },
+          "spireclimb": {
+            "score": 16.7,
+            "label": "SpireClimb"
+          },
+          "spireclimb_sts1_a20_heart": {
+            "score": 13.3,
+            "label": "Spireclimb Sts1 A20 Heart"
+          },
+          "spireclimb_sts2_a10": {
+            "score": 20.0,
+            "label": "Spireclimb Sts2 A10"
           }
         }
       }
@@ -1018,45 +1077,45 @@
         {
           "effort": "high",
           "overall": {
-            "rating": 1538.4,
-            "lower": 1528.8,
-            "upper": 1547.9,
-            "votes": 4273,
+            "rating": 1538.9,
+            "lower": 1529.3,
+            "upper": 1548.4,
+            "votes": 4255,
             "rank": 1,
-            "n": 421
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1564.4,
-              "lower": 1545.7,
-              "upper": 1583.0,
-              "votes": 1069,
+              "rating": 1563.4,
+              "lower": 1544.7,
+              "upper": 1582.2,
+              "votes": 1059,
               "rank": 1,
-              "n": 416
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1532.5,
-              "lower": 1512.5,
-              "upper": 1552.6,
-              "votes": 1007,
-              "rank": 2,
-              "n": 419
+              "rating": 1535.0,
+              "lower": 1515.1,
+              "upper": 1555.0,
+              "votes": 1006,
+              "rank": 1,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1539.5,
-              "lower": 1523.1,
-              "upper": 1555.8,
-              "votes": 1421,
+              "rating": 1539.3,
+              "lower": 1522.9,
+              "upper": 1555.6,
+              "votes": 1415,
               "rank": 1,
-              "n": 421
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1569.2,
-              "lower": 1543.8,
-              "upper": 1594.6,
-              "votes": 605,
+              "rating": 1567.1,
+              "lower": 1541.8,
+              "upper": 1592.5,
+              "votes": 602,
               "rank": 1,
-              "n": 419
+              "n": 425
             }
           }
         }
@@ -1103,6 +1162,18 @@
           "furniture_assembly": {
             "score": 77.5,
             "label": "Furniture Assembly"
+          },
+          "spireclimb": {
+            "score": 31.2,
+            "label": "SpireClimb"
+          },
+          "spireclimb_sts1_a20_heart": {
+            "score": 25.0,
+            "label": "Spireclimb Sts1 A20 Heart"
+          },
+          "spireclimb_sts2_a10": {
+            "score": 37.3,
+            "label": "Spireclimb Sts2 A10"
           }
         }
       }
@@ -1112,45 +1183,241 @@
         {
           "effort": "high",
           "overall": {
-            "rating": 1502.1,
-            "lower": 1493.1,
+            "rating": 1502.2,
+            "lower": 1493.2,
             "upper": 1511.1,
-            "votes": 4741,
-            "rank": 8,
-            "n": 421
+            "votes": 4737,
+            "rank": 9,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1515.9,
-              "lower": 1497.5,
-              "upper": 1534.2,
-              "votes": 1044,
-              "rank": 12,
-              "n": 416
+              "rating": 1512.4,
+              "lower": 1494.3,
+              "upper": 1530.5,
+              "votes": 1075,
+              "rank": 15,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1509.5,
-              "lower": 1489.7,
-              "upper": 1529.2,
-              "votes": 1007,
-              "rank": 5,
-              "n": 419
+              "rating": 1509.6,
+              "lower": 1490.1,
+              "upper": 1529.1,
+              "votes": 1025,
+              "rank": 7,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1519.2,
-              "lower": 1504.2,
-              "upper": 1534.2,
-              "votes": 1700,
-              "rank": 6,
-              "n": 421
+              "rating": 1514.9,
+              "lower": 1499.9,
+              "upper": 1529.9,
+              "votes": 1689,
+              "rank": 9,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1485.5,
-              "lower": 1463.2,
-              "upper": 1507.8,
-              "votes": 709,
-              "rank": 20,
-              "n": 419
+              "rating": 1489.4,
+              "lower": 1467.8,
+              "upper": 1511.0,
+              "votes": 765,
+              "rank": 17,
+              "n": 425
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "xhigh",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 96.8,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 100.0,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 88.1,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 87.8,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 70.5,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 70.9,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 60.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 65.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "frontiermath_erdos": {
+            "score": 2.9,
+            "label": "FrontierMath Erdős"
+          },
+          "furniture_assembly": {
+            "score": 57.5,
+            "label": "Furniture Assembly"
+          },
+          "spireclimb": {
+            "score": 13.5,
+            "label": "SpireClimb"
+          },
+          "spireclimb_sts1_a20_heart": {
+            "score": 15.0,
+            "label": "Spireclimb Sts1 A20 Heart"
+          },
+          "spireclimb_sts2_a10": {
+            "score": 12.0,
+            "label": "Spireclimb Sts2 A10"
+          }
+        }
+      }
+    },
+    "gemini-4-neon": {
+      "lmarena": [
+        {
+          "effort": "high",
+          "overall": {
+            "rating": 1522.9,
+            "lower": 1514.5,
+            "upper": 1531.3,
+            "votes": 5611,
+            "rank": 3,
+            "n": 427
+          },
+          "categories": {
+            "coding": {
+              "rating": 1555.0,
+              "lower": 1538.0,
+              "upper": 1571.9,
+              "votes": 1320,
+              "rank": 2,
+              "n": 422
+            },
+            "creative_writing": {
+              "rating": 1521.2,
+              "lower": 1502.7,
+              "upper": 1539.7,
+              "votes": 1226,
+              "rank": 4,
+              "n": 425
+            },
+            "instruction_following": {
+              "rating": 1535.1,
+              "lower": 1521.1,
+              "upper": 1549.0,
+              "votes": 1945,
+              "rank": 3,
+              "n": 427
+            },
+            "multi_turn": {
+              "rating": 1523.5,
+              "lower": 1502.2,
+              "upper": 1544.9,
+              "votes": 856,
+              "rank": 3,
+              "n": 425
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "xhigh",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 96.3,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 100.0,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 91.2,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 97.6,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 98.1,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 75.2,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 83.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 85.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "furniture_assembly": {
+            "score": 89.2,
+            "label": "Furniture Assembly"
+          }
+        }
+      }
+    },
+    "gemma-4-26b-a4b": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1434.2,
+            "lower": 1426.7,
+            "upper": 1441.6,
+            "votes": 6060,
+            "rank": 94,
+            "n": 427
+          },
+          "categories": {
+            "coding": {
+              "rating": 1446.8,
+              "lower": 1432.0,
+              "upper": 1461.5,
+              "votes": 1437,
+              "rank": 115,
+              "n": 422
+            },
+            "creative_writing": {
+              "rating": 1402.6,
+              "lower": 1384.3,
+              "upper": 1420.8,
+              "votes": 998,
+              "rank": 98,
+              "n": 425
+            },
+            "instruction_following": {
+              "rating": 1420.8,
+              "lower": 1407.4,
+              "upper": 1434.3,
+              "votes": 1732,
+              "rank": 91,
+              "n": 427
+            },
+            "multi_turn": {
+              "rating": 1441.2,
+              "lower": 1424.2,
+              "upper": 1458.2,
+              "votes": 1138,
+              "rank": 90,
+              "n": 425
             }
           }
         }
@@ -1161,45 +1428,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1442.5,
-            "lower": 1435.1,
-            "upper": 1450.0,
-            "votes": 6130,
-            "rank": 73,
-            "n": 421
+            "rating": 1442.9,
+            "lower": 1435.5,
+            "upper": 1450.3,
+            "votes": 6118,
+            "rank": 74,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1459.0,
-              "lower": 1444.0,
-              "upper": 1474.0,
-              "votes": 1411,
-              "rank": 87,
-              "n": 416
+              "rating": 1459.3,
+              "lower": 1444.3,
+              "upper": 1474.3,
+              "votes": 1407,
+              "rank": 91,
+              "n": 422
             },
             "creative_writing": {
               "rating": 1415.1,
               "lower": 1396.5,
               "upper": 1433.7,
-              "votes": 975,
-              "rank": 76,
-              "n": 419
+              "votes": 971,
+              "rank": 80,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1432.8,
-              "lower": 1419.2,
-              "upper": 1446.4,
-              "votes": 1801,
-              "rank": 72,
-              "n": 421
+              "rating": 1433.5,
+              "lower": 1419.9,
+              "upper": 1447.1,
+              "votes": 1796,
+              "rank": 75,
+              "n": 427
             },
             "multi_turn": {
               "rating": 1452.0,
               "lower": 1434.8,
               "upper": 1469.2,
-              "votes": 1121,
-              "rank": 66,
-              "n": 419
+              "votes": 1120,
+              "rank": 69,
+              "n": 425
             }
           }
         }
@@ -1210,45 +1477,45 @@
         {
           "effort": "max",
           "overall": {
-            "rating": 1469.4,
-            "lower": 1465.3,
-            "upper": 1473.4,
-            "votes": 54143,
-            "rank": 33,
-            "n": 421
+            "rating": 1469.5,
+            "lower": 1465.5,
+            "upper": 1473.6,
+            "votes": 53923,
+            "rank": 35,
+            "n": 427
           },
           "categories": {
             "coding": {
               "rating": 1487.9,
               "lower": 1481.9,
               "upper": 1493.9,
-              "votes": 14364,
-              "rank": 41,
-              "n": 416
+              "votes": 14291,
+              "rank": 43,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1459.3,
-              "lower": 1452.5,
-              "upper": 1466.1,
-              "votes": 10851,
-              "rank": 26,
-              "n": 419
+              "rating": 1459.5,
+              "lower": 1452.8,
+              "upper": 1466.3,
+              "votes": 10821,
+              "rank": 28,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1466.7,
-              "lower": 1461.2,
-              "upper": 1472.2,
-              "votes": 18594,
-              "rank": 38,
-              "n": 421
+              "rating": 1467.0,
+              "lower": 1461.6,
+              "upper": 1472.5,
+              "votes": 18497,
+              "rank": 40,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1469.3,
-              "lower": 1462.2,
-              "upper": 1476.5,
-              "votes": 8616,
-              "rank": 41,
-              "n": 419
+              "rating": 1469.6,
+              "lower": 1462.5,
+              "upper": 1476.8,
+              "votes": 8591,
+              "rank": 42,
+              "n": 425
             }
           }
         }
@@ -1305,45 +1572,45 @@
         {
           "effort": "max",
           "overall": {
-            "rating": 1474.9,
-            "lower": 1470.3,
-            "upper": 1479.6,
-            "votes": 31604,
-            "rank": 26,
-            "n": 421
+            "rating": 1474.6,
+            "lower": 1470.1,
+            "upper": 1479.1,
+            "votes": 35486,
+            "rank": 30,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1498.5,
-              "lower": 1490.8,
-              "upper": 1506.2,
-              "votes": 7348,
-              "rank": 28,
-              "n": 416
+              "rating": 1499.7,
+              "lower": 1492.3,
+              "upper": 1507.1,
+              "votes": 8144,
+              "rank": 27,
+              "n": 422
             },
             "creative_writing": {
               "rating": 1459.2,
-              "lower": 1451.1,
-              "upper": 1467.4,
-              "votes": 7185,
-              "rank": 27,
-              "n": 419
+              "lower": 1451.4,
+              "upper": 1467.0,
+              "votes": 8069,
+              "rank": 29,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1483.1,
-              "lower": 1476.3,
-              "upper": 1489.9,
-              "votes": 10480,
-              "rank": 20,
-              "n": 421
+              "rating": 1481.2,
+              "lower": 1474.7,
+              "upper": 1487.7,
+              "votes": 11771,
+              "rank": 23,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1474.4,
-              "lower": 1465.0,
-              "upper": 1483.7,
-              "votes": 4682,
-              "rank": 33,
-              "n": 419
+              "rating": 1476.4,
+              "lower": 1467.5,
+              "upper": 1485.4,
+              "votes": 5269,
+              "rank": 32,
+              "n": 425
             }
           }
         }
@@ -1388,44 +1655,44 @@
           "effort": "single",
           "overall": {
             "rating": 1471.7,
-            "lower": 1467.3,
-            "upper": 1476.1,
-            "votes": 51019,
-            "rank": 30,
-            "n": 421
+            "lower": 1467.5,
+            "upper": 1476.0,
+            "votes": 57426,
+            "rank": 32,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1509.4,
-              "lower": 1502.9,
-              "upper": 1515.9,
-              "votes": 12885,
-              "rank": 16,
-              "n": 416
+              "rating": 1509.3,
+              "lower": 1503.1,
+              "upper": 1515.6,
+              "votes": 14221,
+              "rank": 18,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1442.1,
-              "lower": 1435.0,
-              "upper": 1449.1,
-              "votes": 10973,
+              "rating": 1443.4,
+              "lower": 1436.6,
+              "upper": 1450.2,
+              "votes": 12384,
               "rank": 44,
-              "n": 419
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1479.8,
-              "lower": 1473.8,
-              "upper": 1485.7,
-              "votes": 17601,
-              "rank": 22,
-              "n": 421
+              "rating": 1480.0,
+              "lower": 1474.3,
+              "upper": 1485.8,
+              "votes": 19675,
+              "rank": 25,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1471.4,
-              "lower": 1463.7,
-              "upper": 1479.1,
-              "votes": 7811,
-              "rank": 38,
-              "n": 419
+              "rating": 1472.9,
+              "lower": 1465.5,
+              "upper": 1480.3,
+              "votes": 8724,
+              "rank": 36,
+              "n": 425
             }
           }
         }
@@ -1465,45 +1732,45 @@
         {
           "effort": "xhigh",
           "overall": {
-            "rating": 1431.0,
-            "lower": 1426.8,
-            "upper": 1435.4,
-            "votes": 40598,
-            "rank": 94,
-            "n": 421
+            "rating": 1430.9,
+            "lower": 1426.6,
+            "upper": 1435.2,
+            "votes": 40411,
+            "rank": 96,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1467.0,
-              "lower": 1460.4,
-              "upper": 1473.6,
-              "votes": 10982,
-              "rank": 79,
-              "n": 416
+              "rating": 1467.2,
+              "lower": 1460.6,
+              "upper": 1473.9,
+              "votes": 10926,
+              "rank": 80,
+              "n": 422
             },
             "creative_writing": {
               "rating": 1396.4,
               "lower": 1388.9,
               "upper": 1403.9,
-              "votes": 8484,
-              "rank": 107,
-              "n": 419
+              "votes": 8444,
+              "rank": 111,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1437.2,
-              "lower": 1431.1,
-              "upper": 1443.3,
-              "votes": 14426,
-              "rank": 65,
-              "n": 421
+              "rating": 1436.6,
+              "lower": 1430.5,
+              "upper": 1442.7,
+              "votes": 14335,
+              "rank": 68,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1434.5,
-              "lower": 1426.4,
-              "upper": 1442.5,
-              "votes": 6573,
-              "rank": 96,
-              "n": 419
+              "rating": 1435.0,
+              "lower": 1426.9,
+              "upper": 1443.0,
+              "votes": 6554,
+              "rank": 98,
+              "n": 425
             }
           }
         }
@@ -1555,45 +1822,45 @@
         {
           "effort": "xhigh",
           "overall": {
-            "rating": 1448.8,
-            "lower": 1444.7,
-            "upper": 1453.0,
-            "votes": 48778,
-            "rank": 56,
-            "n": 421
+            "rating": 1448.9,
+            "lower": 1444.8,
+            "upper": 1453.1,
+            "votes": 48549,
+            "rank": 58,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1485.4,
-              "lower": 1479.1,
-              "upper": 1491.7,
-              "votes": 12782,
-              "rank": 48,
-              "n": 416
+              "rating": 1485.5,
+              "lower": 1479.2,
+              "upper": 1491.8,
+              "votes": 12731,
+              "rank": 50,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1413.7,
-              "lower": 1406.7,
-              "upper": 1420.8,
-              "votes": 10485,
-              "rank": 80,
-              "n": 419
+              "rating": 1414.1,
+              "lower": 1407.1,
+              "upper": 1421.2,
+              "votes": 10457,
+              "rank": 82,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1455.4,
-              "lower": 1449.7,
-              "upper": 1461.1,
-              "votes": 17409,
-              "rank": 50,
-              "n": 421
+              "rating": 1455.2,
+              "lower": 1449.4,
+              "upper": 1460.9,
+              "votes": 17319,
+              "rank": 51,
+              "n": 427
             },
             "multi_turn": {
               "rating": 1455.0,
               "lower": 1447.4,
               "upper": 1462.5,
-              "votes": 7871,
-              "rank": 57,
-              "n": 419
+              "votes": 7859,
+              "rank": 59,
+              "n": 425
             }
           }
         }
@@ -1645,45 +1912,45 @@
         {
           "effort": "max",
           "overall": {
-            "rating": 1444.8,
-            "lower": 1438.6,
-            "upper": 1450.9,
-            "votes": 13498,
-            "rank": 66,
-            "n": 421
+            "rating": 1445.7,
+            "lower": 1439.9,
+            "upper": 1451.5,
+            "votes": 16525,
+            "rank": 65,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1485.6,
-              "lower": 1473.6,
-              "upper": 1497.6,
-              "votes": 2830,
-              "rank": 46,
-              "n": 416
+              "rating": 1490.4,
+              "lower": 1479.5,
+              "upper": 1501.4,
+              "votes": 3504,
+              "rank": 40,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1419.6,
-              "lower": 1407.4,
-              "upper": 1431.8,
-              "votes": 2982,
-              "rank": 72,
-              "n": 419
+              "rating": 1422.6,
+              "lower": 1411.4,
+              "upper": 1433.9,
+              "votes": 3592,
+              "rank": 70,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1463.5,
-              "lower": 1453.5,
-              "upper": 1473.5,
-              "votes": 4262,
+              "rating": 1465.6,
+              "lower": 1456.4,
+              "upper": 1474.8,
+              "votes": 5245,
               "rank": 41,
-              "n": 421
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1448.9,
-              "lower": 1434.8,
-              "upper": 1463.1,
-              "votes": 1961,
-              "rank": 70,
-              "n": 419
+              "rating": 1451.1,
+              "lower": 1438.2,
+              "upper": 1464.1,
+              "votes": 2403,
+              "rank": 71,
+              "n": 425
             }
           }
         }
@@ -1751,6 +2018,53 @@
       }
     },
     "gpt-6-1-terra": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1426.0,
+            "lower": 1418.5,
+            "upper": 1433.5,
+            "votes": 9100,
+            "rank": 106,
+            "n": 427
+          },
+          "categories": {
+            "coding": {
+              "rating": 1480.8,
+              "lower": 1466.8,
+              "upper": 1494.8,
+              "votes": 1933,
+              "rank": 61,
+              "n": 422
+            },
+            "creative_writing": {
+              "rating": 1402.0,
+              "lower": 1387.5,
+              "upper": 1416.5,
+              "votes": 1991,
+              "rank": 100,
+              "n": 425
+            },
+            "instruction_following": {
+              "rating": 1437.4,
+              "lower": 1425.6,
+              "upper": 1449.2,
+              "votes": 2909,
+              "rank": 67,
+              "n": 427
+            },
+            "multi_turn": {
+              "rating": 1432.0,
+              "lower": 1415.1,
+              "upper": 1449.0,
+              "votes": 1331,
+              "rank": 104,
+              "n": 425
+            }
+          }
+        }
+      ],
       "epoch": {
         "effort": "max",
         "benchmarks": {
@@ -1805,50 +2119,209 @@
         }
       }
     },
+    "gpt-6-2-astra": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1413.3,
+            "lower": 1404.7,
+            "upper": 1422.0,
+            "votes": 5268,
+            "rank": 142,
+            "n": 427
+          },
+          "categories": {
+            "coding": {
+              "rating": 1446.5,
+              "lower": 1429.3,
+              "upper": 1463.8,
+              "votes": 1173,
+              "rank": 118,
+              "n": 422
+            },
+            "creative_writing": {
+              "rating": 1421.2,
+              "lower": 1401.3,
+              "upper": 1441.0,
+              "votes": 963,
+              "rank": 73,
+              "n": 425
+            },
+            "instruction_following": {
+              "rating": 1420.0,
+              "lower": 1405.8,
+              "upper": 1434.1,
+              "votes": 1767,
+              "rank": 95,
+              "n": 427
+            },
+            "multi_turn": {
+              "rating": 1417.0,
+              "lower": 1394.2,
+              "upper": 1439.8,
+              "votes": 712,
+              "rank": 130,
+              "n": 425
+            }
+          }
+        }
+      ],
+      "epoch": {
+        "effort": "max",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 96.8,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 100.0,
+            "label": "AIME 2024-2025"
+          },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 92.6,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 100.0,
+            "label": "FrontierMath Tier 4"
+          },
+          "ebr_bench": {
+            "score": 92.4,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 78.5,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 78.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 95.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "mirrorcode": {
+            "score": 67.8,
+            "label": "MirrorCode"
+          },
+          "frontiermath_erdos": {
+            "score": 10.3,
+            "label": "FrontierMath Erdős"
+          },
+          "furniture_assembly": {
+            "score": 89.2,
+            "label": "Furniture Assembly"
+          },
+          "spireclimb": {
+            "score": 41.3,
+            "label": "SpireClimb"
+          },
+          "spireclimb_sts1_a20_heart": {
+            "score": 33.3,
+            "label": "Spireclimb Sts1 A20 Heart"
+          },
+          "spireclimb_sts2_a10": {
+            "score": 49.3,
+            "label": "Spireclimb Sts2 A10"
+          }
+        }
+      }
+    },
+    "gpt-6-2-sol": {
+      "lmarena": [
+        {
+          "effort": "max",
+          "overall": {
+            "rating": 1413.7,
+            "lower": 1405.2,
+            "upper": 1422.1,
+            "votes": 5526,
+            "rank": 141,
+            "n": 427
+          },
+          "categories": {
+            "coding": {
+              "rating": 1449.8,
+              "lower": 1433.3,
+              "upper": 1466.3,
+              "votes": 1298,
+              "rank": 109,
+              "n": 422
+            },
+            "creative_writing": {
+              "rating": 1390.0,
+              "lower": 1371.1,
+              "upper": 1409.0,
+              "votes": 1117,
+              "rank": 123,
+              "n": 425
+            },
+            "instruction_following": {
+              "rating": 1429.7,
+              "lower": 1415.8,
+              "upper": 1443.5,
+              "votes": 1926,
+              "rank": 80,
+              "n": 427
+            },
+            "multi_turn": {
+              "rating": 1423.2,
+              "lower": 1401.7,
+              "upper": 1444.7,
+              "votes": 782,
+              "rank": 117,
+              "n": 425
+            }
+          }
+        }
+      ]
+    },
     "gpt-6-astra": {
       "lmarena": [
         {
           "effort": "max",
           "overall": {
-            "rating": 1439.6,
-            "lower": 1434.1,
-            "upper": 1445.1,
-            "votes": 18745,
-            "rank": 78,
-            "n": 421
+            "rating": 1441.1,
+            "lower": 1435.8,
+            "upper": 1446.3,
+            "votes": 21568,
+            "rank": 79,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1494.2,
-              "lower": 1484.5,
-              "upper": 1503.9,
-              "votes": 4229,
-              "rank": 34,
-              "n": 416
+              "rating": 1494.4,
+              "lower": 1485.3,
+              "upper": 1503.6,
+              "votes": 4848,
+              "rank": 35,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1421.5,
-              "lower": 1411.1,
-              "upper": 1431.8,
-              "votes": 4134,
-              "rank": 70,
-              "n": 419
+              "rating": 1420.7,
+              "lower": 1410.9,
+              "upper": 1430.5,
+              "votes": 4724,
+              "rank": 75,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1455.7,
-              "lower": 1447.3,
-              "upper": 1464.0,
-              "votes": 5922,
-              "rank": 49,
-              "n": 421
+              "rating": 1454.9,
+              "lower": 1446.9,
+              "upper": 1462.8,
+              "votes": 6811,
+              "rank": 52,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1447.7,
-              "lower": 1435.5,
-              "upper": 1459.9,
-              "votes": 2683,
-              "rank": 73,
-              "n": 419
+              "rating": 1445.3,
+              "lower": 1433.9,
+              "upper": 1456.8,
+              "votes": 3092,
+              "rank": 80,
+              "n": 425
             }
           }
         }
@@ -1921,45 +2394,45 @@
         {
           "effort": "max",
           "overall": {
-            "rating": 1388.5,
-            "lower": 1384.4,
-            "upper": 1392.6,
-            "votes": 108508,
-            "rank": 173,
-            "n": 421
+            "rating": 1390.6,
+            "lower": 1386.6,
+            "upper": 1394.5,
+            "votes": 120692,
+            "rank": 176,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1431.2,
-              "lower": 1425.5,
-              "upper": 1436.9,
-              "votes": 24889,
-              "rank": 141,
-              "n": 416
+              "rating": 1433.7,
+              "lower": 1428.0,
+              "upper": 1439.4,
+              "votes": 27621,
+              "rank": 139,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1359.4,
-              "lower": 1353.3,
-              "upper": 1365.5,
-              "votes": 24499,
-              "rank": 157,
-              "n": 419
+              "rating": 1360.5,
+              "lower": 1354.5,
+              "upper": 1366.6,
+              "votes": 27215,
+              "rank": 162,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1403.2,
-              "lower": 1397.9,
-              "upper": 1408.6,
-              "votes": 36846,
-              "rank": 125,
-              "n": 421
+              "rating": 1403.9,
+              "lower": 1398.6,
+              "upper": 1409.2,
+              "votes": 41017,
+              "rank": 128,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1392.8,
-              "lower": 1386.4,
-              "upper": 1399.2,
-              "votes": 15948,
-              "rank": 165,
-              "n": 419
+              "rating": 1396.1,
+              "lower": 1389.8,
+              "upper": 1402.4,
+              "votes": 17819,
+              "rank": 166,
+              "n": 425
             }
           }
         }
@@ -2023,45 +2496,45 @@
         {
           "effort": "max",
           "overall": {
-            "rating": 1396.8,
-            "lower": 1391.3,
-            "upper": 1402.2,
-            "votes": 20430,
-            "rank": 163,
-            "n": 421
+            "rating": 1397.9,
+            "lower": 1392.8,
+            "upper": 1403.1,
+            "votes": 23792,
+            "rank": 165,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1449.5,
-              "lower": 1440.0,
-              "upper": 1459.0,
-              "votes": 4725,
-              "rank": 106,
-              "n": 416
+              "rating": 1447.6,
+              "lower": 1438.7,
+              "upper": 1456.6,
+              "votes": 5514,
+              "rank": 113,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1370.3,
-              "lower": 1360.1,
-              "upper": 1380.6,
-              "votes": 4354,
-              "rank": 145,
-              "n": 419
+              "rating": 1371.1,
+              "lower": 1361.5,
+              "upper": 1380.7,
+              "votes": 5150,
+              "rank": 149,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1410.0,
-              "lower": 1402.0,
-              "upper": 1418.1,
-              "votes": 6913,
-              "rank": 107,
-              "n": 421
+              "rating": 1410.2,
+              "lower": 1402.6,
+              "upper": 1417.9,
+              "votes": 8111,
+              "rank": 112,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1414.3,
-              "lower": 1402.9,
-              "upper": 1425.7,
-              "votes": 3206,
-              "rank": 131,
-              "n": 419
+              "rating": 1415.0,
+              "lower": 1404.3,
+              "upper": 1425.8,
+              "votes": 3731,
+              "rank": 136,
+              "n": 425
             }
           }
         }
@@ -2133,45 +2606,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1365.5,
-            "lower": 1361.2,
-            "upper": 1369.9,
-            "votes": 30115,
-            "rank": 197,
-            "n": 421
+            "rating": 1365.4,
+            "lower": 1361.1,
+            "upper": 1369.8,
+            "votes": 30104,
+            "rank": 202,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1379.6,
-              "lower": 1371.9,
-              "upper": 1387.3,
+              "rating": 1379.4,
+              "lower": 1371.7,
+              "upper": 1387.1,
               "votes": 6387,
-              "rank": 198,
-              "n": 416
+              "rank": 205,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1274.3,
-              "lower": 1264.5,
-              "upper": 1284.0,
-              "votes": 3892,
-              "rank": 247,
-              "n": 419
+              "rating": 1274.6,
+              "lower": 1264.9,
+              "upper": 1284.4,
+              "votes": 3885,
+              "rank": 251,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1318.0,
-              "lower": 1311.0,
-              "upper": 1325.0,
-              "votes": 7839,
-              "rank": 220,
-              "n": 421
+              "rating": 1317.8,
+              "lower": 1310.8,
+              "upper": 1324.9,
+              "votes": 7835,
+              "rank": 226,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1339.6,
-              "lower": 1330.9,
-              "upper": 1348.4,
-              "votes": 4869,
-              "rank": 218,
-              "n": 419
+              "rating": 1339.4,
+              "lower": 1330.6,
+              "upper": 1348.1,
+              "votes": 4868,
+              "rank": 222,
+              "n": 425
             }
           }
         }
@@ -2200,45 +2673,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1361.6,
-            "lower": 1351.0,
-            "upper": 1372.1,
-            "votes": 3314,
-            "rank": 201,
-            "n": 421
+            "rating": 1360.9,
+            "lower": 1350.3,
+            "upper": 1371.5,
+            "votes": 3304,
+            "rank": 207,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1394.8,
-              "lower": 1373.5,
-              "upper": 1416.1,
-              "votes": 827,
-              "rank": 184,
-              "n": 416
+              "rating": 1393.3,
+              "lower": 1372.0,
+              "upper": 1414.7,
+              "votes": 826,
+              "rank": 190,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1284.6,
-              "lower": 1259.1,
-              "upper": 1310.1,
-              "votes": 637,
-              "rank": 242,
-              "n": 419
+              "rating": 1285.6,
+              "lower": 1260.2,
+              "upper": 1311.0,
+              "votes": 634,
+              "rank": 244,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1349.6,
-              "lower": 1331.4,
-              "upper": 1367.8,
-              "votes": 1138,
-              "rank": 193,
-              "n": 421
+              "rating": 1348.0,
+              "lower": 1329.8,
+              "upper": 1366.2,
+              "votes": 1131,
+              "rank": 200,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1340.0,
-              "lower": 1313.2,
-              "upper": 1366.8,
-              "votes": 539,
-              "rank": 216,
-              "n": 419
+              "rating": 1339.1,
+              "lower": 1312.3,
+              "upper": 1365.9,
+              "votes": 541,
+              "rank": 223,
+              "n": 425
             }
           }
         }
@@ -2249,45 +2722,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1292.4,
-            "lower": 1280.8,
-            "upper": 1304.1,
-            "votes": 3184,
-            "rank": 258,
-            "n": 421
+            "rating": 1292.6,
+            "lower": 1281.0,
+            "upper": 1304.3,
+            "votes": 3169,
+            "rank": 264,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1358.4,
-              "lower": 1336.3,
-              "upper": 1380.6,
-              "votes": 809,
-              "rank": 226,
-              "n": 416
+              "rating": 1359.5,
+              "lower": 1337.4,
+              "upper": 1381.7,
+              "votes": 803,
+              "rank": 230,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1203.8,
-              "lower": 1175.4,
-              "upper": 1232.3,
-              "votes": 620,
-              "rank": 307,
-              "n": 419
+              "rating": 1203.2,
+              "lower": 1174.8,
+              "upper": 1231.7,
+              "votes": 615,
+              "rank": 313,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1272.1,
-              "lower": 1252.2,
-              "upper": 1292.1,
-              "votes": 1067,
-              "rank": 257,
-              "n": 421
+              "rating": 1271.9,
+              "lower": 1251.9,
+              "upper": 1291.9,
+              "votes": 1062,
+              "rank": 263,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1288.0,
-              "lower": 1258.8,
-              "upper": 1317.2,
-              "votes": 516,
-              "rank": 260,
-              "n": 419
+              "rating": 1290.0,
+              "lower": 1260.8,
+              "upper": 1319.2,
+              "votes": 514,
+              "rank": 263,
+              "n": 425
             }
           }
         }
@@ -2298,45 +2771,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1318.6,
-            "lower": 1307.4,
+            "rating": 1318.5,
+            "lower": 1307.3,
             "upper": 1329.7,
-            "votes": 3193,
-            "rank": 242,
-            "n": 421
+            "votes": 3174,
+            "rank": 248,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1374.2,
-              "lower": 1352.6,
-              "upper": 1395.8,
-              "votes": 810,
-              "rank": 205,
-              "n": 416
+              "rating": 1375.0,
+              "lower": 1353.3,
+              "upper": 1396.7,
+              "votes": 805,
+              "rank": 211,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1234.6,
-              "lower": 1207.4,
-              "upper": 1261.8,
-              "votes": 622,
-              "rank": 290,
-              "n": 419
+              "rating": 1234.5,
+              "lower": 1207.3,
+              "upper": 1261.7,
+              "votes": 619,
+              "rank": 295,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1298.7,
-              "lower": 1279.9,
-              "upper": 1317.6,
-              "votes": 1113,
-              "rank": 242,
-              "n": 421
+              "rating": 1299.4,
+              "lower": 1280.5,
+              "upper": 1318.3,
+              "votes": 1103,
+              "rank": 245,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1297.9,
-              "lower": 1269.3,
-              "upper": 1326.4,
-              "votes": 515,
-              "rank": 251,
-              "n": 419
+              "rating": 1299.2,
+              "lower": 1270.6,
+              "upper": 1327.9,
+              "votes": 512,
+              "rank": 255,
+              "n": 425
             }
           }
         }
@@ -2347,45 +2820,45 @@
         {
           "effort": "high",
           "overall": {
-            "rating": 1430.0,
+            "rating": 1430.1,
             "lower": 1425.4,
-            "upper": 1434.7,
-            "votes": 34582,
-            "rank": 96,
-            "n": 421
+            "upper": 1434.8,
+            "votes": 34413,
+            "rank": 98,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1464.1,
+              "rating": 1464.0,
               "lower": 1456.8,
               "upper": 1471.4,
-              "votes": 8562,
-              "rank": 82,
-              "n": 416
+              "votes": 8516,
+              "rank": 85,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1427.6,
-              "lower": 1419.7,
-              "upper": 1435.6,
-              "votes": 7732,
-              "rank": 63,
-              "n": 419
+              "rating": 1427.9,
+              "lower": 1419.9,
+              "upper": 1435.8,
+              "votes": 7711,
+              "rank": 65,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1431.2,
-              "lower": 1424.7,
-              "upper": 1437.7,
-              "votes": 12264,
-              "rank": 74,
-              "n": 421
+              "rating": 1431.3,
+              "lower": 1424.8,
+              "upper": 1437.8,
+              "votes": 12195,
+              "rank": 77,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1426.8,
-              "lower": 1418.0,
-              "upper": 1435.7,
-              "votes": 5230,
-              "rank": 108,
-              "n": 419
+              "rating": 1427.3,
+              "lower": 1418.5,
+              "upper": 1436.2,
+              "votes": 5215,
+              "rank": 110,
+              "n": 425
             }
           }
         }
@@ -2442,45 +2915,45 @@
         {
           "effort": "xhigh",
           "overall": {
-            "rating": 1399.9,
-            "lower": 1394.7,
-            "upper": 1405.2,
-            "votes": 22219,
-            "rank": 158,
-            "n": 421
+            "rating": 1400.5,
+            "lower": 1395.5,
+            "upper": 1405.6,
+            "votes": 26362,
+            "rank": 163,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1425.3,
-              "lower": 1416.0,
-              "upper": 1434.6,
-              "votes": 4876,
-              "rank": 148,
-              "n": 416
+              "rating": 1424.2,
+              "lower": 1415.4,
+              "upper": 1433.0,
+              "votes": 5720,
+              "rank": 155,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1384.0,
-              "lower": 1374.5,
-              "upper": 1393.6,
-              "votes": 5096,
-              "rank": 129,
-              "n": 419
+              "rating": 1383.0,
+              "lower": 1374.0,
+              "upper": 1392.0,
+              "votes": 6068,
+              "rank": 135,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1403.6,
-              "lower": 1395.7,
-              "upper": 1411.4,
-              "votes": 7408,
-              "rank": 124,
-              "n": 421
+              "rating": 1402.9,
+              "lower": 1395.4,
+              "upper": 1410.3,
+              "votes": 8808,
+              "rank": 133,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1396.6,
-              "lower": 1385.5,
-              "upper": 1407.8,
-              "votes": 3349,
-              "rank": 161,
-              "n": 419
+              "rating": 1395.1,
+              "lower": 1384.7,
+              "upper": 1405.5,
+              "votes": 3979,
+              "rank": 169,
+              "n": 425
             }
           }
         }
@@ -2536,45 +3009,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1443.0,
-            "lower": 1439.0,
-            "upper": 1447.1,
-            "votes": 50718,
-            "rank": 71,
-            "n": 421
+            "rating": 1444.0,
+            "lower": 1440.1,
+            "upper": 1447.9,
+            "votes": 55011,
+            "rank": 72,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1467.0,
-              "lower": 1460.9,
-              "upper": 1473.2,
-              "votes": 13407,
-              "rank": 78,
-              "n": 416
+              "rating": 1467.3,
+              "lower": 1461.4,
+              "upper": 1473.3,
+              "votes": 14398,
+              "rank": 79,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1395.1,
-              "lower": 1388.2,
-              "upper": 1402.0,
-              "votes": 11132,
-              "rank": 109,
-              "n": 419
+              "rating": 1395.3,
+              "lower": 1388.6,
+              "upper": 1401.9,
+              "votes": 12145,
+              "rank": 113,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1426.9,
-              "lower": 1421.3,
-              "upper": 1432.5,
-              "votes": 18192,
-              "rank": 81,
-              "n": 421
+              "rating": 1428.2,
+              "lower": 1422.8,
+              "upper": 1433.6,
+              "votes": 19772,
+              "rank": 82,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1442.0,
-              "lower": 1434.5,
-              "upper": 1449.5,
-              "votes": 7926,
-              "rank": 87,
-              "n": 419
+              "rating": 1441.3,
+              "lower": 1434.0,
+              "upper": 1448.5,
+              "votes": 8556,
+              "rank": 89,
+              "n": 425
             }
           }
         }
@@ -2609,50 +3082,99 @@
         }
       }
     },
+    "inkling-2-mini": {
+      "lmarena": [
+        {
+          "effort": "single",
+          "overall": {
+            "rating": 1343.7,
+            "lower": 1329.3,
+            "upper": 1358.1,
+            "votes": 1793,
+            "rank": 220,
+            "n": 427
+          },
+          "categories": {
+            "coding": {
+              "rating": 1430.9,
+              "lower": 1402.8,
+              "upper": 1459.0,
+              "votes": 436,
+              "rank": 147,
+              "n": 422
+            },
+            "creative_writing": {
+              "rating": 1207.2,
+              "lower": 1174.7,
+              "upper": 1239.9,
+              "votes": 423,
+              "rank": 311,
+              "n": 425
+            },
+            "instruction_following": {
+              "rating": 1361.1,
+              "lower": 1337.4,
+              "upper": 1384.7,
+              "votes": 636,
+              "rank": 188,
+              "n": 427
+            },
+            "multi_turn": {
+              "rating": 1334.3,
+              "lower": 1293.7,
+              "upper": 1374.8,
+              "votes": 238,
+              "rank": 230,
+              "n": 425
+            }
+          }
+        }
+      ]
+    },
     "inkling-2-small": {
       "lmarena": [
         {
           "effort": "single",
           "overall": {
-            "rating": 1402.6,
-            "lower": 1390.9,
-            "upper": 1414.4,
-            "votes": 2669,
-            "rank": 153,
-            "n": 421
+            "rating": 1402.8,
+            "lower": 1391.2,
+            "upper": 1414.5,
+            "votes": 2682,
+            "rank": 158,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1455.2,
-              "lower": 1431.8,
-              "upper": 1478.7,
-              "votes": 619,
-              "rank": 93,
-              "n": 416
+              "rating": 1456.2,
+              "lower": 1432.9,
+              "upper": 1479.4,
+              "votes": 625,
+              "rank": 95,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1347.9,
-              "lower": 1323.5,
-              "upper": 1372.2,
-              "votes": 643,
-              "rank": 170,
-              "n": 419
+              "rating": 1345.4,
+              "lower": 1321.1,
+              "upper": 1369.8,
+              "votes": 644,
+              "rank": 177,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1407.6,
+              "rating": 1407.5,
               "lower": 1387.9,
-              "upper": 1427.4,
-              "votes": 929,
-              "rank": 113,
-              "n": 421
+              "upper": 1427.2,
+              "votes": 931,
+              "rank": 118,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1407.7,
-              "lower": 1379.0,
-              "upper": 1436.5,
-              "votes": 399,
-              "rank": 144,
-              "n": 419
+              "rating": 1406.3,
+              "lower": 1377.8,
+              "upper": 1434.8,
+              "votes": 405,
+              "rank": 152,
+              "n": 425
             }
           }
         }
@@ -2663,45 +3185,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1414.2,
-            "lower": 1409.7,
-            "upper": 1418.7,
-            "votes": 37610,
-            "rank": 136,
-            "n": 421
+            "rating": 1414.0,
+            "lower": 1409.4,
+            "upper": 1418.5,
+            "votes": 37427,
+            "rank": 139,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1451.5,
+              "rating": 1451.4,
               "lower": 1444.6,
-              "upper": 1458.3,
-              "votes": 10199,
-              "rank": 104,
-              "n": 416
+              "upper": 1458.2,
+              "votes": 10131,
+              "rank": 108,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1337.2,
-              "lower": 1329.3,
-              "upper": 1345.1,
-              "votes": 8145,
-              "rank": 188,
-              "n": 419
+              "rating": 1337.0,
+              "lower": 1329.1,
+              "upper": 1344.9,
+              "votes": 8134,
+              "rank": 193,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1402.1,
-              "lower": 1395.8,
-              "upper": 1408.3,
-              "votes": 13636,
-              "rank": 129,
-              "n": 421
+              "rating": 1401.7,
+              "lower": 1395.5,
+              "upper": 1408.0,
+              "votes": 13566,
+              "rank": 134,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1416.8,
-              "lower": 1408.3,
-              "upper": 1425.3,
-              "votes": 5840,
-              "rank": 125,
-              "n": 419
+              "rating": 1416.7,
+              "lower": 1408.2,
+              "upper": 1425.2,
+              "votes": 5818,
+              "rank": 131,
+              "n": 425
             }
           }
         }
@@ -2741,45 +3263,45 @@
         {
           "effort": "max",
           "overall": {
-            "rating": 1474.6,
-            "lower": 1470.3,
-            "upper": 1478.8,
-            "votes": 41402,
+            "rating": 1474.8,
+            "lower": 1470.6,
+            "upper": 1478.9,
+            "votes": 45111,
             "rank": 28,
-            "n": 421
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1506.3,
-              "lower": 1499.6,
-              "upper": 1513.0,
-              "votes": 10247,
-              "rank": 18,
-              "n": 416
+              "rating": 1505.6,
+              "lower": 1499.2,
+              "upper": 1512.1,
+              "votes": 11065,
+              "rank": 19,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1452.7,
-              "lower": 1445.2,
-              "upper": 1460.2,
-              "votes": 8540,
+              "rating": 1453.6,
+              "lower": 1446.3,
+              "upper": 1460.8,
+              "votes": 9370,
               "rank": 34,
-              "n": 419
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1483.9,
-              "lower": 1477.8,
-              "upper": 1489.9,
-              "votes": 13794,
-              "rank": 18,
-              "n": 421
+              "rating": 1483.5,
+              "lower": 1477.6,
+              "upper": 1489.3,
+              "votes": 15039,
+              "rank": 20,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1488.7,
-              "lower": 1480.5,
-              "upper": 1496.9,
-              "votes": 6294,
-              "rank": 16,
-              "n": 419
+              "rating": 1488.5,
+              "lower": 1480.6,
+              "upper": 1496.3,
+              "votes": 6886,
+              "rank": 18,
+              "n": 425
             }
           }
         }
@@ -2836,45 +3358,45 @@
         {
           "effort": "max",
           "overall": {
-            "rating": 1459.1,
-            "lower": 1449.2,
-            "upper": 1469.1,
-            "votes": 3995,
-            "rank": 43,
-            "n": 421
+            "rating": 1458.9,
+            "lower": 1451.1,
+            "upper": 1466.7,
+            "votes": 7378,
+            "rank": 45,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1480.0,
-              "lower": 1460.1,
-              "upper": 1499.9,
-              "votes": 877,
-              "rank": 58,
-              "n": 416
+              "rating": 1487.5,
+              "lower": 1472.6,
+              "upper": 1502.3,
+              "votes": 1645,
+              "rank": 46,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1438.6,
-              "lower": 1417.8,
-              "upper": 1459.5,
-              "votes": 869,
-              "rank": 49,
-              "n": 419
+              "rating": 1436.8,
+              "lower": 1421.2,
+              "upper": 1452.4,
+              "votes": 1613,
+              "rank": 57,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1472.2,
-              "lower": 1455.6,
-              "upper": 1488.8,
-              "votes": 1311,
-              "rank": 32,
-              "n": 421
+              "rating": 1470.9,
+              "lower": 1458.2,
+              "upper": 1483.6,
+              "votes": 2413,
+              "rank": 34,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1448.7,
-              "lower": 1423.6,
-              "upper": 1473.8,
-              "votes": 572,
-              "rank": 72,
-              "n": 419
+              "rating": 1451.5,
+              "lower": 1432.8,
+              "upper": 1470.2,
+              "votes": 1055,
+              "rank": 70,
+              "n": 425
             }
           }
         }
@@ -2885,45 +3407,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1450.8,
-            "lower": 1445.7,
-            "upper": 1456.0,
-            "votes": 23252,
-            "rank": 55,
-            "n": 421
+            "rating": 1450.3,
+            "lower": 1445.5,
+            "upper": 1455.2,
+            "votes": 30312,
+            "rank": 57,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1497.3,
-              "lower": 1488.3,
-              "upper": 1506.3,
-              "votes": 5341,
-              "rank": 31,
-              "n": 416
+              "rating": 1496.0,
+              "lower": 1487.9,
+              "upper": 1504.2,
+              "votes": 6923,
+              "rank": 33,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1402.0,
-              "lower": 1392.3,
-              "upper": 1411.7,
-              "votes": 4923,
-              "rank": 97,
-              "n": 419
+              "rating": 1404.5,
+              "lower": 1395.6,
+              "upper": 1413.3,
+              "votes": 6478,
+              "rank": 93,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1445.2,
-              "lower": 1437.5,
-              "upper": 1452.9,
-              "votes": 7627,
-              "rank": 59,
-              "n": 421
+              "rating": 1444.5,
+              "lower": 1437.3,
+              "upper": 1451.6,
+              "votes": 9940,
+              "rank": 62,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1443.2,
-              "lower": 1432.4,
-              "upper": 1454.0,
-              "votes": 3471,
-              "rank": 84,
-              "n": 419
+              "rating": 1446.0,
+              "lower": 1436.3,
+              "upper": 1455.8,
+              "votes": 4520,
+              "rank": 77,
+              "n": 425
             }
           }
         }
@@ -2934,45 +3456,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1491.6,
-            "lower": 1482.2,
-            "upper": 1501.0,
-            "votes": 4064,
+            "rating": 1492.9,
+            "lower": 1483.4,
+            "upper": 1502.3,
+            "votes": 4047,
             "rank": 14,
-            "n": 421
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1533.6,
-              "lower": 1515.7,
-              "upper": 1551.5,
-              "votes": 1091,
+              "rating": 1534.6,
+              "lower": 1516.6,
+              "upper": 1552.5,
+              "votes": 1087,
               "rank": 5,
-              "n": 416
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1467.8,
-              "lower": 1446.7,
-              "upper": 1488.8,
-              "votes": 805,
+              "rating": 1471.0,
+              "lower": 1449.9,
+              "upper": 1492.1,
+              "votes": 802,
               "rank": 21,
-              "n": 419
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1492.2,
-              "lower": 1476.2,
-              "upper": 1508.2,
-              "votes": 1389,
+              "rating": 1494.5,
+              "lower": 1478.4,
+              "upper": 1510.5,
+              "votes": 1381,
               "rank": 14,
-              "n": 421
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1470.6,
-              "lower": 1446.7,
-              "upper": 1494.5,
-              "votes": 589,
-              "rank": 40,
-              "n": 419
+              "rating": 1472.0,
+              "lower": 1448.1,
+              "upper": 1495.9,
+              "votes": 587,
+              "rank": 38,
+              "n": 425
             }
           }
         }
@@ -2983,45 +3505,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1428.1,
-            "lower": 1424.4,
-            "upper": 1431.7,
-            "votes": 73579,
-            "rank": 100,
-            "n": 421
+            "rating": 1426.2,
+            "lower": 1422.7,
+            "upper": 1429.8,
+            "votes": 77768,
+            "rank": 104,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1468.1,
-              "lower": 1462.7,
-              "upper": 1473.5,
-              "votes": 20492,
-              "rank": 73,
-              "n": 416
+              "rating": 1466.3,
+              "lower": 1461.0,
+              "upper": 1471.6,
+              "votes": 21489,
+              "rank": 83,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1395.0,
-              "lower": 1388.8,
-              "upper": 1401.2,
-              "votes": 13750,
-              "rank": 111,
-              "n": 419
+              "rating": 1390.6,
+              "lower": 1384.6,
+              "upper": 1396.7,
+              "votes": 14673,
+              "rank": 121,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1427.6,
-              "lower": 1422.6,
-              "upper": 1432.6,
-              "votes": 25508,
-              "rank": 79,
-              "n": 421
+              "rating": 1424.5,
+              "lower": 1419.6,
+              "upper": 1429.4,
+              "votes": 26988,
+              "rank": 86,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1438.6,
-              "lower": 1432.4,
-              "upper": 1444.9,
-              "votes": 12656,
-              "rank": 91,
-              "n": 419
+              "rating": 1437.3,
+              "lower": 1431.1,
+              "upper": 1443.4,
+              "votes": 13272,
+              "rank": 97,
+              "n": 425
             }
           }
         }
@@ -3053,45 +3575,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1411.3,
-            "lower": 1402.8,
-            "upper": 1419.8,
-            "votes": 6423,
-            "rank": 141,
-            "n": 421
+            "rating": 1413.7,
+            "lower": 1406.5,
+            "upper": 1420.8,
+            "votes": 10705,
+            "rank": 140,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1457.5,
-              "lower": 1441.8,
-              "upper": 1473.2,
-              "votes": 1500,
-              "rank": 90,
-              "n": 416
+              "rating": 1460.2,
+              "lower": 1447.5,
+              "upper": 1472.9,
+              "votes": 2529,
+              "rank": 89,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1342.6,
-              "lower": 1326.3,
-              "upper": 1358.9,
-              "votes": 1569,
-              "rank": 181,
-              "n": 419
+              "rating": 1344.1,
+              "lower": 1330.8,
+              "upper": 1357.3,
+              "votes": 2532,
+              "rank": 182,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1408.8,
-              "lower": 1395.6,
-              "upper": 1422.0,
-              "votes": 2318,
-              "rank": 110,
-              "n": 421
+              "rating": 1419.0,
+              "lower": 1408.4,
+              "upper": 1429.7,
+              "votes": 3826,
+              "rank": 97,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1420.8,
-              "lower": 1401.1,
-              "upper": 1440.5,
-              "votes": 953,
-              "rank": 118,
-              "n": 419
+              "rating": 1422.0,
+              "lower": 1406.4,
+              "upper": 1437.7,
+              "votes": 1591,
+              "rank": 120,
+              "n": 425
             }
           }
         }
@@ -3102,45 +3624,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1420.8,
-            "lower": 1414.4,
-            "upper": 1427.2,
-            "votes": 11647,
-            "rank": 114,
-            "n": 421
+            "rating": 1420.7,
+            "lower": 1414.3,
+            "upper": 1427.1,
+            "votes": 11621,
+            "rank": 117,
+            "n": 427
           },
           "categories": {
             "coding": {
               "rating": 1460.8,
               "lower": 1450.1,
               "upper": 1471.6,
-              "votes": 3249,
-              "rank": 85,
-              "n": 416
+              "votes": 3236,
+              "rank": 88,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1373.6,
-              "lower": 1359.9,
-              "upper": 1387.3,
-              "votes": 2052,
-              "rank": 143,
-              "n": 419
+              "rating": 1373.1,
+              "lower": 1359.4,
+              "upper": 1386.8,
+              "votes": 2050,
+              "rank": 148,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1416.0,
-              "lower": 1406.0,
-              "upper": 1426.0,
-              "votes": 3787,
-              "rank": 96,
-              "n": 421
+              "rating": 1415.2,
+              "lower": 1405.2,
+              "upper": 1425.3,
+              "votes": 3768,
+              "rank": 103,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1423.6,
-              "lower": 1409.6,
-              "upper": 1437.6,
-              "votes": 1901,
-              "rank": 115,
-              "n": 419
+              "rating": 1423.1,
+              "lower": 1409.1,
+              "upper": 1437.1,
+              "votes": 1897,
+              "rank": 118,
+              "n": 425
             }
           }
         }
@@ -3151,45 +3673,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1388.8,
-            "lower": 1379.0,
-            "upper": 1398.5,
-            "votes": 3791,
-            "rank": 172,
-            "n": 421
+            "rating": 1389.1,
+            "lower": 1379.3,
+            "upper": 1398.8,
+            "votes": 3784,
+            "rank": 177,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1417.8,
+              "rating": 1417.7,
               "lower": 1399.6,
               "upper": 1435.9,
-              "votes": 1091,
-              "rank": 155,
-              "n": 416
+              "votes": 1092,
+              "rank": 161,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1340.6,
-              "lower": 1317.6,
-              "upper": 1363.7,
-              "votes": 699,
-              "rank": 184,
-              "n": 419
+              "rating": 1340.9,
+              "lower": 1317.9,
+              "upper": 1363.9,
+              "votes": 700,
+              "rank": 189,
+              "n": 425
             },
             "instruction_following": {
               "rating": 1373.2,
               "lower": 1356.8,
               "upper": 1389.5,
-              "votes": 1326,
-              "rank": 173,
-              "n": 421
+              "votes": 1320,
+              "rank": 178,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1396.9,
-              "lower": 1372.6,
-              "upper": 1421.2,
+              "rating": 1397.1,
+              "lower": 1372.8,
+              "upper": 1421.4,
               "votes": 610,
-              "rank": 159,
-              "n": 419
+              "rank": 164,
+              "n": 425
             }
           }
         }
@@ -3200,45 +3722,45 @@
         {
           "effort": "max",
           "overall": {
-            "rating": 1491.6,
-            "lower": 1486.7,
-            "upper": 1496.6,
-            "votes": 26806,
+            "rating": 1492.9,
+            "lower": 1488.1,
+            "upper": 1497.7,
+            "votes": 31093,
             "rank": 13,
-            "n": 421
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1508.7,
-              "lower": 1500.7,
-              "upper": 1516.7,
-              "votes": 6830,
-              "rank": 17,
-              "n": 416
+              "rating": 1509.7,
+              "lower": 1502.0,
+              "upper": 1517.2,
+              "votes": 7796,
+              "rank": 16,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1467.0,
-              "lower": 1458.2,
-              "upper": 1475.9,
-              "votes": 5983,
-              "rank": 22,
-              "n": 419
+              "rating": 1468.9,
+              "lower": 1460.5,
+              "upper": 1477.2,
+              "votes": 7006,
+              "rank": 23,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1479.4,
-              "lower": 1472.3,
-              "upper": 1486.4,
-              "votes": 9650,
-              "rank": 23,
-              "n": 421
+              "rating": 1480.1,
+              "lower": 1473.4,
+              "upper": 1486.8,
+              "votes": 11141,
+              "rank": 24,
+              "n": 427
             },
             "multi_turn": {
               "rating": 1487.8,
-              "lower": 1477.8,
-              "upper": 1497.9,
-              "votes": 4003,
-              "rank": 17,
-              "n": 419
+              "lower": 1478.2,
+              "upper": 1497.3,
+              "votes": 4640,
+              "rank": 19,
+              "n": 425
             }
           }
         }
@@ -3279,45 +3801,45 @@
         {
           "effort": "max",
           "overall": {
-            "rating": 1503.0,
-            "lower": 1496.8,
-            "upper": 1509.2,
-            "votes": 12696,
-            "rank": 6,
-            "n": 421
+            "rating": 1503.7,
+            "lower": 1498.0,
+            "upper": 1509.3,
+            "votes": 17102,
+            "rank": 7,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1515.6,
-              "lower": 1504.3,
-              "upper": 1526.9,
-              "votes": 3042,
-              "rank": 13,
-              "n": 416
+              "rating": 1522.5,
+              "lower": 1512.4,
+              "upper": 1532.5,
+              "votes": 4087,
+              "rank": 11,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1492.7,
-              "lower": 1480.6,
-              "upper": 1504.9,
-              "votes": 2947,
-              "rank": 10,
-              "n": 419
+              "rating": 1488.6,
+              "lower": 1477.8,
+              "upper": 1499.3,
+              "votes": 3945,
+              "rank": 12,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1494.3,
-              "lower": 1484.7,
-              "upper": 1504.0,
-              "votes": 4505,
-              "rank": 12,
-              "n": 421
+              "rating": 1493.2,
+              "lower": 1484.5,
+              "upper": 1501.9,
+              "votes": 6052,
+              "rank": 15,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1514.1,
-              "lower": 1499.5,
-              "upper": 1528.8,
-              "votes": 1843,
-              "rank": 3,
-              "n": 419
+              "rating": 1511.3,
+              "lower": 1498.5,
+              "upper": 1524.1,
+              "votes": 2492,
+              "rank": 5,
+              "n": 425
             }
           }
         }
@@ -3328,45 +3850,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1436.6,
-            "lower": 1432.0,
-            "upper": 1441.1,
-            "votes": 33323,
+            "rating": 1437.7,
+            "lower": 1433.3,
+            "upper": 1442.1,
+            "votes": 37444,
             "rank": 85,
-            "n": 421
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1479.1,
-              "lower": 1472.0,
-              "upper": 1486.3,
-              "votes": 8865,
-              "rank": 59,
-              "n": 416
+              "rating": 1480.7,
+              "lower": 1473.8,
+              "upper": 1487.6,
+              "votes": 9898,
+              "rank": 62,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1376.6,
-              "lower": 1368.3,
-              "upper": 1384.9,
-              "votes": 6866,
-              "rank": 136,
-              "n": 419
+              "rating": 1379.0,
+              "lower": 1371.1,
+              "upper": 1386.9,
+              "votes": 7741,
+              "rank": 139,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1431.3,
-              "lower": 1424.8,
-              "upper": 1437.8,
-              "votes": 11741,
-              "rank": 73,
-              "n": 421
+              "rating": 1434.0,
+              "lower": 1427.7,
+              "upper": 1440.2,
+              "votes": 13153,
+              "rank": 74,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1436.0,
-              "lower": 1427.1,
-              "upper": 1445.0,
-              "votes": 5185,
-              "rank": 95,
-              "n": 419
+              "rating": 1438.7,
+              "lower": 1430.2,
+              "upper": 1447.3,
+              "votes": 5838,
+              "rank": 94,
+              "n": 425
             }
           }
         }
@@ -3377,45 +3899,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1485.3,
-            "lower": 1480.7,
-            "upper": 1489.8,
-            "votes": 36936,
-            "rank": 17,
-            "n": 421
+            "rating": 1484.9,
+            "lower": 1480.5,
+            "upper": 1489.3,
+            "votes": 41147,
+            "rank": 18,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1501.7,
-              "lower": 1494.8,
-              "upper": 1508.6,
-              "votes": 9849,
-              "rank": 23,
-              "n": 416
+              "rating": 1502.7,
+              "lower": 1496.1,
+              "upper": 1509.3,
+              "votes": 10866,
+              "rank": 24,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1482.0,
-              "lower": 1474.1,
-              "upper": 1490.0,
-              "votes": 7548,
-              "rank": 16,
-              "n": 419
+              "rating": 1483.4,
+              "lower": 1475.7,
+              "upper": 1491.0,
+              "votes": 8465,
+              "rank": 17,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1483.4,
-              "lower": 1477.2,
-              "upper": 1489.7,
-              "votes": 12965,
+              "rating": 1483.8,
+              "lower": 1477.8,
+              "upper": 1489.8,
+              "votes": 14442,
               "rank": 19,
-              "n": 421
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1491.9,
-              "lower": 1483.3,
-              "upper": 1500.6,
-              "votes": 5575,
+              "rating": 1492.0,
+              "lower": 1483.7,
+              "upper": 1500.3,
+              "votes": 6216,
               "rank": 15,
-              "n": 419
+              "n": 425
             }
           }
         }
@@ -3458,50 +3980,85 @@
         }
       }
     },
+    "qwen4-max": {
+      "epoch": {
+        "effort": "xhigh",
+        "benchmarks": {
+          "gpqa_diamond": {
+            "score": 94.0,
+            "label": "GPQA Diamond"
+          },
+          "otis_mock_aime_2024_2025": {
+            "score": 100.0,
+            "label": "AIME 2024-2025"
+          },
+          "ebr_bench": {
+            "score": 40.0,
+            "label": "Earthborne Rangers"
+          },
+          "simpleqa_verified": {
+            "score": 54.1,
+            "label": "SimpleQA Verified"
+          },
+          "chess_puzzles": {
+            "score": 36.0,
+            "label": "Chess Puzzles"
+          },
+          "mystery_game_puzzles": {
+            "score": 36.0,
+            "label": "Mystery Game Puzzles"
+          },
+          "furniture_assembly": {
+            "score": 34.2,
+            "label": "Furniture Assembly"
+          }
+        }
+      }
+    },
     "solar-pro4": {
       "lmarena": [
         {
           "effort": "single",
           "overall": {
-            "rating": 1388.2,
-            "lower": 1383.2,
-            "upper": 1393.2,
-            "votes": 27067,
-            "rank": 174,
-            "n": 421
+            "rating": 1388.3,
+            "lower": 1383.3,
+            "upper": 1393.4,
+            "votes": 26958,
+            "rank": 179,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1436.6,
-              "lower": 1428.7,
-              "upper": 1444.5,
-              "votes": 6891,
-              "rank": 127,
-              "n": 416
+              "rating": 1437.1,
+              "lower": 1429.2,
+              "upper": 1445.0,
+              "votes": 6855,
+              "rank": 132,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1316.8,
+              "rating": 1316.7,
               "lower": 1307.7,
-              "upper": 1325.9,
-              "votes": 5881,
-              "rank": 210,
-              "n": 419
+              "upper": 1325.8,
+              "votes": 5875,
+              "rank": 214,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1374.8,
-              "lower": 1367.8,
-              "upper": 1381.8,
-              "votes": 9722,
-              "rank": 169,
-              "n": 421
+              "rating": 1374.9,
+              "lower": 1367.9,
+              "upper": 1381.9,
+              "votes": 9674,
+              "rank": 173,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1389.2,
-              "lower": 1379.0,
-              "upper": 1399.4,
-              "votes": 4017,
-              "rank": 170,
-              "n": 419
+              "rating": 1388.9,
+              "lower": 1378.7,
+              "upper": 1399.1,
+              "votes": 4013,
+              "rank": 175,
+              "n": 425
             }
           }
         }
@@ -3512,45 +4069,45 @@
         {
           "effort": "single",
           "overall": {
-            "rating": 1443.3,
-            "lower": 1437.1,
-            "upper": 1449.6,
-            "votes": 12345,
-            "rank": 70,
-            "n": 421
+            "rating": 1443.8,
+            "lower": 1437.6,
+            "upper": 1450.0,
+            "votes": 12270,
+            "rank": 73,
+            "n": 427
           },
           "categories": {
             "coding": {
-              "rating": 1481.7,
-              "lower": 1470.5,
-              "upper": 1492.9,
-              "votes": 2950,
-              "rank": 55,
-              "n": 416
+              "rating": 1481.3,
+              "lower": 1470.1,
+              "upper": 1492.5,
+              "votes": 2938,
+              "rank": 60,
+              "n": 422
             },
             "creative_writing": {
-              "rating": 1414.5,
-              "lower": 1402.0,
-              "upper": 1427.1,
-              "votes": 2636,
-              "rank": 77,
-              "n": 419
+              "rating": 1417.1,
+              "lower": 1404.5,
+              "upper": 1429.6,
+              "votes": 2633,
+              "rank": 78,
+              "n": 425
             },
             "instruction_following": {
-              "rating": 1445.1,
-              "lower": 1435.4,
-              "upper": 1454.7,
-              "votes": 4277,
-              "rank": 60,
-              "n": 421
+              "rating": 1446.0,
+              "lower": 1436.3,
+              "upper": 1455.7,
+              "votes": 4242,
+              "rank": 58,
+              "n": 427
             },
             "multi_turn": {
-              "rating": 1439.9,
-              "lower": 1425.3,
-              "upper": 1454.5,
-              "votes": 1774,
-              "rank": 90,
-              "n": 419
+              "rating": 1439.8,
+              "lower": 1425.2,
+              "upper": 1454.4,
+              "votes": 1764,
+              "rank": 92,
+              "n": 425
             }
           }
         }
