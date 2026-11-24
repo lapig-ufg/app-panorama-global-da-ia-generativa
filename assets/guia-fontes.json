@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "generated_at": "2026-11-23T20:00:43Z",
+  "generated_at": "2026-11-24T13:21:47Z",
   "sources": {
     "lmarena": {
       "name": "LMArena",
       "url": "https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset",
-      "collected_at": "2026-11-23T19:59:51.985807+00:00",
+      "collected_at": "2026-11-24T13:21:45.636554+00:00",
       "measures": "preferência humana em conversas às cegas (Arena Score, Bradley-Terry)",
       "license": "CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/ (dataset: https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset)",
       "attribution": "LMArena — Arena Leaderboard Dataset (Hugging Face)",
@@ -15,7 +15,7 @@
     "epoch": {
       "name": "Epoch AI",
       "url": "https://epoch.ai/benchmarks",
-      "collected_at": "2026-11-23T19:56:41.540538+00:00",
+      "collected_at": "2026-11-24T13:21:26.068028+00:00",
       "measures": "benchmarks de fronteira em matemática, ciência, código, agentes e conhecimento",
       "license": "CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/ (https://epoch.ai/benchmarks/use-this-data); benchmarks de terceiros no hub mantêm a licença original",
       "attribution": "Epoch AI — Capabilities & benchmarking (epoch.ai)",
@@ -25,7 +25,7 @@
     "vals": {
       "name": "Vals AI",
       "url": "https://vals.ai",
-      "collected_at": "2026-11-23T19:56:41.592783+00:00",
+      "collected_at": "2026-11-24T13:21:26.112002+00:00",
       "measures": "benchmarks de trabalho real em finanças, direito, saúde, código e agentes",
       "license": "Sem licença de republicação identificada (conferido em 17/11/2026): conteúdo © Vals AI, todos os direitos reservados (https://vals.ai; não encontrei termos de uso nem licença de dados publicados no site). Os números não foram incluídos.",
       "attribution": "Vals AI — vals.ai",
@@ -1366,6 +1366,10 @@
           "mystery_game_puzzles": {
             "score": 85.0,
             "label": "Mystery Game Puzzles"
+          },
+          "frontiermath_erdos": {
+            "score": 7.3,
+            "label": "FrontierMath Erdős"
           },
           "furniture_assembly": {
             "score": 89.2,
@@ -3992,6 +3996,14 @@
             "score": 100.0,
             "label": "AIME 2024-2025"
           },
+          "frontiermath_tiers_1_3_v2": {
+            "score": 78.6,
+            "label": "FrontierMath Tiers 1-3"
+          },
+          "frontiermath_tier_4_v2": {
+            "score": 53.7,
+            "label": "FrontierMath Tier 4"
+          },
           "ebr_bench": {
             "score": 40.0,
             "label": "Earthborne Rangers"
@@ -4011,6 +4023,18 @@
           "furniture_assembly": {
             "score": 34.2,
             "label": "Furniture Assembly"
+          },
+          "spireclimb": {
+            "score": 0.0,
+            "label": "SpireClimb"
+          },
+          "spireclimb_sts1_a20_heart": {
+            "score": 0.0,
+            "label": "Spireclimb Sts1 A20 Heart"
+          },
+          "spireclimb_sts2_a10": {
+            "score": 0.0,
+            "label": "Spireclimb Sts2 A10"
           }
         }
       }
