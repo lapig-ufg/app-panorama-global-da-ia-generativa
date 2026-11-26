@@ -3,7 +3,7 @@
   "source_url": "https://artificialanalysis.ai/",
   "attribution": "Dados: Artificial Analysis — artificialanalysis.ai",
   "api_tier": "free",
-  "fetched_at": "2026-11-23T20:45:41.727Z",
+  "fetched_at": "2026-11-26T22:20:18.396Z",
   "familias_total": 514,
   "descartados": {
     "entradas_sem_data": 0,
@@ -2478,7 +2478,7 @@
       "mod": "Gemma 4 26B A4B",
       "emp": "Google",
       "date": "2026-04-02",
-      "score": null,
+      "score": 4,
       "open_weights": null
     },
     {
@@ -2786,7 +2786,7 @@
       "mod": "MiniMax-M3",
       "emp": "MiniMax",
       "date": "2026-06-01",
-      "score": 18.9,
+      "score": 19,
       "open_weights": null
     },
     {
@@ -2912,7 +2912,7 @@
       "mod": "GPT-5.6 Terra",
       "emp": "OpenAI",
       "date": "2026-07-09",
-      "score": 32.3,
+      "score": 32.2,
       "open_weights": null
     },
     {
@@ -3108,7 +3108,7 @@
       "mod": "GLM-5.3",
       "emp": "Zhipu AI",
       "date": "2026-08-18",
-      "score": 31.7,
+      "score": 31.6,
       "open_weights": null
     },
     {
@@ -3129,28 +3129,28 @@
       "mod": "Granite 4.2 30B",
       "emp": "IBM",
       "date": "2026-08-25",
-      "score": 5.5,
+      "score": null,
       "open_weights": null
     },
     {
       "mod": "Granite 4.2 3B",
       "emp": "IBM",
       "date": "2026-08-25",
-      "score": 4.7,
+      "score": null,
       "open_weights": null
     },
     {
       "mod": "Granite 4.2 8B",
       "emp": "IBM",
       "date": "2026-08-25",
-      "score": 5.1,
+      "score": null,
       "open_weights": null
     },
     {
       "mod": "Qwen3.8-Flash-Next",
       "emp": "Alibaba",
       "date": "2026-08-26",
-      "score": 28.6,
+      "score": 28.5,
       "open_weights": null
     },
     {
@@ -3164,7 +3164,7 @@
       "mod": "GLM-5.3-Flash",
       "emp": "Zhipu AI",
       "date": "2026-08-26",
-      "score": 27.8,
+      "score": 27.7,
       "open_weights": null
     },
     {
@@ -3185,7 +3185,7 @@
       "mod": "Gemini 3.8 Flash",
       "emp": "Google",
       "date": "2026-09-02",
-      "score": 30.8,
+      "score": 30.7,
       "open_weights": null
     },
     {
@@ -3290,14 +3290,14 @@
       "mod": "Grok 4.7",
       "emp": "xAI",
       "date": "2026-09-21",
-      "score": 35.5,
+      "score": 35.4,
       "open_weights": null
     },
     {
       "mod": "MiMo-V2.6-Flash",
       "emp": "Xiaomi",
       "date": "2026-09-21",
-      "score": 26.7,
+      "score": 26.8,
       "open_weights": null
     },
     {
@@ -3325,7 +3325,7 @@
       "mod": "GPT-6 Sol",
       "emp": "OpenAI",
       "date": "2026-09-22",
-      "score": 44.2,
+      "score": 44.1,
       "open_weights": null
     },
     {
@@ -3339,21 +3339,21 @@
       "mod": "Claude Sonnet 5.5",
       "emp": "Anthropic",
       "date": "2026-09-28",
-      "score": 54.5,
+      "score": 54.7,
       "open_weights": null
     },
     {
       "mod": "GPT-6.1 Sol",
       "emp": "OpenAI",
       "date": "2026-09-29",
-      "score": 54.6,
+      "score": 54.7,
       "open_weights": null
     },
     {
       "mod": "Gemini 4 Argon",
       "emp": "Google",
       "date": "2026-09-30",
-      "score": 50.4,
+      "score": 50.5,
       "open_weights": null
     },
     {
@@ -3367,7 +3367,7 @@
       "mod": "Mistral Large 4 Preview",
       "emp": "Mistral",
       "date": "2026-10-06",
-      "score": 25.3,
+      "score": 25.2,
       "open_weights": null
     },
     {
@@ -3381,14 +3381,14 @@
       "mod": "Muse Wonder",
       "emp": "Meta",
       "date": "2026-10-12",
-      "score": 43.6,
+      "score": 43.7,
       "open_weights": null
     },
     {
       "mod": "Muse Wonder Full",
       "emp": "Meta",
       "date": "2026-10-12",
-      "score": 50.1,
+      "score": 49.9,
       "open_weights": null
     },
     {
@@ -3423,7 +3423,7 @@
       "mod": "DeepSeek V4.1 Flash 1017",
       "emp": "DeepSeek",
       "date": "2026-10-17",
-      "score": 32.6,
+      "score": 32.4,
       "open_weights": null
     },
     {
@@ -3437,14 +3437,14 @@
       "mod": "Ling 3.1 Flash 1019",
       "emp": "InclusionAI",
       "date": "2026-10-22",
-      "score": 29.6,
+      "score": 29.7,
       "open_weights": null
     },
     {
       "mod": "Kimi K3.1 Pro",
       "emp": "Moonshot AI",
       "date": "2026-10-23",
-      "score": 46.5,
+      "score": 46.6,
       "open_weights": null
     },
     {
@@ -3465,7 +3465,7 @@
       "mod": "GPT-6.1 Terra",
       "emp": "OpenAI",
       "date": "2026-10-26",
-      "score": 51.3,
+      "score": 51.4,
       "open_weights": null
     },
     {
@@ -3486,7 +3486,7 @@
       "mod": "Gemini 4 Carbon",
       "emp": "Google",
       "date": "2026-10-28",
-      "score": 60,
+      "score": 60.1,
       "open_weights": null
     },
     {
@@ -3507,28 +3507,28 @@
       "mod": "Inkling 2 Small",
       "emp": "Thinking Machines",
       "date": "2026-11-05",
-      "score": 30.6,
+      "score": 30.7,
       "open_weights": null
     },
     {
       "mod": "Agnes 2.5 Pro Theta",
       "emp": "Sapiens AI",
       "date": "2026-11-07",
-      "score": 24,
+      "score": 24.1,
       "open_weights": null
     },
     {
       "mod": "Claude Fable 5.2",
       "emp": "Anthropic",
       "date": "2026-11-09",
-      "score": 64.6,
+      "score": 64.8,
       "open_weights": null
     },
     {
       "mod": "Muse Ember",
       "emp": "Meta",
       "date": "2026-11-09",
-      "score": 36,
+      "score": 36.1,
       "open_weights": null
     },
     {
@@ -3542,21 +3542,21 @@
       "mod": "Gemini 4 Hydrogen",
       "emp": "Google",
       "date": "2026-11-12",
-      "score": 53.9,
+      "score": 54.1,
       "open_weights": null
     },
     {
       "mod": "Qwen4 Max",
       "emp": "Alibaba",
       "date": "2026-11-16",
-      "score": 42.9,
+      "score": 42.8,
       "open_weights": null
     },
     {
       "mod": "JoyAI-VL-Preview",
       "emp": "Joy Future Academy",
       "date": "2026-11-17",
-      "score": 28,
+      "score": 27.9,
       "open_weights": null
     },
     {
@@ -3570,7 +3570,7 @@
       "mod": "GPT-6.2 Astra",
       "emp": "OpenAI",
       "date": "2026-11-17",
-      "score": 62.1,
+      "score": 62.2,
       "open_weights": null
     },
     {
@@ -3584,7 +3584,7 @@
       "mod": "Gemini 4 Neon",
       "emp": "Google",
       "date": "2026-11-18",
-      "score": 61.4,
+      "score": 61.5,
       "open_weights": null
     },
     {

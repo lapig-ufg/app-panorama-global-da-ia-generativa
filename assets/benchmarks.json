@@ -5,7 +5,7 @@
   "api_tier": "free",
   "intelligence_index_version": 5,
   "models_total": 766,
-  "fetched_at": "2026-11-23T20:45:41.727Z",
+  "fetched_at": "2026-11-26T22:20:18.396Z",
   "has_open_weights": false,
   "benchmarks": [
     {
@@ -15,51 +15,51 @@
       "description": "Índice composto da AA — média de quatro blocos de 25%: trabalho de conhecimento, código, ciência e geral (v5)",
       "unit": "índice (0–100)",
       "is_fraction": false,
-      "models_evaluated": 158,
-      "families_evaluated": 86,
+      "models_evaluated": 156,
+      "families_evaluated": 84,
       "top": [
         {
           "model": "Claude Fable 5.2",
           "variant": "Max, Default Fallback",
           "creator": "Anthropic",
-          "score": 64.6,
+          "score": 64.8,
           "release_date": "2026-11-09",
           "price_1m_blended": 16,
           "cost_per_task": 26.5386,
-          "tok_per_sec": 92.55,
+          "tok_per_sec": 90.61,
           "open_weights": null
         },
         {
           "model": "GPT-6.2 Astra",
           "variant": "Max",
           "creator": "OpenAI",
-          "score": 62.1,
+          "score": 62.2,
           "release_date": "2026-11-17",
           "price_1m_blended": 16,
           "cost_per_task": 3.9979,
-          "tok_per_sec": 67.41,
+          "tok_per_sec": 57.03,
           "open_weights": null
         },
         {
           "model": "Gemini 4 Neon",
           "variant": "Xhigh",
           "creator": "Google",
-          "score": 61.4,
+          "score": 61.5,
           "release_date": "2026-11-18",
           "price_1m_blended": 6,
           "cost_per_task": 6.4448,
-          "tok_per_sec": 116.43,
+          "tok_per_sec": 122.61,
           "open_weights": null
         },
         {
           "model": "Gemini 4 Carbon",
           "variant": "High",
           "creator": "Google",
-          "score": 60,
+          "score": 60.1,
           "release_date": "2026-10-28",
           "price_1m_blended": 8,
           "cost_per_task": 7.7555,
-          "tok_per_sec": 88.71,
+          "tok_per_sec": 77.56,
           "open_weights": null
         },
         {
@@ -70,7 +70,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 8,
           "cost_per_task": 10.0364,
-          "tok_per_sec": 97.36,
+          "tok_per_sec": 97.89,
           "open_weights": null
         },
         {
@@ -81,7 +81,7 @@
           "release_date": "2026-11-17",
           "price_1m_blended": 4,
           "cost_per_task": 1.0144,
-          "tok_per_sec": 82.59,
+          "tok_per_sec": 68.01,
           "open_weights": null
         },
         {
@@ -92,73 +92,62 @@
           "release_date": "2026-09-03",
           "price_1m_blended": 20,
           "cost_per_task": 6.2447,
-          "tok_per_sec": 72.33,
-          "open_weights": null
-        },
-        {
-          "model": "GPT-6.1 Sol",
-          "variant": "Max",
-          "creator": "OpenAI",
-          "score": 54.6,
-          "release_date": "2026-09-29",
-          "price_1m_blended": 4,
-          "cost_per_task": 1.2721,
-          "tok_per_sec": 92.63,
+          "tok_per_sec": 64.17,
           "open_weights": null
         },
         {
           "model": "Claude Sonnet 5.5",
           "variant": "Max, Default Fallback",
           "creator": "Anthropic",
-          "score": 54.5,
+          "score": 54.7,
           "release_date": "2026-09-28",
           "price_1m_blended": 4,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 134.9,
+          "tok_per_sec": 132.99,
+          "open_weights": null
+        },
+        {
+          "model": "GPT-6.1 Sol",
+          "variant": "Max",
+          "creator": "OpenAI",
+          "score": 54.7,
+          "release_date": "2026-09-29",
+          "price_1m_blended": 4,
+          "cost_per_task": 1.2721,
+          "tok_per_sec": 76.41,
           "open_weights": null
         },
         {
           "model": "Gemini 4 Hydrogen",
           "variant": "Xhigh",
           "creator": "Google",
-          "score": 53.9,
+          "score": 54.1,
           "release_date": "2026-11-12",
           "price_1m_blended": 3,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 234.5,
+          "tok_per_sec": 211.92,
           "open_weights": null
         },
         {
           "model": "GPT-6.1 Terra",
           "variant": "Max",
           "creator": "OpenAI",
-          "score": 51.3,
+          "score": 51.4,
           "release_date": "2026-10-26",
           "price_1m_blended": 2,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 103.31,
+          "tok_per_sec": 72.05,
           "open_weights": null
         },
         {
           "model": "Gemini 4 Argon",
           "variant": "High",
           "creator": "Google",
-          "score": 50.4,
+          "score": 50.5,
           "release_date": "2026-09-30",
           "price_1m_blended": 8,
-          "cost_per_task": 9.9466,
-          "tok_per_sec": 109.28,
-          "open_weights": null
-        },
-        {
-          "model": "Muse Wonder Full",
-          "variant": "Max",
-          "creator": "Meta",
-          "score": 50.1,
-          "release_date": "2026-10-12",
-          "price_1m_blended": null,
-          "cost_per_task": null,
-          "tok_per_sec": 0,
+          "cost_per_task": 7.0616,
+          "tok_per_sec": 94.59,
           "open_weights": null
         },
         {
@@ -169,18 +158,29 @@
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
           "cost_per_task": 10.8475,
-          "tok_per_sec": 66.83,
+          "tok_per_sec": 63.32,
+          "open_weights": null
+        },
+        {
+          "model": "Muse Wonder Full",
+          "variant": "Max",
+          "creator": "Meta",
+          "score": 49.9,
+          "release_date": "2026-10-12",
+          "price_1m_blended": null,
+          "cost_per_task": null,
+          "tok_per_sec": 0,
           "open_weights": null
         },
         {
           "model": "Kimi K3.1 Pro",
           "variant": null,
           "creator": "Moonshot AI",
-          "score": 46.5,
+          "score": 46.6,
           "release_date": "2026-10-23",
           "price_1m_blended": 4,
           "cost_per_task": 3.6812,
-          "tok_per_sec": 30.37,
+          "tok_per_sec": 32.45,
           "open_weights": null
         },
         {
@@ -191,40 +191,40 @@
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
           "cost_per_task": 11.8215,
-          "tok_per_sec": 52.94,
+          "tok_per_sec": 53.23,
           "open_weights": null
         },
         {
           "model": "GPT-6 Sol",
           "variant": "Max",
           "creator": "OpenAI",
-          "score": 44.2,
+          "score": 44.1,
           "release_date": "2026-09-22",
           "price_1m_blended": 4,
           "cost_per_task": 2.4658,
-          "tok_per_sec": 164.28,
+          "tok_per_sec": 155.88,
           "open_weights": null
         },
         {
           "model": "Muse Wonder",
           "variant": "Max",
           "creator": "Meta",
-          "score": 43.6,
+          "score": 43.7,
           "release_date": "2026-10-12",
           "price_1m_blended": 8,
           "cost_per_task": 6.952,
-          "tok_per_sec": 99.63,
+          "tok_per_sec": 95.05,
           "open_weights": null
         },
         {
           "model": "Qwen4 Max",
           "variant": null,
           "creator": "Alibaba",
-          "score": 42.9,
+          "score": 42.8,
           "release_date": "2026-11-16",
           "price_1m_blended": 2.25,
           "cost_per_task": 3.2681,
-          "tok_per_sec": 72.42,
+          "tok_per_sec": 105.76,
           "open_weights": null
         },
         {
@@ -235,7 +235,7 @@
           "release_date": "2026-09-02",
           "price_1m_blended": 2,
           "cost_per_task": 2.3858,
-          "tok_per_sec": 140.84,
+          "tok_per_sec": 115.08,
           "open_weights": null
         }
       ],
@@ -243,22 +243,22 @@
         {
           "model": "Claude Fable 5.2",
           "creator": "Anthropic",
-          "score": 64.6
+          "score": 64.8
         },
         {
           "model": "GPT-6.2 Astra",
           "creator": "OpenAI",
-          "score": 62.1
+          "score": 62.2
         },
         {
           "model": "Gemini 4 Neon",
           "creator": "Google",
-          "score": 61.4
+          "score": 61.5
         },
         {
           "model": "Gemini 4 Carbon",
           "creator": "Google",
-          "score": 60
+          "score": 60.1
         },
         {
           "model": "Claude Opus 5.5",
@@ -276,34 +276,29 @@
           "score": 56.9
         },
         {
-          "model": "GPT-6.1 Sol",
-          "creator": "OpenAI",
-          "score": 54.6
-        },
-        {
           "model": "Claude Sonnet 5.5",
           "creator": "Anthropic",
-          "score": 54.5
+          "score": 54.7
+        },
+        {
+          "model": "GPT-6.1 Sol",
+          "creator": "OpenAI",
+          "score": 54.7
         },
         {
           "model": "Gemini 4 Hydrogen",
           "creator": "Google",
-          "score": 53.9
+          "score": 54.1
         },
         {
           "model": "GPT-6.1 Terra",
           "creator": "OpenAI",
-          "score": 51.3
+          "score": 51.4
         },
         {
           "model": "Gemini 4 Argon",
           "creator": "Google",
-          "score": 50.4
-        },
-        {
-          "model": "Muse Wonder Full",
-          "creator": "Meta",
-          "score": 50.1
+          "score": 50.5
         },
         {
           "model": "Claude Fable 5.1",
@@ -311,9 +306,14 @@
           "score": 50
         },
         {
+          "model": "Muse Wonder Full",
+          "creator": "Meta",
+          "score": 49.9
+        },
+        {
           "model": "Kimi K3.1 Pro",
           "creator": "Moonshot AI",
-          "score": 46.5
+          "score": 46.6
         },
         {
           "model": "Claude Opus 5",
@@ -323,17 +323,17 @@
         {
           "model": "GPT-6 Sol",
           "creator": "OpenAI",
-          "score": 44.2
+          "score": 44.1
         },
         {
           "model": "Muse Wonder",
           "creator": "Meta",
-          "score": 43.6
+          "score": 43.7
         },
         {
           "model": "Qwen4 Max",
           "creator": "Alibaba",
-          "score": 42.9
+          "score": 42.8
         },
         {
           "model": "Muse Spark 1.3",
@@ -348,12 +348,12 @@
         {
           "model": "Muse Ember",
           "creator": "Meta",
-          "score": 36
+          "score": 36.1
         },
         {
           "model": "Grok 4.7",
           "creator": "xAI",
-          "score": 35.5
+          "score": 35.4
         },
         {
           "model": "Tencent Hy4",
@@ -368,17 +368,17 @@
         {
           "model": "DeepSeek V4.1 Flash 1017",
           "creator": "DeepSeek",
-          "score": 32.6
+          "score": 32.4
         },
         {
           "model": "GPT-5.6 Terra",
           "creator": "OpenAI",
-          "score": 32.3
+          "score": 32.2
         },
         {
           "model": "GLM-5.3",
           "creator": "Zhipu AI",
-          "score": 31.7
+          "score": 31.6
         },
         {
           "model": "Grok 4.6",
@@ -388,12 +388,12 @@
         {
           "model": "Gemini 3.8 Flash",
           "creator": "Google",
-          "score": 30.8
+          "score": 30.7
         },
         {
           "model": "Inkling 2 Small",
           "creator": "Thinking Machines",
-          "score": 30.6
+          "score": 30.7
         },
         {
           "model": "MiMo-V2.6-Pro",
@@ -403,7 +403,7 @@
         {
           "model": "Ling 3.1 Flash 1019",
           "creator": "InclusionAI",
-          "score": 29.6
+          "score": 29.7
         },
         {
           "model": "MiniMax-M3.1-Flash",
@@ -411,19 +411,14 @@
           "score": 29.1
         },
         {
-          "model": "Qwen3.8-Flash-Next",
-          "creator": "Alibaba",
-          "score": 28.6
-        },
-        {
           "model": "Step 5 Preview",
           "creator": "StepFun",
           "score": 28.5
         },
         {
-          "model": "JoyAI-VL-Preview",
-          "creator": "Joy Future Academy",
-          "score": 28
+          "model": "Qwen3.8-Flash-Next",
+          "creator": "Alibaba",
+          "score": 28.5
         },
         {
           "model": "GPT-6 Luna",
@@ -431,14 +426,19 @@
           "score": 27.9
         },
         {
+          "model": "JoyAI-VL-Preview",
+          "creator": "Joy Future Academy",
+          "score": 27.9
+        },
+        {
           "model": "GLM-5.3-Flash",
           "creator": "Zhipu AI",
-          "score": 27.8
+          "score": 27.7
         },
         {
           "model": "MiMo-V2.6-Flash",
           "creator": "Xiaomi",
-          "score": 26.7
+          "score": 26.8
         },
         {
           "model": "Mistral Large 4",
@@ -448,7 +448,7 @@
         {
           "model": "Mistral Large 4 Preview",
           "creator": "Mistral",
-          "score": 25.3
+          "score": 25.2
         },
         {
           "model": "Muse Spark Open",
@@ -458,7 +458,7 @@
         {
           "model": "Agnes 2.5 Pro Theta",
           "creator": "Sapiens AI",
-          "score": 24
+          "score": 24.1
         },
         {
           "model": "GPT-5.6 Luna",
@@ -491,14 +491,14 @@
           "score": 20.1
         },
         {
-          "model": "JT-4.1 Flash 236B A21B",
-          "creator": "China Mobile",
+          "model": "MiniMax-M3",
+          "creator": "MiniMax",
           "score": 19
         },
         {
-          "model": "MiniMax-M3",
-          "creator": "MiniMax",
-          "score": 18.9
+          "model": "JT-4.1 Flash 236B A21B",
+          "creator": "China Mobile",
+          "score": 19
         },
         {
           "model": "K2 Horizon 375B A23B",
@@ -606,29 +606,14 @@
           "score": 6
         },
         {
-          "model": "Granite 4.2 30B",
-          "creator": "IBM",
-          "score": 5.5
-        },
-        {
           "model": "Nemotron 3.5 Lightning",
           "creator": "NVIDIA",
           "score": 5.5
         },
         {
-          "model": "Granite 4.2 8B",
-          "creator": "IBM",
-          "score": 5.1
-        },
-        {
           "model": "Gemma 4 E4B",
           "creator": "Google",
           "score": 4.8
-        },
-        {
-          "model": "Granite 4.2 3B",
-          "creator": "IBM",
-          "score": 4.7
         },
         {
           "model": "Mistral Medium 3.5",
@@ -644,6 +629,11 @@
           "model": "Mistral Small 4",
           "creator": "Mistral",
           "score": 4.3
+        },
+        {
+          "model": "Gemma 4 26B A4B",
+          "creator": "Google",
+          "score": 4
         },
         {
           "model": "gpt-oss-120b",
@@ -690,7 +680,7 @@
           "release_date": "2026-11-18",
           "price_1m_blended": 6,
           "cost_per_task": 6.4448,
-          "tok_per_sec": 116.43,
+          "tok_per_sec": 122.61,
           "open_weights": null
         },
         {
@@ -701,7 +691,7 @@
           "release_date": "2026-11-09",
           "price_1m_blended": 16,
           "cost_per_task": 26.5386,
-          "tok_per_sec": 92.55,
+          "tok_per_sec": 90.61,
           "open_weights": null
         },
         {
@@ -712,7 +702,7 @@
           "release_date": "2026-10-28",
           "price_1m_blended": 8,
           "cost_per_task": 7.7555,
-          "tok_per_sec": 88.71,
+          "tok_per_sec": 77.56,
           "open_weights": null
         },
         {
@@ -723,7 +713,7 @@
           "release_date": "2026-11-17",
           "price_1m_blended": 16,
           "cost_per_task": 3.9979,
-          "tok_per_sec": 67.41,
+          "tok_per_sec": 57.03,
           "open_weights": null
         },
         {
@@ -734,7 +724,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 8,
           "cost_per_task": 10.0364,
-          "tok_per_sec": 97.36,
+          "tok_per_sec": 97.89,
           "open_weights": null
         },
         {
@@ -745,7 +735,7 @@
           "release_date": "2026-11-12",
           "price_1m_blended": 3,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 234.5,
+          "tok_per_sec": 211.92,
           "open_weights": null
         },
         {
@@ -756,7 +746,7 @@
           "release_date": "2026-09-03",
           "price_1m_blended": 20,
           "cost_per_task": 6.2447,
-          "tok_per_sec": 72.33,
+          "tok_per_sec": 64.17,
           "open_weights": null
         },
         {
@@ -767,7 +757,7 @@
           "release_date": "2026-11-17",
           "price_1m_blended": 4,
           "cost_per_task": 1.0144,
-          "tok_per_sec": 82.59,
+          "tok_per_sec": 68.01,
           "open_weights": null
         },
         {
@@ -778,7 +768,7 @@
           "release_date": "2026-09-29",
           "price_1m_blended": 4,
           "cost_per_task": 1.2721,
-          "tok_per_sec": 92.63,
+          "tok_per_sec": 76.41,
           "open_weights": null
         },
         {
@@ -788,8 +778,8 @@
           "score": 55.9,
           "release_date": "2026-09-30",
           "price_1m_blended": 8,
-          "cost_per_task": 9.9466,
-          "tok_per_sec": 109.28,
+          "cost_per_task": 7.0616,
+          "tok_per_sec": 94.59,
           "open_weights": null
         },
         {
@@ -800,7 +790,7 @@
           "release_date": "2026-09-28",
           "price_1m_blended": 4,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 134.9,
+          "tok_per_sec": 132.99,
           "open_weights": null
         },
         {
@@ -822,7 +812,7 @@
           "release_date": "2026-11-16",
           "price_1m_blended": 2.25,
           "cost_per_task": 3.2681,
-          "tok_per_sec": 72.42,
+          "tok_per_sec": 105.76,
           "open_weights": null
         },
         {
@@ -833,7 +823,7 @@
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
           "cost_per_task": 12.994,
-          "tok_per_sec": 65.69,
+          "tok_per_sec": 68.35,
           "open_weights": null
         },
         {
@@ -844,7 +834,7 @@
           "release_date": "2026-10-23",
           "price_1m_blended": 4,
           "cost_per_task": 3.6812,
-          "tok_per_sec": 30.37,
+          "tok_per_sec": 32.45,
           "open_weights": null
         },
         {
@@ -855,7 +845,7 @@
           "release_date": "2026-09-21",
           "price_1m_blended": 3,
           "cost_per_task": 7.7715,
-          "tok_per_sec": 85.57,
+          "tok_per_sec": 89.77,
           "open_weights": null
         },
         {
@@ -866,7 +856,7 @@
           "release_date": "2026-10-12",
           "price_1m_blended": 8,
           "cost_per_task": 6.952,
-          "tok_per_sec": 99.63,
+          "tok_per_sec": 95.05,
           "open_weights": null
         },
         {
@@ -877,7 +867,7 @@
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
           "cost_per_task": 11.8215,
-          "tok_per_sec": 52.94,
+          "tok_per_sec": 53.23,
           "open_weights": null
         },
         {
@@ -888,7 +878,7 @@
           "release_date": "2026-10-26",
           "price_1m_blended": 2,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 103.31,
+          "tok_per_sec": 72.05,
           "open_weights": null
         },
         {
@@ -899,7 +889,7 @@
           "release_date": "2026-09-02",
           "price_1m_blended": 2,
           "cost_per_task": 2.3858,
-          "tok_per_sec": 140.84,
+          "tok_per_sec": 115.08,
           "open_weights": null
         }
       ],
@@ -1358,8 +1348,8 @@
       "description": "Índice de domínio da AA para estratégia e operações",
       "unit": "índice (0–100)",
       "is_fraction": false,
-      "models_evaluated": 171,
-      "families_evaluated": 93,
+      "models_evaluated": 172,
+      "families_evaluated": 94,
       "top": [
         {
           "model": "Claude Fable 5.2",
@@ -1369,7 +1359,7 @@
           "release_date": "2026-11-09",
           "price_1m_blended": 16,
           "cost_per_task": 26.5386,
-          "tok_per_sec": 92.55,
+          "tok_per_sec": 90.61,
           "open_weights": null
         },
         {
@@ -1380,7 +1370,7 @@
           "release_date": "2026-11-18",
           "price_1m_blended": 6,
           "cost_per_task": 6.4448,
-          "tok_per_sec": 116.43,
+          "tok_per_sec": 122.61,
           "open_weights": null
         },
         {
@@ -1391,7 +1381,7 @@
           "release_date": "2026-11-17",
           "price_1m_blended": 16,
           "cost_per_task": 3.9979,
-          "tok_per_sec": 67.41,
+          "tok_per_sec": 57.03,
           "open_weights": null
         },
         {
@@ -1402,7 +1392,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 8,
           "cost_per_task": 10.0364,
-          "tok_per_sec": 97.36,
+          "tok_per_sec": 97.89,
           "open_weights": null
         },
         {
@@ -1413,7 +1403,7 @@
           "release_date": "2026-10-28",
           "price_1m_blended": 8,
           "cost_per_task": 7.7555,
-          "tok_per_sec": 88.71,
+          "tok_per_sec": 77.56,
           "open_weights": null
         },
         {
@@ -1424,7 +1414,7 @@
           "release_date": "2026-11-17",
           "price_1m_blended": 4,
           "cost_per_task": 1.0144,
-          "tok_per_sec": 82.59,
+          "tok_per_sec": 68.01,
           "open_weights": null
         },
         {
@@ -1435,7 +1425,7 @@
           "release_date": "2026-09-28",
           "price_1m_blended": 4,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 134.9,
+          "tok_per_sec": 132.99,
           "open_weights": null
         },
         {
@@ -1446,7 +1436,7 @@
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
           "cost_per_task": 12.994,
-          "tok_per_sec": 65.69,
+          "tok_per_sec": 68.35,
           "open_weights": null
         },
         {
@@ -1457,7 +1447,7 @@
           "release_date": "2026-09-03",
           "price_1m_blended": 20,
           "cost_per_task": 6.2447,
-          "tok_per_sec": 72.33,
+          "tok_per_sec": 64.17,
           "open_weights": null
         },
         {
@@ -1479,7 +1469,7 @@
           "release_date": "2026-11-12",
           "price_1m_blended": 3,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 234.5,
+          "tok_per_sec": 211.92,
           "open_weights": null
         },
         {
@@ -1490,7 +1480,7 @@
           "release_date": "2026-09-29",
           "price_1m_blended": 4,
           "cost_per_task": 1.2721,
-          "tok_per_sec": 92.63,
+          "tok_per_sec": 76.41,
           "open_weights": null
         },
         {
@@ -1501,7 +1491,7 @@
           "release_date": "2026-10-23",
           "price_1m_blended": 4,
           "cost_per_task": 3.6812,
-          "tok_per_sec": 30.37,
+          "tok_per_sec": 32.45,
           "open_weights": null
         },
         {
@@ -1511,8 +1501,8 @@
           "score": 57.2,
           "release_date": "2026-09-30",
           "price_1m_blended": 8,
-          "cost_per_task": 9.9466,
-          "tok_per_sec": 109.28,
+          "cost_per_task": 7.0616,
+          "tok_per_sec": 94.59,
           "open_weights": null
         },
         {
@@ -1523,7 +1513,7 @@
           "release_date": "2026-11-16",
           "price_1m_blended": 2.25,
           "cost_per_task": 3.2681,
-          "tok_per_sec": 72.42,
+          "tok_per_sec": 105.76,
           "open_weights": null
         },
         {
@@ -1534,7 +1524,7 @@
           "release_date": "2026-09-21",
           "price_1m_blended": 3,
           "cost_per_task": 7.7715,
-          "tok_per_sec": 85.57,
+          "tok_per_sec": 89.77,
           "open_weights": null
         },
         {
@@ -1545,7 +1535,7 @@
           "release_date": "2026-10-12",
           "price_1m_blended": 8,
           "cost_per_task": 6.952,
-          "tok_per_sec": 99.63,
+          "tok_per_sec": 95.05,
           "open_weights": null
         },
         {
@@ -1556,7 +1546,7 @@
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
           "cost_per_task": 11.8215,
-          "tok_per_sec": 52.94,
+          "tok_per_sec": 53.23,
           "open_weights": null
         },
         {
@@ -1566,8 +1556,8 @@
           "score": 52.8,
           "release_date": "2026-08-12",
           "price_1m_blended": 3,
-          "cost_per_task": 4.6786,
-          "tok_per_sec": 81.78,
+          "cost_per_task": 4.68,
+          "tok_per_sec": 69.17,
           "open_weights": null
         },
         {
@@ -1578,7 +1568,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 4,
           "cost_per_task": 2.4658,
-          "tok_per_sec": 164.28,
+          "tok_per_sec": 155.88,
           "open_weights": null
         }
       ],
@@ -2034,6 +2024,11 @@
           "score": 5.2
         },
         {
+          "model": "Gemma 4 12B",
+          "creator": "Google",
+          "score": 4.8
+        },
+        {
           "model": "K2 Horizon 0.9B",
           "creator": "Institute of Foundation Models",
           "score": 3.4
@@ -2068,7 +2063,7 @@
           "release_date": "2026-11-18",
           "price_1m_blended": 6,
           "cost_per_task": 6.4448,
-          "tok_per_sec": 116.43,
+          "tok_per_sec": 122.61,
           "open_weights": null
         },
         {
@@ -2079,7 +2074,7 @@
           "release_date": "2026-11-09",
           "price_1m_blended": 16,
           "cost_per_task": 26.5386,
-          "tok_per_sec": 92.55,
+          "tok_per_sec": 90.61,
           "open_weights": null
         },
         {
@@ -2090,7 +2085,7 @@
           "release_date": "2026-10-28",
           "price_1m_blended": 8,
           "cost_per_task": 7.7555,
-          "tok_per_sec": 88.71,
+          "tok_per_sec": 77.56,
           "open_weights": null
         },
         {
@@ -2101,7 +2096,7 @@
           "release_date": "2026-11-17",
           "price_1m_blended": 16,
           "cost_per_task": 3.9979,
-          "tok_per_sec": 67.41,
+          "tok_per_sec": 57.03,
           "open_weights": null
         },
         {
@@ -2112,7 +2107,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 8,
           "cost_per_task": 10.0364,
-          "tok_per_sec": 97.36,
+          "tok_per_sec": 97.89,
           "open_weights": null
         },
         {
@@ -2123,7 +2118,7 @@
           "release_date": "2026-11-12",
           "price_1m_blended": 3,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 234.5,
+          "tok_per_sec": 211.92,
           "open_weights": null
         },
         {
@@ -2134,7 +2129,7 @@
           "release_date": "2026-09-03",
           "price_1m_blended": 20,
           "cost_per_task": 3.6589,
-          "tok_per_sec": 57.48,
+          "tok_per_sec": 52.23,
           "open_weights": null
         },
         {
@@ -2145,7 +2140,7 @@
           "release_date": "2026-11-17",
           "price_1m_blended": 4,
           "cost_per_task": 1.0144,
-          "tok_per_sec": 82.59,
+          "tok_per_sec": 68.01,
           "open_weights": null
         },
         {
@@ -2155,8 +2150,8 @@
           "score": 54.6,
           "release_date": "2026-09-30",
           "price_1m_blended": 8,
-          "cost_per_task": 9.9466,
-          "tok_per_sec": 109.28,
+          "cost_per_task": 7.0616,
+          "tok_per_sec": 94.59,
           "open_weights": null
         },
         {
@@ -2167,7 +2162,7 @@
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
           "cost_per_task": 12.994,
-          "tok_per_sec": 65.69,
+          "tok_per_sec": 68.35,
           "open_weights": null
         },
         {
@@ -2178,7 +2173,7 @@
           "release_date": "2026-09-29",
           "price_1m_blended": 4,
           "cost_per_task": 0.764,
-          "tok_per_sec": 72.11,
+          "tok_per_sec": 69.6,
           "open_weights": null
         },
         {
@@ -2189,7 +2184,7 @@
           "release_date": "2026-09-28",
           "price_1m_blended": 4,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 134.9,
+          "tok_per_sec": 132.99,
           "open_weights": null
         },
         {
@@ -2200,7 +2195,7 @@
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
           "cost_per_task": 11.8215,
-          "tok_per_sec": 52.94,
+          "tok_per_sec": 53.23,
           "open_weights": null
         },
         {
@@ -2222,7 +2217,7 @@
           "release_date": "2026-11-16",
           "price_1m_blended": 2.25,
           "cost_per_task": 3.2681,
-          "tok_per_sec": 72.42,
+          "tok_per_sec": 105.76,
           "open_weights": null
         },
         {
@@ -2233,7 +2228,7 @@
           "release_date": "2026-10-23",
           "price_1m_blended": 4,
           "cost_per_task": 3.6812,
-          "tok_per_sec": 30.37,
+          "tok_per_sec": 32.45,
           "open_weights": null
         },
         {
@@ -2244,7 +2239,7 @@
           "release_date": "2026-09-21",
           "price_1m_blended": 3,
           "cost_per_task": 7.7715,
-          "tok_per_sec": 85.57,
+          "tok_per_sec": 89.77,
           "open_weights": null
         },
         {
@@ -2255,7 +2250,7 @@
           "release_date": "2026-10-12",
           "price_1m_blended": 8,
           "cost_per_task": 6.952,
-          "tok_per_sec": 99.63,
+          "tok_per_sec": 95.05,
           "open_weights": null
         },
         {
@@ -2266,7 +2261,7 @@
           "release_date": "2026-10-26",
           "price_1m_blended": 2,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 103.31,
+          "tok_per_sec": 72.05,
           "open_weights": null
         },
         {
@@ -2277,7 +2272,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 4,
           "cost_per_task": 2.4658,
-          "tok_per_sec": 164.28,
+          "tok_per_sec": 155.88,
           "open_weights": null
         }
       ],
@@ -2747,7 +2742,7 @@
           "release_date": "2026-11-09",
           "price_1m_blended": 16,
           "cost_per_task": 26.5386,
-          "tok_per_sec": 92.55,
+          "tok_per_sec": 90.61,
           "open_weights": null
         },
         {
@@ -2758,7 +2753,7 @@
           "release_date": "2026-11-18",
           "price_1m_blended": 6,
           "cost_per_task": 6.4448,
-          "tok_per_sec": 116.43,
+          "tok_per_sec": 122.61,
           "open_weights": null
         },
         {
@@ -2769,7 +2764,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 8,
           "cost_per_task": 10.0364,
-          "tok_per_sec": 97.36,
+          "tok_per_sec": 97.89,
           "open_weights": null
         },
         {
@@ -2780,7 +2775,7 @@
           "release_date": "2026-11-17",
           "price_1m_blended": 16,
           "cost_per_task": 3.9979,
-          "tok_per_sec": 67.41,
+          "tok_per_sec": 57.03,
           "open_weights": null
         },
         {
@@ -2791,7 +2786,7 @@
           "release_date": "2026-10-28",
           "price_1m_blended": 8,
           "cost_per_task": 7.7555,
-          "tok_per_sec": 88.71,
+          "tok_per_sec": 77.56,
           "open_weights": null
         },
         {
@@ -2802,7 +2797,7 @@
           "release_date": "2026-09-28",
           "price_1m_blended": 4,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 134.9,
+          "tok_per_sec": 132.99,
           "open_weights": null
         },
         {
@@ -2813,7 +2808,7 @@
           "release_date": "2026-09-03",
           "price_1m_blended": 20,
           "cost_per_task": 6.2447,
-          "tok_per_sec": 72.33,
+          "tok_per_sec": 64.17,
           "open_weights": null
         },
         {
@@ -2824,7 +2819,7 @@
           "release_date": "2026-11-17",
           "price_1m_blended": 4,
           "cost_per_task": 1.0144,
-          "tok_per_sec": 82.59,
+          "tok_per_sec": 68.01,
           "open_weights": null
         },
         {
@@ -2835,7 +2830,7 @@
           "release_date": "2026-11-12",
           "price_1m_blended": 3,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 234.5,
+          "tok_per_sec": 211.92,
           "open_weights": null
         },
         {
@@ -2846,7 +2841,7 @@
           "release_date": "2026-09-29",
           "price_1m_blended": 4,
           "cost_per_task": 1.2721,
-          "tok_per_sec": 92.63,
+          "tok_per_sec": 76.41,
           "open_weights": null
         },
         {
@@ -2868,7 +2863,7 @@
           "release_date": "2026-10-23",
           "price_1m_blended": 4,
           "cost_per_task": 3.6812,
-          "tok_per_sec": 30.37,
+          "tok_per_sec": 32.45,
           "open_weights": null
         },
         {
@@ -2878,8 +2873,8 @@
           "score": 51.3,
           "release_date": "2026-09-30",
           "price_1m_blended": 8,
-          "cost_per_task": 9.9466,
-          "tok_per_sec": 109.28,
+          "cost_per_task": 7.0616,
+          "tok_per_sec": 94.59,
           "open_weights": null
         },
         {
@@ -2890,7 +2885,7 @@
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
           "cost_per_task": 12.994,
-          "tok_per_sec": 65.69,
+          "tok_per_sec": 68.35,
           "open_weights": null
         },
         {
@@ -2901,7 +2896,7 @@
           "release_date": "2026-10-12",
           "price_1m_blended": 8,
           "cost_per_task": 6.952,
-          "tok_per_sec": 99.63,
+          "tok_per_sec": 95.05,
           "open_weights": null
         },
         {
@@ -2912,7 +2907,7 @@
           "release_date": "2026-11-16",
           "price_1m_blended": 2.25,
           "cost_per_task": 3.2681,
-          "tok_per_sec": 72.42,
+          "tok_per_sec": 105.76,
           "open_weights": null
         },
         {
@@ -2923,7 +2918,7 @@
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
           "cost_per_task": 11.8215,
-          "tok_per_sec": 52.94,
+          "tok_per_sec": 53.23,
           "open_weights": null
         },
         {
@@ -2934,7 +2929,7 @@
           "release_date": "2026-09-21",
           "price_1m_blended": 3,
           "cost_per_task": 7.7715,
-          "tok_per_sec": 85.57,
+          "tok_per_sec": 89.77,
           "open_weights": null
         },
         {
@@ -2945,7 +2940,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 4,
           "cost_per_task": 2.4658,
-          "tok_per_sec": 164.28,
+          "tok_per_sec": 155.88,
           "open_weights": null
         },
         {
@@ -2956,7 +2951,7 @@
           "release_date": "2026-10-26",
           "price_1m_blended": 2,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 103.31,
+          "tok_per_sec": 72.05,
           "open_weights": null
         }
       ],
@@ -3285,51 +3280,51 @@
       "description": "Índice de domínio da AA para engenharia",
       "unit": "índice (0–100)",
       "is_fraction": false,
-      "models_evaluated": 158,
-      "families_evaluated": 86,
+      "models_evaluated": 156,
+      "families_evaluated": 84,
       "top": [
         {
           "model": "Claude Fable 5.2",
           "variant": "Max, Default Fallback",
           "creator": "Anthropic",
-          "score": 72.6,
+          "score": 72.8,
           "release_date": "2026-11-09",
           "price_1m_blended": 16,
           "cost_per_task": 26.5386,
-          "tok_per_sec": 92.55,
+          "tok_per_sec": 90.61,
           "open_weights": null
         },
         {
           "model": "Gemini 4 Neon",
           "variant": "Xhigh",
           "creator": "Google",
-          "score": 66.8,
+          "score": 67,
           "release_date": "2026-11-18",
           "price_1m_blended": 6,
           "cost_per_task": 6.4448,
-          "tok_per_sec": 116.43,
+          "tok_per_sec": 122.61,
           "open_weights": null
         },
         {
           "model": "GPT-6.2 Astra",
           "variant": "Max",
           "creator": "OpenAI",
-          "score": 66.6,
+          "score": 66.7,
           "release_date": "2026-11-17",
           "price_1m_blended": 16,
           "cost_per_task": 3.9979,
-          "tok_per_sec": 67.41,
+          "tok_per_sec": 57.03,
           "open_weights": null
         },
         {
           "model": "Gemini 4 Carbon",
           "variant": "High",
           "creator": "Google",
-          "score": 65.3,
+          "score": 65.4,
           "release_date": "2026-10-28",
           "price_1m_blended": 8,
           "cost_per_task": 7.7555,
-          "tok_per_sec": 88.71,
+          "tok_per_sec": 77.56,
           "open_weights": null
         },
         {
@@ -3340,7 +3335,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 8,
           "cost_per_task": 10.0364,
-          "tok_per_sec": 97.36,
+          "tok_per_sec": 97.89,
           "open_weights": null
         },
         {
@@ -3351,7 +3346,7 @@
           "release_date": "2026-09-03",
           "price_1m_blended": 20,
           "cost_per_task": 6.2447,
-          "tok_per_sec": 72.33,
+          "tok_per_sec": 64.17,
           "open_weights": null
         },
         {
@@ -3362,18 +3357,18 @@
           "release_date": "2026-11-17",
           "price_1m_blended": 4,
           "cost_per_task": 1.0144,
-          "tok_per_sec": 82.59,
+          "tok_per_sec": 68.01,
           "open_weights": null
         },
         {
           "model": "Gemini 4 Hydrogen",
           "variant": "Xhigh",
           "creator": "Google",
-          "score": 60.1,
+          "score": 60.2,
           "release_date": "2026-11-12",
           "price_1m_blended": 3,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 234.5,
+          "tok_per_sec": 211.92,
           "open_weights": null
         },
         {
@@ -3384,47 +3379,47 @@
           "release_date": "2026-09-29",
           "price_1m_blended": 4,
           "cost_per_task": 1.2721,
-          "tok_per_sec": 92.63,
+          "tok_per_sec": 76.41,
           "open_weights": null
         },
         {
           "model": "Claude Sonnet 5.5",
           "variant": "Max, Default Fallback",
           "creator": "Anthropic",
-          "score": 58.5,
+          "score": 58.6,
           "release_date": "2026-09-28",
           "price_1m_blended": 4,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 134.9,
+          "tok_per_sec": 132.99,
           "open_weights": null
         },
         {
           "model": "Gemini 4 Argon",
           "variant": "High",
           "creator": "Google",
-          "score": 57.3,
+          "score": 57.4,
           "release_date": "2026-09-30",
           "price_1m_blended": 8,
-          "cost_per_task": 9.9466,
-          "tok_per_sec": 109.28,
+          "cost_per_task": 7.0616,
+          "tok_per_sec": 94.59,
           "open_weights": null
         },
         {
           "model": "Claude Fable 5.1",
           "variant": "Xhigh, Default Fallback",
           "creator": "Anthropic",
-          "score": 57.2,
+          "score": 57.3,
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
           "cost_per_task": 10.8475,
-          "tok_per_sec": 66.83,
+          "tok_per_sec": 63.32,
           "open_weights": null
         },
         {
           "model": "Muse Wonder Full",
           "variant": "Max",
           "creator": "Meta",
-          "score": 55.3,
+          "score": 55.2,
           "release_date": "2026-10-12",
           "price_1m_blended": null,
           "cost_per_task": null,
@@ -3435,11 +3430,11 @@
           "model": "GPT-6.1 Terra",
           "variant": "Max",
           "creator": "OpenAI",
-          "score": 54.7,
+          "score": 54.8,
           "release_date": "2026-10-26",
           "price_1m_blended": 2,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 103.31,
+          "tok_per_sec": 72.05,
           "open_weights": null
         },
         {
@@ -3450,40 +3445,40 @@
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
           "cost_per_task": 11.8215,
-          "tok_per_sec": 52.94,
+          "tok_per_sec": 53.23,
           "open_weights": null
         },
         {
           "model": "Kimi K3.1 Pro",
           "variant": null,
           "creator": "Moonshot AI",
-          "score": 50.9,
+          "score": 51,
           "release_date": "2026-10-23",
           "price_1m_blended": 4,
           "cost_per_task": 3.6812,
-          "tok_per_sec": 30.37,
+          "tok_per_sec": 32.45,
           "open_weights": null
         },
         {
           "model": "Qwen4 Max",
           "variant": null,
           "creator": "Alibaba",
-          "score": 50.1,
+          "score": 50,
           "release_date": "2026-11-16",
           "price_1m_blended": 2.25,
           "cost_per_task": 3.2681,
-          "tok_per_sec": 72.42,
+          "tok_per_sec": 105.76,
           "open_weights": null
         },
         {
           "model": "Muse Wonder",
           "variant": "Max",
           "creator": "Meta",
-          "score": 49.6,
+          "score": 49.7,
           "release_date": "2026-10-12",
           "price_1m_blended": 8,
           "cost_per_task": 6.952,
-          "tok_per_sec": 99.63,
+          "tok_per_sec": 95.05,
           "open_weights": null
         },
         {
@@ -3494,7 +3489,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 4,
           "cost_per_task": 2.4658,
-          "tok_per_sec": 164.28,
+          "tok_per_sec": 155.88,
           "open_weights": null
         },
         {
@@ -3505,7 +3500,7 @@
           "release_date": "2026-09-02",
           "price_1m_blended": 2,
           "cost_per_task": 2.3858,
-          "tok_per_sec": 140.84,
+          "tok_per_sec": 115.08,
           "open_weights": null
         }
       ],
@@ -3513,22 +3508,22 @@
         {
           "model": "Claude Fable 5.2",
           "creator": "Anthropic",
-          "score": 72.6
+          "score": 72.8
         },
         {
           "model": "Gemini 4 Neon",
           "creator": "Google",
-          "score": 66.8
+          "score": 67
         },
         {
           "model": "GPT-6.2 Astra",
           "creator": "OpenAI",
-          "score": 66.6
+          "score": 66.7
         },
         {
           "model": "Gemini 4 Carbon",
           "creator": "Google",
-          "score": 65.3
+          "score": 65.4
         },
         {
           "model": "Claude Opus 5.5",
@@ -3548,7 +3543,7 @@
         {
           "model": "Gemini 4 Hydrogen",
           "creator": "Google",
-          "score": 60.1
+          "score": 60.2
         },
         {
           "model": "GPT-6.1 Sol",
@@ -3558,27 +3553,27 @@
         {
           "model": "Claude Sonnet 5.5",
           "creator": "Anthropic",
-          "score": 58.5
+          "score": 58.6
         },
         {
           "model": "Gemini 4 Argon",
           "creator": "Google",
-          "score": 57.3
+          "score": 57.4
         },
         {
           "model": "Claude Fable 5.1",
           "creator": "Anthropic",
-          "score": 57.2
+          "score": 57.3
         },
         {
           "model": "Muse Wonder Full",
           "creator": "Meta",
-          "score": 55.3
+          "score": 55.2
         },
         {
           "model": "GPT-6.1 Terra",
           "creator": "OpenAI",
-          "score": 54.7
+          "score": 54.8
         },
         {
           "model": "Claude Opus 5",
@@ -3588,17 +3583,17 @@
         {
           "model": "Kimi K3.1 Pro",
           "creator": "Moonshot AI",
-          "score": 50.9
+          "score": 51
         },
         {
           "model": "Qwen4 Max",
           "creator": "Alibaba",
-          "score": 50.1
+          "score": 50
         },
         {
           "model": "Muse Wonder",
           "creator": "Meta",
-          "score": 49.6
+          "score": 49.7
         },
         {
           "model": "GPT-6 Sol",
@@ -3613,17 +3608,17 @@
         {
           "model": "Claude Haiku 5.5",
           "creator": "Anthropic",
-          "score": 42.5
-        },
-        {
-          "model": "Grok 4.7",
-          "creator": "xAI",
-          "score": 41.8
+          "score": 42.6
         },
         {
           "model": "Muse Ember",
           "creator": "Meta",
           "score": 41.8
+        },
+        {
+          "model": "Grok 4.7",
+          "creator": "xAI",
+          "score": 41.7
         },
         {
           "model": "Tencent Hy4",
@@ -3643,17 +3638,17 @@
         {
           "model": "Gemini 3.8 Flash",
           "creator": "Google",
-          "score": 38.8
+          "score": 38.7
         },
         {
           "model": "DeepSeek V4.1 Flash 1017",
           "creator": "DeepSeek",
-          "score": 37.6
+          "score": 37.5
         },
         {
           "model": "GLM-5.3",
           "creator": "Zhipu AI",
-          "score": 37.6
+          "score": 37.5
         },
         {
           "model": "Grok 4.6",
@@ -3683,7 +3678,7 @@
         {
           "model": "GLM-5.3-Flash",
           "creator": "Zhipu AI",
-          "score": 34.5
+          "score": 34.4
         },
         {
           "model": "MiMo-V2.6-Pro",
@@ -3698,7 +3693,7 @@
         {
           "model": "JoyAI-VL-Preview",
           "creator": "Joy Future Academy",
-          "score": 33.9
+          "score": 33.8
         },
         {
           "model": "Mistral Large 4",
@@ -3713,12 +3708,12 @@
         {
           "model": "Qwen3.8-Flash-Next",
           "creator": "Alibaba",
-          "score": 33
+          "score": 32.9
         },
         {
           "model": "MiMo-V2.6-Flash",
           "creator": "Xiaomi",
-          "score": 31
+          "score": 31.1
         },
         {
           "model": "Mistral Large 4 Preview",
@@ -3743,7 +3738,7 @@
         {
           "model": "Ling-3.2-air",
           "creator": "InclusionAI",
-          "score": 28.7
+          "score": 28.8
         },
         {
           "model": "Qwen3.8 27B",
@@ -3758,7 +3753,7 @@
         {
           "model": "Nanbeige4.3-33B",
           "creator": "Nanbeige",
-          "score": 26.8
+          "score": 26.7
         },
         {
           "model": "K2 Horizon 375B A23B",
@@ -3768,7 +3763,7 @@
         {
           "model": "MiniMax-M3",
           "creator": "MiniMax",
-          "score": 26.2
+          "score": 26.3
         },
         {
           "model": "JT-4.1 Flash 236B A21B",
@@ -3871,11 +3866,6 @@
           "score": 15.5
         },
         {
-          "model": "Granite 4.2 30B",
-          "creator": "IBM",
-          "score": 15.4
-        },
-        {
           "model": "Muse Glimmer",
           "creator": "Meta",
           "score": 15.4
@@ -3884,16 +3874,6 @@
           "model": "Gemini 3.1 Flash-Lite",
           "creator": "Google",
           "score": 14.6
-        },
-        {
-          "model": "Granite 4.2 8B",
-          "creator": "IBM",
-          "score": 14.6
-        },
-        {
-          "model": "Granite 4.2 3B",
-          "creator": "IBM",
-          "score": 14
         },
         {
           "model": "Mistral Small 4",
@@ -3919,6 +3899,11 @@
           "model": "gpt-oss-120b",
           "creator": "OpenAI",
           "score": 11.2
+        },
+        {
+          "model": "Gemma 4 26B A4B",
+          "creator": "Google",
+          "score": 11.1
         },
         {
           "model": "North Mini Code",
@@ -3960,7 +3945,7 @@
           "release_date": "2026-11-09",
           "price_1m_blended": 16,
           "cost_per_task": 26.5386,
-          "tok_per_sec": 92.55,
+          "tok_per_sec": 90.61,
           "open_weights": null
         },
         {
@@ -3971,7 +3956,7 @@
           "release_date": "2026-11-18",
           "price_1m_blended": 6,
           "cost_per_task": 6.4448,
-          "tok_per_sec": 116.43,
+          "tok_per_sec": 122.61,
           "open_weights": null
         },
         {
@@ -3982,7 +3967,7 @@
           "release_date": "2026-11-17",
           "price_1m_blended": 16,
           "cost_per_task": 3.9979,
-          "tok_per_sec": 67.41,
+          "tok_per_sec": 57.03,
           "open_weights": null
         },
         {
@@ -3993,7 +3978,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 8,
           "cost_per_task": 10.0364,
-          "tok_per_sec": 97.36,
+          "tok_per_sec": 97.89,
           "open_weights": null
         },
         {
@@ -4004,7 +3989,7 @@
           "release_date": "2026-10-28",
           "price_1m_blended": 8,
           "cost_per_task": 7.7555,
-          "tok_per_sec": 88.71,
+          "tok_per_sec": 77.56,
           "open_weights": null
         },
         {
@@ -4015,7 +4000,7 @@
           "release_date": "2026-11-17",
           "price_1m_blended": 4,
           "cost_per_task": 1.0144,
-          "tok_per_sec": 82.59,
+          "tok_per_sec": 68.01,
           "open_weights": null
         },
         {
@@ -4026,7 +4011,7 @@
           "release_date": "2026-09-01",
           "price_1m_blended": 20,
           "cost_per_task": 12.994,
-          "tok_per_sec": 65.69,
+          "tok_per_sec": 68.35,
           "open_weights": null
         },
         {
@@ -4037,7 +4022,7 @@
           "release_date": "2026-09-03",
           "price_1m_blended": 20,
           "cost_per_task": 6.2447,
-          "tok_per_sec": 72.33,
+          "tok_per_sec": 64.17,
           "open_weights": null
         },
         {
@@ -4048,7 +4033,7 @@
           "release_date": "2026-09-29",
           "price_1m_blended": 4,
           "cost_per_task": 1.2721,
-          "tok_per_sec": 92.63,
+          "tok_per_sec": 76.41,
           "open_weights": null
         },
         {
@@ -4059,7 +4044,7 @@
           "release_date": "2026-11-12",
           "price_1m_blended": 3,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 234.5,
+          "tok_per_sec": 211.92,
           "open_weights": null
         },
         {
@@ -4070,7 +4055,7 @@
           "release_date": "2026-09-28",
           "price_1m_blended": 4,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 134.9,
+          "tok_per_sec": 132.99,
           "open_weights": null
         },
         {
@@ -4091,8 +4076,8 @@
           "score": 52.6,
           "release_date": "2026-09-30",
           "price_1m_blended": 8,
-          "cost_per_task": 9.9466,
-          "tok_per_sec": 109.28,
+          "cost_per_task": 7.0616,
+          "tok_per_sec": 94.59,
           "open_weights": null
         },
         {
@@ -4103,7 +4088,7 @@
           "release_date": "2026-11-16",
           "price_1m_blended": 2.25,
           "cost_per_task": 3.2681,
-          "tok_per_sec": 72.42,
+          "tok_per_sec": 105.76,
           "open_weights": null
         },
         {
@@ -4114,7 +4099,7 @@
           "release_date": "2026-07-24",
           "price_1m_blended": 10,
           "cost_per_task": 11.8215,
-          "tok_per_sec": 52.94,
+          "tok_per_sec": 53.23,
           "open_weights": null
         },
         {
@@ -4125,7 +4110,7 @@
           "release_date": "2026-10-23",
           "price_1m_blended": 4,
           "cost_per_task": 3.6812,
-          "tok_per_sec": 30.37,
+          "tok_per_sec": 32.45,
           "open_weights": null
         },
         {
@@ -4136,7 +4121,7 @@
           "release_date": "2026-10-12",
           "price_1m_blended": 8,
           "cost_per_task": 6.952,
-          "tok_per_sec": 99.63,
+          "tok_per_sec": 95.05,
           "open_weights": null
         },
         {
@@ -4147,7 +4132,7 @@
           "release_date": "2026-10-26",
           "price_1m_blended": 2,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 103.31,
+          "tok_per_sec": 72.05,
           "open_weights": null
         },
         {
@@ -4158,7 +4143,7 @@
           "release_date": "2026-09-22",
           "price_1m_blended": 4,
           "cost_per_task": 2.4658,
-          "tok_per_sec": 164.28,
+          "tok_per_sec": 155.88,
           "open_weights": null
         },
         {
@@ -4169,7 +4154,7 @@
           "release_date": "2026-09-02",
           "price_1m_blended": 2,
           "cost_per_task": 2.3858,
-          "tok_per_sec": 140.84,
+          "tok_per_sec": 115.08,
           "open_weights": null
         }
       ],
@@ -4631,31 +4616,31 @@
           "variant": "low",
           "intelligence": 53.9,
           "cost_per_task": 3.0972,
-          "tok_per_sec": 81.15
+          "tok_per_sec": 79.67
         },
         {
           "variant": "medium",
-          "intelligence": 56.4,
+          "intelligence": 56.3,
           "cost_per_task": 3.8026,
-          "tok_per_sec": 81.68
+          "tok_per_sec": 82.18
         },
         {
           "variant": "high",
-          "intelligence": 61.8,
+          "intelligence": 61.9,
           "cost_per_task": 9.0784,
-          "tok_per_sec": 82.32
+          "tok_per_sec": 82.76
         },
         {
           "variant": "xhigh",
           "intelligence": 62.2,
           "cost_per_task": 14.8286,
-          "tok_per_sec": 83.8
+          "tok_per_sec": 86
         },
         {
           "variant": "max",
-          "intelligence": 64.6,
+          "intelligence": 64.8,
           "cost_per_task": 26.5386,
-          "tok_per_sec": 92.55
+          "tok_per_sec": 90.61
         }
       ]
     },
@@ -4667,31 +4652,31 @@
           "variant": "low",
           "intelligence": 45.7,
           "cost_per_task": 0.6617,
-          "tok_per_sec": 46.15
+          "tok_per_sec": 38.07
         },
         {
           "variant": "medium",
           "intelligence": 57,
           "cost_per_task": 1.6177,
-          "tok_per_sec": 46.87
+          "tok_per_sec": 39.03
         },
         {
           "variant": "high",
-          "intelligence": 60.1,
+          "intelligence": 60.3,
           "cost_per_task": 2.0739,
-          "tok_per_sec": 45.88
+          "tok_per_sec": 42.5
         },
         {
           "variant": "xhigh",
-          "intelligence": 61.6,
+          "intelligence": 61.8,
           "cost_per_task": 2.5211,
-          "tok_per_sec": 47.88
+          "tok_per_sec": 43.29
         },
         {
           "variant": "max",
-          "intelligence": 62.1,
+          "intelligence": 62.2,
           "cost_per_task": 3.9979,
-          "tok_per_sec": 67.41
+          "tok_per_sec": 57.03
         }
       ]
     },
@@ -4702,26 +4687,26 @@
         {
           "variant": "low",
           "intelligence": 44.1,
-          "cost_per_task": 0.7452,
-          "tok_per_sec": 121.34
+          "cost_per_task": 0.8819,
+          "tok_per_sec": 115.08
         },
         {
           "variant": "medium",
           "intelligence": 54.9,
           "cost_per_task": 1.9046,
-          "tok_per_sec": 117.5
+          "tok_per_sec": 118.45
         },
         {
           "variant": "high",
-          "intelligence": 59.6,
+          "intelligence": 59.8,
           "cost_per_task": 3.7427,
-          "tok_per_sec": 114.5
+          "tok_per_sec": 113.23
         },
         {
           "variant": "xhigh",
-          "intelligence": 61.4,
+          "intelligence": 61.5,
           "cost_per_task": 6.4448,
-          "tok_per_sec": 116.43
+          "tok_per_sec": 122.61
         }
       ]
     },
@@ -4733,19 +4718,19 @@
           "variant": "low",
           "intelligence": 54.2,
           "cost_per_task": 7.1866,
-          "tok_per_sec": 84.17
+          "tok_per_sec": 70.81
         },
         {
           "variant": "medium",
-          "intelligence": 58.3,
+          "intelligence": 58.4,
           "cost_per_task": 6.5858,
-          "tok_per_sec": 85.89
+          "tok_per_sec": 68.06
         },
         {
           "variant": "high",
-          "intelligence": 60,
+          "intelligence": 60.1,
           "cost_per_task": 7.7555,
-          "tok_per_sec": 88.71
+          "tok_per_sec": 77.56
         }
       ]
     },
@@ -4757,31 +4742,31 @@
           "variant": "low",
           "intelligence": 34.8,
           "cost_per_task": 0.9755,
-          "tok_per_sec": 80.34
+          "tok_per_sec": 83.32
         },
         {
           "variant": "medium",
-          "intelligence": 48.2,
+          "intelligence": 48.3,
           "cost_per_task": 2.4511,
-          "tok_per_sec": 80.37
+          "tok_per_sec": 81.51
         },
         {
           "variant": "high",
           "intelligence": 51.8,
           "cost_per_task": 3.4647,
-          "tok_per_sec": 82.76
+          "tok_per_sec": 81.12
         },
         {
           "variant": "xhigh",
-          "intelligence": 57.4,
+          "intelligence": 57.5,
           "cost_per_task": 6.0472,
-          "tok_per_sec": 82.82
+          "tok_per_sec": 87.49
         },
         {
           "variant": "max",
           "intelligence": 59.1,
           "cost_per_task": 10.0364,
-          "tok_per_sec": 97.36
+          "tok_per_sec": 97.89
         }
       ]
     },
@@ -4793,31 +4778,31 @@
           "variant": "low",
           "intelligence": 40.6,
           "cost_per_task": 0.1836,
-          "tok_per_sec": 75.08
+          "tok_per_sec": 53.16
         },
         {
           "variant": "medium",
-          "intelligence": 52.7,
+          "intelligence": 52.4,
           "cost_per_task": 0.4061,
-          "tok_per_sec": 71.05
+          "tok_per_sec": 53.35
         },
         {
           "variant": "high",
-          "intelligence": 54.9,
+          "intelligence": 54.8,
           "cost_per_task": 0.5636,
-          "tok_per_sec": 72.83
+          "tok_per_sec": 52.54
         },
         {
           "variant": "xhigh",
-          "intelligence": 55.7,
+          "intelligence": 55.6,
           "cost_per_task": 0.648,
-          "tok_per_sec": 79.48
+          "tok_per_sec": 63.94
         },
         {
           "variant": "max",
           "intelligence": 57.3,
           "cost_per_task": 1.0144,
-          "tok_per_sec": 82.59
+          "tok_per_sec": 68.01
         }
       ]
     },
@@ -4827,69 +4812,33 @@
       "variants": [
         {
           "variant": "low",
-          "intelligence": 43.3,
+          "intelligence": 43.5,
           "cost_per_task": 1.4237,
-          "tok_per_sec": 54.01
+          "tok_per_sec": 45.25
         },
         {
           "variant": "medium",
-          "intelligence": 51.6,
+          "intelligence": 51.7,
           "cost_per_task": 2.7324,
-          "tok_per_sec": 54.09
+          "tok_per_sec": 46.83
         },
         {
           "variant": "high",
-          "intelligence": 54.8,
+          "intelligence": 54.9,
           "cost_per_task": 3.2386,
-          "tok_per_sec": 49.57
+          "tok_per_sec": 48.76
         },
         {
           "variant": "xhigh",
-          "intelligence": 55.3,
+          "intelligence": 55.4,
           "cost_per_task": 3.6589,
-          "tok_per_sec": 57.48
+          "tok_per_sec": 52.23
         },
         {
           "variant": "max",
           "intelligence": 56.9,
           "cost_per_task": 6.2447,
-          "tok_per_sec": 72.33
-        }
-      ]
-    },
-    {
-      "model": "GPT-6.1 Sol",
-      "creator": "OpenAI",
-      "variants": [
-        {
-          "variant": "low",
-          "intelligence": 34.8,
-          "cost_per_task": 0.1615,
-          "tok_per_sec": 63.22
-        },
-        {
-          "variant": "medium",
-          "intelligence": 46.3,
-          "cost_per_task": 0.3594,
-          "tok_per_sec": 54.99
-        },
-        {
-          "variant": "high",
-          "intelligence": 50.3,
-          "cost_per_task": 0.591,
-          "tok_per_sec": 66.79
-        },
-        {
-          "variant": "xhigh",
-          "intelligence": 52.5,
-          "cost_per_task": 0.764,
-          "tok_per_sec": 72.11
-        },
-        {
-          "variant": "max",
-          "intelligence": 54.6,
-          "cost_per_task": 1.2721,
-          "tok_per_sec": 92.63
+          "tok_per_sec": 64.17
         }
       ]
     },
@@ -4901,31 +4850,67 @@
           "variant": "low",
           "intelligence": 25.6,
           "cost_per_task": 0.5113,
-          "tok_per_sec": 103.38
+          "tok_per_sec": 105.32
         },
         {
           "variant": "medium",
-          "intelligence": 30.8,
+          "intelligence": 30.9,
           "cost_per_task": 0.7807,
-          "tok_per_sec": 108.37
+          "tok_per_sec": 104.54
         },
         {
           "variant": "high",
           "intelligence": 41.5,
           "cost_per_task": 1.6361,
-          "tok_per_sec": 112.15
+          "tok_per_sec": 105.76
         },
         {
           "variant": "xhigh",
           "intelligence": 49.9,
           "cost_per_task": 4.092,
-          "tok_per_sec": 111.02
+          "tok_per_sec": 107.06
         },
         {
           "variant": "max",
-          "intelligence": 54.5,
+          "intelligence": 54.7,
           "cost_per_task": 10.0206,
-          "tok_per_sec": 134.9
+          "tok_per_sec": 132.99
+        }
+      ]
+    },
+    {
+      "model": "GPT-6.1 Sol",
+      "creator": "OpenAI",
+      "variants": [
+        {
+          "variant": "low",
+          "intelligence": 34.8,
+          "cost_per_task": 0.1615,
+          "tok_per_sec": 52.18
+        },
+        {
+          "variant": "medium",
+          "intelligence": 46.3,
+          "cost_per_task": 0.3594,
+          "tok_per_sec": 48.95
+        },
+        {
+          "variant": "high",
+          "intelligence": 50.3,
+          "cost_per_task": 0.591,
+          "tok_per_sec": 62.14
+        },
+        {
+          "variant": "xhigh",
+          "intelligence": 52.4,
+          "cost_per_task": 0.764,
+          "tok_per_sec": 69.6
+        },
+        {
+          "variant": "max",
+          "intelligence": 54.7,
+          "cost_per_task": 1.2721,
+          "tok_per_sec": 76.41
         }
       ]
     },
@@ -4936,26 +4921,26 @@
         {
           "variant": "low",
           "intelligence": 26.9,
-          "cost_per_task": 0.2922,
-          "tok_per_sec": 230.91
+          "cost_per_task": 0.3674,
+          "tok_per_sec": 227.81
         },
         {
           "variant": "medium",
-          "intelligence": 41.2,
+          "intelligence": 41.1,
           "cost_per_task": 0.798,
-          "tok_per_sec": 220.26
+          "tok_per_sec": 215.25
         },
         {
           "variant": "high",
-          "intelligence": 50.8,
+          "intelligence": 51,
           "cost_per_task": 1.8733,
-          "tok_per_sec": 217.44
+          "tok_per_sec": 208.31
         },
         {
           "variant": "xhigh",
-          "intelligence": 53.9,
+          "intelligence": 54.1,
           "cost_per_task": 3.1602,
-          "tok_per_sec": 234.5
+          "tok_per_sec": 211.92
         }
       ]
     },
@@ -4967,37 +4952,37 @@
           "variant": "non-reasoning",
           "intelligence": 30.5,
           "cost_per_task": 0.2259,
-          "tok_per_sec": 80.97
+          "tok_per_sec": 62.7
         },
         {
           "variant": "low",
           "intelligence": 29.4,
           "cost_per_task": 0.0713,
-          "tok_per_sec": 90.93
+          "tok_per_sec": 63.55
         },
         {
           "variant": "medium",
-          "intelligence": 38.2,
+          "intelligence": 38.1,
           "cost_per_task": 0.1688,
-          "tok_per_sec": 80.18
+          "tok_per_sec": 65.76
         },
         {
           "variant": "high",
-          "intelligence": 42.4,
+          "intelligence": 42.5,
           "cost_per_task": 0.2593,
-          "tok_per_sec": 84.88
+          "tok_per_sec": 66.47
         },
         {
           "variant": "xhigh",
           "intelligence": 45.3,
           "cost_per_task": 0.4007,
-          "tok_per_sec": 89.13
+          "tok_per_sec": 70.65
         },
         {
           "variant": "max",
-          "intelligence": 51.3,
+          "intelligence": 51.4,
           "cost_per_task": 0.9611,
-          "tok_per_sec": 103.31
+          "tok_per_sec": 72.05
         }
       ]
     },
@@ -5007,15 +4992,15 @@
       "variants": [
         {
           "variant": "medium",
-          "intelligence": 47.6,
+          "intelligence": 47.7,
           "cost_per_task": 8.6292,
-          "tok_per_sec": 102.01
+          "tok_per_sec": 89.72
         },
         {
           "variant": "high",
-          "intelligence": 50.4,
-          "cost_per_task": 9.9466,
-          "tok_per_sec": 109.28
+          "intelligence": 50.5,
+          "cost_per_task": 7.0616,
+          "tok_per_sec": 94.59
         }
       ]
     },
@@ -5027,31 +5012,31 @@
           "variant": "low",
           "intelligence": 38.7,
           "cost_per_task": 4.4711,
-          "tok_per_sec": 57.34
+          "tok_per_sec": 56.25
         },
         {
           "variant": "medium",
           "intelligence": 43.2,
           "cost_per_task": 5.5643,
-          "tok_per_sec": 59.37
+          "tok_per_sec": 56.91
         },
         {
           "variant": "high",
           "intelligence": 47.2,
           "cost_per_task": 7.54,
-          "tok_per_sec": 59.42
+          "tok_per_sec": 56.25
         },
         {
           "variant": "xhigh",
           "intelligence": 50,
           "cost_per_task": 10.8475,
-          "tok_per_sec": 66.83
+          "tok_per_sec": 63.32
         },
         {
           "variant": "max",
-          "intelligence": 49.2,
+          "intelligence": 49.3,
           "cost_per_task": 12.994,
-          "tok_per_sec": 65.69
+          "tok_per_sec": 68.35
         }
       ]
     },
@@ -5063,13 +5048,13 @@
           "variant": "high",
           "intelligence": 40.5,
           "cost_per_task": 4.5605,
-          "tok_per_sec": 115.5
+          "tok_per_sec": 91.51
         },
         {
           "variant": "max",
-          "intelligence": 43.6,
+          "intelligence": 43.7,
           "cost_per_task": 6.952,
-          "tok_per_sec": 99.63
+          "tok_per_sec": 95.05
         }
       ]
     },
@@ -5081,31 +5066,31 @@
           "variant": "low",
           "intelligence": 18.6,
           "cost_per_task": 0.0438,
-          "tok_per_sec": 171.32
+          "tok_per_sec": 155.6
         },
         {
           "variant": "medium",
           "intelligence": 24.6,
           "cost_per_task": 0.0918,
-          "tok_per_sec": 173
+          "tok_per_sec": 162.54
         },
         {
           "variant": "high",
-          "intelligence": 29.9,
+          "intelligence": 30,
           "cost_per_task": 0.1586,
-          "tok_per_sec": 176.19
+          "tok_per_sec": 175.52
         },
         {
           "variant": "xhigh",
           "intelligence": 34.6,
           "cost_per_task": 0.2484,
-          "tok_per_sec": 188.68
+          "tok_per_sec": 182.83
         },
         {
           "variant": "max",
           "intelligence": 36.5,
           "cost_per_task": 0.411,
-          "tok_per_sec": 231.14
+          "tok_per_sec": 225.34
         }
       ]
     },
@@ -5115,15 +5100,15 @@
       "variants": [
         {
           "variant": "xhigh",
-          "intelligence": 34.1,
+          "intelligence": 34.2,
           "cost_per_task": 0.1162,
-          "tok_per_sec": 610.71
+          "tok_per_sec": 600.36
         },
         {
           "variant": "max",
-          "intelligence": 36,
+          "intelligence": 36.1,
           "cost_per_task": 0.1359,
-          "tok_per_sec": 628.55
+          "tok_per_sec": 582.71
         }
       ]
     },
@@ -5135,19 +5120,19 @@
           "variant": "low",
           "intelligence": 31.1,
           "cost_per_task": 2.9222,
-          "tok_per_sec": 69.15
+          "tok_per_sec": 68.82
         },
         {
           "variant": "high",
           "intelligence": 35.2,
           "cost_per_task": 6.1836,
-          "tok_per_sec": 75.49
+          "tok_per_sec": 84.44
         },
         {
           "variant": "xhigh",
-          "intelligence": 35.5,
+          "intelligence": 35.4,
           "cost_per_task": 7.7715,
-          "tok_per_sec": 85.57
+          "tok_per_sec": 89.77
         }
       ]
     },
@@ -5159,19 +5144,19 @@
           "variant": "non-reasoning",
           "intelligence": 18.5,
           "cost_per_task": 0.4254,
-          "tok_per_sec": 189.02
+          "tok_per_sec": 182.1
         },
         {
           "variant": "high",
-          "intelligence": 28.6,
+          "intelligence": 28.7,
           "cost_per_task": 0.4562,
-          "tok_per_sec": 181.26
+          "tok_per_sec": 191.22
         },
         {
           "variant": "max",
-          "intelligence": 32.6,
+          "intelligence": 32.4,
           "cost_per_task": 0.6021,
-          "tok_per_sec": 182.92
+          "tok_per_sec": 183.74
         }
       ]
     },
@@ -5183,13 +5168,13 @@
           "variant": "low",
           "intelligence": 23.1,
           "cost_per_task": 1.5749,
-          "tok_per_sec": 79.34
+          "tok_per_sec": 84.56
         },
         {
           "variant": "max",
-          "intelligence": 31.7,
+          "intelligence": 31.6,
           "cost_per_task": 5.0093,
-          "tok_per_sec": 85.57
+          "tok_per_sec": 88.69
         }
       ]
     },
@@ -5201,19 +5186,19 @@
           "variant": "low",
           "intelligence": 22.5,
           "cost_per_task": null,
-          "tok_per_sec": 114.65
+          "tok_per_sec": 114.85
         },
         {
           "variant": "medium",
           "intelligence": 30.1,
-          "cost_per_task": 6.2586,
-          "tok_per_sec": 112
+          "cost_per_task": 2.6064,
+          "tok_per_sec": 118.06
         },
         {
           "variant": "high",
-          "intelligence": 30.8,
-          "cost_per_task": 7.766,
-          "tok_per_sec": 114.05
+          "intelligence": 30.7,
+          "cost_per_task": 3.0217,
+          "tok_per_sec": 120.71
         }
       ]
     },
@@ -5225,37 +5210,37 @@
           "variant": "non-reasoning",
           "intelligence": 9.4,
           "cost_per_task": 0.0714,
-          "tok_per_sec": 133.1
+          "tok_per_sec": 145.32
         },
         {
           "variant": "low",
           "intelligence": 9.7,
           "cost_per_task": 0.0051,
-          "tok_per_sec": 130.93
+          "tok_per_sec": 146.54
         },
         {
           "variant": "medium",
           "intelligence": 18.5,
           "cost_per_task": 0.0422,
-          "tok_per_sec": 130.02
+          "tok_per_sec": 142.55
         },
         {
           "variant": "high",
-          "intelligence": 21.4,
+          "intelligence": 21.5,
           "cost_per_task": 0.0729,
-          "tok_per_sec": 127.93
+          "tok_per_sec": 146.93
         },
         {
           "variant": "xhigh",
           "intelligence": 23.5,
           "cost_per_task": 0.1041,
-          "tok_per_sec": 141.73
+          "tok_per_sec": 146.92
         },
         {
           "variant": "max",
           "intelligence": 27.9,
           "cost_per_task": 0.152,
-          "tok_per_sec": 142.26
+          "tok_per_sec": 149.06
         }
       ]
     },
@@ -5267,13 +5252,13 @@
           "variant": "medium",
           "intelligence": 23.1,
           "cost_per_task": 1.4121,
-          "tok_per_sec": 72.67
+          "tok_per_sec": 99.15
         },
         {
           "variant": "high",
           "intelligence": 26.1,
           "cost_per_task": 2.0617,
-          "tok_per_sec": 77.64
+          "tok_per_sec": 95.95
         }
       ]
     },
@@ -5285,19 +5270,19 @@
           "variant": "non-reasoning",
           "intelligence": 12.6,
           "cost_per_task": 0.977,
-          "tok_per_sec": 93.58
+          "tok_per_sec": 72.52
         },
         {
           "variant": "high",
           "intelligence": 20.8,
           "cost_per_task": 0.8485,
-          "tok_per_sec": 89.79
+          "tok_per_sec": 70.09
         },
         {
           "variant": "max",
           "intelligence": 23.1,
           "cost_per_task": 1.7691,
-          "tok_per_sec": 87.31
+          "tok_per_sec": 76.11
         }
       ]
     },
@@ -5308,26 +5293,26 @@
         {
           "variant": "non-reasoning",
           "intelligence": 10,
-          "cost_per_task": 3.7729,
-          "tok_per_sec": 69.97
+          "cost_per_task": 4.6287,
+          "tok_per_sec": 59.81
         },
         {
           "variant": "low",
           "intelligence": 15.7,
           "cost_per_task": 1.9059,
-          "tok_per_sec": 88.45
+          "tok_per_sec": 62.41
         },
         {
           "variant": "medium",
           "intelligence": 17.5,
-          "cost_per_task": 2.16,
-          "tok_per_sec": 71.77
+          "cost_per_task": 2.5081,
+          "tok_per_sec": 52.99
         },
         {
           "variant": "xhigh",
           "intelligence": 20.1,
-          "cost_per_task": 3.5295,
-          "tok_per_sec": 66.06
+          "cost_per_task": 3.5323,
+          "tok_per_sec": 54
         }
       ]
     },
@@ -5339,13 +5324,13 @@
           "variant": "high",
           "intelligence": 11,
           "cost_per_task": 0.617,
-          "tok_per_sec": 156.79
+          "tok_per_sec": 155.33
         },
         {
           "variant": "xhigh",
           "intelligence": 12.5,
           "cost_per_task": 1.352,
-          "tok_per_sec": 152.99
+          "tok_per_sec": 161.31
         }
       ]
     }
